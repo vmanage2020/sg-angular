@@ -58,7 +58,7 @@
     "ng5-slider": "^1.2.4",
     "ngi-notification": "file:lib/ngi-notification/ngi-notification-0.0.1.tgz",
     "ngx-avatar": "^3.7.0",
-    "ngx-bootstrap": "5.3.2",
+    "ngx-bootstrap": "^5.1.0",
     "ngx-chartist": "^1.0.3",
     "ngx-color-picker": "^8.1.0",
     "ngx-drag-drop": "^2.0.0",
