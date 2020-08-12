@@ -1,0 +1,99 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12 p-0">
+      <div class="card mb-0 px-3 minHeightForCard">
+        <app-ui-preloader [display]="loading" *ngIf="displayLoader" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+        <div class="card-body paddingCard" *ngIf="!displayLoader">
+          <form class="needs-validation" name="createLevelForm" [formGroup]="createLevelForm"
+            (ngSubmit)="onSubmit(createLevelForm)" novalidate>
+           
+         
+            <div class="row mb-2">
+              <h3 class="headingTitle">Add Level</h3>
+            </div>
+            <div class="row mb-2">
+              <button type="submit" class="btn btn-dark waves-effect waves-light"
+                (click)="save('up')">Save</button>&nbsp;&nbsp;&nbsp;
+              <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveNew('up')">Save &
+                New</button>&nbsp;&nbsp;&nbsp;
+              <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                (click)="goBack()">Cancel</button>
+            </div>
+            <ngb-alert type="danger" *ngIf="error && isSaveUp" class="margin sdkErrorInUpperTag" [dismissible]="true" (click)=closeError()>{{error}}
+            </ngb-alert>
+            <div class="row">
+              <div class="col-12  mt-2 heading">
+                <h4>Level Details</h4>
+              </div>
+            </div>          
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label-req" for="first_name">Level Name</label>
+              </div>
+              <div class="col-4 mt-2" id="customHeight">
+                <input type="text" formControlName="level_name" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.level_name.errors }" name="level_name" id="level_name"
+                  placeholder="Enter level name" />
+                <div *ngIf="submitted && f.level_name.errors" class="invalid-feedback">
+                  <div *ngIf="f.level_name?.errors.required">Level Name is required.</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth ">
+                <label class="for-label-req" for="first_name">Abbreviation</label>
+              </div>
+              <div class="col-4 mt-2" id="customHeight">
+                <input type="text" formControlName="abbreviation" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }" name="abbreviation"
+                  placeholder="Enter abbreviation " />
+                <div *ngIf="submitted && f.abbreviation.errors" class="invalid-feedback">
+                  <div *ngIf="f.abbreviation?.errors.required">Abbreviation is required.</div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-Description allColMaxWidth">
+                <label class="for-label" for="first_name">Description</label>
+              </div>
+              <div class="col-4 mt-2" id="customHeight">
+                <textarea formControlName="description" class="form-control" row="16" cols="64" name="description"
+                  id="description" placeholder="Enter description"></textarea>
+                <!-- <div *ngIf="f.description.errors?.required && submitted" class="input-error-msg text-danger">
+                  Description is required.
+                </div> -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label-req" for="first_name">Sport</label>
+              </div>
+              <div class="col-4 mt-2" id="customHeight">
+                <ng-select [items]="SportsList" formControlName="sport_id" bindLabel="name" [loading]="sportSelect"
+                  (focus)="selectedSport($event,createLevelForm)" [clearable]="false"
+                  (change)="selectedSport($event,createLevelForm)" bindValue="sport_id" placeholder="Select sport">
+                </ng-select>
+                <div *ngIf="f.sport_id.errors?.required && submitted" class="input-error-msg text-danger">
+                  Select Sport.
+                </div>
+              </div>
+            </div>
+            <ngb-alert type="danger" *ngIf="error && !isSaveUp" class="margin sdkErrorInDownTag mt-2" [dismissible]="true" (click)=closeError()>{{error}}
+            </ngb-alert>
+            <div class="row mt-3 mb-2">
+              <button type="submit" class="btn btn-dark waves-effect waves-light"
+                (click)="save('down')">Save</button>&nbsp;&nbsp;&nbsp;
+              <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveNew('down')">Save &
+                New</button>&nbsp;&nbsp;&nbsp;
+              <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                (click)="goBack()">Cancel</button>
+            </div>
+         
+          </form>
+
+        </div> <!-- end card-body -->
+      </div> <!-- end card-->
+    </div>
+  </div>
+</div>

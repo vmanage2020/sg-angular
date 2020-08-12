@@ -1,0 +1,63 @@
+<div class="wrapper p-0">
+    <div class="container-fluid">
+       <div class="row">
+            <div class="col-xl-12 p-0">
+                <div class="card mb-0 px-3 minHeightForCard">
+                    <div class="card-body paddingCard">
+  <form #submitForm="ngForm" (ngSubmit)="createSports(submitForm)" novalidate>
+                            <app-ui-preloader [display]="loading"></app-ui-preloader>
+                            <ngb-alert type="danger" *ngIf="error" class="margin" [dismissible]="true" (click)="closeToast()">{{ message }}</ngb-alert>
+                            <div class="row mb-1">
+                                <h3 class="headingTitle">Add Sport</h3>
+                            </div>
+                            <div class="row mt-2">
+                                <button type="submit"
+                                    class="btn btn-dark waves-effect waves-light" (click)="save()" [disabled]="!submitForm.valid">Save</button>&nbsp;&nbsp;&nbsp;
+                                    <button type="submit"
+                                    class="btn btn-dark waves-effect waves-light" (click)="saveNew()" [disabled]="!submitForm.valid">Save & New</button>&nbsp;&nbsp;&nbsp;
+
+                                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                    (click)="goBack()">Cancel</button>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12  mt-2 heading">
+                                    <h4>Sport Details</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                    <label class="for-label-req" for="first_name">Sport Name</label>
+                                </div>
+                                <div class="col-4 mt-2" id="customHeight">
+                                    <input type="text" [(ngModel)]="createSportsForm.name" name="name"
+                                        class="form-control" #name="ngModel" id="name" placeholder="Enter sport name"
+                                        pattern="^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$" required>
+                                    <div class="input-error-msg" *ngIf="name.invalid && (name.dirty || name.touched)"
+                                        class="text-danger">
+                                        <div class="input-error-msg" *ngIf="name.errors.required">
+                                            Sport Name is required.
+                                        </div>
+                                        <div class="input-error-msg" *ngIf="name.errors?.pattern">
+                                           Enter a valid sport name.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <button type="submit"
+                                    class="btn btn-dark waves-effect waves-light" (click)="save()" [disabled]="!submitForm.valid" (click)="save()">Save</button>&nbsp;&nbsp;&nbsp;
+                                    <button type="submit" 
+                                    class="btn btn-dark waves-effect waves-light" (click)="saveNew()" [disabled]="!submitForm.valid" (click)="saveNew()">Save & New</button>&nbsp;&nbsp;&nbsp;
+                                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                    (click)="goBack()">Cancel</button>
+                            </div>
+                        </form>
+
+                    </div> <!-- end card-body -->
+                </div> <!-- end card-->
+            </div>
+        </div>
+    </div>
+</div>

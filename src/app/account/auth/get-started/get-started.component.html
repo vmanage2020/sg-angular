@@ -1,0 +1,50 @@
+<div class=" mt-5 mb-5" *ngIf="getStarted">
+        <div class="container">
+          <div class="row justify-content-center">
+            <app-ui-preloader [display]="loading" [ngStyle]="{'display': displayLoader ? 'block' : 'none' }" [landingPage]="isLandingPage" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+            <div class="col-md-8 col-lg-7 col-xl-6" [ngStyle]="{'display': !displayLoader ? 'block' : 'none' }">
+              <div class="card bg-pattern">                
+                <div class="card-body p-3"  >
+                  <!-- Logo -->
+                  <div class="text-center">
+                    <a>
+                      <img src="assets/images/logo-sg.png" alt="" height="85">
+                    </a>
+                    <p class=" mb-2 athletes">A better way to develop your athletes!</p>
+                   
+                  </div>
+      
+                  <form class="needs-validation mt-2" name="getStartedForm" [formGroup]="getStartedForm" novalidate>                          
+                    <ngb-alert type="danger" *ngIf="error" [dismissible]="true" (click)=closeError()>Error : {{message}}</ngb-alert>
+                    <h3 class="subHeading">Sign Up</h3>
+                    <p class="smallContent">Congrats on being invited to SportsGravy! Enter your email address below to get started and create your account.</p>
+                          <div class="form-group mb-4">
+                          <label for="email" class="inputLabel">Email Address</label>
+                         <input type="email" formControlName="email_address" class="form-control" id="email_address" placeholder="Email address" disabled />
+                          </div>
+                    <div class="">
+                      <button type="submit" class="btn btn-dark w-35 waves-effect waves-light" (click)=navigateToSignup() [disabled]="havingData">Next</button>
+                    </div>
+                  </form>
+      
+                  <!-- <p class="mt-3 text-muted"><strong>Username:</strong> ubold@coderthemes.com, <strong>Password:</strong> test
+                  </p> -->
+                </div> <!-- end card-body -->
+              </div>
+              <!-- end card -->
+              <!-- end row -->
+      
+            </div> <!-- end col -->
+          </div>
+          <!-- end row -->
+        </div>
+        <!-- end container -->
+      </div>
+      <!-- end page -->
+<app-signup  *ngIf="showSignup" [userInfo] ="userInfo"></app-signup>
+
+<footer class="footer footer-alt" id="footerSignUp">
+  &copy; Sports Gravy,LLC
+</footer>
+      
+    

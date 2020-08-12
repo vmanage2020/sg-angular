@@ -1,0 +1,123 @@
+<div class="wrapper p-0">
+    <div class="container-fluid">
+        <!-- <app-page-title title="Update Season" ></app-page-title> -->
+
+
+        <div class="row">
+            <div class="col-xl-12 p-0">
+                <div class="card mb-0 px-3 minHeightForCard">
+                    <app-ui-preloader [display]="loading" [ngStyle]="{'display': displayLoader ? 'block' : 'none' }"  [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+                    <div class="card-body paddingCard" [ngStyle]="{'display': !displayLoader ? 'block' : 'none' }">
+                        <form class="needs-validation" name="updateSeasonForm" [formGroup]="updateSeasonForm"
+                            (ngSubmit)="onSubmit(updateSeasonForm)" novalidate>
+                          
+                            
+                            <div class="row mb-2">
+                                <h3 class="headingTitle">Update Season</h3>
+                            </div>
+                            <div class="row mb-2">
+                                <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveUp('up')"
+                                    [disabled]="disableSubmit">Save</button>&nbsp;&nbsp;&nbsp;
+
+                                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                    (click)="goBack()">Cancel</button>
+                            </div>
+                            <ngb-alert type="danger" class="margin sdkErrorInUpperTag" *ngIf="err && isSaveUp" [dismissible]="true"
+                            (click)=closeError()>{{err}}
+                        </ngb-alert>
+                            <div class="row">
+                                <div class="col-12 mt-2 heading">
+                                    <h4>Season Details</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                    <label class="for-label-req" for="first_name">Sport</label>
+                                </div>
+                                <div class="col-4 mt-2" id="customHeight">
+                                    <!-- <ng-select [items]="sportsInfo" bindLabel="name" bindValue="sport_id" placeholder="Select Sport" 
+                                  [closeOnSelect]="true" formControlName="sports_id" [clearable]="false" (change)="OnSportChange()" name="sports_id">
+                                  </ng-select> -->
+                                    <input type="text" formControlName="sports_name" class="form-control" disabled />
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                    <label class="for-label-req" for="season_name">Season Name</label>
+                                </div>
+                                <div class="col-4 mt-2" id="customHeight">
+                                    <input type="text" formControlName="season_name" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.season_name.errors }"
+                                        name="season_name" id="season_name" placeholder="Enter season name" />
+                                    <div *ngIf="submitted && f.season_name.errors" class="invalid-feedback">
+                                        <div *ngIf="f.season_name.errors.required">Season Name is required.</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                    <label class="for-label-req" for="date_of_birth">Season Start Date</label>
+                                </div>
+                                <div class="col-2 mt-2">
+                                    <div class="input-group add-on date datepicker" id="customHeight">
+                                        <input type="text" class="form-control date-picker" id="datetime-datepicker"
+                                            class="form-control" placeholder="Choose start date"
+                                            (change)="compareDate1($event)" formControlName="season_start_date"
+                                            [ngClass]="{ 'is-invalid': submitted && f.season_start_date.errors, 'applyBorder': isBorderReq }"
+                                            name="season_start_date">
+                                        <div *ngIf="submitted && f.season_start_date.errors" class="invalid-feedback">
+                                            <div *ngIf="f.season_start_date.errors.required">Season Start Date is
+                                                required.
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                    <label class="for-label-req" for="date_of_birth">Season End Date</label>
+                                </div>
+                                <div class="col-2 mt-2">
+                                    <div class="input-group add-on date datepicker" id="customHeight">
+                                        <input type="text" class="form-control date-picker" id="datepicker"
+                                            class="form-control" placeholder="Choose end date "
+                                            (change)="compareDate2($event)" formControlName="season_end_date"
+                                            [ngClass]="{ 'is-invalid': submitted && f.season_end_date.errors , 'applyBorder': isBorderReq}"
+                                            name="season_end_date">
+                                        <div *ngIf="submitted && f.season_end_date.errors" class="invalid-feedback">
+                                            <div *ngIf="f.season_end_date.errors.required">Season End Date is required.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 offset-3 offsetMargin">
+                                    <div class="input-error-msg text-danger" *ngIf="error">
+                                        End date should be greater than start date.
+                                    </div>
+                                </div>
+                            </div>
+                            <ngb-alert type="danger" class="margin sdkErrorInDownTag mt-2" *ngIf="err && !isSaveUp" [dismissible]="true"
+                            (click)=closeError()>{{err}}
+                        </ngb-alert>
+                            <div class="row mt-3 mb-2">
+                                <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveUp('down')"
+                                    [disabled]="disableSubmit">Save</button>&nbsp;&nbsp;&nbsp;
+
+                                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                    (click)="goBack()">Cancel</button>
+                            </div>
+                            
+                        </form>
+
+                    </div> <!-- end card-body -->
+                </div> <!-- end card-->
+            </div>
+        </div>
+    </div>
+</div>

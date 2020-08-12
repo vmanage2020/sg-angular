@@ -1,0 +1,274 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card-box">
+            <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Organization Details</h5>
+            <div class="row">  
+                <div class="col-lg-6">
+                    <div class="card-box">
+                        
+                        <div class="form-group mb-3" style="height: 131px;">
+                            <label for="product-name" style="width:200px;">Avatar </label>
+                            
+                            <div class=" form-check-inline">
+                               
+
+                                <div class="image-upload pl-1" *ngIf="getUserData.organization_id != '1'"> 
+                                    <label for="file-input" class="hoverable" *ngIf='getUserData.avatar !== "null" && getUserData.avatar !== "" '>
+                                        <img [src]="getUserData.avatar"  id="imageLabel"
+                                        [ngClass]="{
+                                            'defaultImage': deafulltImagePlaceholder === true, 
+                                            'customizedImage': deafulltImagePlaceholder === false}">
+                                    </label>
+                                    <div id="container" class="hoverable" *ngIf='getUserData.avatar === "null" || getUserData.avatar === "" '>
+                                        <div class="profile-image">
+                                            <div id="abbreviation">{{getUserData.abbrev}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="image-upload pl-1" *ngIf="getUserData.organization_id == '1'"> 
+                                    <div id="container" class="hoverable">
+                                        <div class="profile-image">
+                                            <div id="abbreviation">{{getUserData.abbrev}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            
+                            </div>
+                        </div>
+                        
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Organization Name </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.name}} </label>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Abbreviation </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.abbrev}} </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Street 1 </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.street1}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Street 2 </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.street2}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">City </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2">  {{getUserData.city}}  </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">State </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.state}} </label>
+                            </div>
+                        </div>
+
+                       
+                    </div>
+                </div>    
+                <div class="col-lg-6">
+                    <div class="card-box">
+                                
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Postal Code </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.postal_code}} </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Country </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.country}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Email </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.email_address}} </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Phone Number </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.mobile_phone}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Fax Number </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.fax}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Website </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.website}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Primary Contact </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.field_type}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Secondary Contact </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.field_type}} </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="product-reference" style="width:200px;">Sports Offered </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.sportsRef}} </label>
+                                
+                            </div> 
+                        </div>
+
+
+                    </div> <!-- end card-box -->
+                </div> <!-- end col -->
+            </div>
+
+            <div class="row">  
+                <div class="col-12">
+            
+                    <div class="row" *ngIf="sportsRefData">
+                        <div class="col-12 mt-2">
+                            <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Governing Body Details</h5>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="sportsRefData">
+                        <div class="col-12 mt-2 mb-0 pl-0">
+                            <div>
+                                <table id="basic-datatable"
+                                    class="table table-responsive datatables dt-responsive nowrap mb-0">
+                                    <thead class="border">
+                                        <tr>
+                                            <th class="border">Sport Name</th>
+                                            <th class="border">Is National Governing Body</th>
+                                            <th class="border">National Governing Body Organization</th>
+                                            <th class="border">Is State Governing Body</th>
+                                            <th class="border">State Governing Body Organization</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border"
+                                            *ngFor="let sportsInfo of sportsRefData; let sportsRef = index">
+                                            <td class="border p-1 pt-2">
+                                                <p class="text-center size">
+                                                    {{sportsInfo.sport}}</p>
+                                            </td>
+                                            <td class="border p-1 pt-2">
+                                                <p class="text-center size">Yes</p>
+
+                                            <!--    <p class="text-center size"
+                                                    *ngIf="sportsInfo.is_national_governing_organization =='true'">
+                                                    Yes</p>
+                                                <p class="text-center size"
+                                                    *ngIf="sportsInfo.is_national_governing_organization =='false'">
+                                                    No</p>
+                                            -->
+                                            </td>
+                                            <td class="border p-1 pt-2">
+                                                <p class="text-center"> - </p>
+                                             
+                                            <!--    <p class="text-center"
+                                                    *ngIf="sportsInfo.is_national_governing_organization =='true'">
+                                                    - </p>
+                                                <p class="text-center size"
+                                                    *ngIf="sportsInfo.is_national_governing_organization =='false'">
+                                                    {{sportsInfo.national_governing_organization_name|| "-"}}
+                                                </p>
+                                            -->
+                                            </td>
+                                            <td class="border p-1 pt-2">
+                                                <p class="text-center size">Yes</p>
+                                                <!--
+                                                <p class="text-center size"
+                                                    *ngIf="sportsInfo.is_state_governing_organization =='true'">
+                                                    Yes</p>
+                                                <p class="text-center size"
+                                                    *ngIf="sportsInfo.is_state_governing_organization =='false'">
+                                                    No</p>
+                                                -->
+                                            </td>
+                                            <td class="border p-1 pt-2">
+                                                <p class="text-center"> - </p>
+                                                <!--
+                                                <p class="text-center"
+                                                    *ngIf="sportsInfo.is_state_governing_organization =='true'">
+                                                    - </p>
+                                                <p class="text-center size"
+                                                    *ngIf="sportsInfo.is_state_governing_organization =='false'">
+                                                    {{sportsInfo.state_governing_organization_name|| "-"}}
+                                                </p>
+                                                -->
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="row" style="display: none;">  
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="editOrganization(getUserData.organization_id)" type="button" class="btn w-sm btn-success ml-1" style="float:right;">Edit</button>
+                    </div>
+                </div> <!-- end col -->
+            </div>
+        </div>    
+    </div>
+</div>
+<!-- end row -->

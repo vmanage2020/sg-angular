@@ -1,0 +1,102 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+        <div class="col-lg-6">
+            <div class="card-box">
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Team Details</h5>
+                
+                <form class="needs-validation" name="createteamForm" [formGroup]="createteamForm"
+                (ngSubmit)="onSubmit(createteamForm)" novalidate>
+ 
+                <div class="form-group mb-3">
+                    <label for="sport_id"> Sport<span class="text-danger">*</span></label>
+                    <select class="form-control select2" id="sport_id" name="sport_id" formControlName="sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                        <option value="" disabled selected >Select Sport</option>
+                        <option *ngFor="let SportData of getSportsArray let i = index;" value="{{SportData.sport_id}}">{{SportData.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.sport_id.errors" class="invalid-feedback">
+                        <div *ngIf="f.sport_id.errors.required">Sport Name is required.</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="sport_id"> Level<span class="text-danger">*</span></label>
+                    <select class="form-control select2" id="sport_id" name="sport_id" formControlName="sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                        <option value="" disabled selected >Select Level</option>
+                        <option *ngFor="let SportData of getSportsArray let i = index;" value="{{SportData.sport_id}}">{{SportData.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.sport_id.errors" class="invalid-feedback">
+                        <div *ngIf="f.sport_id.errors.required">Level Name is required.</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="team_name">Enter Team Name<span class="text-danger">*</span></label>
+                    <input type="text" id="team_name" name="team_name" formControlName="team_name" class="form-control" placeholder="Enter Team Name" [ngClass]="{ 'is-invalid': submitted && f.tag_name.errors }"/>
+                    <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="level_name">Player Selection<span class="text-danger">*</span></label>
+                    <input type="text" id="level_name" name="level_name" formControlName="level_name" class="form-control" placeholder="Enter Level Name" [ngClass]="{ 'is-invalid': submitted && f.tag_name.errors }"/>
+                    <div *ngIf="submitted && f.level_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.level_name.errors.required">Player Selection is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="player_name">Players Details<span class="text-danger">*</span></label>
+                    <input type="text" id="player_name" name="player_name" formControlName="player_name" class="form-control" placeholder="Enter Players Name" [ngClass]="{ 'is-invalid': submitted && f.tag_name.errors }"/>
+                    <div *ngIf="submitted && f.player_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.player_name.errors.required">Players is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="coach_name">Coach Selection<span class="text-danger">*</span></label>
+                    <input type="text" id="coach_name" name="coach_name" formControlName="coach_name" class="form-control" placeholder="Enter Coaches Name" [ngClass]="{ 'is-invalid': submitted && f.tag_name.errors }"/>
+                    <div *ngIf="submitted && f.coach_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.coach_name.errors.required">Coaches is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="coach_name">Coach Details<span class="text-danger">*</span></label>
+                    <input type="text" id="coach_name" name="coach_name" formControlName="coach_name" class="form-control" placeholder="Enter Coaches Name" [ngClass]="{ 'is-invalid': submitted && f.tag_name.errors }"/>
+                    <div *ngIf="submitted && f.coach_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.coach_name.errors.required">Coaches is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="managers_name">Manager Selection<span class="text-danger">*</span></label>
+                    <input type="text" id="managers_name" name="managers_name" formControlName="managers_name" class="form-control" placeholder="Enter Managers Name" [ngClass]="{ 'is-invalid': submitted && f.tag_name.errors }"/>
+                    <div *ngIf="submitted && f.managers_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.managers_name.errors.required">Managers is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="season_name">Manager Details<span class="text-danger">*</span></label>
+                    <input type="text" id="season_name" name="season_name" formControlName="season_name" class="form-control" placeholder="Enter Season Name" [ngClass]="{ 'is-invalid': submitted && f.tag_name.errors }"/>
+                    <div *ngIf="submitted && f.season_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.season_name.errors.required">Season is required.</div>
+                    </div>                
+                </div>
+                 
+  
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="listTag()" type="button" class="btn w-sm btn-light waves-effect" style="float: left;">Cancel</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn w-sm btn-success ml-1" style="float: right;">Save</button>
+                    </div>
+                </div> <!-- end col -->
+    
+            </form>    
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+ 
+    </div>
+    <!-- end row -->

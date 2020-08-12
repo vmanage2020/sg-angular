@@ -1,0 +1,294 @@
+<div class="wrapper p-0">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-12 p-0">
+          <div class="card mb-0 px-3 minHeightForCard">
+            <app-ui-preloader [display]="loading" [ngStyle]="{'display': displayLoader ? 'block' : 'none' }"  [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+            <div class="card-body paddingCard" [ngStyle]="{'display': !displayLoader ? 'block' : 'none' }">
+              <form class="needs-validation" name="updateUserImportForm" [formGroup]="updateUserImportForm"
+                (ngSubmit)="onSubmit(updateUserImportForm)" novalidate>
+             
+                
+                <div class="row mb-2">
+                  <h3 class="headingTitle">Update User</h3>
+                </div>
+                <div class="row mb-2">
+                  <button type="submit" class="btn btn-dark waves-effect waves-light"  (click)="saveUp('up')"
+                    >Process</button>&nbsp;&nbsp;&nbsp;
+                  <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                    (click)="goBack()">Cancel</button>
+                </div>
+                <ngb-alert type="danger" *ngIf="error && isSaveUp" class="margin sdkErrorInUpperTag" [dismissible]="true" (click)=closeError()>{{error}}
+                </ngb-alert>
+                <div class="row">
+                  <div class="col-12  mt-2 heading">
+                    <h4>Import Details</h4>
+                  </div>
+                </div>
+                <div formGroupName="intelimObj">
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label-req" for="first_name">Player First Name</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                      <input type="text" formControlName="player_first_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && updateUserImportForm.get('intelimObj')?.controls?.player_first_name?.errors?.required }"
+                      name="player_first_name"
+                      id="player_first_name" placeholder="Enter player first name" />
+                  
+                      <div *ngIf="submitted && updateUserImportForm.get('intelimObj')?.controls?.player_first_name?.errors?.required" class="text-danger input-error-msg">Player First Name is required.</div>
+                      <div *ngIf="updateUserImportForm.get('intelimObj')?.controls?.player_first_name?.errors?.pattern" class="text-danger input-error-msg">Only text characters are allowed.</div>
+                  
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" for="first_name">Player Middle Initial</label>
+                  </div>
+                  <div class="col-2 mt-2" id="customHeight">
+                      <input type="text" formControlName="player_initial" class="form-control"  placeholder="Enter player middle initial"
+                       name="player_initial"
+                      id="player_initial"  />
+              
+                </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                        <label class="for-label-req" for="first_name">Player Last Name</label>
+                      </div>
+                      <div class="col-4 mt-2" id="customHeight">
+                          <input type="text" formControlName="player_last_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && updateUserImportForm.get('intelimObj')?.controls?.controls?.player_last_name?.errors?.required }"
+                          name="player_last_name"
+                          id="team_name" placeholder="Enter player last name" />
+                          
+                              <div *ngIf="submitted && updateUserImportForm.get('intelimObj')?.controls?.player_last_name?.errors?.required" class="text-danger input-error-msg">Player Last Name is required.</div>
+                              <div *ngIf="updateUserImportForm.get('intelimObj')?.controls?.player_last_name?.errors?.pattern" class="text-danger input-error-msg">Only text characters are allowed.</div>
+                      
+                      </div>
+                    </div>
+  
+           
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" for="middle_initial">Gender</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                      <ng-select [items]="gender" bindLabel="name"
+                      formControlName="player_gender" [clearable]="false" bindValue="name"
+                      placeholder="Select gender">
+                  </ng-select>
+                </div>
+  
+                </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label-req" for="player_DOB">Player Date Of Birth</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                      <input type="text" class="form-control date-picker" id="datetime-datepicker" [ngClass]="{ 'is-invalid': submitted && updateUserImportForm.get('intelimObj')?.controls?.player_DOB?.errors?.required }"
+                      class="form-control" placeholder="Choose date of birth " (change)="date($event)"
+                      formControlName="player_DOB"
+                       name="player_DOB">
+                       
+                          <div *ngIf="submitted && updateUserImportForm.get('intelimObj')?.controls?.player_DOB?.errors?.required" class="text-danger input-error-msg">Player Date Of Birth is required.</div>
+                         
+                     
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                      <label class="for-label-req" for="level_of_play">Level Of Play</label>
+                    </div>
+                    <div class="col-4 mt-2" id="customHeight">
+                        <ng-select [items]="levelList" formControlName="level_of_play" bindLabel="level_name" [loading]="levelSelect"
+                        [clearable]="false"  (change)="selectedLevel($event)"
+                        bindValue="level_name" placeholder="Select level of play">
+                      </ng-select>
+                        <div *ngIf="submitted && updateUserImportForm.get('intelimObj')?.controls?.level_of_play?.errors?.required" class="text-danger input-error-msg">Select Level of play.</div>
+                    </div>
+                  </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" for="guardian1_first_name">Guardian 1 First Name</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                  
+                      <input type="text" formControlName="guardian1_first_name" class="form-control"
+                       name="guardian1_first_name"
+                      id="guardian1_first_name" placeholder="Enter guardian 1 first name" />
+                  <!-- <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
+                      <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
+                      <div *ngIf="f.team_name.errors?.pattern">Only text characters are allowed.</div>
+                  </div> -->
+                 
+                  </div>
+  
+                </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" for="guardian1_last_name">Guardian 1 Last Name</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                      <input type="text" formControlName="guardian1_last_name" class="form-control"
+                      name="guardian1_last_name"
+                      id="guardian1_last_name" placeholder="Enter guardian 1 last name" />
+                  <!-- <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
+                      <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
+                      <div *ngIf="f.team_name.errors?.pattern">Only text characters are allowed.</div>
+                  </div> -->
+                   </div>
+  
+                </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" [ngStyle]="{'color':emailNotReqG1 ? 'red' : 'grey' }" for="guardian1_email_address">Guardian 1 Email Address</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                      <input type="text" formControlName="guardian1_email_address" class="form-control"
+                      name="guardian1_email_address" [ngClass]="{ 'is-invalid': submitted &&updateUserImportForm.get('intelimObj')?.controls?.guardian1_email_address?.errors?.required }"
+                      id="guardian1_email_address" placeholder="Enter guardian 1 email address" />
+                      <div *ngIf="submitted && updateUserImportForm.get('intelimObj')?.controls?.guardian1_email_address?.errors?.required" class="text-danger input-error-msg">Guardian 1 Email Address is required.</div>     
+                      <div *ngIf="updateUserImportForm.get('intelimObj')?.controls?.guardian1_email_address?.errors?.pattern" class="text-danger input-error-msg">Enter a valid email address.</div>
+                  </div>
+  
+                </div>
+                <div class="row">
+                    <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                      <label class="for-label" for="guardian2_first_name">Guardian 2 First Name</label>
+                    </div>
+                    <div class="col-4 mt-2" id="customHeight">
+                    
+                        <input type="text" formControlName="guardian2_first_name" class="form-control"
+                         name="guardian2_first_name"
+                        id="guardian2_first_name" placeholder="Enter guardian 2 first name" />
+                   
+                    </div>
+    
+                  </div>
+                  <div class="row">
+                      <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                        <label class="for-label" for="guardian2_last_name">Guardian 2 Last Name</label>
+                      </div>
+                      <div class="col-4 mt-2" id="customHeight">
+                          <input type="text" formControlName="guardian2_last_name" class="form-control"
+                           name="guardian2_last_name"
+                          id="guardian2_last_name" placeholder="Enter guardian 2 last name" />
+                      <!-- <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
+                          <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
+                          <div *ngIf="f.team_name.errors?.pattern">Only text characters are allowed.</div>
+                      </div> -->
+                       </div>
+      
+                    </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label"  [ngStyle]="{'color':emailNotReqG2 ? 'red' : 'grey' }" for="guardian2_email_address">Guardian 2 Email Address</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                      <input type="text" formControlName="guardian2_email_address" class="form-control"
+                       name="guardian2_email_address" [ngClass]="{ 'is-invalid': submitted && updateUserImportForm.get('intelimObj')?.controls?.guardian2_email_address?.errors?.required }"
+                      id="guardian2_email_address" placeholder="Enter guardian 2 email address" />
+                      <div *ngIf="submitted && updateUserImportForm.get('intelimObj')?.controls?.guardian2_email_address?.errors?.required" class="text-danger input-error-msg">Guardian 2 Email Address is required.</div>
+                
+                      <div *ngIf="updateUserImportForm.get('intelimObj')?.controls?.guardian2_email_address?.errors?.pattern" class="text-danger input-error-msg">Enter a valid email address.</div>
+                  </div>
+  
+                </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" for="address">Address</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                  
+                      <input type="text" formControlName="address" class="form-control"
+                       name="address"
+                      id="address" placeholder="Enter address" />
+                  <!-- <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
+                      <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
+                      <div *ngIf="f.team_name.errors?.pattern">Only text characters are allowed.</div>
+                  </div> -->
+                 
+                  </div>
+  
+                </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" for="city">City</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                  
+                      <input type="text" formControlName="city" class="form-control"
+                       name="city"
+                      id="city" placeholder="Enter city" />
+                  <!-- <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
+                      <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
+                      <div *ngIf="f.team_name.errors?.pattern">Only text characters are allowed.</div>
+                  </div> -->
+                 
+                  </div>
+  
+                </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" for="state">State</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                      <ng-select [items]="stateList" bindLabel="name" bindValue="state_code" placeholder="Select state" [clearable]="false"
+                      name="state"  formControlName="state" [loading]="state">
+                    </ng-select>
+                  <!-- <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
+                      <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
+                      <div *ngIf="f.team_name.errors?.pattern">Only text characters are allowed.</div>
+                  </div> -->
+                
+                 
+                  </div>
+  
+                </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" for="middle_initial">Country</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                      <ng-select [items]="countryCodeList" formControlName="country" bindLabel="name" [clearable]="false" [loading]="country"
+                      bindValue="country_code"  
+                      placeholder="Select country" name="country_code">
+                    </ng-select>
+                  <!-- <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
+                      <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
+                      <div *ngIf="f.team_name.errors?.pattern">Only text characters are allowed.</div>
+                  </div> -->
+                   </div>
+  
+                </div>
+                <div class="row">
+                  <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" for="postal_code">Postal code</label>
+                  </div>
+                  <div class="col-4 mt-2" id="customHeight">
+                      <input type="text" formControlName="postal_code" class="form-control"
+                     name="postal_code"
+                      id="postal_code" placeholder="Enter postal code" />
+                  <!-- <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
+                      <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
+                      <div *ngIf="f.team_name.errors?.pattern">Only text characters are allowed.</div>
+                  </div> -->
+                   </div>
+  
+                </div>
+              </div>
+              <ngb-alert type="danger" *ngIf="error && !isSaveUp" class="margin sdkErrorInDownTag mt-2" [dismissible]="true" (click)=closeError()>{{error}}
+              </ngb-alert>
+               <div class="row mt-3 mb-2">
+                  <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveUp('down')"
+                   >Process</button>&nbsp;&nbsp;&nbsp;
+                  <button (click)="goBack()" type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                    >Cancel</button>
+                </div>                
+              </form>
+  
+            </div> <!-- end card-body -->
+          </div> <!-- end card-->
+        </div>
+      </div>
+    </div>
+  </div>

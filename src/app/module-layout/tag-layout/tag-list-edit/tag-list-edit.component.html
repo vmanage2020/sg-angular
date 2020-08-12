@@ -1,0 +1,46 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+        <div class="col-lg-6">
+            <div class="card-box">
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Edit Tag Details</h5>
+                
+                <form class="needs-validation" name="createtagForm" [formGroup]="createtagForm"
+                (ngSubmit)="onSubmit(createtagForm)" novalidate>
+
+                <div class="form-group mb-3">
+                    <label for="sport_id"> Sport<span class="text-danger">*</span></label>
+                    <select class="form-control select2" [ngModel]="getTagValueArray.sport_id" id="sport_id" name="sport_id" formControlName="sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                        <option value="" disabled selected >Select Sport</option>
+                        <option *ngFor="let SportData of getSportsArray let i = index;" value="{{SportData.sport_id}}">{{SportData.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.sport_id.errors" class="invalid-feedback">
+                        <div *ngIf="f.sport_id.errors.required">Sport Name is required.</div>
+                    </div>
+                </div>
+  
+                <div class="form-group mb-3">
+                    <label for="tag_name">Tag Name<span class="text-danger">*</span></label>
+                    <input type="text" [ngModel]="getTagValueArray.tag_name" id="tag_name" name="tag_name" formControlName="tag_name" class="form-control" placeholder="Enter Tag Name" [ngClass]="{ 'is-invalid': submitted && f.tag_name.errors }"/>
+                    <div *ngIf="submitted && f.tag_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.tag_name.errors.required">Tag Name is required.</div>
+                    </div>
+                
+                </div>
+                
+ 
+             
+  
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="listTag()" type="button" class="btn w-sm btn-light waves-effect" style="float: left;">Cancel</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn w-sm btn-success ml-1" style="float: right;">Save</button>
+                    </div>
+                </div> <!-- end col -->
+    
+            </form>    
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+ 
+    </div>
+    <!-- end row -->

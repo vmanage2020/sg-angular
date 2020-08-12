@@ -1,0 +1,59 @@
+<div class="wrapper">
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <app-page-title title="Create Skill Category" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+        <!-- end page title -->
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="header-title">Add New Skill Category</h4>
+                        <p class="sub-header"></p>
+
+                        <form class="needs-validation" name="createSkillCategoryForm" [formGroup]="createSkillCategoryForm"
+                       (ngSubmit)="createSkillCategory(createSkillCategoryForm)" novalidate>
+                                <app-ui-preloader [display]="loading"></app-ui-preloader>
+                                <ngb-alert type="danger" *ngIf="error" [dismissible]="true" (click)="closeToast()">{{ message }}</ngb-alert>
+
+                                <div class="form-group">
+                                        <label for="sport_id">Sports</label>
+                                        <ng-select [items]="sportsInfo"  bindLabel="name"
+                                            bindValue="sport_id" placeholder="Select Sport" formControlName="sport_id"
+                                            [clearable]="false" (change)="hideSportReq()" name="state">
+                                        </ng-select>
+        
+                                        <div class="input-error-msg text-danger" *ngIf="sportIdValid">
+                                            Sports is required.
+                                        </div>
+        
+                                    </div>
+                                    <div class="form-group">
+                                            <label for="name">Skill Category Name</label>
+                                            <input type="text" name="name" class="form-control" formControlName="name" id="name"
+                                                placeholder="Enter Position name"
+                                                [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
+                                            <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                                <div *ngIf="f.name.errors.required">Skill Category Name is required.</div>
+            
+                                            </div>
+            
+                                        </div>
+                        
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-dark waves-effect waves-light" [disabled]="!createSkillCategoryForm.valid">Save</button>&nbsp;
+                                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10" (click)="goBack()">Cancel</button>
+                            </div>
+                        </form>
+
+                    </div> <!-- end card-body -->
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+            <div class="col-lg-3"></div>
+        </div>
+        <!-- end row -->
+
+    </div> <!-- end container -->
+</div>

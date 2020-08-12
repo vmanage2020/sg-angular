@@ -1,0 +1,92 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            
+            <button (click)="addUser()" type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
+                <i class="mdi mdi-plus-circle"></i> Add User
+            </button>
+            
+            <h4 class="header-title mb-4">User Lists</h4>
+            
+            <table class="table table-hover m-0 table-centered dt-responsive nowrap w-100" id="tickets-table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Role</th>
+                    <th>Email</th>                    
+                    <th>Mobile</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th class="hidden-sm">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let Playerdata of data let i = index;">
+                    
+                        <td><b>{{i+1}}</b></td>
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Playerdata.first_name}} {{Playerdata.middle_initial}} {{Playerdata.last_name}} {{Playerdata.suffix}} 
+                                </span>
+                            </a>
+                        </td>
+    
+                        <td>
+                            <div *ngIf="Playerdata.is_signup_completed === true"><span class="badge badge-success" >Registered</span></div>
+                            <div *ngIf="Playerdata.is_signup_completed === false"><span class="badge badge-warning" >Pending</span></div>
+                        </td>
+                        
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2" style="text-transform: uppercase;">{{Playerdata.role}}</span>
+                            </a>
+                        </td>
+    
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Playerdata.email_address}}</span>
+                            </a>
+                        </td>
+    
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Playerdata.mobile_number}}</span>
+                            </a>
+                        </td>
+    
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Playerdata.city}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Playerdata.state}}</span>
+                            </a>
+                        </td>
+    
+                        <td>
+                            <div class="btn-group dropdown">
+                                <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" (click)="viewUser(Playerdata.user_id)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle"></i>View</a>
+                                    <a class="dropdown-item" (click)="editUser(Playerdata.user_id)"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
+                                    <!-- <a class="dropdown-item" (click)="deleteUser(Playerdata.user_id,Playerdata.first_name)"><i class="mdi mdi-delete mr-2 text-muted font-18 vertical-middle"></i>Remove</a> -->
+                                </div>
+                            </div>
+                        </td>    
+                    </tr>     
+
+                </tbody>
+            </table>
+        </div>
+    </div><!-- end col -->
+</div>
+<!-- end row -->
+
+

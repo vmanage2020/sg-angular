@@ -1,0 +1,75 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            
+
+            <button (click)="addLevel()" type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
+                <i class="mdi mdi-plus-circle"></i> Add Level
+            </button>
+            <h4 class="header-title mb-4">Level</h4>
+        
+            <table class="table table-hover m-0 table-centered dt-responsive nowrap w-100" id="tickets-table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>Level Name</th>
+                    <th>Abbreviation</th>
+                    <th>Sport</th>
+                    <th>Copied From</th>
+                    <th class="hidden-sm">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let Leveldata of data let i = index;">
+                    
+                        <td><b>{{i+1}}</b></td>
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Leveldata.level_name}}</span>
+                            </a>
+                        </td>
+    
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Leveldata.abbreviation}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Leveldata.sport_name}}</span>
+                            </a>
+                        </td>
+                        
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Leveldata.created_datetime.toDate() | date}}</span>
+                            </a>
+                        </td>
+     
+                        <td>
+                            <div class="btn-group dropdown">
+                                <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" (click)="viewLevel(Leveldata.level_id)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle"></i>View</a>
+                                    
+                                    <a *ngIf="Leveldata.is_active === false" class="dropdown-item" (click)="editLevel(Leveldata.level_id)"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
+                                    <a *ngIf="Leveldata.is_active === false" class="dropdown-item" (click)="deleteLevel(Leveldata.level_id,Leveldata.level_name)"><i class="mdi mdi-delete mr-2 text-muted font-18 vertical-middle"></i>Remove</a>
+
+                                </div>
+                            </div>
+                        </td>    
+                    </tr>     
+
+                </tbody>
+            </table>
+        </div>
+    </div><!-- end col -->
+</div>
+<!-- end row -->
+
+

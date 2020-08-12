@@ -1,0 +1,30 @@
+// 
+// authentication.scss
+//
+
+.authentication-bg.enlarged {
+    min-height: 100px;
+}
+
+.bg-pattern {
+    // background-image: url("../images/bg-pattern-2.png");
+    background-size: cover;
+}
+
+// authentication pages background
+body.authentication-bg {
+    background-color: $gray-200;
+    background-size: cover;
+    background-position: center;
+}
+
+body.authentication-bg-pattern {
+    // background-image: url("../images/bg-pattern.png");
+    // background-color: #8b8b8f;
+    background-image: url("../images/bg-pattern.png"),linear-gradient(120deg, #b3aeae, #8e8888, #585757) !important;
+}
+
+// Logout page
+.logout-icon {
+    width: 140px;
+}

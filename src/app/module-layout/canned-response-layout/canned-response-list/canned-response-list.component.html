@@ -1,0 +1,70 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            
+
+            <button (click)="addCannedResponses()" type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
+                <i class="mdi mdi-plus-circle"></i> Add Canned Responses
+            </button>
+            <h4 class="header-title mb-4">Canned Responses</h4>
+            
+            <table class="table table-hover m-0 table-centered dt-responsive nowrap w-100" id="tickets-table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>Canned Response Title</th>
+                    <th>Canned Response Description</th>
+                    <th>Sport</th>
+                    <th>Copied From</th>
+                    <th class="hidden-sm">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let CannedResponsesData of data let i = index;">
+                    
+                        <td><b>{{i+1}}</b></td>
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{CannedResponsesData.cannedResponseTitle}}</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{CannedResponsesData.cannedResponseDesc}}</span>
+                            </a>
+                        </td>    
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{CannedResponsesData.sport_name}}</span>
+                            </a>
+                        </td>                        
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{CannedResponsesData.created_datetime.toDate() | date}}</span>
+                            </a>
+                        </td>     
+                        <td>
+                            <div class="btn-group dropdown">
+                                <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" (click)="viewCannedResponses(CannedResponsesData.cannedResponseTitle_id)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle"></i>View</a>                                    
+                                    <a class="dropdown-item" (click)="editCannedResponses(CannedResponsesData.cannedResponseTitle_id)"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
+                                    <a class="dropdown-item" (click)="deleteCannedResponses(CannedResponsesData.cannedResponseTitle_id,CannedResponsesData.cannedResponseTitle)"><i class="mdi mdi-delete mr-2 text-muted font-18 vertical-middle"></i>Remove</a>
+
+                                </div>
+                            </div>
+                        </td>    
+                    </tr>     
+
+                </tbody>
+            </table>
+        </div>
+    </div><!-- end col -->
+</div>
+<!-- end row -->
+
+

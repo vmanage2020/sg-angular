@@ -1,0 +1,345 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+        <div class="col-lg-6">
+            <div class="card-box">
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Organization Details</h5>
+                
+                <form class="needs-validation" name="createplayermetaForm" [formGroup]="createorganizationForm"
+                (ngSubmit)="onSubmit(createorganizationForm)" novalidate>
+                
+                <div class="form-group mb-3">
+                    <label for="name">Organization Name<span class="text-danger">*</span></label>
+                    <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter Organization Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
+                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">Organization Name is required.</div>
+                    </div>
+                
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label for="abbrev">Abbreviation<span class="text-danger">*</span></label>
+                    <input type="text" id="abbrev" name="abbrev" formControlName="abbrev" class="form-control" placeholder="Enter Abbreviation Name" [ngClass]="{ 'is-invalid': submitted && f.abbrev.errors }"/>
+                    <div *ngIf="submitted && f.abbrev.errors" class="invalid-feedback">
+                        <div *ngIf="f.abbrev.errors.required">Abbreviation is required.</div>
+                    </div>
+                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="street1">Street 1<span class="text-danger">*</span></label>
+                    <input type="text" id="street1" name="street1" formControlName="street1" class="form-control" placeholder="Enter Street 1" [ngClass]="{ 'is-invalid': submitted && f.street1.errors }"/>
+                    <div *ngIf="submitted && f.street1.errors" class="invalid-feedback">
+                        <div *ngIf="f.street1.errors.required">street 1 is required.</div>
+                    </div>
+                
+                </div>
+
+
+                <div class="form-group mb-3">
+                    <label for="street2">Street 2</label>
+                    <input type="text" id="street2" name="street2" formControlName="street2" class="form-control" placeholder="Enter Street 2" [ngClass]="{ 'is-invalid': submitted && f.street2.errors }"/>
+                    <div *ngIf="submitted && f.street2.errors" class="invalid-feedback">
+                        <div *ngIf="f.street2.errors.required">street 2 is required.</div>
+                    </div>
+                
+                </div> 
+                
+                <div class="form-group mb-3">
+                    <label for="city">City <span class="text-danger">*</span></label>
+                    <input type="text" id="city" name="city" formControlName="city" class="form-control" placeholder="Enter Field Name" [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
+                    <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                        <div *ngIf="f.city.errors.required">Field Name is required.</div>
+                    </div>
+                
+                </div> 
+
+                <div class="form-group mb-3">
+                    <label for="state">State<span class="text-danger">*</span></label>
+                    <select class="form-control select2" id="state" name="state" formControlName="state" [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
+                        <option value="" disabled selected>Select State</option>
+                        <option *ngFor="let Sportdata of getAllSportmetaData let i = index;" value="{{Sportdata.sport_id}}">{{Sportdata.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
+                        <div *ngIf="f.state.errors.required">Sport Name is required.</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="postal_code">Postal Code<span class="text-danger">*</span></label>
+                    <input type="text" id="postal_code" name="postal_code" formControlName="postal_code" class="form-control" placeholder="Enter Postal Code" [ngClass]="{ 'is-invalid': submitted && f.postal_code.errors }"/>
+                    <div *ngIf="submitted && f.postal_code.errors" class="invalid-feedback">
+                        <div *ngIf="f.postal_code.errors.required">Postal Code is required.</div>
+                    </div>
+                
+                </div>
+ 
+                <div class="form-group mb-3">
+                    <label for="country_code">Country <span class="text-danger">*</span></label>
+                    <select class="form-control select2" id="country_code" name="country_code" formControlName="country_code" [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
+                        <option value="" disabled selected>Select Field Type</option>
+                        <option *ngFor="let Typedata of getAllTypemetaData let i = index;">{{Typedata.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.country_code.errors" class="invalid-feedback">
+                        <div *ngIf="f.country_code.errors.required">Field Type is required.</div>
+                    </div>
+                </div>
+
+
+                                
+                <div class="form-group mb-3">
+                    <label for="phone">Phone<span class="text-danger">*</span></label>
+                    <input type="text" id="phone" name="phone" formControlName="phone" class="form-control" placeholder="Enter Phone Number" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"/>
+                    <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+                        <div *ngIf="f.phone.errors.required">Field Name is required.</div>
+                    </div>
+                
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label for="fax">Fax </label>
+                    <input type="text" id="fax" name="fax" formControlName="fax" class="form-control" placeholder="Enter Fax Number" [ngClass]="{ 'is-invalid': submitted && f.fax.errors }"/>
+                    <div *ngIf="submitted && f.fax.errors" class="invalid-feedback">
+                        <div *ngIf="f.fax.errors.required">Field Name is required.</div>
+                    </div>
+                
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="email">Email<span class="text-danger">*</span></label>
+                    <input type="text" id="email" name="email" formControlName="email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                        <div *ngIf="f.email.errors.required">Field Name is required.</div>
+                    </div>
+                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="website">Website </label>
+                    <input type="text" id="website" name="website" formControlName="website" class="form-control" placeholder="Enter Website" [ngClass]="{ 'is-invalid': submitted && f.website.errors }"/>
+                    <div *ngIf="submitted && f.website.errors" class="invalid-feedback">
+                        <div *ngIf="f.website.errors.required">Field Name is required.</div>
+                    </div>
+                
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label for="sports">Sports Offered <span class="text-danger">*</span></label>
+
+                    <ng-select [items]="getAllSportmetaData"
+                    id="sports" name="sports" formControlName="sports"
+                   bindLabel="name"
+                   bindValue="id"
+                   [multiple]="true"
+                   placeholder="Select Sports Offered"
+                   (change)="OnSportChange($event,orgCreateForm)"
+                   [ngClass]="{ 'is-invalid': submitted && f.sports.errors }">
+                    </ng-select>
+                <!--
+                    <select multiple="true" class="form-control select2" id="sports" name="sports" formControlName="sports" [ngClass]="{ 'is-invalid': submitted && f.sports.errors }">
+                        <option value="" disabled selected>Select Field Type</option>
+                        <option *ngFor="let Typedata of getAllTypemetaData let i = index;">{{Typedata.name}}</option>
+                    </select>
+                -->
+                    <div *ngIf="submitted && f.sports.errors" class="invalid-feedback">
+                        <div *ngIf="f.sports.errors.required">Field Type is required.</div>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="orgCreateForm?.value.sports">
+                    <div class="col-12 mt-2 heading">
+                      <h4>Governing Body Details</h4>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="orgCreateForm?.value.sports">
+                    <div class="col-12 mt-2 mb-0 pl-0">
+                      <div formArrayName="governing_body_info">
+                        <table id="basic-datatable" class="table table-responsive datatables dt-responsive nowrap mb-0">
+                          <thead class="border">
+                            <tr>
+                              <th class="border">Sport Name</th>
+                              <th class="border">Is National Governing Body</th>
+                              <th class="border">National Governing Body Organization</th>
+                              <th class="border">Is State Governing Body</th>
+                              <th class="border">State Governing Body Organization</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="border"
+                              *ngFor="let individualGoverningInfo of orgCreateForm?.get('governing_body_info')?.controls; let governingBodyIndex = index"
+                              [formGroupName]="governingBodyIndex">
+                              <td class="border p-1 pt-2">{{individualGoverningInfo.value.sport_name}}</td>
+                              <td class="border p-1 verticalAlign">
+                                <div class="radio  mx-2 form-check-inline">
+                                  <input type="radio" value="true" (input)="closeErrors('National')"
+                                    [id]="individualGoverningInfo.get('is_national_true').value"
+                                    formControlName="is_national_governing_organization"
+                                    (click)="getnationalList($event,orgCreateForm,governingBodyIndex,individualGoverningInfo)">
+                                  <label [for]="individualGoverningInfo.get('is_national_true').value"> Yes </label>
+                                </div>
+                                <div class="radio  mx-2 form-check-inline">
+                                  <input type="radio" value="false" (input)="closeErrors('National')"
+                                    [id]="individualGoverningInfo.get('is_national_false').value"
+                                    formControlName="is_national_governing_organization"
+                                    (click)="getnationalList($event,orgCreateForm,governingBodyIndex,individualGoverningInfo)">
+                                  <label [for]="individualGoverningInfo.get('is_national_false').value"> No </label>
+                                </div>
+      
+                                <div
+                                  *ngIf="individualGoverningInfo.controls.is_national_governing_organization.errors?.required && submitted"
+                                  class="input-error-msg text-danger">
+                                  Need to be choosen.
+                                </div>
+                              </td>
+                              <td class="border p-1">
+                                <div *ngIf="individualGoverningInfo.get('is_national_visible').value">
+                                  <ng-select [items]="individualGoverningInfo.get('lov_for_national').value" bindLabel="name"
+                                    [loading]="nationalGoverning" appendTo="body"
+                                    *ngIf="individualGoverningInfo.get('is_select_dropdown_for_national').value"
+                                    bindValue="organization_id" [clearable]="false" id="selectSuffix"
+                                    placeholder="Select national governing body organization" name="organization_id"
+                                    (change)="nationalDropdown($event,orgCreateForm,governingBodyIndex)"
+                                    formControlName="national_governing_organization_id">
+                                  </ng-select>
+                                  <p class="text-center" *ngIf="individualGoverningInfo.get('is_hypen_for_national').value">-
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="border p-1 verticalAlign">
+                                <div class="radio  mx-2 form-check-inline">
+                                  <input type="radio" value="true" [id]="individualGoverningInfo.get('is_state_true').value"
+                                    formControlName="is_state_governing_organization" (input)="closeErrors('State')"
+                                    (click)="getstateList($event,orgCreateForm,governingBodyIndex)">
+                                  <label [for]="individualGoverningInfo.get('is_state_true').value"> Yes </label>
+                                </div>
+                                <div class="radio   mx-2 form-check-inline">
+                                  <input type="radio" value="false" [id]="individualGoverningInfo.get('is_state_false').value"
+                                    formControlName="is_state_governing_organization" (input)="closeErrors('State')"
+                                    (click)="getstateList($event,orgCreateForm,governingBodyIndex)">
+                                  <label [for]="individualGoverningInfo.get('is_state_false').value"> No </label>
+                                </div>
+                                <div
+                                  *ngIf="individualGoverningInfo.controls.is_state_governing_organization.errors?.required && submitted"
+                                  class="input-error-msg text-danger">
+                                  Need to be choosen.
+                                </div>
+                              </td>
+                              <td class="border p-1">
+                                <div *ngIf="individualGoverningInfo.get('is_state_visible').value">
+                                  <ng-select [items]="individualGoverningInfo.get('lov_for_state').value" bindLabel="name"
+                                    appendTo="body" *ngIf="individualGoverningInfo.get('is_select_dropdown_for_state').value"
+                                    bindValue="organization_id" id="selectSuffix" [loading]="stateGoverning"
+                                    (change)="stateDropdown($event,orgCreateForm,governingBodyIndex)" [clearable]="false"
+                                    [disabled]="!orgCreateForm.value.state && !orgCreateForm.value.country_code"
+                                    placeholder="Select state governing body organization" name="organization_id"
+                                    formControlName="state_governing_organization_id">
+                                  </ng-select>
+                                  <p class="text-center" *ngIf="individualGoverningInfo.get('is_hypen_for_state').value">-</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+      
+                  </div>
+
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Primary Contact Details</h5>
+
+                <div class="form-group mb-3">
+                    <label for="primary_first_name">First Name<span class="text-danger">*</span></label>
+                    <input type="text" id="primary_first_name" name="primary_first_name" formControlName="primary_first_name" class="form-control" placeholder="Enter First Name" [ngClass]="{ 'is-invalid': submitted && f.primary_first_name.errors }"/>
+                    <div *ngIf="submitted && f.primary_first_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.primary_first_name.errors.required">First Name is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="primary_middle_initial">Middle Initial</label>
+                    <input type="text" id="primary_middle_initial" name="primary_middle_initial" formControlName="primary_middle_initial" class="form-control" placeholder="Enter Middle Initial" [ngClass]="{ 'is-invalid': submitted && f.primary_middle_initial.errors }"/>
+                    <div *ngIf="submitted && f.primary_middle_initial.errors" class="invalid-feedback">
+                        <div *ngIf="f.primary_middle_initial.errors">Middle Initial check character lenght, Maximum 3 character.</div>
+                    </div>
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label for="last_name">Last Name<span class="text-danger">*</span></label>
+                    <input type="text" id="primary_last_name" name="primary_last_name" formControlName="primary_last_name" class="form-control" placeholder="Enter Last Name" [ngClass]="{ 'is-invalid': submitted && f.primary_last_name.errors }"/>
+                    <div *ngIf="submitted && f.primary_last_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.primary_last_name.errors.required">Last Name is required.</div>
+                    </div>                
+                </div>
+ 
+                <div class="form-group mb-3">
+                    <label for="primary_suffix">Suffix</label>
+                    <select class="form-control select2" id="primary_suffix" name="primary_suffix" formControlName="primary_suffix">
+                        <option value="" disabled selected>Select Suffix</option>
+                        <option *ngFor="let Typedata of getUserSuffixDataArray let i = index;">{{Typedata.name}}</option>
+                    </select>
+                </div> 
+             
+                <div class="form-group mb-3">
+                    <label for="primary_admin_email">Email Address<span class="text-danger">*</span></label>
+                    <input type="text" id="primary_admin_email" name="primary_admin_email" formControlName="primary_admin_email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.primary_admin_email.errors }"/>
+                    <div *ngIf="submitted && f.primary_admin_email.errors" class="invalid-feedback">
+                        <div *ngIf="f.primary_admin_email.errors.required">Email is required.</div>
+                        <div *ngIf="f.primary_admin_email.errors?.pattern">Enter a valid email address.</div>
+                    </div>                
+                </div>
+
+                
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Secondary Contact Details</h5>
+
+                <div class="form-group mb-3">
+                    <label for="secondary_first_name">First Name</label>
+                    <input type="text" id="secondary_first_name" name="secondary_first_name" formControlName="secondary_first_name" class="form-control" placeholder="Enter First Name" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="secondary_middle_initial">Middle Initial</label>
+                    <input type="text" id="secondary_middle_initial" name="secondary_middle_initial" formControlName="secondary_middle_initial" class="form-control" placeholder="Enter Middle Initial" />
+                    <div *ngIf="submitted && f.secondary_middle_initial.errors" class="invalid-feedback">
+                        <div *ngIf="f.secondary_middle_initial.errors">Middle Initial check character lenght, Maximum 3 character.</div>
+                    </div>
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label for="secondary_last_name">Last Name</label>
+                    <input type="text" id="secondary_last_name" name="secondary_last_name" formControlName="secondary_last_name" class="form-control" placeholder="Enter Last Name" />
+                </div>
+ 
+                <div class="form-group mb-3">
+                    <label for="secondary_suffix">Suffix</label>
+                    <select class="form-control select2" id="secondary_suffix" name="secondary_suffix" formControlName="secondary_suffix">
+                        <option value="" disabled selected>Select Suffix</option>
+                        <option *ngFor="let Typedata of getUserSuffixDataArray let i = index;">{{Typedata.name}}</option>
+                    </select>
+                </div> 
+             
+                <div class="form-group mb-3">
+                    <label for="email">Email Address</label>
+                    <input type="text" id="secondary_admin_email" name="secondary_admin_email" formControlName="secondary_admin_email" class="form-control" placeholder="Enter Email Address"/>
+                    <div *ngIf="submitted && f.secondary_admin_email.errors" class="invalid-feedback">
+                        <div *ngIf="f.secondary_admin_email.errors?.pattern">Enter a valid email address.</div>
+                    </div>                
+                </div>
+
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="listOrganization()" type="button" class="btn w-sm btn-light waves-effect" style="float: left;">Cancel</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn w-sm btn-success ml-1" style="float: right;">Save</button>
+                    </div>
+                </div> <!-- end col -->
+    
+            </form>    
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+ 
+    </div>
+    <!-- end row -->

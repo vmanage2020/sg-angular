@@ -1,0 +1,166 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            
+
+            <button (click)="addUser()" type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
+                <i class="mdi mdi-plus-circle"></i> Add User
+            </button>
+            <h4 class="header-title mb-4">Import Users
+
+                <a  class="color font-weight-bold mrg ml-2"  href="https://firebasestorage.googleapis.com/v0/b/sportsgravy-testing.appspot.com/o/sampleUserImportTemplate%2Fstandard_user_import_template.csv?alt=media&token=f0f88e4a-3822-44d0-a6e2-fcb5269c32b1" 
+                download>Download Template</a>
+            </h4>
+            
+             
+            <div class="table-responsive">
+          
+            <table class="table table-hover m-0 table-centered dt-responsive nowrap w-100" id="tickets-table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th class="hidden-sm">Action</th>
+                    
+                    <th>Sport</th>
+                    <th>Season</th>
+                    <th>File <br/>Name</th>
+                    <th>Uploaded <br/>By</th>
+                    <th>Uploaded <br/>Date/Time</th>
+
+
+                    <th>Status</th>
+                    <th>Total <br/>Rows</th>
+                    <th>Success <br/>Rows</th>
+                    <th>Error <br/>Rows</th>
+                    <th>Total <br/>Users <br/>Created</th>
+                    <th>Players <br/>Created</th>
+                    <th>Duplicate <br/>Players</th>
+                    <th>Guardians <br/>Created</th>
+                    <th>Duplicate <br/>Guardians</th>
+
+                </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let Importdata of data let i = index;">
+                    
+                        <td><b>{{i+1}}</b></td>
+                        
+                        <td>
+                            <div class="btn-group dropdown">
+                                <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" (click)="viewUser(Importdata.imported_file_id)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle"></i>View Matrix</a>
+                                    <a class="dropdown-item" (click)="viewUserList(Importdata.imported_file_id,1)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle" style="color:blue !important;"></i>All List</a>        
+                                    <a class="dropdown-item" (click)="viewUserList(Importdata.imported_file_id,2)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle" style="color:green !important;"></i>Success List</a>
+                                    <a class="dropdown-item" (click)="viewUserList(Importdata.imported_file_id,3)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle" style="color:red !important;"></i>Failure List</a>
+                                                                
+                                    <!--
+                                        <a class="dropdown-item" (click)="editUser(Importdata.imported_file_id)"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
+                                        <a class="dropdown-item" (click)="deleteUser(Importdata.imported_file_id,Importdata.imported_file_name)"><i class="mdi mdi-delete mr-2 text-muted font-18 vertical-middle"></i>Remove</a>
+                                    -->
+                                </div>
+                            </div>                            
+                        </td>    
+ 
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.sports_name}}</span>
+                            </a>
+                        </td>
+    
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.season_name}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.imported_file_name}}</span>
+                            </a>
+                        </td>
+                        
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.imported_by}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2" *ngIf="Importdata.imported_datetime!=null">{{Importdata.imported_datetime.toDate() | date}}</span>
+                            </a>
+                        </td>
+
+
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2" *ngIf="Importdata.processed_Flag == 'y' || Importdata.processed_Flag == 'Y' "> Processed </span>
+                                <span class="ml-2" *ngIf="Importdata.processed_Flag == 'n' || Importdata.processed_Flag == 'N' "> Processing </span>
+                                <span class="ml-2" *ngIf="Importdata.processed_Flag == 'e' || Importdata.processed_Flag == 'E' "> Unsupported </span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.total_records_found}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.processed_records}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.error_records}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.total_user_records}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.player_records_created}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.player_duplicate_records_found}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.guardian_records_created}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.guardian_duplicate_records_found}}</span>
+                            </a>
+                        </td>
+                    </tr>   
+                </tbody>
+            </table>
+
+            </div>
+        </div>
+    </div><!-- end col -->
+</div>
+<!-- end row -->
+
+

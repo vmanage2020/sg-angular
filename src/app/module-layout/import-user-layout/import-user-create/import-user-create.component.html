@@ -1,0 +1,124 @@
+<div class="wrapper p-0">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-12 p-0">
+        <div class="card mb-0 px-3 minHeightForCard">
+          <app-ui-preloader [display]="loading" [ngStyle]="{'display': displayLoader ? 'block' : 'none' }"  [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+          <div class="card-body paddingCard" [ngStyle]="{'display': !displayLoader ? 'block' : 'none' }">
+            <form class="needs-validation" name="createUserImportForm" [formGroup]="createUserImportForm"
+              (ngSubmit)="onSubmit(createUserImportForm)" novalidate>
+              
+
+              <div class="row mb-2">
+                <h3 class="headingTitle">Add Users</h3>
+              </div>
+              <div class="row mb-2">
+                <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveUp('up')"
+                  [disabled]="!createUserImportForm.valid || !progress">Submit</button>&nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                  (click)="goBack()">Cancel</button>&nbsp;&nbsp;&nbsp;
+                <a class="color font-weight-bold mrg"
+                  href="https://firebasestorage.googleapis.com/v0/b/sportsgravy-testing.appspot.com/o/sampleUserImportTemplate%2Fstandard_user_import_template.csv?alt=media&token=f0f88e4a-3822-44d0-a6e2-fcb5269c32b1"
+                  download>Download Standard User Import Template</a>
+              </div>
+              <ngb-alert type="danger" *ngIf="error && isSaveUp" class="margin" [dismissible]="true"
+                (click)=closeError()>{{error}}
+              </ngb-alert>
+              <div class="row">
+                <div class="col-12  mt-2 heading">
+                  <h4>Import Details</h4>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2 mt-2 label-border-height">
+                  <label class="for-label-req" for="first_name">Sport</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+                  <ng-select [items]="SportsList" formControlName="sports_id" bindLabel="name" [loading]="sportSelect"
+                    (focus)="selectedSport($event,createUserImportForm)" [clearable]="false"
+                    (change)="selectedSport($event,createUserImportForm)" bindValue="sport_id"
+                    placeholder="Select Sport">
+                  </ng-select>
+                  <div class="input-error-msg text-danger" *ngIf="sportValid">
+                    Select Sport.
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2 mt-2 label-border-height">
+                  <label class="for-label-req" for="first_name">Season</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+                  <ng-select [items]="seasonList" formControlName="season_id" bindLabel="season_name"
+                    [loading]="seasonSelect" (focus)="selectedSeason($event,createUserImportForm)" [clearable]="false"
+                    (change)="selectedSeason($event,createUserImportForm)" bindValue="season_id"
+                    placeholder="Select Season">
+                  </ng-select>
+                  <div class="input-error-msg text-danger" *ngIf="seasonValid">
+                    Select Season.
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-2 mt-2 label-border-height">
+                  <label class="for-label-req" for="middle_initial">File Template</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+                  <ng-select [items]="fileList" formControlName="imported_file_template" bindLabel="name"
+                    [clearable]="false" bindValue="name" (change)="selectFile()" placeholder="Select File Template">
+                  </ng-select>
+                  <div class="input-error-msg text-danger" *ngIf="fileValid">
+                    Select File Template.
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2 mt-2 label-border-height">
+                  <label class="for-label-req" for="last_name">File</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+
+                  <input type="text" formControlName="imported_file_name" class="form-control edit-icon input"
+                    (click)="fileUploader.click()" name="team_name" placeholder="Click to upload file" id="team_name"
+                    readonly />
+                  <input type="file" class="form-control" #fileUploader (change)="showPreview($event)"
+                    style="display: none">
+                  <!-- <img src="assets/images/xls.png" alt="" height="35" class="px-1 edit-icon input" (click)="fileUploader.click()"> -->
+
+                  <div class="mt-1 text-dark">Supported formats: xls, xlsx, csv</div>
+                  <!-- <div *ngIf="progress !== 0" >
+                      <ngb-progressbar class="text-dark" [value]="progress" [striped]="true" [animated]="true">{{progress}} %</ngb-progressbar>
+                     </div> -->
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-animated" [ngStyle]="{ 'width': progress + '%' }">
+                      {{progress}} %</div>
+                  </div>
+                  <div *ngIf="f.imported_file_name.errors?.required && submitted" class="input-error-msg text-danger">
+                    Import File is required.</div>
+
+                  <div *ngIf="fileSize" class="input-error-msg text-danger">
+                    File Size limit is 5Mb.
+                  </div>
+                  <div *ngIf="fileType" class="input-error-msg text-danger">
+                    Invalid File Type.
+                  </div>
+                </div>
+              </div>
+              <div class="row my-2">
+                <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveUp('down')"
+                  [disabled]="!createUserImportForm.valid || !progress">Submit</button>&nbsp;&nbsp;&nbsp;
+                <button (click)="goBack()" type="button"
+                  class="btn btn-dark waves-effect waves-light m-l-10">Cancel</button>
+              </div>
+              <ngb-alert type="danger" *ngIf="error && !isSaveUp" class="margin" [dismissible]="true"
+                (click)=closeError()>{{error}}
+              </ngb-alert>
+            </form>
+
+          </div> <!-- end card-body -->
+        </div> <!-- end card-->
+      </div>
+    </div>
+  </div>
+</div>

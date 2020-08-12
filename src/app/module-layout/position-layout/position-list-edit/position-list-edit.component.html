@@ -1,0 +1,68 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+        <div class="col-lg-6">
+            <div class="card-box">
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Edit Position Details</h5>
+                
+                <form class="needs-validation" name="createpositionForm" [formGroup]="createpositionForm"
+                (ngSubmit)="onSubmit(createpositionForm)" novalidate>
+
+                <div class="form-group mb-3">
+                    <label for="sport_id"> Sport<span class="text-danger">*</span></label>
+                    <select class="form-control select2" [ngModel]="getPositionValueArray.sport_id" id="sport_id" name="sport_id" formControlName="sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                        <option value="" disabled selected >Select Sport</option>
+                        <option *ngFor="let SportData of getSportsArray let i = index;" value="{{SportData.sport_id}}">{{SportData.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.sport_id.errors" class="invalid-feedback">
+                        <div *ngIf="f.sport_id.errors.required">Sport Name is required.</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="parent_position_id"> Parent Position </label>
+                    <select class="form-control select2" [ngModel]="getPositionValueArray.parent_position_id" id="parent_position_id" name="parent_position_id" formControlName="parent_position_id" >
+                        <option value="" disabled selected >Select Parent Position</option>
+                        <option *ngFor="let PositionData of getPositionsArray let i = index;" value="{{PositionData.position_id}}">{{PositionData.name}}</option>
+                    </select>
+                    <!--
+                    <div *ngIf="submitted && f.country_code.errors" class="invalid-feedback">
+                        <div *ngIf="f.country_code.errors.required">Parent Position is required.</div>
+                     </div>
+                    -->
+                </div>
+  
+                <div class="form-group mb-3">
+                    <label for="name">Position Name<span class="text-danger">*</span></label>
+                    <input type="text" [ngModel]="getPositionValueArray.name" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter Position Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
+                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">Position Name is required.</div>
+                    </div>
+                
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label for="abbreviation">Abbreviation<span class="text-danger">*</span></label>
+                    <input type="text" [ngModel]="getPositionValueArray.abbreviation" id="abbreviation" name="abbreviation" formControlName="abbreviation" class="form-control" placeholder="Enter Abbreviation" [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }"/>
+                    <div *ngIf="submitted && f.abbreviation.errors" class="invalid-feedback">
+                        <div *ngIf="f.abbreviation.errors.required">Abbreviation is required.</div>
+                    </div>
+                
+                </div>
+ 
+             
+  
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="listPosition()" type="button" class="btn w-sm btn-light waves-effect" style="float: left;">Cancel</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn w-sm btn-success ml-1" style="float: right;">Save</button>
+                    </div>
+                </div> <!-- end col -->
+    
+            </form>    
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+ 
+    </div>
+    <!-- end row -->

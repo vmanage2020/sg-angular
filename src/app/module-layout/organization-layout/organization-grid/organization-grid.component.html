@@ -1,0 +1,21 @@
+ <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 p-0">
+        <div class="card mb-0 minHeightForCard">
+          <app-ui-preloader [display]="loading" [ngStyle]="{'display': displayLoader ? 'block' : 'none' }"  [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+          <div class="card-body py-1 px-2" [ngStyle]="{'display': !displayLoader ? 'block' : 'none' }">
+            <h3 class="mb-3 headingTitle">Organizations</h3>
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <a (click)="addOrganization()" class="btn btn-dark link-active edit-icon"
+                  data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a"> Add Organization</a>
+              </div>
+            </div>
+            <!-- <app-ui-preloader [display]="loading"></app-ui-preloader> -->
+            <ngi-datatable [config]="dataTableForGrid" *ngIf="isEnabled" (editEvent)="editOrganization($event)" (viewEvent)="viewOrganization($event)" 
+            (valueForAddEvent)="valueForAddOrganization($event)" (loaderEvent)="reInitialise($event)"></ngi-datatable>   
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

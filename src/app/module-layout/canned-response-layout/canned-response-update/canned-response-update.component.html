@@ -1,0 +1,93 @@
+<div class="wrapper p-0">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xl-12 p-0">
+              <div class="card mb-0 px-3 minHeightForCard">
+                <app-ui-preloader [display]="loading" *ngIf="displayLoader" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+                <div class="card-body paddingCard" *ngIf="!displayLoader">
+                  <form class="needs-validation" name="updateCannedResponseForm" [formGroup]="updateCannedResponseForm"
+                    (ngSubmit)="onSubmit(updateCannedResponseForm)" novalidate>
+                    
+                    
+                    <div class="row mb-2">
+                      <h3 class="headingTitle">Update Canned Response</h3>
+                    </div>
+                    <div class="row mb-2">
+                      <button type="submit" class="btn btn-dark waves-effect waves-light"  (click)="saveUp('up')"
+                        >Save</button>&nbsp;&nbsp;&nbsp;                      
+                      <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                        (click)="goBack()">Cancel</button>
+                    </div>
+                    <ngb-alert type="danger" *ngIf="error && isSaveUp" class="margin sdkErrorInUpperTag" [dismissible]="true" (click)=closeError()>{{error}}
+                    </ngb-alert>
+                   <div class="row">
+                      <div class="col-12  mt-2 heading">
+                        <h4>Canned Response Details</h4>
+                      </div>
+                    </div>
+                    
+                    <div class="row">
+                      <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                        <label class="for-label-req" for="name">Canned Response Name</label>
+                      </div>
+                      <div class="col-4 mt-2" id="customHeight">
+                        <!-- <label>{{this.injectData.data?.cannedResponseTitle || "--"}}</label> -->
+                        <input type="text" class="form-control" disabled="true"
+                        [value]="this.injectData.data?.cannedResponseTitle | titlecase"/>
+                      </div>
+      
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-Description allColMaxWidth">
+                          <label class="for-label-Description" for="canned_response_desc">Canned Response Description</label>
+                        </div>
+                        <div class="col-4 mt-2" id="customHeight">
+<!-- 
+                            <div id="snow-editor" style="height: 300px;" (input)="cannedResDesc($event)">
+                           
+
+                              </div> -->
+                            <textarea formControlName="cannedResponseDesc" class="form-control" row="16" cols="64" name="cannedResponseDesc" id="cannedResponseDesc"
+                            placeholder="Enter canned response description"></textarea>                    
+                            <!-- <app-ngx-editor [placeholder]="'Enter text '" [spellcheck]="true" [height]="'250px'" formControlName="cannedResponseDesc"></app-ngx-editor> -->
+                            <!-- <angular-editor [placeholder]="'Enter text here...'"   [config]="editorConfig" formControlName="cannedResponseDesc"></angular-editor> -->
+                            <div *ngIf="f.cannedResponseDesc?.errors?.required && submitted" class="input-error-msg text-danger">Canned Response Description is required.</div>                        
+                   
+                        </div>
+        
+                      </div>
+                      <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                          <label class="for-label-req" for="first_name">Sport</label>
+                        </div>
+                        <div class="col-4 mt-2" id="customHeight">
+                          <!-- <label>{{this.injectData.data?.sport | titlecase}}</label> -->
+                          <input type="text"  class="form-control" disabled="true"
+                          [value]="this.injectData.data?.sport_name | titlecase"/>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="injectData.data?.copied_from">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                          <label class="for-label" for="first_name">Copied From</label>
+                        </div>
+                        <div class="col-4 mt-2" id="customHeight">
+                                <input type="text"  class="form-control" disabled="true"
+                                [value]="injectData.data?.copied_from"/>                
+                        </div>
+                      </div> 
+                      <ngb-alert type="danger" *ngIf="error && !isSaveUp" class="margin sdkErrorInDownTag mt-2" [dismissible]="true" (click)=closeError()>{{error}}
+                      </ngb-alert>
+                    <div class="row mt-3">
+                      <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveUp('down')"
+                        >Save</button>&nbsp;&nbsp;&nbsp;                      
+                      <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                        (click)="goBack()">Cancel</button>
+                    </div>                    
+                  </form>
+      
+                </div> <!-- end card-body -->
+              </div> <!-- end card-->
+            </div>
+          </div>
+        </div>
+      </div>

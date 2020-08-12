@@ -1,0 +1,64 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            
+
+            <button (click)="addSports()" type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
+                <i class="mdi mdi-plus-circle"></i> Add Sport
+            </button>
+            <h4 class="header-title mb-4">Sports</h4>
+        
+            <table class="table table-hover m-0 table-centered dt-responsive nowrap w-100" id="tickets-table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>Sport</th>
+                    <th>Country</th>
+                    <th>Created Date</th>
+                    <th class="hidden-sm">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let Sportsdata of data let i = index;">
+                    
+                        <td><b>{{i+1}}</b></td>
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Sportsdata.name}}</span>
+                            </a>
+                        </td>
+    
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Sportsdata.country}}</span>
+                            </a>
+                        </td>
+                        
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Sportsdata.created_date.toDate() | date}}</span>
+                            </a>
+                        </td>
+     
+                        <td>
+                            <div class="btn-group dropdown">
+                                <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" (click)="editSports(Sportsdata.sport_id)"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
+                                </div>
+                            </div>
+                        </td>    
+                    </tr>     
+
+                </tbody>
+            </table>
+        </div>
+    </div><!-- end col -->
+</div>
+<!-- end row -->
+
+

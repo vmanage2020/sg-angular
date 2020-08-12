@@ -1,0 +1,45 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+        <div class="col-lg-6">
+            <div class="card-box">
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Edit Sport Details</h5>
+                
+                <form class="needs-validation" name="editsportsForm" [formGroup]="editsportsForm"
+                (ngSubmit)="onSubmit(editsportsForm)" novalidate>
+
+                <div class="form-group mb-3">
+                    <label for="country_code">Country<span class="text-danger">*</span></label>
+                    <select class="form-control select2" [ngModel]="getAllSportmetaData.country_code" id="country_code" name="country_code" formControlName="country_code" [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
+                        <option value="" disabled selected >Select Country</option>
+                        <option *ngFor="let Countrydata of countryCodeSelect let i = index;" [ngValue]="Countrydata.country_code">{{Countrydata.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.country_code.errors" class="invalid-feedback">
+                        <div *ngIf="f.country_code.errors.required">Country Name is required.</div>
+                    </div>
+                </div>
+  
+                <div class="form-group mb-3">
+                    <label for="name">Sport Name<span class="text-danger">*</span></label>
+                    <input type="text" [ngModel]="getAllSportmetaData.name" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter Sport Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
+                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">Sport Name is required.</div>
+                    </div>
+                
+                </div>
+ 
+             
+  
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="listSports()" type="button" class="btn w-sm btn-light waves-effect" style="float: left;">Cancel</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn w-sm btn-success ml-1" style="float: right;">Save</button>
+                    </div>
+                </div> <!-- end col -->
+    
+            </form>    
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+ 
+    </div>
+    <!-- end row -->

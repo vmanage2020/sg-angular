@@ -1,0 +1,95 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+        <div class="col-lg-6">
+            <div class="card-box">
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Create User Details</h5>
+                
+                <form class="needs-validation" name="createuserForm" [formGroup]="createuserForm" (ngSubmit)="onSubmit(createuserForm)" novalidate>
+
+                    <ngb-alert type="danger" class="margin mt-2" *ngIf="userAlreadyError" [dismissible]="true" (click)=closeError()>
+                        User Already Exist
+                    </ngb-alert>
+                    <br/>
+                <div class="form-group mb-3">
+                    <label for="product-reference">Role <span class="text-danger">*</span></label>
+                    <br/>
+                   
+                    <div class="paddingTopForRoleCreate d-flex">
+                        <div *ngFor="let role of roleList;let i = index" >
+                            <div class="custom-control custom-checkbox pr-1">
+                            <!--
+                                    <input type="checkbox" #checkboxes class="custom-control-input" [id]="role.role_id"
+                                    [value]="role.role_id" (click)="selectedRole($event,createUserForm)">
+                            -->    
+                            <input type="checkbox" #checkboxes class="custom-control-input" [id]="role.role_id"
+                            [value]="role.role_id" (click)="selectedRole($event,createUserForm)">
+                                <label class="custom-control-label" [for]="role.role_id">{{role.name}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="submitted && f.roles?.errors" class="invalid-feedback">
+                        <div *ngIf="f.roles?.errors?.required">Need to be choosen.</div>
+                    </div>  
+                <!--    
+                    <div class="input-error-msg text-danger" *ngIf="f.roles?.errors?.required && submitted">
+                        Need to be choosen.
+                    </div>
+                -->
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="first_name">First Name<span class="text-danger">*</span></label>
+                    <input type="text" id="first_name" name="first_name" formControlName="first_name" class="form-control" placeholder="Enter First Name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }"/>
+                    <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.first_name.errors.required">First Name is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="middle_initial">Middle Initial</label>
+                    <input type="text" id="middle_initial" name="middle_initial" formControlName="middle_initial" class="form-control" placeholder="Enter Middle Initial" [ngClass]="{ 'is-invalid': submitted && f.middle_initial.errors }"/>
+                    <div *ngIf="submitted && f.middle_initial.errors" class="invalid-feedback">
+                        <div *ngIf="f.middle_initial.errors">Middle Initial check character lenght, Maximum 3 character.</div>
+                    </div>
+                </div>
+
+                
+                <div class="form-group mb-3">
+                    <label for="last_name">Last Name<span class="text-danger">*</span></label>
+                    <input type="text" id="last_name" name="last_name" formControlName="last_name" class="form-control" placeholder="Enter Last Name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }"/>
+                    <div *ngIf="submitted && f.last_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.last_name.errors.required">Last Name is required.</div>
+                    </div>                
+                </div>
+ 
+                <div class="form-group mb-3">
+                    <label for="suffix">Suffix</label>
+                    <select class="form-control select2" id="suffix" name="suffix" formControlName="suffix">
+                        <option value="" disabled selected>Select Suffix</option>
+                        <option *ngFor="let Typedata of getUserSuffixDataArray let i = index;">{{Typedata.name}}</option>
+                    </select>
+                </div> 
+             
+                <div class="form-group mb-3">
+                    <label for="email">Email Address<span class="text-danger">*</span></label>
+                    <input type="text" id="email" name="email" formControlName="email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                        <div *ngIf="f.email.errors.required">Email is required.</div>
+                        <div *ngIf="f.email.errors?.pattern">Enter a valid email address.</div>
+                    </div>                
+                </div>
+
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="listUser()" type="button" class="btn w-sm btn-light waves-effect" style="float: left;">Cancel</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn w-sm btn-success ml-1" style="float: right;">Save</button>
+                    </div>
+                </div> <!-- end col -->
+    
+            </form>    
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+ 
+    </div>
+    <!-- end row -->

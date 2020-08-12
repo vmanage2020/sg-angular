@@ -1,0 +1,236 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12 p-0">
+            <div class="card  mb-0 px-3 minHeightForCard">
+                <app-ui-preloader [display]="loading" [ngStyle]="{'display': displayLoader ? 'block' : 'none' }" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+                <div class="card-body paddingCard" [ngStyle]="{'display': !displayLoader ? 'block' : 'none' }">
+                    <!-- <h3 class="mb-3 ">View User</h3> -->
+                    <div class="row mb-2">
+                        <h3 class="headingTitle">View User</h3>
+                    </div>
+                    <div class="row">
+                        <button (click)="navigateView()"
+                            class="btn btn-dark waves-effect waves-light  mr-2">Update</button>
+                            <button type="button" (click)="resendInvite('down')" *ngIf= isShowResendInvite
+                                class="btn btn-dark waves-effect waves-light mr-2">Resend Invite</button>
+                        <button type="button" class="btn btn-dark waves-effect waves-light "
+                            (click)="goBack()">Close</button>
+                    </div>                    
+                    <div class="row">
+                        <div class="col-12 mt-2 heading">
+                            <h4>User Details</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-sports allColMaxWidth">
+                            <label class="for-label-sports" for="name">Avatar</label>
+                        </div>
+                        <div class="col-5">
+                            <div class="image-upload pl-1">
+                                <label for="file-input" class="hoverable" *ngIf="ProfileUrl !== null">
+                                    <img [src]="ProfileUrl"  id="imageLabel"
+                                    [ngClass]="{
+                                        'defaultImage': deafulltImagePlaceholder === true, 
+                                        'customizedImage': deafulltImagePlaceholder === false}">
+                                </label>
+                                <div id="container" class="hoverable" *ngIf="ProfileUrl === null">
+                                    <div class="profile-image">
+                                        <div id="abbreviation"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="first_name">Name</label>
+                        </div>
+                        <div class="col-3 mt-3">
+                            <label>{{userInfo?.name || "-"}}</label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border allColMaxWidth">
+                            <label class="text-player" for="first_name">Role(s)</label>
+                        </div>
+                        <div class="col-9 mt-3" id="customHeight">
+                            <div *ngFor="let role of selectedRoles;let i = index">
+                                <div class="d-flex">
+
+                                    <div class="col-2 p-0">
+                                        <label class="">{{role.name}}</label>
+                                    </div>
+                                    <div class="col-4 p-0" *ngIf="role.isBanned">
+                                        <label class=""><b>Is Banned</b></label>
+                                        <label class="pl-2">- &nbsp; Yes</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="date_of_birth">Date Of Birth</label>
+                        </div>
+                        <div class="col-2 mt-3">
+
+                            <label>{{userInfo?.date_of_birth || "-"}}</label>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="street1">Street 1</label>
+                        </div>
+                        <div class="col-4 mt-3">
+
+                            <label>{{userInfo?.street1 || "-"}}</label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="street2">Street 2</label>
+                        </div>
+                        <div class="col-4 mt-3">
+                            <label>{{userInfo?.street2 || "-"}}</label>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="city">City</label>
+                        </div>
+                        <div class="col-3 mt-3">
+
+                            <label>{{userInfo?.city || "-"}}</label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="city">State/Province</label>
+                        </div>
+                        <div class="col-2 mt-3">
+
+                            <label>{{userInfo?.state || "-"}}</label>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="postal_code">Postal Code</label>
+                        </div>
+                        <div class="col-1 mt-3">
+                            <label>{{userInfo?.postal_code || "-"}}</label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="country_code">Country</label>
+                        </div>
+                        <div class="col-2 mt-3">
+                            <label>{{userInfo?.country || "-"}}</label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="email">Email</label>
+                        </div>
+                        <div class="col-9 mt-3">
+                            <label>{{userInfo?.email_address || "-"}}</label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="phone">Mobile Phone</label>
+                        </div>
+                        <div class="col-9 mt-3 ">
+
+                            <label
+                                *ngIf="userInfo?.mobile_phone">{{dialCode}}{{userInfo?.mobile_phone | mask: '(000) 000-0000' || "-"}}</label>
+                            <label *ngIf="!userInfo?.mobile_phone">-</label>
+
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="phone">Guardian(s)</label>
+                        </div>
+                        <div class="col-9 mt-3 ">
+                            <label>{{guardian || "-"}}</label>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <label class="for-label" for="phone">Player(s)</label>
+                        </div>
+                        <div class="col-9 mt-3">
+                            <label>{{player || "-"}}</label>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-Description allColMaxWidth">
+                            <label class="is-for-label-Description" for="phone">Is Suspended</label>
+                        </div>
+                        <div class="col-9 mt-2">
+                            <label *ngIf="!isSuspendLength" class="pt-2">{{userInfo?.isSuspended  || "-"}}</label>
+                            <table  class="datatables dt-responsive nowrap" *ngIf="isSuspendLength">
+                                <thead class="border">
+                                    <tr>
+                                        <th  class="border p-1">Status</th>
+                                        <th class="border p-1">Role</th>
+                                        <th class="border p-1">Suspension Start Date</th>
+                                        <th class="border p-1">Suspension End Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border" *ngFor="let suspend of suspendInfo; let i = index"
+                                        >
+                                        <td class="border p-1">Yes</td>
+                                        <td class="border p-1">{{suspend?.role || "-"}}
+                                           </td>
+                                           <td class="border p-1">{{suspend?.suspension_start_date || "-"}}
+                                        </td>
+                                        <td class="border p-1">{{suspend?.suspension_end_date || "-"}}
+                                        </td> 
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-3">
+                        <button (click)="navigateView()"
+                            class="btn btn-dark waves-effect waves-light mr-2">Update</button>
+                            <button type="button" (click)="resendInvite('down')" *ngIf= isShowResendInvite
+                                class="btn btn-dark waves-effect waves-light mr-2">Resend Invite</button>
+                        <button type="button" class="btn btn-dark waves-effect waves-light "
+                            (click)="goBack()">Close</button>
+                    </div>
+
+                </div> <!-- end card-body -->
+            </div> <!-- end card-->
+        </div>
+    </div>
+</div>

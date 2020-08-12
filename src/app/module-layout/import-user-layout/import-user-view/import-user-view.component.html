@@ -1,0 +1,303 @@
+<div class="wrapper p-0">
+  <div class="container-fluid">
+    <!-- <app-page-title title="View Season" ></app-page-title> -->
+
+
+    <div class="row">
+      <div class="col-xl-12 p-0">
+        <div class="card mb-0 px-3 minHeightForCard">
+          <div class="card-body paddingCard">
+            <app-ui-preloader [display]="loading"></app-ui-preloader>
+            <div class="row mb-2">
+              <h3 class="headingTitle">View Import</h3>
+            </div>
+            <div class="row">
+              <!-- <a (click)=navigateView() class="btn btn-dark waves-effect waves-light"
+                        data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a">Update</a>&nbsp;&nbsp;&nbsp; -->
+              <a id="close" (click)="goBack()" class="btn btn-dark waves-effect waves-light" data-animation="fadein"
+                data-plugin="custommodal" data-overlaycolor="#38414a">Close</a>
+            </div>
+
+            <div class="row">
+              <div class="col-12 mt-3 heading">
+                <h4>Import Details</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="sport_name">Upload Date/Time</label>
+              </div>
+              <div class="col-3 mt-3">
+                <label>{{importedUserInfo?.imported_datetime || "-"}}</label>
+
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Uploaded By</label>
+              </div>
+              <div class="col-6 mt-3">
+
+                <label>{{importedUserInfo?.imported_by || "-" + " [ " +  importedUserInfo?.imported_user_email_id || "-" + " ]"}} </label>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Total Rows Processed</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.total_records_found || "0"}}</label>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Total Rows Succeeded</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.processed_records || "0"}}</label>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Total Rows Rejected</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.error_records || "0"}}</label>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">User Records Created</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.total_user_created || "0"}}</label>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Player Records Processed</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.total_players_found || "0"}}</label>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Player Records Created</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.player_records_created || "0"}}</label>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Duplicate Player Records</label>
+              </div>
+              <div class="col-4 mt-3">
+                <label>{{importedUserInfo?.player_duplicate_records_found || "0"}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Guardian Records Processed</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.total_guardains_found || "0"}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Guardian Records Created</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.guardian_records_created || "0"}}</label>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Duplicate Guardian Records</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.guardian_duplicate_records_found || "0"}}</label>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="first_name">Season</label>
+              </div>
+              <div class="col-7 mt-3">
+                <label>{{importedUserInfo?.season_name || "-"}}{{ " | " + importedUserInfo?.season_start_date || "-"}}{{ " to " + importedUserInfo?.season_end_date || "-"}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="first_name">Sport</label>
+              </div>
+              <div class="col-5 mt-3">
+                <label>{{importedUserInfo?.sports_name || "-"}}</label>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="date_of_birth">Season Start Date</label>
+              </div>
+              <div class="col-5 mt-3">
+
+                <label>{{importedUserInfo?.season_start_date || "-"}}</label>
+
+
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Season End Date</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.season_end_date || "-"}}</label>
+              </div>
+
+            </div> -->
+
+
+
+
+
+            <!-- <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Guradian Records</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.guardian_records || "-"}}</label>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Player Records</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.player_records || "-"}}</label>
+              </div>
+
+            </div> -->
+
+
+
+
+
+            <!-- <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Total User Records</label>
+              </div>
+              <div class="col-4 mt-3">
+
+                <label>{{importedUserInfo?.total_user_records || "0"}}</label>
+              </div>
+
+            </div>
+
+            
+
+            
+
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Processed Flag</label>
+              </div>
+              <div class="col-9 mt-3">
+
+                <label *ngIf="importedUserInfo?.processed_Flag === 'y'">The file has been processed and ready to map the users.</label>
+                <label *ngIf="importedUserInfo?.processed_Flag === 'n'">The file has been processing.</label>
+                <label *ngIf="importedUserInfo?.processed_Flag === 'e'">The file has been corrupted.</label>
+              </div>
+
+            </div> -->
+
+
+            <!-- <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Imported File Template</label>
+              </div>
+              <div class="col-9 mt-3">
+
+                <label>{{importedUserInfo?.imported_file_template || "-"}}</label>
+              </div>
+
+            </div> -->
+
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">File Name</label>
+              </div>
+              <div class="col-9 mt-3">
+
+                <label>{{importedUserInfo?.imported_file_name || "-"}}</label>
+              </div>
+
+            </div>
+
+
+            <!-- <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Status</label>
+              </div>
+              <div class="col-9 mt-3">
+
+                <label>{{importedUserInfo?.original_status || "-"}}</label>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                <label class="for-label" for="street1">Error Description</label>
+              </div>
+              <div class="col-9 mt-3">
+
+                <label>{{importedUserInfo?.erroDes || "-"}}</label>
+              </div>
+
+            </div> -->
+
+
+
+            <div class="row mt-3">
+              <!-- <a (click)=navigateView() class="btn btn-dark waves-effect waves-light"
+                                          data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a">Update</a>&nbsp;&nbsp;&nbsp; -->
+              <a id="close" (click)="goBack()" class="btn btn-dark waves-effect waves-light" data-animation="fadein"
+                data-plugin="custommodal" data-overlaycolor="#38414a">Close</a>
+            </div>
+
+          </div> <!-- end card-body -->
+        </div> <!-- end card-->
+      </div>
+    </div>
+  </div>
+</div>

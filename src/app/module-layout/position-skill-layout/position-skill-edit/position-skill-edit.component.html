@@ -1,0 +1,79 @@
+<div class="wrapper">
+  <div class="container-fluid">
+
+    <!-- start page title -->
+    <app-page-title title="Update Position Skill" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <!-- end page title -->
+    <div class="row">
+      <div class="col-lg-3"></div>
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+
+         <form class="needs-validation" name="updatePositionSkillForm" [formGroup]="updatePositionSkillForm"
+              (ngSubmit)="updatePositionSkill(updatePositionSkillForm)" novalidate>
+
+              <app-ui-preloader [display]="loading"></app-ui-preloader>
+             
+              <div class="row">
+                <div class="col-12 mb-3 heading">
+                  <h4>Add New Position Skill</h4>
+                </div>
+                <div class="col-lg-6 col-xl-6 col-md-6">
+                  <div class="form-group">
+                    <label required for="sport_id">Sports</label>
+                    <ng-select [items]="sportsInfo" bindLabel="name"  placeholder="Select Sport" 
+                      formControlName="sport_id" [clearable]="false"  name="sport_id">
+                    </ng-select>
+
+                   
+
+                  </div>
+                </div>
+                <div class="col-lg-6 col-xl-6 col-md-6">
+                  <div class="form-group">
+                    <label required for="sport_id">Select Position</label>
+                    <ng-select [items]="positionInfo" bindLabel="name" bindValue="position_id" (change)=getPosName($event) 
+                      placeholder="Select Position" formControlName="position_id" [clearable]="false"
+                      name="position_id">
+                    </ng-select>
+                  </div>
+                  
+                  <div class="input-error-msg text-danger" *ngIf="positionValid">
+                   Position is required.
+                  </div>
+                </div>
+
+
+            
+                  <div formArrayName="skills_list" class="row display-content">
+                    <div *ngFor="let line of updatePositionSkillForm.get('skills_list')?.controls; let lineIndex = index" [formGroupName]="lineIndex" class="col-6 mx-0 pl-0" >                    
+                        <div >                          
+                            <h3 class="open-close accordion"><span>{{line?.get('name').value}}</span></h3>
+                            <div formArrayName="skills" class="ml-2">
+                              <div *ngFor="let player of line.get('skills').controls; let playerIndex = index" [formGroupName]="playerIndex">
+                                 <label> <input formControlName="isChecked" type="checkbox"> &nbsp;{{player?.get('name').value}} </label>
+                            </div>
+                            <p *ngIf="line?.get('skills').length == 0">&nbsp;No Skills available</p>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+            
+              
+              </div>
+              <div class="text-left mt-3">
+                <button type="submit" class="btn btn-dark waves-effect waves-light">Save</button>&nbsp;
+                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10" (click)=goBack()>Cancel</button>
+              </div>
+            </form>
+
+          </div> <!-- end card-body -->
+        </div> <!-- end card -->
+      </div> <!-- end col -->
+      <div class="col-lg-3"></div>
+    </div>
+    <!-- end row -->
+
+  </div> <!-- end container -->
+</div>

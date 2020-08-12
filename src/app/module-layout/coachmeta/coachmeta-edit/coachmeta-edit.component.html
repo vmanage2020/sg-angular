@@ -1,0 +1,132 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card-box">
+            <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Coach Custom Meta Field Details                </h5>
+
+            <form class="needs-validation" name="editplayermetaForm" [formGroup]="editplayermetaForm"
+                (ngSubmit)="onSubmit(editplayermetaForm)" novalidate>
+
+                <div class="form-group mb-3">
+                    <label for="sport_id">Sport<span class="text-danger">*</span></label>
+                    <select class="form-control select2" id="sport_id" name="sport_id" formControlName="sport_id"  [(ngModel)]="getAllPlayermetaData.sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                        <option *ngFor="let Sportdata of getAllSportmetaData let i = index;" [ngValue]="Sportdata.sport_id">{{Sportdata.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.sport_id.errors" class="invalid-feedback">
+                        <div *ngIf="f.sport_id.errors.required">Sport Name is required.</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="field_name">Field Name<span class="text-danger">*</span></label>
+                    <input type="text" id="field_name" name="field_name" formControlName="field_name" [ngModel]="getAllPlayermetaData.field_name" class="form-control" placeholder="Enter Field Name" [ngClass]="{ 'is-invalid': submitted && f.field_name.errors }"/>
+                    <div *ngIf="submitted && f.field_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.field_name.errors.required">Field Name is required.</div>
+                    </div>
+                
+                </div>
+ 
+                <div class="form-group mb-3">
+                    <label for="field_type">Field Type<span class="text-danger">*</span></label>
+                    <select class="form-control select2" id="field_type" name="field_type" formControlName="field_type" [(ngModel)]="getAllPlayermetaData.field_type" [ngClass]="{ 'is-invalid': submitted && f.field_type.errors }">
+                        <option *ngFor="let Typedata of getAllTypemetaData let i = index;" [ngValue]="Typedata.name">{{Typedata.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.field_type.errors" class="invalid-feedback">
+                        <div *ngIf="f.field_type.errors.required">Field Type is required.</div>
+                    </div>
+                </div>
+             
+                <div class="form-group mb-3">
+                    <label for="product-reference">Is Required <span class="text-danger">*</span></label>
+                    <br/>
+                    <div class="radio form-check-inline">
+                        <input type="radio" id="inlineRadioRequire1" name="is_required" formControlName="is_required" [(ngModel)]="is_required_value" [value]="true" required />
+                        <label for="inlineRadio1"> Yes </label>
+                    </div>
+                    <div class="radio form-check-inline">
+                        <input type="radio" id="inlineRadioRequire2" name="is_required" formControlName="is_required" [(ngModel)]="is_required_value" [value]="false" required />
+                        <label for="inlineRadio2"> No </label>
+                    </div>
+                    <br/>
+                    <div *ngIf="submitted && f.is_required.errors" class="invalid-feedback">
+                        <div *ngIf="f.is_required.errors.required">Required Option is required.</div>
+                    </div>
+                </div>
+    
+                <div class="form-group mb-3">
+                    <label for="product-name">Is Editable <span class="text-danger">*</span></label>
+                    <br/>
+                    <div class="radio form-check-inline">
+                        <input type="radio" id="inlineRadioEdit1" name="is_editable" formControlName="is_editable" [(ngModel)]="is_editable_value" [value]="true" required />
+                        <label for="inlineRadio1"> Yes </label>
+                    </div>
+                    <div class="radio form-check-inline">
+                        <input type="radio" id="inlineRadioEdit2" name="is_editable" formControlName="is_editable" [(ngModel)]="is_editable_value" [value]="false" required />
+                        <label for="inlineRadio2"> No </label>
+                    </div>
+                    <br/>
+                    <div *ngIf="submitted && f.is_editable.errors" class="invalid-feedback">
+                        <div *ngIf="f.is_editable.errors.required">Editable Option is required.</div>
+                    </div>
+                </div>
+    
+                <div class="form-group mb-3">
+                    <label for="product-name">Is Deletable <span class="text-danger">*</span></label>
+                    <br/>
+                    <div class="radio form-check-inline">
+                        <input type="radio" id="inlineRadioDelete1" name="is_deletable" formControlName="is_deletable" [(ngModel)]="is_deletable_value" [value]="true" required />
+                        <label for="inlineRadio1"> Yes </label>
+                    </div>
+                    <div class="radio form-check-inline">
+                        <input type="radio" id="inlineRadioDelete2" name="is_deletable" formControlName="is_deletable" [(ngModel)]="is_deletable_value" [value]="false" required />
+                        <label for="inlineRadio2"> No </label>
+                    </div>
+                    <br/>
+                    <div *ngIf="submitted && f.is_deletable.errors" class="invalid-feedback">
+                        <div *ngIf="f.is_deletable.errors.required">Deletable option is required.</div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3" id="customHeight" *ngIf="editplayermetaForm?.value.field_type === 'Text Field'">
+                    <label for="field_value">Value</label>
+                    <input type="text" [ngModel]="getAllPlayermetaData.field_value" id="field_value" name="field_value" formControlName="field_value" class="form-control" placeholder="Enter Field Value" />
+                </div>
+
+                <div formArrayName="value" class="form-group mb-3" id="customHeight" *ngIf="editplayermetaForm?.value.field_type !== 'Text Field' && editplayermetaForm?.value.field_type !== ''">
+                    <label for="field_value" style="width: 100%;">Value(s) 
+                    <a style="float:right;" class="color font-weight-bold edit-icon" (click)="addnewfield()" ><i class="fa fa-plus" aria-hidden="true"></i></a></label>  
+                    
+                    <div class="row" *ngFor="let field_value of getAllPlayermetaData.value let valueIndex = index;" style="padding: 10px 0px;">
+                         
+                        <input type="text" value="{{field_value}}" formControlName="optionvalue" class="form-control" id="optionvalue_{{valueIndex}}" placeholder="Enter value" style="width: 80%; margin: 0px 10px;" />
+                        <button type="button" class="btn btn-danger waves-effect waves-light" (click)="removefield(i)"><i class="mdi mdi-close"></i></button><br/>
+                        
+                    </div>
+                    <div class="row" style="padding: 10px 0px;" 
+                    *ngFor="let individualvalue of editplayermetaForm?.get('value')?.controls; let valueIndex = index"
+                    [formGroupName]="valueIndex">
+                        
+                        <input type="text" formControlName="optionvalue" class="form-control" id="optionvalue_{{valueIndex}}" placeholder="Enter value" style="width: 80%; margin: 0px 10px;" />
+                        <button type="button" class="btn btn-danger waves-effect waves-light" (click)="removefield(i)"><i class="mdi mdi-close"></i></button><br/>
+                        
+                    </div>
+                    
+
+                </div>
+
+ 
+            <div class="col-12">
+                <div class="text-center mb-3">
+                    <button (click)="listCoachmeta()" type="button" class="btn w-sm btn-light waves-effect" style="float:left;">Cancel</button>
+
+
+                    <button type="submit" class="btn w-sm btn-success ml-1" style="float:right;">Save</button>
+                </div>
+            </div> <!-- end col -->
+        </form>    
+
+        </div> <!-- end card-box -->
+    </div> <!-- end col -->
+
+</div>
+<!-- end row -->

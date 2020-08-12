@@ -1,0 +1,209 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-12 p-0">
+        <div class="card mb-0 px-3 minHeightForCard">
+          <app-ui-preloader [display]="loading" *ngIf="displayLoader" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+          <div class="card-body paddingCard" *ngIf="!displayLoader">
+            <form class="needs-validation" name="updateplayerfieldForm" [formGroup]="updateplayerfieldForm"
+              (ngSubmit)="onSubmit(updateplayerfieldForm)" novalidate>                          
+              <div class="row mb-2">
+                <h3 class="headingTitle">Update Player Custom Field</h3>
+              </div>
+              <div class="row mb-2">
+                <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveUp('up')">Save</button>&nbsp;&nbsp;&nbsp;                      
+                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                  (click)="goBack()">Cancel</button>
+              </div>
+              <ngb-alert type="danger" *ngIf="error && isSaveUp" class="margin sdkErrorInUpperTag" [dismissible]="true" (click)=closeError()>{{error}}
+              </ngb-alert>
+              <div class="row">
+                <div class="col-12  mt-2 heading">
+                  <h4>Player Custom Field</h4>
+                </div>
+              </div>
+                      
+            <div class="row">
+                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label-req" for="first_name">Sport</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+                    <ng-select [items]="SportsList" formControlName="sport_id" bindLabel="name" [loading]="sportSelect"
+                    (focus)="selectedSport($event,updateplayerfieldForm)" [clearable]="false"
+                    (change)="selectedSport($event,updateplayerfieldForm)" bindValue="sport_id" placeholder="Select sport">
+                    </ng-select>
+                    <div *ngIf="f.sport_id.errors?.required && submitted" class="input-error-msg text-danger">
+                    Select Sport.
+                    </div>
+                </div>
+                </div>        
+    
+                <div class="row">
+                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label-req" for="first_name">Field Name</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+                    <input type="text" formControlName="field_name" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.field_name.errors }" name="field_name" id="field_name"
+                    placeholder="Enter field name" />
+                    <div *ngIf="submitted && f.field_name.errors" class="invalid-feedback">
+                    <div *ngIf="f.field_name.errors?.required">Field Name is required.</div>
+                    </div>
+                </div>
+                </div>
+    
+                <div class="row">
+                <div class="col-3 mt-2 label-border-height allColMaxWidth ">
+                    <label class="for-label-req" for="first_name">Field Type</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+                    
+                    <ng-select [items]="FieldList" formControlName="field_type" bindLabel="name" id="selectfieldtype" [clearable]="false" 
+                        (change)="onfieldtypeChange($event)" placeholder="Select field type" bindValue="name">
+                    </ng-select>
+    
+                    <div *ngIf="f.field_type.errors?.required && submitted" class="input-error-msg text-danger">Field Type is required.</div>
+                </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label-req" for="name">Is Required</label>
+                    </div>
+                    <div class="col-3 mt-3">
+                    <div class="row mb-2 ml-1">
+                        <div class="radio  mx-2 form-check-inline">
+                        <input type="radio" value="true" id="is_required_yes" 
+                            formControlName="is_required"
+                            (click)="is_requiredvalue($event)">
+                        <label for="is_required_yes"> Yes </label>
+                        </div>
+                        <div class="radio  mx-2 form-check-inline">
+                        <input type="radio" value="false" id="is_required_no"
+                            formControlName="is_required" 
+                            (click)="is_requiredvalue($event)">
+                        <label for="is_required_no"> No </label>
+                        </div>
+                    <div *ngIf="f.is_required.errors?.required && submitted" class="input-error-msg text-danger">
+                        Select option to Mandatory  field or Not.
+                    </div>
+                    </div>
+                
+                    </div>
+                
+                </div>
+    
+                <div class="row">
+                    <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                      <label class="for-label-req" for="name">Is Editable</label>
+                    </div>
+                    <div class="col-3 mt-3">
+                      <div class="row mb-2 ml-1">
+                        <div class="radio  mx-2 form-check-inline">
+                          <input type="radio"  value="true" id="is_editable_yes"
+                            formControlName="is_editable"
+                            (click)="is_editablevalue($event)">
+                          <label for="is_editable_yes"> Yes </label>
+                        </div>
+                        <div class="radio  mx-2 form-check-inline">
+                          <input type="radio" value="false" id="is_editable_no"
+                            formControlName="is_editable"
+                            (click)="is_editablevalue($event)">
+                          <label for="is_editable_no"> No </label>
+                        </div>
+                        
+                      <div *ngIf="f.is_editable.errors?.required && submitted" class="input-error-msg text-danger">
+                        Select option to Editable or Not.
+                      </div>
+                      </div>
+                
+                    </div>
+                
+                </div>
+                
+                <div class="row">
+                    <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label-req" for="name">Is Deletable</label>
+                    </div>
+                    <div class="col-3 mt-3">
+                    <div class="row mb-2 ml-1">
+                        <div class="radio  mx-2 form-check-inline">
+                        <input type="radio" value="true" id="is_deletable_yes"
+                            formControlName="is_deletable" 
+                            (click)="is_deletablevalue($event,updateplayerfieldForm)">
+                        <label for="is_deletable_yes"> Yes </label>
+                        </div>
+                        <div class="radio  mx-2 form-check-inline">
+                        <input type="radio" value="false" id="is_deletable_no"
+                            formControlName="is_deletable"
+                            (click)="is_deletablevalue($event,updateplayerfieldForm)">
+                        <label for="is_deletable_no"> No </label>
+                        </div>
+                        
+                    <div *ngIf="f.is_deletable.errors?.required && submitted" class="input-error-msg text-danger">
+                        Select option to Mandatory  field or Not.
+                    </div>
+                    </div>
+                
+                    </div>
+                
+                </div>
+                
+    
+                <div class="row" *ngIf="updateplayerfieldForm?.value.field_type === 'Text Field'">
+                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                    <label class="for-label" for="value">Value</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+                    <input type="text" formControlName="singlevalue" class="form-control"name="value" id="value" placeholder="Enter value" />
+                    </div>
+                
+                </div>
+    
+    
+                <div formArrayName="value" *ngIf="updateplayerfieldForm?.value.field_type === 'Drop Down' || 
+                updateplayerfieldForm?.value.field_type === 'Check box' || updateplayerfieldForm?.value.field_type === 'Radio button'">
+                    <div class="row" *ngFor="let individualvalue of updateplayerfieldForm?.get('value')?.controls; let valueIndex = index"
+                    [formGroupName]="valueIndex">
+                        <div class="col-3 mt-2 label-border-height allColMaxWidth" >
+                            <label class="for-label-req" for="value">Value {{valueIndex + 1}}</label>
+                        </div>
+                        <div class="col-4 mt-2" id="customHeight" *ngIf="updateplayerfieldForm?.value.field_type === 'Drop Down' || 
+                        updateplayerfieldForm?.value.field_type === 'Check box' || updateplayerfieldForm?.value.field_type === 'Radio button'">
+                            <input type="text" formControlName="optionvalue" class="form-control" id="optionvalue_{{valueIndex}}" placeholder="Enter value" />
+                            
+                            <div *ngIf="individualvalue.controls.optionvalue.errors?.required && submitted" class="input-error-msg text-danger">Option Value is required.</div>
+                        </div> 
+                        <div class="col-4 mt-2" id="customHeight">
+                            <button type="button" class="btn btn-danger waves-effect waves-light" (click)="removefield(i)"><i class="mdi mdi-close"></i></button>
+                        </div>  
+                    </div> 
+                        
+                        
+                </div>
+                
+                <div class="row" *ngIf="updateplayerfieldForm?.value.field_type === 'Drop Down' || 
+                updateplayerfieldForm?.value.field_type === 'Check box' || updateplayerfieldForm?.value.field_type === 'Radio button'">
+                    <div class="col-3 mt-2">
+                    </div>
+                    <div class="col-3 mt-2" id="customHeight">
+                        <a  class="color font-weight-bold edit-icon" (click)="addnewfield()" >Add Value</a>
+                    </div>
+                </div>
+    
+
+              <ngb-alert type="danger" *ngIf="error && !isSaveUp" class="margin sdkErrorInDownTag mt-2" [dismissible]="true" (click)=closeError()>{{error}}
+              </ngb-alert>
+              <div class="row mt-3 mb-2">
+                <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveUp('down')"
+                  >Save</button>&nbsp;&nbsp;&nbsp;                      
+                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                  (click)="goBack()">Cancel</button>
+              </div>
+              
+            </form>
+  
+          </div> <!-- end card-body -->
+        </div> <!-- end card-->
+      </div>
+    </div>
+  </div>

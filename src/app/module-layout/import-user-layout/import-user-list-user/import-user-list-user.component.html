@@ -1,0 +1,190 @@
+<!--
+<p>viewUserListType :: {{viewUserListType}}</p>
+<p>import-user-list-user works!</p>
+-->
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+
+            <button (click)="listUser()"  type="button" class="btn btn-dark waves-effect waves-light float-right">Back</button>
+
+        <!--
+            <button (click)="addUser()" type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
+                <i class="mdi mdi-plus-circle"></i> Add User
+            </button>
+        -->
+    
+        <h4 class="header-title mb-4" *ngIf="viewUserListType == '1' ">Import Users - All Users</h4>
+        <h4 class="header-title mb-4" *ngIf="viewUserListType == '2' ">Import Users - Success Users</h4>
+        <h4 class="header-title mb-4" *ngIf="viewUserListType == '3' ">Import Users - Failure Users</h4>
+            
+             
+            <div class="table-responsive">
+                												 	
+            
+            
+            <table class="table table-hover m-0 table-centered dt-responsive nowrap w-100" id="tickets-table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th class="hidden-sm">Action</th>
+
+                    <th>Status <br/>Description</th>
+                    <th>Status</th>
+                    
+                    <th>Player <br/>First <br/>Name</th>
+                    <th>Player <br/>Initial</th>
+                    <th>Player <br/>Last <br/>Name</th>
+                    <th>Player <br/>Gender</th>
+                    <th>Player <br/>DOB</th>
+                    <th>Level <br/>Of <br/>Play</th>
+                    <th>Guardian1 <br/>Email</th>
+                    <th>Guardian2 <br/>Email</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Postal <br/>Code</th>
+                    <th>Country</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let Importdata of data let i = index;">
+                    
+                        <td><b>{{i+1}}</b></td>
+                        
+                        <td>
+                            <div class="btn-group dropdown" *ngIf="Importdata.processed_flag == 'e' || Importdata.processed_flag == 'E' ">
+
+                                <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <!--
+                                        <a class="dropdown-item" (click)="editUser(Importdata.id)"><i class="mdi mdi-edit mr-2 text-muted font-18 vertical-middle"></i> Fix </a>
+                                    <a (click)="editUserRecord(data)" class="edit-icon color font-weight-bold">Fix Data</a>
+                                    -->
+                                    
+                                    <a class="dropdown-item" (click)="editUserRecord(Importdata.id)"><i class="mdi mdi-edit mr-2 text-muted font-18 vertical-middle"></i> Fix </a>
+                                    
+                                </div>
+                            </div>                            
+                        </td>    
+
+ 
+                        <td>
+                            <!--
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.error_description}}</span>
+                            </a>
+                            -->
+
+                            <a href="javascript: void(0);" class="text-body" *ngFor="let ImportdataError of Importdata.error_description;">
+                                <span class="ml-2">{{ImportdataError.error}}</span><br/>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                
+                                <span class="ml-2" *ngIf="Importdata.processed_flag == 'y' || Importdata.processed_flag == 'Y' "> Success </span>
+                                <span class="ml-2" *ngIf="Importdata.processed_flag == 'n' || Importdata.processed_flag == 'N' "> Processing </span>
+                                <span class="ml-2" *ngIf="Importdata.processed_flag == 'e' || Importdata.processed_flag == 'E' "> Error </span>
+                                
+                            </a>
+                        </td>
+ 
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.athlete_1_first_name}}</span>
+                            </a>
+                        </td>
+    
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.athlete_1_middle_name}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.athlete_1_last_name}}</span>
+                            </a>
+                        </td>
+                        
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.athlete_1_gender}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body"> 
+                                <!--
+                                <span class="ml-2" *ngIf="Importdata.athlete_1_dob.length">{{Importdata.athlete_1_dob.toDate() | date}}</span>
+                                <span class="ml-2" *ngIf="Importdata.athlete_1_dob!=null">{{Importdata.athlete_1_dob.toDate() | date}}</span>
+                                -->
+                            </a>
+                        </td> 
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.athlete_1_level}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.guardian_1_email_1}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.guardian_2_email_1}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.athlete_1_address_1}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.athlete_1_city_1}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.athlete_1_state_1}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.athlete_1_zip_1}}</span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="javascript: void(0);" class="text-body">
+                                <span class="ml-2">{{Importdata.athlete_1_country_1}}</span>
+                            </a>
+                        </td>
+
+                    </tr>   
+                </tbody>
+            </table>
+
+            </div>
+        </div>
+    </div><!-- end col -->
+</div>
+<!-- end row -->
+
+
+

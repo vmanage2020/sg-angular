@@ -1,0 +1,73 @@
+
+<div class="wrapper">
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <app-page-title title="Create Skill" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+        <!-- end page title -->
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+
+                        <h4 class="header-title">Add New Skill</h4>
+                        <p class="sub-header"></p>
+
+                        <form class="needs-validation" name="createSkillForm" [formGroup]="createSkillForm"
+                      (ngSubmit)="createSkill(createSkillForm)" novalidate>
+                                <app-ui-preloader [display]="loading"></app-ui-preloader>
+                                <ngb-alert type="danger" *ngIf="error" [dismissible]="true" (click)="closeToast()">{{ message }}</ngb-alert>
+
+
+                                <div class="form-group">
+                                        <label for="sport_id">Sports</label>
+                                        <ng-select [items]="sportsInfo"  bindLabel="name"
+                                            bindValue="sport_id" placeholder="Select Sport" formControlName="sport_id"
+                                            [clearable]="false" (change)="filterSports($event)" name="state">
+                                        </ng-select>
+        
+                                        <div class="input-error-msg text-danger" *ngIf="sportIdValid">
+                                            Sports is required.
+                                        </div>
+        
+                                    </div>
+                                    <div class="form-group">
+                                            <label for="sport_id">Skill Category</label>
+                                            <ng-select [items]="skillCategoryInfo"  bindLabel="name"
+                                                bindValue="skill_category_id" placeholder="Select Skill Category" formControlName="skill_category_id" (change)="hideCategoryReq()"
+                                                [clearable]="false"  name="state">
+                                            </ng-select>
+            
+                                            <div class="input-error-msg text-danger" *ngIf="categoryIdValid">
+                                                    Skill Category is required.
+                                            </div>
+            
+                                        </div>
+                                        <div class="form-group">
+                                                <label for="name">Skill Name</label>
+                                                <input type="text" name="name" class="form-control" formControlName="name" id="name"
+                                                    placeholder="Enter Skill name"
+                                                    [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
+                                                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                                    <div *ngIf="f.name.errors.required">Skill Name is required.</div>
+                
+                                                </div>
+                
+                                            </div>
+                        
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-dark waves-effect waves-light" >Save</button>&nbsp;
+                                <button type="button" class="btn btn-danger waves-effect waves-light m-l-10" (click)="goBack()">Cancel</button>
+                            </div>
+                        </form>
+
+                    </div> <!-- end card-body -->
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+            <div class="col-lg-3"></div>
+        </div>
+        <!-- end row -->
+
+    </div> <!-- end container -->
+</div>

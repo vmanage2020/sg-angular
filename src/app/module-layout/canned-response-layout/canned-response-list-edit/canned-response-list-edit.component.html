@@ -1,0 +1,53 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+        <div class="col-lg-6">
+            <div class="card-box">
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Edit Canned Response Details</h5>
+                
+                <form class="needs-validation" name="createcannedresponseForm" [formGroup]="createcannedresponseForm"
+                (ngSubmit)="onSubmit(createcannedresponseForm)" novalidate>
+
+                <div class="form-group mb-3">
+                    <label for="sport_id"> Sport<span class="text-danger">*</span></label>
+                    <select class="form-control select2" [ngModel]="getCannedResponseValueArray.sport_id" id="sport_id" name="sport_id" formControlName="sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                        <option value="" disabled selected >Select Sport</option>
+                        <option *ngFor="let SportData of getSportsArray let i = index;" value="{{SportData.sport_id}}">{{SportData.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.sport_id.errors" class="invalid-feedback">
+                        <div *ngIf="f.sport_id.errors.required">Sport Name is required.</div>
+                    </div>
+                </div>
+  
+                <div class="form-group mb-3">
+                    <label for="canned_response_title">Canned Response Name<span class="text-danger">*</span></label>
+                    <input type="text" [ngModel]="getCannedResponseValueArray.canned_response_title" id="canned_response_title" name="tag_name" formControlName="canned_response_title" class="form-control" placeholder="Enter Canned Response Name" [ngClass]="{ 'is-invalid': submitted && f.canned_response_title.errors }"/>
+                    <div *ngIf="submitted && f.canned_response_title.errors" class="invalid-feedback">
+                        <div *ngIf="f.canned_response_title.errors.required">Canned Response Name is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="canned_response_description">Canned Response Description<span class="text-danger">*</span></label>
+                    <input type="text" [ngModel]="getCannedResponseValueArray.canned_response_description" id="canned_response_description" name="tag_name" formControlName="canned_response_description" class="form-control" placeholder="Enter Canned Response Name" [ngClass]="{ 'is-invalid': submitted && f.canned_response_description.errors }"/>
+                    <div *ngIf="submitted && f.canned_response_description.errors" class="invalid-feedback">
+                        <div *ngIf="f.canned_response_description.errors.required">Canned Response Description is required.</div>
+                    </div>                
+                </div>
+                
+ 
+             
+  
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="listCannedResponses()" type="button" class="btn w-sm btn-light waves-effect" style="float: left;">Cancel</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn w-sm btn-success ml-1" style="float: right;">Save</button>
+                    </div>
+                </div> <!-- end col -->
+    
+            </form>    
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+ 
+    </div>
+    <!-- end row -->

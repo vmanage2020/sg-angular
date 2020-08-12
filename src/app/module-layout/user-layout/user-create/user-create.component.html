@@ -1,0 +1,147 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12 p-0">
+            <div class="card mb-0 px-3 minHeightForCard">
+                <app-ui-preloader [display]="loading" [ngStyle]="{'display': displayLoader ? 'block' : 'none' }" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+                <div class="card-body paddingCard" [ngStyle]="{'display': !displayLoader ? 'block' : 'none' }">
+                    <form class="needs-validation" name="createUserForm" [formGroup]="createUserForm"
+                        (ngSubmit)="onSubmit(createUserForm)" novalidate>                                                
+                        <div class="row mb-2">
+                            <h3 class="headingTitle">Add User</h3>
+                        </div>
+                        <div class="row mb-2">
+                            <button type="submit" class="btn btn-dark waves-effect waves-light"
+                                (click)="save('up')">Save</button>&nbsp;&nbsp;&nbsp;
+                            <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveNew('up')">Save
+                                & New</button>&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                (click)="goBack()">Cancel</button>
+                        </div>
+                        <ngb-alert type="danger" class="margin sdkErrorInUpperTag" *ngIf="error && isSaveUp" [dismissible]="true" (click)=closeError()>
+                            {{error}}
+                        </ngb-alert>
+                        <ngb-alert type="danger" class="col-4 mt-2 offset-2" *ngIf="isOrgSelect" [dismissible]="false">
+                            Select Organization</ngb-alert>
+                        <div class="row">
+                            <div class="col-12  mt-2 heading">
+                                <h4>User Details</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label-req" for="first_name">Role</label>
+                            </div>
+                            <div class="col-9 " id="customHeight">
+                                <div class="paddingTopForRoleCreate d-flex">
+                                    <div *ngFor="let role of roleList;let i = index" >
+                                        <div class="custom-control custom-checkbox pr-1">
+                                            <input type="checkbox" #checkboxes class="custom-control-input" [id]="role.role_id"
+                                                [value]="role.role_id" (click)="selectedRole($event,createUserForm)">
+                                            <label class="custom-control-label" [for]="role.role_id">{{role.name}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="input-error-msg text-danger" *ngIf="f.roles?.errors?.required && submitted">
+                                    Need to be choosen.
+                                </div>
+                            </div>
+                        </div>
+                      
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label-req" for="first_name">First Name</label>
+                            </div>
+                            <div class="col-4 mt-2" id="customHeight">
+                                <input type="text" formControlName="first_name" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }" name="first_name"
+                                    id="first_name" placeholder="Enter first name" />
+                                <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.first_name.errors.required">First Name is required.</div>
+                                    <div *ngIf="f.first_name.errors?.pattern">Only text characters are allowed.</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="middle_initial">Middle Initial</label>
+                            </div>
+                            <div class="col-2 mt-2" id="customHeight">
+
+                                <input type="text" formControlName="middle_initial" class="form-control"
+                                    placeholder="Enter middle initial" name="middle_initial" id="middle_initial" />
+                                <!-- <div *ngIf="f.middle_initial.errors?.pattern" class="input-error-msg text-danger">Only
+                                    text characters are allowed.</div>
+                                <div *ngIf="f.middle_initial.errors?.maxlength" class="input-error-msg text-danger">
+                                    Maximum of 3 characters are allowed.</div> -->
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 offset-3 offsetMargin">
+                                <div *ngIf="f.middle_initial.errors?.pattern" class="input-error-msg text-danger">Only
+                                    text characters are allowed.</div>
+                                <div *ngIf="f.middle_initial.errors?.maxlength" class="input-error-msg text-danger">
+                                    Maximum of 3 characters are allowed.</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label-req" for="last_name">Last Name</label>
+                            </div>
+                            <div class="col-4 mt-2" id="customHeight">
+                                <input type="text" formControlName="last_name" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }" name="last_name"
+                                    id="last_name" placeholder="Enter last name " />
+                                <div *ngIf="submitted && f.last_name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.last_name.errors.required">Last Name is required.</div>
+                                    <div *ngIf="f.last_name.errors?.pattern">Only text characters are allowed.</div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="suffix">Suffix</label>
+                            </div>
+                            <div class="col-2 mt-2" id="customHeight">
+                                <ng-select [items]="suffixList" formControlName="suffix" bindLabel="name" id="selectSuffix" [clearable]="false" (change)="onSuffixChange($event)"
+                                    placeholder="Select suffix" bindValue="name" name="suffix">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label-req" for="email"
+                                    [ngStyle]="{'color':emailNotReq ? 'grey' : 'red' }">Email Address</label>
+                            </div>
+                            <div class="col-4 mt-2" id="customHeight">
+                                <input type="text" formControlName="email" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.email.errors }" name="email" id="email"
+                                    placeholder="Enter email address" />
+                                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                    <div *ngIf="f.email.errors.required">Email Address is required.</div>
+                                    <div *ngIf="f.email.errors?.pattern">Enter a valid email address.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <ngb-alert type="danger" class="margin sdkErrorInDownTag mt-2" *ngIf="error && !isSaveUp" [dismissible]="true" (click)=closeError()>
+                            {{error}}
+                        </ngb-alert>
+                        <div class="row mt-3">
+                            <button type="submit" class="btn btn-dark waves-effect waves-light"
+                                (click)="save('down')">Save</button>&nbsp;&nbsp;&nbsp;
+                            <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveNew('down')">Save
+                                & New</button>&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                (click)="goBack()">Cancel</button>
+                        </div>
+                        
+                    </form>
+
+                </div> <!-- end card-body -->
+            </div> <!-- end card-->
+        </div>
+    </div>
+</div>

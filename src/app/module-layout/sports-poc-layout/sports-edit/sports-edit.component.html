@@ -1,0 +1,57 @@
+
+    <div class="container-fluid">
+        <!-- <app-page-title title="Add User" [breadcrumbItems]="breadCrumbItems"></app-page-title> -->
+
+
+        <div class="row">
+            <div class="col-xl-12 p-0">
+                <div class="card mb-0 px-3 minHeightForCard">
+                    <div class="card-body paddingCard">
+             <form #submitForm="ngForm" (ngSubmit)="updateSports(submitForm)" novalidate>
+                            <app-ui-preloader [display]="loading"></app-ui-preloader>
+                            <ngb-alert type="danger" *ngIf="error" class="margin" [dismissible]="true" (click)="closeToast()">{{ message }}</ngb-alert>
+                            <div class="row mb-1">
+                                <h3 class="headingTitle">Update Sport</h3>
+                            </div>
+                            <div class="row mt-2">
+                                <button type="submit"
+                                    class="btn btn-dark waves-effect waves-light" [disabled]="!submitForm.valid">Save</button>&nbsp;&nbsp;&nbsp;
+
+                                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                    (click)="goBack()">Cancel</button>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12  mt-2 heading">
+                                    <h4>Sport Details</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                    <label class="for-label-req" for="first_name">Sport Name</label>
+                                </div>
+                                <div class="col-4 mt-2" id="customHeight">
+                                    <input type="text" [(ngModel)]="updateSportsForm.name" name="name" class="form-control" #name="ngModel" id="name" placeholder="Enter sport name" required>
+                                    <div class="input-error-msg" *ngIf="name.invalid && (name.dirty || name.touched)"
+                                    class="text-danger">
+                                        <div class="input-error-msg" *ngIf="name.errors.required">
+                                        Sport Name is required.
+                                        </div>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2">
+                                <button type="submit"
+                                    class="btn btn-dark waves-effect waves-light" [disabled]="!submitForm.valid">Save</button>&nbsp;&nbsp;&nbsp;
+
+                                <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                    (click)="goBack()">Cancel</button>
+                            </div>
+                        </form>
+
+                    </div> <!-- end card-body -->
+                </div> <!-- end card-->
+            </div>
+        </div>
+    </div>

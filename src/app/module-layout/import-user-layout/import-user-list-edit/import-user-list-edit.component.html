@@ -1,0 +1,130 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+        <div class="col-lg-6">
+            <div class="card-box">
+            <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Update User Details</h5>
+ 
+            <form class="needs-validation" name="createImportUserForm" [formGroup]="createImportUserForm" (ngSubmit)="onSubmit(createImportUserForm)" novalidate>
+
+                <div class="form-group mb-3">
+                    <label for="player_first_name">Player First Name<span class="text-danger">*</span></label>
+                    <input type="text" [ngModel]="getUserData.athlete_1_first_name" id="player_first_name" name="player_first_name" formControlName="player_first_name" class="form-control" placeholder="Enter First Name" [ngClass]="{ 'is-invalid': submitted && f.player_first_name.errors }"/>
+                    <div *ngIf="submitted && f.player_first_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.player_first_name.errors?.required">Player First Name is required.</div>
+                    </div>                
+                </div>
+                <div class="form-group mb-3">
+                    <label for="player_initial">Player Middle Initial</label>
+                    <input type="text" [ngModel]="getUserData.athlete_1_middle_name" id="player_initial" name="player_initial" formControlName="player_initial" class="form-control" placeholder="Enter Middle Initial" />
+                </div>
+                <div class="form-group mb-3">
+                    <label for="player_last_name">Player Last Name<span class="text-danger">*</span></label>
+                    <input type="text" [ngModel]="getUserData.athlete_1_last_name" id="player_last_name" name="player_last_name" formControlName="player_last_name" class="form-control" placeholder="Enter Last Name" [ngClass]="{ 'is-invalid': submitted && f.player_last_name.errors }"/>
+                    <div *ngIf="submitted && f.player_last_name.errors" class="invalid-feedback">
+                        <div *ngIf="f.player_last_name.errors?.required">Player Last Name is required.</div>
+                    </div>                 
+                </div>
+
+                 
+                <div class="form-group mb-3">
+                    <label for="player_gender">Gender</label>
+                    <ng-select [items]="gender" [ngModel]="getUserData.athlete_1_gender" 
+                      formControlName="player_gender" bindLabel="name" [clearable]="false" bindValue="name"
+                      placeholder="Select gender">
+                    </ng-select>        
+                </div>
+                <div class="form-group mb-3">
+                    <label for="player_DOB">Player DOB</label>
+                    <input type="text" name="player_DOB" [ngModel]="getUserData.athlete_1_dob_value" formControlName="player_DOB" class="form-control date-picker" id="datetime-datepicker" placeholder="Choose DOB" [ngClass]="{ 'is-invalid': submitted && f.player_DOB.errors }"/>
+                    <div *ngIf="submitted && f.player_DOB.errors" class="invalid-feedback">
+                        <div *ngIf="f.player_DOB.errors?.required">Player DOB is required.</div>
+                    </div>  
+                </div>
+                <div class="form-group mb-3">
+                    <label for="level_of_play">Level of play</label>
+                    
+                    <ng-select [items]="levelList" [ngModel]="getUserData.athlete_1_level" 
+                        formControlName="level_of_play" bindLabel="level_name" [loading]="levelSelect"
+                        [clearable]="false"  [ngClass]="{ 'is-invalid': submitted && f.level_of_play.errors }"
+                        bindValue="level_name" placeholder="Select level of play">
+                      </ng-select>
+
+                    <div *ngIf="submitted && f.level_of_play.errors" class="invalid-feedback">
+                        <div *ngIf="f.level_of_play.errors?.required">Level Play is required.</div>
+                    </div>  
+                </div>
+             
+
+                <div class="form-group mb-3">
+                    <label for="guardian1_first_name">Guardian 1 First Name </label>
+                    <input type="text" [ngModel]="getUserData.guardian_1_first_name" id="guardian1_first_name" name="guardian1_first_name" formControlName="guardian1_first_name" class="form-control" placeholder="Enter First Name" />
+                </div>
+                <div class="form-group mb-3">
+                    <label for="guardian1_last_name">Guardian 1 Last Name </label>
+                    <input type="text" [ngModel]="getUserData.guardian_1_last_name" id="guardian1_last_name" name="guardian1_last_name" formControlName="guardian1_last_name" class="form-control" placeholder="Enter Last Name" />
+                </div>
+                <div class="form-group mb-3">
+                    <label for="guardian1_email_address">Guardian 1 Email<span class="text-danger">*</span></label>
+                    <input type="email" [ngModel]="getUserData.guardian_1_email_1" id="guardian1_email_address" name="guardian1_email_address" formControlName="guardian1_email_address" class="form-control" placeholder="Enter Last Name" [ngClass]="{ 'is-invalid': submitted && f.guardian1_email_address.errors }"/>
+                    <div *ngIf="submitted && f.guardian1_email_address.errors" class="invalid-feedback">
+                        <div *ngIf="f.guardian1_email_address.errors.required">Email is required.</div>
+                    </div>  
+                </div>
+
+
+                <div class="form-group mb-3">
+                    <label for="guardian2_first_name">Guardian 2 First Name </label>
+                    <input type="text" [ngModel]="getUserData.guardian_2_first_name" id="guardian2_first_name" name="guardian2_first_name" formControlName="guardian2_first_name" class="form-control" placeholder="Enter First Name" />
+                </div>                
+                <div class="form-group mb-3">
+                    <label for="guardian2_last_name">Guardian 2 Last Name </label>
+                    <input type="text" [ngModel]="getUserData.guardian_2_last_name" id="guardian2_last_name" name="guardian2_last_name" formControlName="guardian2_last_name" class="form-control" placeholder="Enter Last Name" />
+                </div>
+                <div class="form-group mb-3">
+                    <label for="guardian2_email_address">Guardian 2 Email<span class="text-danger">*</span></label>
+                    <input type="email" [ngModel]="getUserData.guardian_2_email_1" id="guardian2_email_address" name="guardian2_email_address" formControlName="guardian2_email_address" class="form-control" placeholder="Enter Last Name" [ngClass]="{ 'is-invalid': submitted && f.guardian2_email_address.errors }"/>
+                    <div *ngIf="submitted && f.guardian2_email_address.errors" class="invalid-feedback">
+                        <div *ngIf="f.guardian2_email_address.errors.required">Email is required.</div>
+                    </div>  
+                </div>
+        
+                
+                <div class="form-group mb-3">
+                    <label for="address">Address</label>
+                    <input type="text" [ngModel]="getUserData.athlete_1_address_1" id="address" name="address" formControlName="address" class="form-control" placeholder="Enter Address"/>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="city">City</label>
+                    <input type="text" [ngModel]="getUserData.athlete_1_city_1" id="city" name="city" formControlName="city" class="form-control" placeholder="Enter City Name" />
+                </div> 
+                <div class="form-group mb-3">
+                    <label for="state">State</label>
+                    <ng-select [items]="stateList" [ngModel]="getUserData.athlete_1_state_1" bindLabel="name" bindValue="state_code" placeholder="Select state" [clearable]="false"
+                    name="state"  formControlName="state" [loading]="state">
+                  </ng-select> 
+                </div> 
+                <div class="form-group mb-3">
+                    <label for="country">Country</label>
+                    <ng-select [items]="countryCodeList" [ngModel]="getUserData.athlete_1_country_1" formControlName="country" bindLabel="name" [clearable]="false" [loading]="country"
+                      bindValue="country_code" placeholder="Select country" name="country">
+                    </ng-select> 
+                </div>
+                <div class="form-group mb-3">
+                    <label for="postal_code">Pincode</label>
+                    <input type="text" [ngModel]="getUserData.athlete_1_zip_1" id="postal_code" name="postal_code" formControlName="postal_code" class="form-control" placeholder="Enter Postal Code" />
+                </div> 
+        
+
+                 <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="listUser()" type="button" class="btn w-sm btn-light waves-effect" style="float: left;">Cancel</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn w-sm btn-success ml-1" style="float: right;">Save</button>
+                    </div>
+                </div> 
+            </form>    
+       
+            </div>  
+        </div>  
+ 
+    </div> 

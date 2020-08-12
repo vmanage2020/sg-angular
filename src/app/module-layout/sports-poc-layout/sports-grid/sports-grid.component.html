@@ -1,0 +1,112 @@
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-12 p-0">
+        <div class="card mb-0 minHeightForCard">
+          <div class="card-body py-1 px-2">
+            <h3 class="mb-3 headingTitle">Sports</h3>
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <a (click)="addSport()" class="btn btn-dark link-active edit-icon"
+                  data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a"> Add Sport</a>
+              </div>
+            </div>
+            <div class="row mb-md-2">
+              <div class="col-sm-12 col-md-4">
+                    <div class="col-sm-12 col-md-4">
+                        <div class="dataTables_length" id="tickets-table_length"><label
+                            class="d-inline-flex align-items-center">Show
+                            <ng-select [items]="selectEntries" bindLabel="value" class="mx-1" bindValue="value"
+                              [clearable]="false" (change)="selectedPage($event)" [(ngModel)]="selectedPageSize" name="value">
+                            </ng-select>entries</label></div>
+                      </div>
+              </div>
+              <div class="col-sm-12 col-md-8">
+                  <div class="row">
+                      <div class="col-4 offset-4">
+                  
+                          <div class="row">
+                            <div class="col-2 p-0 searchLabel">
+                              <label class="">Search</label>
+                            </div>
+                            <div class="col pl-0">
+                                <ng-select [items]="noOfCol" [multiple]="false" bindLabel="value" [searchable]="false"
+                                (change)="selectedCol($event)" [clearable]="false" [closeOnSelect]="false" bindValue="name"
+                                [(ngModel)]="searchFilter">
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      <div class="col-4">
+                        <div class="search-input">
+                          <input class="form-control" [(ngModel)]="term" name="search" placeholder="Search"  (input)="searchInput($event)" type="text">
+                          <i *ngIf="term" class="fa fa-times search-icon" (click)="onClear($event)"></i>
+                        </div>
+                        </div>                        
+                  </div>
+             
+              </div>
+            </div>
+            
+            <!-- Table -->
+            <div class="table-responsive">
+              <table id="basic-datatable" class="table datatables dt-responsive nowrap">
+
+                <thead>
+                  <tr class="table-header">
+                    <th sortable="action" style="width: 85px;" *ngIf="showColumns?.length != 0">
+                      Action
+                    </th>
+                    <th *ngFor="let rowheader of SportInfo | objectHeaders:1:showColumns;let i = index">{{rowheader}}
+                      <span class="sorting-position" (click)="sorting(rowheader,1,i)"><i
+                        [ngClass]="[(sortingInfo.type == 1 && i == sortingInfo.index)?'ascendingSort':'']"
+                        class="fa fa-sort-up text-grey edit-icon" aria-hidden="true"></i></span>
+                    <span class="sorting-position" (click)="sorting(rowheader,-1,i)"><i
+                        [ngClass]="[(sortingInfo.type== -1 && i==sortingInfo.index)?'descendingSort':'']"
+                        class="fa fa-sort-down text-grey edit-icon" aria-hidden="true"></i></span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <app-ui-preloader [display]="loading"></app-ui-preloader>
+                <tr *ngFor="let sport of SportInfo ;let i = index;">
+                  <td *ngIf="showColumns?.length != 0">
+                    <a (click)="editSport(sport)" class="action-icon edit-icon"> <i
+                      class="mdi mdi-square-edit-outline"></i></a> 
+                      <a (click)="sportView(sport)" class="action-icon edit-icon"> <i class="mdi mdi-eye"></i></a>
+                  </td>
+
+                  <ng-container *ngFor="let items of showColumns">
+                    <td *ngIf="sport[items]"><span [innerHTML]="sport[items]"  ></span></td>
+                    <td *ngIf="!sport[items]"><span>-</span></td>
+                  </ng-container>
+
+
+                </tr>
+                </tbody>
+               
+              </table>
+              <p class="text-center" *ngIf="SportInfo?.length == 0">No data available.</p>
+            </div>
+            <!-- End table -->
+            <div class="row justify-content-md-between align-items-md-center mt-2" *ngIf="SportInfo?.length !== 0">
+              <div class="col-sm-12 col-md-5">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">Showing
+                  {{startIndex}} to
+                  {{endIndex}} of {{totalRecords}}
+                  entries
+                </div>
+              </div>
+              <!-- Pagination -->
+              <div class="col-sm-12 col-md-5">
+                <div class="text-md-right float-md-right pagination-rounded">
+                  <ngb-pagination [collectionSize]="totalRecords" (pageChange)="onPageChange($event)" [(page)]="page" [maxSize]="5" [rotate]="true"
+                    [pageSize]="pageSize"></ngb-pagination>
+                </div>
+              </div>
+              <!-- End Pagination -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

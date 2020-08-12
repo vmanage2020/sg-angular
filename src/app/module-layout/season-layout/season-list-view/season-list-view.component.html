@@ -1,0 +1,51 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+        <div class="col-lg-6">
+            <div class="card-box">
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">View Season Details</h5>
+                
+                <div class="form-group mb-3">
+                    <label for="product-name" style="width:200px;">Sport </label>
+                     
+                    <div class=" form-check-inline">
+                        <label for="inlineRadio2"> {{getSeasonValueArray.sports_name}} </label>
+                    </div>
+                </div> 
+
+                <div class="form-group mb-3">
+                    <label for="product-name" style="width:200px;">Season Name </label>
+                     
+                    <div class=" form-check-inline">
+                        <label for="inlineRadio2"> {{getSeasonValueArray.season_name}} </label>
+                    </div>
+                </div> 
+ 
+                <div class="form-group mb-3">
+                    <label for="product-name" style="width:200px;">Season Start Date </label>
+                     
+                    <div class=" form-check-inline">
+                        <label for="inlineRadio2"> {{getSeasonValueArray.season_start_date.toDate() | date}} </label>
+                    </div>
+                </div> 
+             
+                <div class="form-group mb-3">
+                    <label for="product-name" style="width:200px;">Season End Date </label>
+                     
+                    <div class=" form-check-inline">
+                        <label for="inlineRadio2"> {{getSeasonValueArray.season_end_date.toDate() | date}} </label>
+                    </div>
+                </div>             
+  
+                <div class="col-12">
+                    <div class="text-center mb-3"> 
+                        <button (click)="listSeason()" type="button" class="btn w-sm btn-light waves-effect" style="float: left;">Cancel</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button (click)="editSeason(getSeasonValueArray.season_id)" type="button" class="btn w-sm btn-success ml-1" style="float: right;">Edit</button>
+                    </div>
+                </div> <!-- end col -->
+        
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+ 
+    </div>
+    <!-- end row -->

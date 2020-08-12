@@ -1,0 +1,164 @@
+<div class="wrapper">
+<div class="container-fluid">
+  <app-page-title title="Skill" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+  <ngb-alert *ngIf="successMessage" class="customAlert" type="warning" (close)="successMessage = null">{{ successMessage }}</ngb-alert>   
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="header-title">Organization</h4> -->
+       <app-ui-preloader [display]="loading"></app-ui-preloader>
+        <div class="row mb-3">
+            <div class="col-sm-4">
+                <a  [routerLink]="['/skill/create']" [queryParams]="{ sport_id: sportId ,skill_category_id:skillCategoryId}"
+                class="btn btn-dark waves-effect waves-light"><i
+                        class="mdi mdi-plus-circle mr-1"></i> Add Skill</a>
+            </div>
+            <div class="col-sm-8">
+    </div>
+        </div>
+          <div class="row mb-md-2">
+            <div class="col-sm-12 col-md-6">
+              <!-- <div class="dataTables_length" id="tickets-table_length"><label
+                  class="d-inline-flex align-items-center">Show
+                  <select name="tickets-table_length" aria-controls="tickets-table" name="pageSize"
+                    [(ngModel)]="service.pageSize"
+                    class="custom-select custom-select-sm form-control form-control-sm mx-2">
+                    <option [ngValue]="10">10</option>
+                    <option [ngValue]="25">25</option>
+                    <option [ngValue]="50">50</option>
+                    <option [ngValue]="100">100</option>
+                  </select> entries</label></div> -->
+            </div>
+            <div class="col-sm-12 col-md-6 ">
+              <div class="row">
+                <div class="col-3 float-right offset-2">
+
+                  <div class="form-group">
+                                    
+                    <!-- <select name="sportsList" [(ngModel)]="sportsList" id="sportsList" class="form-control"  (ngModelChange)="filterSports(sportsList,skillcategoryList)">        
+                           
+                        <option class="text-disabled" disabled=true selected value="">Select Sport</option>
+                        <option value="{{sport.sport_id}}" *ngFor="let sport of sportsInfo;let i=index;">{{sport.name}}</option>
+                        
+                    </select> -->
+                    <ng-select [items]="sportsInfo" bindLabel="name" bindValue="sport_id" placeholder="Select Sports" [clearable]="false" [(ngModel)]="sportName"
+                    name="state" (change)="onSportsChange($event,skillCategoryName)" >
+                  </ng-select>
+                </div>
+                </div>
+
+                <!-- Search -->
+                <div class="col-3">
+                  <div class="form-group ">
+                              
+                    <!-- <select name="skillcategoryList" [(ngModel)]="skillcategoryList" [disabled]="!sportsList" id="skillcategoryList" class="form-control"  (ngModelChange)="filterSkills(sportsList,skillcategoryList)">        
+                           
+                        <option class="text-disabled" disabled=true selected value="">Select Skill Category</option>
+                        <option value="{{skill.skill_category_id}}" *ngFor="let skill of skillCategoryInfo;let i=index;">{{skill?.name || '--'}}</option>
+                        <option disabled=true *ngIf="skillCategoryInfo?.length == 0">No data Available</option>
+                        
+                    </select> -->
+                    <ng-select [items]="skillCategoryInfo" bindLabel="name" bindValue="skill_category_id" placeholder="Select Skill Category" [clearable]="false" [(ngModel)]="skillCategoryName"
+                    name="skill_category" (change)="filterSkills($event,sportName)" >
+                  </ng-select>
+                </div>
+                </div>
+                <div class="col-4">
+                  <div id="tickets-table_filter" class="dataTables_filter text-md-right"><label
+                      class="d-inline-flex align-items-center">Search:
+                      <input type="search" class="form-control form-control-sm ml-2" placeholder="Search"
+                      [(ngModel)]="term" name="search"></label></div>
+                </div>
+                <!-- End search -->
+              </div>
+            </div>
+            <!-- Search -->
+         
+            <!-- End search -->
+          </div>
+          <!-- Table -->
+          <div class="table-responsive">
+            <table id="basic-datatable" class="table datatables dt-responsive nowrap">
+               
+              <thead>
+                <tr>
+                  <!-- <th sortable="name" (sort)="onSort($event)">Name</th>
+                  <th sortable="position" (sort)="onSort($event)">Position</th>
+                  <th sortable="office" (sort)="onSort($event)">Office</th>
+                  <th sortable="age" (sort)="onSort($event)">Age</th>
+                  <th sortable="date" (sort)="onSort($event)">Start date</th>
+                  <th sortable="salary" (sort)="onSort($event)">Salary</th> -->
+  
+                  <th>S.no</th>
+                  <th>Name</th>                                            
+                  <!-- <th>Order</th> -->
+                  <th>Created Date</th>
+                  <th>Edit</th>
+                                                                                                       
+                  
+                </tr>
+              </thead>
+              <!-- <tbody>
+                <tr tr *ngFor="let table of tables$ | async">
+                  <td>
+                    <ngb-highlight [result]="table.name" [term]="service.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="table.position" [term]="service.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="table.office" [term]="service.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="table.age" [term]="service.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="table.date" [term]="service.searchTerm"></ngb-highlight>
+                  </td>
+                  <td>
+                    <ngb-highlight [result]="table.salary" [term]="service.searchTerm"></ngb-highlight>
+                  </td>
+                </tr>
+              </tbody> -->
+              <tbody>
+                  <tr *ngFor="let skill of skillInfo | filter:term | slice:0:10;let i = index;">
+                      <td>{{i + 1}}</td>
+                      <td>{{skill.name}}</td>                                                                                        
+                      <td>{{skill.created_datetime}}</td>
+                      <td>
+                          <a [routerLink]="['/skill/edit',skill.sport_id,skill.skill_category_id,skill.skill_id]" class="action-icon"> <i
+                                  class="mdi mdi-square-edit-outline"></i></a>                                                
+                      </td>                                            
+                     
+                  </tr>
+              </tbody>                                    
+          </table>
+          <p class="text-center" *ngIf="skillInfo?.length == 0">No data Available</p>
+        
+          <!-- <p class="text-center" *ngIf="noDataDefault">No data Available</p> -->
+          </div>
+          <!-- End table -->
+          <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col-sm-12 col-md-5">
+              <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">Showing
+                {{startIndex}} to
+                {{endIndex}} of {{totalRecords}}
+                entries
+              </div>
+            </div>
+            <!-- Pagination -->
+            <div class="col-sm-12 col-md-5">
+              <div class="text-md-right float-md-right pagination-rounded">
+                <ngb-pagination [collectionSize]="totalRecords" (pageChange)="onPageChange($event)"
+                [(page)]="page" [pageSize]="pageSize"></ngb-pagination>
+              </div>
+            </div>
+            <!-- End Pagination -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>

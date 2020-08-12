@@ -1,0 +1,277 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12 p-0">
+            <div class="card mb-0 px-3 minHeightForCard">
+                <app-ui-preloader [display]="loading" [ngStyle]="{'display': displayLoader ? 'block' : 'none' }"  [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+                <div class="card-body paddingCard" [ngStyle]="{'display': !displayLoader ? 'block' : 'none' }">
+                    <form class="needs-validation" novalidate>                        
+                        <ngb-alert type="danger" *ngIf="error" [dismissible]="true" (click)=closeError()>{{error}}
+                        </ngb-alert>
+                        <div class="row mb-2">
+                            <h3 class="headingTitle" *ngIf="admin && adminWithId">View Organization</h3>
+                            <h3 class="headingTitle" *ngIf="!admin || !adminWithId ">Organization</h3>
+                        </div>
+
+                        <div class="row">
+
+                            <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                (click)="navigateView()">Update</button>&nbsp;&nbsp;&nbsp;
+
+                            <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                *ngIf="admin && adminWithId " (click)="goBack()">Cancel</button>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt-3 heading">
+                                <h4>Organization Details</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-sports allColMaxWidth">
+                                <label class="for-label-sports" for="name">Avatar</label>
+                            </div>
+                            <div class="col-5">
+                                <div class="image-upload pl-1">
+                                    <label for="file-input" class="hoverable" *ngIf="ProfileUrl !== null">
+                                        <img [src]="ProfileUrl" id="imageLabel" [ngClass]="{
+                            'defaultImage': deafulltImagePlaceholder === true, 
+                            'customizedImage': deafulltImagePlaceholder === false}">
+                                    </label>
+                                    <div id="container" class="hoverable" *ngIf="ProfileUrl === null">
+                                        <div id="abbreviation"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="name">Organization Name</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size">{{organizationInformations?.name || "-"}}</p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="abbrev">Abbreviation</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size">{{organizationInformations?.abbrev || "-"}}</p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="street1">Street 1</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size">{{organizationInformations?.street1|| "-"}}</p>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="street2">Street 2</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size">{{organizationInformations?.street2 || "-"}}</p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="city">City</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size">{{organizationInformations?.city|| "-"}}</p>
+
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="city">State/Province</label>
+                            </div>
+                            <div class="col-5 mt-2">
+
+                                <p class="size">{{organizationInformations?.state|| "-"}}</p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="postal_code">Postal Code</label>
+                            </div>
+                            <div class="col-5 mt-2">
+
+                                <p class="size">{{organizationInformations?.postal_code|| "-"}}</p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="country_code">Country</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size">{{organizationInformations?.country|| "-"}}</p>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="phone">Phone</label>
+                            </div>
+                            <div class="col-5 mt-2 ">
+                                <p class="size">
+                                    {{dialCodePhone}}{{organizationInformations?.mobile_phone | mask: '(000) 000-0000' || "-"}}
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="fax">Fax</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size" *ngIf="organizationInformations?.fax">
+                                    {{dialCodeFax}}{{organizationInformations?.fax | mask: '(000) 000-0000' || "-"}}</p>
+                                <p class="size" *ngIf="!organizationInformations?.fax">
+                                    {{dialCodeFax}}{{organizationInformations?.fax || "-"}}</p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="email">Email</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size">
+                                    {{organizationInformations?.email_address || "-"}}</p>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="website">Website</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size">{{organizationInformations?.website || "-"}}</p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="primary_contact">Primary Contact</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size">
+                                    {{ primaryContactName  }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="country_code">Secondary Contact</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size">
+                                    {{ secondaryContactName }}</p>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="Sports">Sports Offered</label>
+                            </div>
+                            <div class="col-5 mt-2">
+                                <p class="size"> {{sports || "-"}}</p>
+
+                            </div>
+
+                        </div>
+                        <div class="row" *ngIf="organizationInformations?.sports">
+                            <div class="col-12 mt-2 heading">
+                                <h4>Governing Body Details</h4>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="organizationInformations?.sports">
+                            <div class="col-12 mt-2 mb-0 pl-0">
+                                <div>
+                                    <table id="basic-datatable"
+                                        class="table table-responsive datatables dt-responsive nowrap mb-0">
+                                        <thead class="border">
+                                            <tr>
+                                                <th class="border">Sport Name</th>
+                                                <th class="border">Is National Governing Body</th>
+                                                <th class="border">National Governing Body Organization</th>
+                                                <th class="border">Is State Governing Body</th>
+                                                <th class="border">State Governing Body Organization</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border"
+                                                *ngFor="let individualGoverningInfo of organizationInformations?.governing_body_info; let governingBodyIndex = index">
+                                                <td class="border p-1 pt-2">
+                                                    <p class="text-center size">
+                                                        {{individualGoverningInfo?.sport_name}}</p>
+                                                </td>
+                                                <td class="border p-1 pt-2">
+                                                    <p class="text-center size"
+                                                        *ngIf="individualGoverningInfo?.is_national_governing_organization =='true'">
+                                                        Yes</p>
+                                                    <p class="text-center size"
+                                                        *ngIf="individualGoverningInfo?.is_national_governing_organization =='false'">
+                                                        No</p>
+                                                </td>
+                                                <td class="border p-1 pt-2">
+                                                    <p class="text-center"
+                                                        *ngIf="individualGoverningInfo?.is_national_governing_organization =='true'">
+                                                        - </p>
+                                                    <p class="text-center size"
+                                                        *ngIf="individualGoverningInfo?.is_national_governing_organization =='false'">
+                                                        {{individualGoverningInfo?.national_governing_organization_name|| "-"}}
+                                                    </p>
+                                                </td>
+                                                <td class="border p-1 pt-2">
+                                                    <p class="text-center size"
+                                                        *ngIf="individualGoverningInfo?.is_state_governing_organization =='true'">
+                                                        Yes</p>
+                                                    <p class="text-center size"
+                                                        *ngIf="individualGoverningInfo?.is_state_governing_organization =='false'">
+                                                        No</p>
+                                                </td>
+                                                <td class="border p-1 pt-2">
+                                                    <p class="text-center"
+                                                        *ngIf="individualGoverningInfo?.is_state_governing_organization =='true'">
+                                                        - </p>
+                                                    <p class="text-center size"
+                                                        *ngIf="individualGoverningInfo?.is_state_governing_organization =='false'">
+                                                        {{individualGoverningInfo?.state_governing_organization_name|| "-"}}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-3">
+                            <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                (click)="navigateView()">Update</button>&nbsp;&nbsp;&nbsp;
+
+                            <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                *ngIf="admin && adminWithId " (click)="goBack()">Cancel</button>
+                        </div>
+                    </form>
+                </div> <!-- end card-body -->
+            </div> <!-- end card-->
+        </div>
+    </div>
+</div>

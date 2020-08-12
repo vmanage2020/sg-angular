@@ -1,0 +1,189 @@
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card-box">
+            <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">User Details</h5>
+            <div class="row">  
+                <div class="col-lg-6">
+                    <div class="card-box">
+                        
+                        <div class="form-group mb-3" style="height: 81px;">
+                            <label for="product-name" style="width:200px;">Avatar </label>
+                            
+                            <div class=" form-check-inline">
+                               
+
+                            <div class="image-upload pl-1">
+                                <label for="file-input" class="hoverable" *ngIf='getUserData.profile_image !== null && getUserData.profile_image !== "" '>
+                                    <img [src]="getUserData.profile_image"  id="imageLabel"
+                                    [ngClass]="{
+                                        'defaultImage': deafulltImagePlaceholder === true, 
+                                        'customizedImage': deafulltImagePlaceholder === false}">
+                                </label>
+                                <div id="container" class="hoverable" *ngIf="getUserData.profile_image === null || getUserData.profile_image === ''">
+                                    <div class="profile-image">
+                                        <div id="abbreviation">AV</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            </div>
+                        </div>
+                        
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Name </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.first_name}} {{getUserData.middle_initial}} {{getUserData.last_name}} {{getUserData.suffix}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-reference" style="width:200px;">Roles </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.roles}} </label>
+                            </div>
+                            <div class="col-9 mt-3" id="customHeight">
+                                <div *ngFor="let role of selectedRoles;let i = index">
+                                    <div class="d-flex">
+    
+                                        <div class="col-2 p-0">
+                                            <label class="">{{role.name}}</label>
+                                        </div>
+                                        <div class="col-4 p-0" *ngIf="role.isBanned">
+                                            <label class=""><b>Is Banned</b></label>
+                                            <label class="pl-2">- &nbsp; Yes</label>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Date of Birth </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.date_of_birth}} </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Street 1 </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.street1}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Street 2 </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.street2}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">City </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2">  {{getUserData.city}}  </label>
+                            </div>
+                        </div>
+
+                        
+
+                    </div>
+                </div>    
+                <div class="col-lg-6">
+                    <div class="card-box">
+                                
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">State </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.state}} </label>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Postal Code </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.postal_code}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Country </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.country}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Email </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.email_address}} </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Mobile Number </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.mobile_phone}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Gaurdian(s) </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.field_type}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Player(s) </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.player}} </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="product-name" style="width:200px;">Is Suspended </label>
+                            
+                            <div class=" form-check-inline">
+                                <label for="inlineRadio2"> {{getUserData.field_type}} </label>
+                            </div>
+                        </div>
+
+                       
+
+
+                    </div> <!-- end card-box -->
+                </div> <!-- end col -->
+            </div>
+            <div class="row">  
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="listUser()" type="button" class="btn w-sm btn-light waves-effect" style="float:left;">Cancel</button>
+                        
+                        <button (click)="editUser(getUserData.user_id)" type="button" class="btn w-sm btn-success ml-1" style="float:right;">Edit</button>
+                    </div>
+                </div> <!-- end col -->
+            </div>
+        </div>    
+    </div>
+</div>
+<!-- end row -->

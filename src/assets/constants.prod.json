@@ -1,0 +1,27 @@
+{
+    "constantsname": "REUSABLEGRIDCONSTANTS",
+    "version": "0.01",
+    "env":"prod",
+    "tableDropdown":{
+      "pageCountShowTitle":"Show",
+      "pageCountEntries":"entries",
+      "paginationDropdownValue":[{
+        "count":"10"
+      },{
+        "count":"25"
+      },{
+        "count":"50"
+      },
+      {
+        "count":"100"
+      }
+    ]
+  
+    },
+  
+    "userLabelInDropdown":"All Users",
+    "userValueInDropdown":"all",
+    "intialSearchColDropdownName":"All Columns",
+    "intialSearchColDropdownValue":"keywords"
+  }
+  

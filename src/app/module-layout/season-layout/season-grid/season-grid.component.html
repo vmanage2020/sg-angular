@@ -1,0 +1,147 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 p-0">
+            <div class="card mb-0 minHeightForCard">
+                <app-ui-preloader [display]="loading" *ngIf="displayLoader" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+                <div class="card-body py-1 px-2"  *ngIf="!displayLoader">
+                    <h3 class="mb-3 headingTitle">Seasons</h3>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <a (click)="addSeason()" class="btn btn-dark link-active" data-animation="fadein"
+                                data-plugin="custommodal" data-overlaycolor="#38414a">Add Season</a>
+
+                        </div>
+                    </div>
+                    <div class="row mb-md-2">
+                        <div class="col-sm-12 col-md-4">
+                            <div class="dataTables_length" id="tickets-table_length"><label
+                                    class="d-inline-flex align-items-center">Show
+                                    <ng-select [items]="selectEntries" bindLabel="value" class="mx-1" bindValue="value"
+                                        [clearable]="false" (change)="selectedPage($event)"
+                                        [(ngModel)]="selectedPageSize" name="value">
+                                    </ng-select>entries</label></div>
+                        </div>
+                        <!-- Search -->
+                        <div class="col-sm-12 col-md-8">
+                            <div class="row">
+                                <div class="col-4 offset-4">
+                                    <div class="row">
+                                        <div class="col-1 pr-0">
+                                            <label class="selectLabel">View</label>
+                                        </div>
+                                        <div class="col-11 pl-1">
+                                            <!-- <ng-select [items]="sportsInfo" bindLabel="name" bindValue="name" placeholder="Select Sport" [loading]="selectedSport" [clearable]="false" [(ngModel)]="sportName"
+                                        name="state" (change)="onSportsChange($event)" >
+                                      </ng-select> -->
+                                            <ng-select [items]="sportsInfo" bindLabel="name" groupBy="value"
+                                                [searchable]="false" [clearable]="false" [(ngModel)]="sportName"
+                                                (change)="onSportsChange($event)">
+                                                <ng-template ng-optgroup-tmp let-item="item">
+                                                    {{item.value}}
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- <div class="col-4">
+                  
+                                        <div class="row">
+                                          <div class="col-2 searchLabel">
+                                            <label class="">Search</label>
+                                          </div>
+                                          <div class="col">
+                                                <ng-select [items]="noOfCol" [multiple]="false" bindLabel="value"
+                                                [searchable]="false" (change)="selectedCol($event)" [clearable]="false"
+                                                [closeOnSelect]="false" bindValue="name" [(ngModel)]="searchFilter">
+                                            </ng-select>
+                                          </div>
+                                        </div>
+                                      </div> -->
+                                <div class="col-4">
+                                    <div class="search-input">
+                                        <input class="form-control" [(ngModel)]="term" name="search"  (keyup.enter)="searchInput($event)"
+                                            placeholder="Search" type="text">
+                                        <i *ngIf="term" class="fa fa-times search-icon" (click)="onClear($event)"></i>
+                                    </div>
+                                </div>
+                               
+
+                                <!-- Search -->
+
+                                <!-- End search -->
+                            </div>
+                        </div>
+                        <!-- End search -->
+                    </div>
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table id="basic-datatable" class="table datatables dt-responsive nowrap">
+                            <thead>
+                                <tr class="table-header">
+                                    <th sortable="action" style="width: 85px;" *ngIf="showColumns?.length != 0">
+                                        Actions
+                                    </th>
+                                    <th *ngFor="let rowheader of seasonInfo | objectHeaders:1:showColumns;let i = index">
+                                        {{rowheader}}
+                                    
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                                <tr *ngFor="let season of seasonInfo let i = index;">
+                                    <td *ngIf="showColumns?.length != 0">
+                                        <a (click)=navigateView(season) title="View Record" class="action-icon edit-icon"> <i
+                                                class="mdi mdi-eye"></i></a>
+                                        <a (click)=navigateEdit(season) title="Update Record" class="action-icon edit-icon"> <i
+                                                class="mdi mdi-square-edit-outline" *ngIf="season.isUsed !== true"></i></a>
+                                    </td>
+                                    <ng-container *ngFor="let items of showColumns">
+                                        <td class="paddingTop" *ngIf="season[items]"><span
+                                                [textContent]="season[items]"></span></td>
+                                        <td *ngIf="!season[items]"><span>-</span></td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <p class="text-center" *ngIf="seasonInfo?.length == 0">No data available.</p>
+
+                    </div>
+                    <!-- End table -->
+                    <div class="row justify-content-md-between align-items-md-center mt-2"
+                        *ngIf="showColumns?.length !== 0 && seasonInfo?.length !== 0 ">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                                Showing
+                                {{startIndex}} to
+                                {{endIndex}} of {{totalRecords}}
+                                entries
+                            </div>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="col-sm-12 col-md-5 mt-2">
+                            <div class="text-md-right float-md-right pagination-rounded">
+                                <ul class="pagination pagination-no-border pagination-success pagination-primary">
+
+                                    <li class="page-item enabled edit-icon"
+                                        [ngClass]="{ 'disableNext':pager.currentPage === 1 , disabled:pager.currentPage === 1}">
+                                        <a aria-label="Previous edit-icon" class="page-link" tabindex="-1"
+                                            (click)="prevPage()"><span aria-hidden="true">«</span></a></li>
+                                    <li class="page-item active">
+                                        <a class="page-link">{{pagination_clicked_count+1}}</a></li>
+
+                                    <li class="page-item enabled edit-icon"
+                                        [ngClass]="{ 'disableNext': pager.currentPage === pager.totalPages , disabled:pager.currentPage === pager.totalPages}">
+                                        <a aria-label="Next" class="page-link edit-icon" tabindex="-1"
+                                            (click)="nextPage()"><span aria-hidden="true">»</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- End Pagination -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

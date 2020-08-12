@@ -1,0 +1,116 @@
+<div class="wrapper p-0">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12 p-0">
+                <div class="card mb-0 px-3 minHeightForCard">
+                    <app-ui-preloader [display]="loading" *ngIf="displayLoader" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+                    <div class="card-body paddingCard" *ngIf="!displayLoader">
+                       
+                        <div class="row mb-2">
+                            <h3 class="headingTitle">View Manager Custom Field</h3>
+                        </div>
+                        <div class="row">
+                            <a (click)="navigateView()" class="btn btn-dark link-active mr-2" data-animation="fadein" *ngIf="managerFieldInfo?.is_active === false"
+                                data-plugin="custommodal" data-overlaycolor="#38414a">Update</a>
+                            <a id="close" (click)="goBack()" class="btn btn-dark link-active" data-animation="fadein"
+                                data-plugin="custommodal" data-overlaycolor="#38414a">Close</a>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mt-3 heading">
+                                <h4>Manager Custom Field Details</h4>
+                            </div>
+                        </div>
+                      
+
+
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="field_name">Field Name</label>
+                            </div>
+                            <div class="col-4 mt-3">
+
+                                <label>{{managerFieldInfo?.field_name || "-"}}</label>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="field_type">Field Type</label>
+                            </div>
+                            <div class="col-4 mt-3">
+
+                                <label>{{managerFieldInfo?.field_type || "-"}}</label>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="value">Value</label>
+                            </div>
+                            <div class="col-3 mt-3">
+                                <label>{{managerFieldInfo?.value || "-" }}</label>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="sport">Sport</label>
+                            </div>
+                            <div class="col-3 mt-3">
+                                <label>{{managerFieldInfo?.sport || "-" }}</label>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="is_required">Is Required</label>
+                            </div>
+                            <div class="col-4 mt-3">
+
+                                <label>{{managerFieldInfo?.is_required || "-"}}</label>
+                            </div>
+
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="is_editable">Is Editable</label>
+                            </div>
+                            <div class="col-4 mt-3">
+
+                                <label>{{managerFieldInfo?.is_editable || "-"}}</label>
+                            </div>
+
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="is_deletable">Is Deletable</label>
+                            </div>
+                            <div class="col-4 mt-3">
+
+                                <label>{{managerFieldInfo?.is_deletable || "-"}}</label>
+                            </div>
+
+                        </div>
+
+                       
+
+                        <div class="row mt-3">
+                            <a (click)=navigateView() class="btn btn-dark link-active mr-2" data-animation="fadein" *ngIf="managerFieldInfo?.is_active === false"
+                                data-plugin="custommodal" data-overlaycolor="#38414a">Update</a>
+                            <a id="close" (click)="goBack()" class="btn btn-dark link-active" data-animation="fadein"
+                                data-plugin="custommodal" data-overlaycolor="#38414a">Close</a>
+                        </div>
+
+                    </div> <!-- end card-body -->
+                </div> <!-- end card-->
+            </div>
+        </div>
+    </div>
+</div>

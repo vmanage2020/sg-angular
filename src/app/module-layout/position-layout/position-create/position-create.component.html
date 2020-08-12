@@ -1,0 +1,108 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12 p-0">
+            <div class="card mb-0 px-3 minHeightForCard">
+                <app-ui-preloader [display]="loading" *ngIf="displayLoader" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+                <div class="card-body paddingCard" *ngIf="!displayLoader">
+                    <form class="needs-validation" name="createPositionsForm" [formGroup]="createPositionsForm"
+                        (ngSubmit)="createPositions(createPositionsForm)" novalidate>
+                       
+                       
+                        <div class="row mb-2">
+                            <h3 class="headingTitle">Add Position</h3>
+                        </div>
+                        <div class="row mb-2">
+                            <button type="submit" class="btn btn-dark waves-effect waves-light"
+                                (click)="save('up')">Save</button>&nbsp;&nbsp;&nbsp;
+                            <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveNew('up')">Save
+                                & New</button>&nbsp;&nbsp;&nbsp;
+
+                            <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                (click)="goBack()">Cancel</button>
+                        </div>
+                        <ngb-alert type="danger" *ngIf="error && isSaveUp" class="margin sdkErrorInUpperTag" [dismissible]="true"
+                        (click)="closeToast()">{{ message }}</ngb-alert>
+                        <div class="row">
+                            <div class="col-12  mt-2 heading">
+                                <h4>Position Details</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label-req" for="sport_id">Sport</label>
+                            </div>
+                            <div class="col-4 mt-2" id="customHeight">
+                                <ng-select [items]="sportsInfo" bindLabel="name" [loading]="sportSelect"
+                                    bindValue="sport_id" placeholder="Select sport" formControlName="sport_id"
+                                    [clearable]="false" (change)="OnSportChange($event)" name="sport_id">
+                                </ng-select>
+
+                                <div class="input-error-msg text-danger"
+                                    *ngIf="f.sport_id.errors?.required && submitted">
+                                    Select Sport.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label" for="first_name">Parent Position</label>
+                            </div>
+                            <div class="col-4 mt-2" id="customHeight">
+                                <ng-select [items]="positionInfo" bindLabel="name" [loading]="parentPositionSelect"
+                                    [clearable]="false" id="selectSuffix" bindValue="position_id"
+                                    placeholder="Select parent position" formControlName="parent_position_id"
+                                    (change)="onParentPosChange($event,createPositionsForm)" name="parent_position_id">
+                                </ng-select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label-req" for="first_name">Position Name</label>
+                            </div>
+                            <div class="col-4 mt-2" id="customHeight">
+                                <input type="text" name="name" class="form-control" formControlName="name" id="name"
+                                    placeholder="Enter position name"
+                                    [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
+                                <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.name.errors.required">Position Name is required.</div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <label class="for-label-req" for="first_name">Abbreviation</label>
+                            </div>
+                            <div class="col-4 mt-2" id="customHeight">
+                                <input type="text" name="abbreviation" class="form-control"
+                                    formControlName="abbreviation" placeholder="Enter abbreviation"
+                                    [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }">
+                                <div *ngIf="submitted && f.abbreviation.errors" class="invalid-feedback">
+                                    <div *ngIf="f.abbreviation.errors.required">Abbreviation is required.</div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <ngb-alert type="danger" *ngIf="error && isSaveUp" class="margin sdkErrorInDownTag mt-2" [dismissible]="true"
+                        (click)="closeToast()">{{ message }}</ngb-alert>
+
+                        <div class="row mt-3 mb-2">
+                            <button type="submit" class="btn btn-dark waves-effect waves-light"
+                                (click)="save('down')">Save</button>&nbsp;&nbsp;&nbsp;
+                            <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveNew('down')">Save
+                                & New</button>&nbsp;&nbsp;&nbsp;
+
+                            <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                                (click)="goBack()">Cancel</button>
+                        </div>
+                        
+                    </form>
+
+                </div> <!-- end card-body -->
+            </div> <!-- end card-->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+<!-- Topbar Start -->
+<div class="navbar-custom">
+  <ul class="list-unstyled topnav-menu float-right mb-0">
+    <!-- <div class="col-md-12"> -->
+    <li class="d-flex select" *ngIf="custAdmin">
+      <label class="margin">Organization</label>
+      <label class="margin text-dark noFontWeight" *ngIf="singleValue">{{selectedOrg}}</label>
+
+      <ng-select class="select-fixed-width" bindLabel="organization_name" *ngIf="select" [(ngModel)]="selectedOrg"
+        bindValue="organization_name" placeholder="Select Organization" id="select" [items]="filteredRole"
+        (change)="getOrgInfoCust($event)" [clearable]="false" name="organization_name">
+      </ng-select>
+    </li>
+    <li class="d-flex select" *ngIf="sysAdmin">
+      <label class="margin">Organization</label>
+
+      <ng-select class="select-fixed-width" bindLabel="name" [(ngModel)]="selectedOrg" bindValue="name"
+        placeholder="Select Organization" [loading]="organizationListLoader" id="select" [items]="orgInfo"
+        (change)="getOrgInfo($event)" [clearable]="false" name="organization_name">
+      </ng-select>
+
+    </li>
+    <li class="dropdown notification-list">
+      <a class="dropdown-toggle nav-user mr-0 waves-effect waves-light" aria-haspopup="false" aria-expanded="false">
+        <img [src]="profile" alt="user-image" class="rounded-circle mt-2" *ngIf="profile">
+        <div id="containerTop" [ngStyle]="{'display': profile ? 'none' : 'block' }">
+          <div id="name"> </div>
+        </div>
+      </a>
+
+    </li>
+    <li class="d-flex float-right" ngbDropdown>
+      <span ngbDropdownToggle id="profileDropdown"
+        class="edit-icon userNamePosition nav-link dropdown-toggle waves-effect waves-light text-dark" id="extraMenu"
+        role="button" aria-haspopup="false" aria-expanded="false">{{userData?.first_name}}<i
+          class="mdi mdi-chevron-down edit-icon"></i></span>
+      <div class="dropdown-menu dropdown-menu-right profile-dropdown" aria-labelledby="profileDropdown" ngbDropdownMenu>
+        <a routerLink="/profile" class="dropdown-item notify-item" *ngIf="custAdmin || sysAdmin">
+          <i class="fe-user"></i>
+          <span>Update Profile</span>
+        </a>
+        <a href="javascript:void(0);" class="dropdown-item notify-item mt-1" (click)="logout()">
+          <i class="fe-log-out"></i>
+          <span>Logout</span>
+        </a>
+
+      </div>
+    </li>
+    <ngb-alert [dismissible]="true" *ngIf="showMsg" (click)="closeToast()"
+      class="alert alert-danger text-white showToast bg-danger" type="danger">Select Organization.
+    </ngb-alert>
+    <!-- </div> -->
+  </ul>
+
+  <!-- LOGO -->
+  <div class="logo-box">
+    <a href="/" class="logo text-center">
+      <span class="logo-lg float-left pl-2">
+        <img src="assets/images/logo-sg.png" alt="" height="62">       
+      </span>      
+      <span class="logo-sm">        
+        <img src="assets/images/logo-sg.png" alt="" height="62">
+      </span>
+    </a>
+  </div>
+  <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+    <li class="dropdown d-none d-lg-block" ngbDropdown *ngIf="custAdmin || sysAdmin">
+      <a class="nav-link dropdown-toggle waves-effect waves-light text-dark" href="javascript: void(0);"
+        ngbDropdownToggle id="extraMenu" role="button" aria-haspopup="false" aria-expanded="false">
+        Create New
+        <i class="mdi mdi-chevron-down"></i>
+      </a>
+      <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="extraMenu">
+        <a (click)="addOrganization()" *ngIf="sysAdmin && !sysAdminWithId" class="dropdown-item edit-icon">
+          <i class="fe-users mr-1"></i>
+          <span>Organization</span>
+        </a>
+        <a class="dropdown-item edit-icon" (click)="addUser()">
+          <i class="fe-user mr-1"></i>
+          <span>User</span>
+        </a>
+        <a (click)="addTeam()" class="dropdown-item edit-icon" *ngIf="sysAdminWithId">
+          <i class="fe-users mr-1"></i>
+          <span>Team</span>
+        </a>
+      </div>
+    </li>
+  </ul>
+
+
+</div>
+
+<!-- end Topbar -->

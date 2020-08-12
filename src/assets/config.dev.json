@@ -1,0 +1,296 @@
+{
+  "version": "0.01",
+  "env":"dev",
+  "dashboard": {
+    "url": "/getUsers",
+    "showColumninfo": [
+      {
+        "displayValue": "name",
+        "key": "name",
+        "type": "concatenation",
+        "keyname": [
+          "first_name",
+          "middle_initial",
+          "last_name",
+          "suffix"
+        ],
+        "concat_symbol": " "
+      },
+      {
+        "displayValue": "city",
+        "key": "city",
+        "type": "normal"
+      },
+      {
+        "displayValue": "state",
+        "key": "state",
+        "type": "normal"
+      },
+      {
+        "displayValue": "postal code",
+        "key": "postal_code",
+        "type": "normal"
+      },
+      {
+        "displayValue": "Email Address",
+        "key": "email_address",
+        "type": "normal"
+      },
+      {
+        "displayValue": "Mobile phone",
+        "key": "mobile_phone",
+        "type": "normal"
+      },
+      {
+        "displayValue": "created at",
+        "key": "created_datetime",
+        "type": "date",
+        "format": "MMMM DD, YYYY"
+      }
+    ],
+    "isEditEnable": true,
+    "isviewEnable": true,
+    "params": {},
+    "sortingValue": "desc",
+    "sortingKey": "created_datetime",
+    "searchKey": "keywords",
+    "item_per_page": 10,
+    "isSearchEnable": true,
+    "isSearchDropdownEnable": true,
+    "serachDropdownData": [],
+    "serachDropdownColumn": [
+      "all"
+    ],
+    "isViewDropdownEnable": true,
+    "viewDropdownData": [],
+    "isSorting": true
+  },
+  "seasonData": {
+    "url": "/getFilterSeason",
+    "showColumninfo": [
+      {
+        "displayValue": "Sports Name",
+        "key": "sports_name",
+        "type": "normal"
+      },
+      {
+        "displayValue": "Season Start Date",
+        "key": "season_start_date",
+        "type": "date",
+        "format": "MMMM DD, YYYY"
+      },
+      {
+        "displayValue": "Season End Date",
+        "key": "season_end_date",
+        "type": "date",
+        "format": "MMMM DD, YYYY"
+      },
+      {
+        "displayValue": "Organization Name",
+        "key": "organization_name",
+        "type": "normal"
+      }
+    ],
+    "isActionSingle": false,
+    "isEditEnable": true,
+    "isviewEnable": true,
+    "params": {},
+    "sortingValue": "desc",
+    "sortingKey": "created_datetime",
+    "searchKey": "keywords",
+    "item_per_page": 10,
+    "searchVal": "",
+    "isSearchEnable": true,
+    "isSearchDropdownEnable": true,
+    "searchDropdownData": [],
+    "searchDropdownColumn": [
+      "all"
+    ],
+    "isViewDropdownEnable": true,
+    "viewDropdownData": [],
+    "viewDropdownColumn": [
+      "name",
+      "sport_id"
+    ],
+    "filterKey": "sports_id",
+    "isViewDropdownDataGroupBy": false,
+    "isSorting": true
+  },
+  "organizationData": {
+    "url": "/getOrganizations",
+    "dataTableType": "organization",
+    "displayDataInGrid": [],
+    "showColumninfo": [
+      {
+        "displayValue": "Organization Name",
+        "key": "name",
+        "type": "normal",
+        "searchKey": "keywordForOrgName"
+      },
+      {
+        "displayValue": "Abbreviation",
+        "key": "abbrev",
+        "type": "normal",
+        "searchKey": "keywordForAbbrev"
+      },
+      {
+        "displayValue": "State",
+        "key": "state",
+        "type": "normal",
+        "searchKey": "keywordForState"
+      },
+      {
+        "displayValue": "Country",
+        "key": "country",
+        "type": "normal",
+        "searchKey": "keywordForCountryCode"
+      },
+      {
+        "displayValue": "Email Address",
+        "key": "email_address",
+        "type": "normal",
+        "searchKey": "keywordForOrgEmailAddress"
+      },
+      {
+        "displayValue": "Mobile Phone",
+        "key": "mobile_phone",
+        "type": "mobile",
+        "searchKey": "keywordForPhone",
+        "format": "/^(\\d{3})(\\d{3})(\\d{4}).*/, '($1) $2-$3'"
+      }
+    ],
+    "isActionSingle": false,
+    "isEditEnable": true,
+    "isviewEnable": true,
+    "params": {},
+    "sortingValue": "desc",
+    "sortingKey": "created_datetime",
+    "searchKey": "keywords",
+    "item_per_page": 10,
+    "page_no": 1,
+    "searchValue": "",
+    "isSearchEnable": true,
+    "isSearchDropdownEnable": false,
+    "searchDropdownData": [],
+    "searchDropdownColumn": [
+      "all"
+    ],
+    "isViewDropdownEnable": false,
+    "isSorting": false,
+    "isStatus": false
+  },
+  "userData": {
+    "url": "/getUsers",
+    "dropdownUrl": "/getRolesList",
+    "showColumninfo": [
+      {
+        "displayValue": "Name",
+        "key": "name",
+        "type": "concatenation",
+        "keyname": [
+          "first_name",
+          "middle_initial",
+          "last_name",
+          "suffix"
+        ],
+        "concat_symbol": " "
+      },
+      {
+        "displayValue": "City",
+        "key": "city",
+        "type": "normal"
+      },
+      {
+        "displayValue": "State",
+        "key": "state",
+        "type": "normal"
+      },
+      {
+        "displayValue": "Postal Code",
+        "key": "postal_code",
+        "type": "normal"
+      },
+      {
+        "displayValue": "Email Address",
+        "key": "email_address",
+        "type": "normal"
+      },
+      {
+        "displayValue": "Mobile Phone",
+        "key": "mobile_phone",
+        "type": "mobile",
+        "format": "/^(\\d{3})(\\d{3})(\\d{4}).*/, '($1) $2-$3'"
+      }
+    ],
+    "isActionSingle": false,
+    "isEditEnable": true,
+    "isviewEnable": true,
+    "params": {},
+    "sortingValue": "desc",
+    "sortingKey": "created_datetime",
+    "searchKey": "keywords",
+    "item_per_page": 10,
+    "page_no": 1,
+    "searchVal": "",
+    "isSearchEnable": true,
+    "isSearchDropdownEnable": true,
+    "searchDropdownData": [],
+    "searchDropdownColumn": [
+      "all"
+    ],
+    "isViewDropdownEnable": true,
+    "viewDropdownData": [],
+    "viewDropdownColumn": [
+      "name",
+      "role_id"
+    ],
+    "filterKey": "role_id",
+    "isFilterKeyNull": false,
+    "isViewDropdownDataGroupBy": false,
+    "isSorting": true
+  },
+  "tagData": {
+    "showColumninfo": [
+      {
+        "displayValue": "Sport",
+        "key": "sport_name",
+        "type": "normal"
+      },
+      {
+        "displayValue": "Copied From",
+        "key": "copied_from",
+        "type": "normal"
+      },
+      {
+        "displayValue": "Tag Name",
+        "key": "tag_name",
+        "type": "normal"
+      }
+    ],
+    "isActionSingle": false,
+    "isEditEnable": true,
+    "isviewEnable": true,
+    "isDeleteEnable": true,
+    "params": {},
+    "sortingValue": "desc",
+    "sortingKey": "created_datetime",
+    "searchKey": "keywords",
+    "item_per_page": 10,
+    "searchVal": "",
+    "isSearchEnable": true,
+    "isSearchDropdownEnable": false,
+    "searchDropdownData": [],
+    "searchDropdownColumn": [
+      "all"
+    ],
+    "isViewDropdownEnable": true,
+    "viewDropdownData": [],
+    "viewDropdownColumn": [
+      "name",
+      "sport_id"
+    ],
+    "filterKey": "sport_id",
+    "isViewDropdownDataGroupBy": false,
+    "isSorting": false
+  }
+}

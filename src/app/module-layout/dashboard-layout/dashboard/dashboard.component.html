@@ -1,0 +1,53 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 p-0">
+      <div class="card mb-0 minHeightForCard">
+        <div class="card-body py-1 px-2" >
+          <h3 class="mb-2 headingTitle">Welcome to SportsGravy</h3>
+
+          <div class="row">
+            <div class="col-12">
+
+              <div class="removeShadow" *ngIf="!sysAdmin">
+                <div class="d-flex justify-content-center" *ngIf="warningInfo">
+                  <ngb-alert [dismissible]="false" type="warning"><i class="mdi mdi-alert-outline mr-1"></i>
+                    You have already signed in with one account.To continue with signup process,kindly logout the
+                    current user/account.
+                  </ngb-alert>
+                </div>
+                <!-- <img src="assets/images/logo-dark.png" alt="" height="30">
+                <h3 class="mb-3">Welcome to SportsGravy</h3> -->
+                <p class="text-muted"> Use the navigation menu to manage your selected organization.</p>
+
+              </div>
+
+              <!-- unAuthorized User Info Message Content-->
+              <div class="text-center card-box removeShadow" *ngIf="sysAdmin">
+                <i class="h1 mdi mdi-information-outline text-muted"></i>
+                <!-- <h3 class="mb-3">Welcome to SportsGravy</h3> -->
+                <p class="text-muted"> Congratulations for signing up on SportsGravy.For tracking your players kindly
+                  login with mobile application.This site is for administration purpose,thank you.</p>
+                <div class="row">
+                  <div class="col-4 offset-1">
+                    <p><span class="mdi mdi-android theme-font-size-24 mx-2"></span><a>Android Mobile Application</a>
+                    </p>
+                  </div>
+                  <div class="col-4 offset-1">
+                    <p><span class="mdi mdi-apple theme-font-size-24 mx-2"></span><a>IOS Mobile Application</a></p>
+                  </div>
+                </div>
+                <button type="button" (click)="logout()" class="btn btn-success waves-effect waves-light mt-2 mr-1"><i
+                    class="mdi mdi-logout mr-1"></i> Logout </button>
+
+              </div>
+            </div><!-- end col -->
+          </div>
+
+
+
+        </div>
+     
+      </div>
+    </div>
+  </div>
+</div>

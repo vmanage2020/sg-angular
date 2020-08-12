@@ -1,0 +1,87 @@
+<div class="wrapper p-0">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-12 p-0">
+        <div class="card mb-0 px-3 minHeightForCard">
+          <app-ui-preloader [display]="loading" *ngIf="displayLoader" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+          <div class="card-body paddingCard" *ngIf="!displayLoader">
+            <form class="needs-validation" name="UpdateTagForm" [formGroup]="UpdateTagForm"
+              (ngSubmit)="onSubmit(UpdateTagForm)" novalidate>
+             
+             
+              <div class="row mb-2">
+                <h3 class="headingTitle">Update Tag</h3>
+              </div>
+              <div class="row mb-2">
+                <button type="submit" class="btn btn-dark waves-effect waves-light" (click)="saveUp('up')"
+                 [disabled]="disableByDefault"
+                  >Save</button>&nbsp;&nbsp;&nbsp;
+              
+                  <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                  (click)="goBack()">Cancel</button>
+              </div>
+              <ngb-alert type="danger" *ngIf="error && isSaveUp" class="margin sdkErrorInUpperTag" [dismissible]="true" (click)=closeError()>{{error}}
+              </ngb-alert>
+             <div class="row">
+                <div class="col-12  mt-2 heading">
+                  <h4>Tag Details</h4>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                  <label class="for-label-req" for="first_name">Tag Name</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+                  <input type="text" formControlName="name" class="form-control" (input)="tagName()"
+                    [ngClass]="{ 'is-invalid': submitted && f.name.errors }" name="name" id="name"
+                    placeholder="Enter tag name" />
+                  <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                    <div *ngIf="f.name.errors.required">Tag Name is required.</div>
+                    
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                  <label class="for-label-req" for="first_name">Sport</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+                  <ng-select [items]="SportsList" formControlName="sport_id" bindLabel="name"
+                  [loading]="sportSelect" (focus)="selectedSport($event,UpdateTagForm)"
+                  [clearable]="false" (change)="selectedSport($event,UpdateTagForm)"
+                  bindValue="sport_id" placeholder="Select sport">
+              </ng-select>
+              <div *ngIf="f.sport_id.errors?.required && submitted" class="input-error-msg text-danger">
+                  Select Sport.
+              </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="injectedata.data?.copied_from">
+                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                  <label class="for-label" for="first_name">Copied From</label>
+                </div>
+                <div class="col-4 mt-2" id="customHeight">
+                        <input type="text"  class="form-control" disabled="true"
+                        [value]="injectedata.data?.copied_from"/>                
+                </div>
+              </div> 
+              <ngb-alert type="danger" *ngIf="error && !isSaveUp" class="margin sdkErrorInDownTag mt-2" [dismissible]="true" (click)=closeError()>{{error}}
+              </ngb-alert>
+              <div class="row mt-3 mb-2">
+                <button type="submit" class="btn btn-dark waves-effect waves-light" [disabled]="disableByDefault" (click)="saveUp('down')"
+                  >Save</button>&nbsp;&nbsp;&nbsp;
+               
+                  <button type="button" class="btn btn-dark waves-effect waves-light m-l-10"
+                  (click)="goBack()">Cancel</button>
+              </div>
+              
+            </form>
+
+          </div> <!-- end card-body -->
+        </div> <!-- end card-->
+      </div>
+    </div>
+  </div>
+</div>

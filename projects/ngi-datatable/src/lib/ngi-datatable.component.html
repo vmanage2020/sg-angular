@@ -1,0 +1,151 @@
+<div class="row mb-md-2">
+    <div class="col-sm-12 col-md-4">
+        <div class="dataTables_length" id="tickets-table_length"><label class="d-inline-flex align-items-center"><span
+                    [innerHtml]=constants?.pageCountShowTitle></span>
+                <ng-select [items]="constants.paginationDropdownValue" bindLabel="count" class="mx-1" bindValue="count"
+                    [clearable]="false" (change)="changePageRecordCount($event)" [(ngModel)]="selectedPageSize">
+                </ng-select>
+
+                <span [innerHtml]=constants?.pageCountEntries></span>
+            </label></div>
+    </div>
+    <!-- Search -->
+    <div class="col-sm-12 col-md-8">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row" *ngIf="config.isViewDropdownEnable">
+                    <div class="col-1 pr-0">
+                        <label class="selectLabel">View</label>
+                    </div>
+                    <div class="col-11 pl-1">
+                        <ng-select *ngIf="config.isViewDropDownGoupBy" bindLabel="label" [searchable]="false"
+                            groupBy="value" [multiple]="false" [items]="config.viewDropdownData"
+                            [(ngModel)]="selectedSeason" [clearable]="false" (change)=selectedSport($event)>
+                            <ng-template *ngIf=config.isViewDropdownDataGroupBy ng-optgroup-tmp let-item="item">
+                                {{item.value || ' '}}
+                            </ng-template>
+                        </ng-select>
+                        <ng-select *ngIf="!config.isViewDropDownGoupBy" bindLabel="label" bindValue="value"
+                            [searchable]="false" [multiple]="false" [items]="config.viewDropdownData"
+                            [(ngModel)]="selectedSeason" [clearable]="false" (change)=selectedSport($event)></ng-select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="row" *ngIf="config.isSearchDropdownEnable">
+                    <div class="col-2 searchLabel">
+                        <label class="">Search</label>
+                    </div>
+                    <div class="col">
+                        <ng-select bindLabel="label" bindValue="value" [searchable]="false" [multiple]="false"
+                            [items]="config.searchDropdownData" [(ngModel)]="selecteColumn" [clearable]="false"
+                            (change)=onDataChange($event)>
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="search-input" *ngIf="config.isSearchEnable">
+                    <input  (keyup.enter)="searchData($event)" class="form-control" [(ngModel)]="searchValue"
+                        name="search" placeholder="Search" type="text">
+                    <i *ngIf="searchValue" class="fa fa-times search-icon" (click)="onClear($event)"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End search -->
+</div>
+<div class="table-responsive">
+   
+    <table id="basic-datatable" class="table dt-responsive nowrap">
+        <thead>
+            <tr class="table-header">
+                <th
+                    *ngIf="config.isEditEnable || config.isviewEnable || config.isErrorEnable || config.isSuccessEnable">
+                    Actions</th>
+                <th *ngIf="config.isStatusColumnEnable">Status</th>
+                <th *ngFor="let header of config.showColumninfo;let i=index">{{header.displayValue| titlecase}}<span
+                        *ngIf="config.isSorting" class="sorting-position" (click)="sorting(header,'asc',i)"><i
+                            [ngClass]="[(this.config.sortingValue ==='asc' && i ===  this.config['index'])?'ascendingSort':'']"
+                            class="fa fa-sort-up text-grey edit-icon" aria-hidden="true"></i></span>
+                    <span *ngIf="config.isSorting" class="sorting-position" (click)="sorting(header,'desc',i)"><i
+                            [ngClass]="[(this.config.sortingValue==='desc' && i=== this.config['index'])?'descendingSort':'']"
+                            class="fa fa-sort-down text-grey edit-icon" aria-hidden="true"></i></span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of resData">
+                <td class="paddingInTable"
+                    *ngIf="config.isEditEnable || config.isviewEnable || config.isErrorEnable || config.isSuccessEnable">
+                    <a *ngIf="config.isviewEnable" title="View Record" (click)="view(data)"
+                        class="action-icon edit-icon p-1"> <i class="mdi mdi-eye"></i></a>
+                    <a *ngIf="config.isEditEnable" title="Update Record" (click)="edit(data)"
+                        class="action-icon edit-icon p-1"> <i class="mdi mdi-square-edit-outline"></i></a>
+                        <a *ngIf="config.isDeleteEnable" title="Edit Records" (click)="delete(data)"
+                        class="action-icon edit-icon p-1"> <i class="mdi mdi-delete"></i></a>
+                    <a *ngIf="config.isErrorEnable && (data?.processed_Flag === 'y' || data?.processed_Flag === 'n')  && data?.processed_Flag"
+                        title="Unsuccessful Records" (click)="errorRecord(data)"
+                        class="action-icon edit-icon text-danger p-1"> <i class="mdi mdi-close-circle-outline"></i></a>
+                    <a *ngIf="config.isSuccessEnable && (data?.processed_Flag === 'y' || data?.processed_Flag === 'n')  && data?.processed_Flag"
+                        title="Successful Records" (click)="successRecord(data)"
+                        class="action-icon edit-icon text-success"> <i class="mdi mdi-check-circle-outline"></i></a>
+                    <a *ngIf="config.isInfoEnable && (data?.processed_Flag === 'y' || data?.processed_Flag === 'n')  && data?.processed_Flag"
+                        title="Detailed View" (click)="viewDetailRecords(data)" class="action-icon edit-icon"> <i
+                            class="mdi mdi-information-outline"></i></a>
+                    <a><span *ngIf="data?.processed_Flag === 'e'" class="color font-weight-bold edit-icon p-1"
+                            (click)="fixEvents(data)">Fix</span></a>
+                    <a *ngIf="(data?.processed_Flag !== 'y' && data?.processed_Flag !== 'n') && data?.processed_Flag"
+                        class="color font-weight-bold edit-icon" (click)="reUploadEvent(data)">ReUpload</a>
+                </td>
+                <td class="paddingInTable" *ngIf="config.isStatus">
+                    <span *ngIf="data?.processed_Flag == 'y'">Processed</span>
+                    <span *ngIf="data?.processed_Flag == 'n'">Processing</span>
+                    <span
+                        *ngIf="(data?.processed_Flag !== 'y' && data?.processed_Flag !== 'n') && data?.processed_Flag">The
+                        file contains error</span>
+                    <a *ngIf="config.isStatusErrorEnable && (data?.processed_Flag === 'e')" (click)="view(data)"
+                        class="action-icon edit-icon text-danger p-1"> <i class="mdi mdi-close-circle-outline"></i></a>
+                    <a *ngIf="config.isStatusSuccessEnable && (data?.processed_Flag === 'y' || data?.processed_Flag === 'n')"
+                        (click)="view(data)" class="action-icon edit-icon text-success"> <i
+                            class="mdi mdi-information-outline"></i></a>
+
+                </td>
+                <ng-container *ngFor="let items of showColumns">                    
+                        <td *ngIf="!data[items.key]"><span>-</span></td>
+                    <td class="paddingTop paddingInTable" *ngIf="data[items.key]"><span [textContent]="data[items.key]"></span></td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+    <p *ngIf="resData?.length === 0" class="text-center table-head"> No data available.</p>
+</div>
+<div class="row justify-content-md-between align-items-md-center mt-2" *ngIf="resData?.length !== 0">
+    <div class="col-sm-12 col-md-5">
+        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">Showing
+            {{startIndex}} to
+            {{endIndex}} of {{totalRecords}}
+            entries
+        </div>
+    </div>
+    <!-- Pagination -->
+    <div class="col-sm-12 col-md-5 mt-2">
+        <div class="text-md-right float-md-right pagination-rounded">
+            <ul class="pagination pagination-no-border pagination-success pagination-primary">
+
+                <li class="page-item enabled edit-icon"
+                    [ngClass]="{ 'disableNext':pager.currentPage === 1 , disabled:pager.currentPage === 1}">
+                    <a aria-label="Previous edit-icon" class="page-link" tabindex="-1" (click)="prevPage()"><span
+                            aria-hidden="true">«</span></a></li>
+                <li class="page-item active">
+                    <a class="page-link">{{pagination_clicked_count+1}}</a></li>
+
+                <li class="page-item enabled edit-icon"
+                    [ngClass]="{ 'disableNext': pager.currentPage === pager.totalPages , disabled:pager.currentPage === pager.totalPages}">
+                    <a aria-label="Next" class="page-link edit-icon" tabindex="-1" (click)="nextPage()"><span
+                            aria-hidden="true">»</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- End Pagination -->
+</div>

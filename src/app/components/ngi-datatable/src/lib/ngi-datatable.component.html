@@ -1,0 +1,125 @@
+<div class="container-fluid ">
+
+    <div class="card">
+        <div class="card-header card-header-primary">
+            <div class="float-left">
+                <h4 class="card-title responsive-title" [innerHtml]=config?.tableTitle></h4>
+                <p class="card-category" [innerHtml]=config?.tableSubTitle></p>
+            </div>
+            <div class="float-right mt-3 create-btn">
+
+                <button class="btn btn-primary btn-round py-1 px-3 bg-light theme-color" mat-min-fab=""
+                    mat-raised-button="" (click)=addEvent()>
+                    <span class="mat-button-wrapper text-capitalize">
+                       
+                        <b class="theme-font-size-14 createbtn">Create</b> </span>
+                    <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                    <div class="mat-button-focus-overlay"></div>
+                </button>
+
+            </div>
+          
+            
+            
+            <div class="float-right mr-3 mt-3 responsive-search"> 
+                <input (ngModelChange)="searchData($event)" [(ngModel)]="search" class="form-control search-input "
+                    placeholder="Search" name="search">
+            </div>
+            
+            <div class="float-right mr-2 responsive-dropdown dropdown">
+                <!-- <div *ngIf="config.isdropDownEnable">                    
+                        <ngi-select class="pb-0" [hideSelected]="true" [required]="false"  [multiple]="false" [(ngModel)]='optionSelected'
+                        placeholder="Choose Config"  bindLabel="name" bindValue="id"  [items]="dropdownvalue" (change)="dropDownProperty($event)"
+                        required>
+                </ngi-select>
+                </div> -->
+                    
+            </div>
+            
+
+
+        </div>
+        <div class="card-body" [id]="carddatatableIdentity">
+
+            <div class="table-responsive" >
+                <table class="table">
+                    <thead class="text-primary">
+
+                        <th class="table-head p-1" *ngFor="let rowheader of pagedItemsHeader ">{{rowheader}}</th>
+                       
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of pagedItemsHeader">
+
+                            <ng-container *ngFor="let items of showColumns">
+                                <td class="p-1"><span [textContent]="data[items]"></span></td>
+                            </ng-container>
+
+                            <td class="td-actions text-center">
+                                <!-- <button *ngIf="config.isViewMoreEnable" class="btn btn-just-icon btn-round btn-reddit mat-raised-button btn-datatable-icon"
+                                    mat-raised-button="" (click)="view(data)">
+                                    <span class="mat-button-wrapper"><i class="material-icons mt-2">visibility</i></span>
+                                    <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                                    <div class="mat-button-focus-overlay"></div>
+                                </button>&nbsp;
+                                <button *ngIf="config.isEditEnable" class="btn btn-just-icon btn-round btn-reddit mat-raised-button btn-datatable-icon"
+                                    mat-raised-button="" (click)="edit(data)">
+                                    <span class="mat-button-wrapper"><i class="material-icons mt-2">edit</i></span>
+                                    <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                                    <div class="mat-button-focus-overlay"></div>
+                                </button>&nbsp;
+                                <button *ngIf="config.isDisableEnable" class="btn btn-just-icon btn-round btn-reddit mat-raised-button btn-datatable-icon"
+                                    mat-raised-button="" (click)="disable(data)">
+                                    <span class="mat-button-wrapper"><i class="material-icons mt-2">delete</i></span>
+                                    <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                                    <div class="mat-button-focus-overlay"></div>
+                                </button>&nbsp;
+
+                                <button *ngIf="config.isTestScriptEnable" class="btn btn-just-icon btn-round btn-reddit mat-raised-button btn-datatable-icon"
+                                    mat-raised-button="" (click)="inview(data)">
+                                    <span class="mat-button-wrapper"><i class="material-icons mt-2">keyboard_arrow_right</i></span>
+                                    <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                                    <div class="mat-button-focus-overlay"></div>
+                                </button> -->
+                            </td>
+
+                        </tr>                        
+
+                    </tbody>                    
+                </table>
+                <p *ngIf="!totalRecords" class="text-center table-head"> No Data to Show</p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <p class="card-category" *ngIf="totalRecords">Showing {{pager?.startIndex + 1}} to {{pager?.endIndex + 1}}
+                of {{totalRecords}} entries</p>
+            <p class="card-category" *ngIf="!totalRecords">No entries</p>
+
+            <ul class="pagination pagination-no-border pagination-success pagination-primary">
+                <li class="page-item prev-page" [ngClass]="{disabled:pager.currentPage === 1}">
+                    <a aria-label="Previous" (click)="initPage(1)" class="page-link">
+                        <i class="material-icons">skip_previous</i></a>
+                </li>
+
+
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                    <a class="page-link" (click)="initPage(pager.currentPage - 1)"><i class="material-icons">chevron_left</i>
+                    </a>
+                </li>
+
+                <li class="page-item active" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                    <a class="page-link" (click)="initPage(page)">{{page}}</a></li>
+
+
+
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                    <a class="page-link" (click)="initPage(pager.currentPage + 1)">
+                        <i class="material-icons">chevron_right</i></a>
+                </li>
+               
+                <li class="page-item page-pre next-page" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                    <a aria-label="Next" (click)="initPage(pager.totalPages)" class="page-link"><i class="material-icons">skip_next</i></a></li>
+            </ul>
+        </div>
+    </div>
+</div>

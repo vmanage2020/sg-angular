@@ -1,0 +1,153 @@
+ <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 p-0">
+          <div class="card mb-0 minHeightForCard">
+            <app-ui-preloader [display]="loading"  *ngIf="displayLoader" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
+            <div class="card-body py-1 px-2"  *ngIf="!displayLoader">
+              <h3 class="mb-3 headingTitle">Import Failed User Records</h3>
+              <div class="row mb-3">
+                <div class="col-sm-4">                  
+                    <button type="submit" class="btn btn-dark waves-effect waves-light"
+                    (click)='backImportedLogs()'>Back</button>
+                </div>
+              </div>
+              <div class="row mb-md-2">
+                <div class="col-sm-12 col-md-4">
+                    <div class="dataTables_length" id="tickets-table_length"><label
+                      class="d-inline-flex align-items-center">Show
+                      <ng-select [items]="selectEntries" bindLabel="value" class="mx-1" bindValue="value"
+                        [clearable]="false" (change)="selectedPage($event)" [(ngModel)]="selectedPageSize" name="value">
+                      </ng-select>entries</label></div>
+                </div>
+                
+              </div>
+  
+              <!-- Table -->
+              <div class="table-responsive">
+                <table id="basic-datatable" class="table datatables dt-responsive nowrap">
+  
+                  <thead>
+                    
+                    <tr class="table-header">
+                        <th sortable="action"  style="width: 85px;">
+                            Action
+                          </th>
+                        <th>Status</th>
+                        <th>Status Description</th>
+                        <th>Player First Name</th>
+                        <th style="width: 85px;">Player Initial</th>
+                        <th>Player Last Name</th>
+                        <th>Player Gender</th>
+                        <th>Player DOB</th>
+                        <th>Level Of Play</th>
+                        <th>Guardian1 Email</th>
+                        <th>Guardian2 Email</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Postal Code</th>
+                        <th>Country </th>
+                    
+                    </tr>
+                  </thead>
+                  <tbody>                  
+                    <tr *ngFor="let data of userImportedRecordInfo | filter:term ;let i = index;">
+                        <td class="paddingTop">
+                            <a (click)="editUserRecord(data)" class="edit-icon color font-weight-bold">Fix</a>
+                         </td>
+                         <td *ngIf= "data?.processed_flag === 'e'">
+                            <i
+                            class="mdi mdi-close-circle-outline action-icon  text-danger"></i>
+                        </td>
+                        <td *ngIf= "data?.processed_flag === 'n' || data?.processed_flag === 'y'">
+                            <i class="mdi mdi-check-circle-outline action-icon text-success"></i>
+                          </td>
+                         <td class="paddingTop">
+                          {{data?.error_for_status || "-"}}
+                        </td>
+                         
+                         <td class="paddingTop">
+                             {{data?.player_first_name || "-"}}
+                            </td>
+                            <td class="paddingTop">
+                               {{data?.player_initial || "-"}}
+                              </td>
+                              <td class="paddingTop">
+                                  {{data?.player_last_name || "-"}}
+                                </td>
+                                <td class="paddingTop">
+                                    {{data?.player_gender || "-"}}
+                                  </td>
+                                  <td class="paddingTop">
+                                      {{data?.player_DOB  || "-"}}
+                                    </td>
+                                     <td class="paddingTop">
+                                          {{data?.level_of_play || "-"}}
+                                        </td>
+                                        <td class="paddingTop">
+                                            {{data?.guardian1_email_address || "-"}}
+                                          </td>
+                                          <td class="paddingTop">
+                                            {{data?.guardian2_email_address || "-"}}
+                                          </td>
+                                          <td class="paddingTop">
+                                              {{data?.address || "-"}}
+                                            </td>
+                                            <td class="paddingTop" >
+                                                {{data?.city || "-"}}
+                                              </td>
+                                              <td class="paddingTop">
+                                                  {{data?.state || "-"}}
+                                                </td>
+                                                <td class="paddingTop">
+                                                    {{data?.postal_code || "-"}}
+                                                  </td>
+                                                  <td class="paddingTop">
+                                                      {{data?.country || "-"}}
+                                                    </td>
+                                              
+                                             
+                                             
+  
+                   
+   </tr>
+                  </tbody>
+  
+                </table>
+                <p class="text-center" *ngIf="userImportedRecordInfo?.length == 0">No data available.</p>
+              </div>
+            </div>
+            
+            <div class="row justify-content-md-between align-items-md-center mt-2" *ngIf="userImportedRecordInfo?.length !== 0">
+              <div class="col-sm-12 col-md-5">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">Showing
+                  {{startIndex}} to
+                  {{endIndex}} of {{totalRecords}}
+                  entries
+                </div>
+              </div>
+              <!-- Pagination -->
+              <div class="col-sm-12 col-md-5 mt-2">
+                <div class="text-md-right float-md-right pagination-rounded">
+                  <ul class="pagination pagination-no-border pagination-success pagination-primary">
+  
+                    <li class="page-item enabled edit-icon"
+                      [ngClass]="{ 'disableNext':pager.currentPage === 1 , disabled:pager.currentPage === 1}">
+                      <a aria-label="Previous edit-icon" class="page-link" tabindex="-1" (click)="prevPage()"><span
+                          aria-hidden="true">«</span></a></li>
+                    <li class="page-item active">
+                      <a class="page-link">{{pagination_clicked_count+1}}</a></li>
+  
+                    <li class="page-item enabled edit-icon"
+                      [ngClass]="{ 'disableNext': pager.currentPage === pager.totalPages , disabled:pager.currentPage === pager.totalPages}">
+                      <a aria-label="Next" class="page-link edit-icon" tabindex="-1" (click)="nextPage()"><span
+                          aria-hidden="true">»</span></a></li>
+                  </ul>
+                </div>
+              </div>
+              <!-- End Pagination -->
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
