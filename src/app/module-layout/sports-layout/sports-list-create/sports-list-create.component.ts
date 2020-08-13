@@ -14,6 +14,9 @@ import { DropdownService } from 'src/app/core/services/dropdown.service';
 
 import { NgiNotificationService } from 'ngi-notification';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-sports-list-create',
@@ -41,7 +44,7 @@ export class SportsListCreateComponent implements OnInit {
   submitted = false;
   createsportsForm: FormGroup;
 
-  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService,private dropDownService: DropdownService, private notification: NgiNotificationService) { 
+  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService,private dropDownService: DropdownService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
      this.createForm(); 
   }
   
@@ -57,7 +60,8 @@ export class SportsListCreateComponent implements OnInit {
   
 
   ngOnInit() {
-    this.getCountryCodeList();
+    //this.getCountryCodeList();
+    this.getCountryCodeListAPI();
     this.loading = false;
     this.displayLoader = false;
   }
@@ -85,6 +89,36 @@ export class SportsListCreateComponent implements OnInit {
 
   }
  
+
+  async getCountryCodeListAPI()
+  {
+    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/countries';
+    //let Metaurl = this.baseAPIUrl+'countries';
+
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists)
+
+      try {
+        if (lists) {
+          this.countryCodeSelect = lists;
+          this.country = false;
+        }
+        else {
+          this.countryCodeSelect = [];
+          this.country = false;
+        }
+      } catch (error) {
+        console.log(error);
+        this.countryCodeSelect = [];
+        this.country = false;
+      }
+  
+      console.log(this.countryCodeSelect);
+  
+     
+    });
+
+  }
  
   get f() { return this.createsportsForm.controls; }
 
@@ -127,12 +161,32 @@ export class SportsListCreateComponent implements OnInit {
       "isUsed": false,
     }
 
+    /*
       let createObjRoot = await this.db.collection('sports').add(insertObj);
       await createObjRoot.set({ sport_id: createObjRoot.id }, { merge: true });
-      
-      this.router.navigate(['/sports/list']);
+    */
+   
+   console.log( insertObj);
+   console.log( JSON.stringify(insertObj));
+   //return;
+   
+    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports/';
+    //let Metaurl = this.baseAPIUrl+'sports/';
 
-      this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");
+    this.http.post<any>(Metaurl, insertObj  ).subscribe(
+        data => {
+          
+          console.log(data);
+          this.router.navigate(['/sports/list']);
+          this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");
+
+        },
+        error => {
+          console.log(error);    
+        }
+    );
+  
+      
       
     } catch (error) {
       

@@ -10,6 +10,8 @@ import { NgiNotificationService } from 'ngi-notification';
 
 import { DOCUMENT } from '@angular/common';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-sports-list',
   templateUrl: './sports-list.component.html',
@@ -29,10 +31,11 @@ export class SportsListComponent implements OnInit {
   loading = true;
   displayLoader: any = true;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document) { }
+  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService) { }
 
   ngOnInit() { 
-    this.getSportMeta();  
+    //this.getSportMeta();  
+    this.getSportMetaAPI();  
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -44,6 +47,7 @@ export class SportsListComponent implements OnInit {
 
     this.getAllSportmeta = await this.db.collection('sports').orderBy('sport_id').get();
     this.getAllSportmetaData = await this.getAllSportmeta.docs.map((doc: any) => doc.data());
+    console.log(this.getAllSportmetaData);
     this.data = this.getAllSportmetaData;
     this.dtTrigger.next();
     this.loading = false;
@@ -52,7 +56,52 @@ export class SportsListComponent implements OnInit {
     console.log(this.data);
 
   }
+
+  
+  async getSportMetaAPI(){
+
+    /*
+    this.getAllSportmeta = await this.db.collection('sports').orderBy('sport_id').get();
+    this.getAllSportmetaData = await this.getAllSportmeta.docs.map((doc: any) => doc.data());
+    console.log(this.getAllSportmetaData);
+    this.data = this.getAllSportmetaData;
+    this.dtTrigger.next();
+    this.loading = false;
+    this.displayLoader = false;
+    console.log(this.data);
+    */
+
+   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
+   //let Metaurl = this.baseAPIUrl+'sports';
+
+   this.restApiService.lists(Metaurl).subscribe( lists => {
+     console.log('---lists----', lists)
+
+     try {
+
+      this.getAllSportmetaData = lists;
+      this.data = this.getAllSportmetaData;
+      this.dtTrigger.next();
+      this.loading = false;
+      this.displayLoader = false;      
+
+     } catch (error) {
+      
+       console.log(error);
+       this.data = [];
+       this.dtTrigger.next();
+       this.loading = false;
+       this.displayLoader = false;
+       
+     }
  
+     console.log(this.data);
+ 
+    
+   });
+
+  }
+
   listSports(){
     this.router.navigate(['/sports/list']);
   }

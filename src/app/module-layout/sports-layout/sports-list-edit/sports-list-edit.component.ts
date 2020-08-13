@@ -17,6 +17,10 @@ import { DropdownService } from 'src/app/core/services/dropdown.service';
 
 import { NgiNotificationService } from 'ngi-notification';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-sports-list-edit',
   templateUrl: './sports-list-edit.component.html',
@@ -45,7 +49,7 @@ export class SportsListEditComponent implements OnInit {
   submitted = false;
   editsportsForm: FormGroup;
 
-  constructor(private router: Router,private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService,private dropDownService: DropdownService, private notification: NgiNotificationService) { 
+  constructor(private router: Router,private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService,private dropDownService: DropdownService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
     this.editForm(); 
  }
 
@@ -64,8 +68,10 @@ getAllSportmeta: any = [];
 getAllSportmetaData: any = [];
 
   ngOnInit() { 
-    this.getSportsMeta();  
-    this.getCountryCodeList();
+    //this.getSportsMeta();  
+    this.getSportsMetaAPI();  
+    //this.getCountryCodeList();
+    this.getCountryCodeListAPI();
     this.loading = false;
     this.displayLoader = false;
     
@@ -83,6 +89,40 @@ getAllSportmetaData: any = [];
 
     this.loading = false;
     this.displayLoader = false; 
+  }
+
+  
+  async getSportsMetaAPI(){
+  /*
+    this.getAllSportmeta = await this.db.collection('sports').doc(this.resourceID).get();
+    if (this.getAllSportmeta.exists) {
+      this.getAllSportmetaData = this.getAllSportmeta.data();
+    } else {
+      this.getAllSportmetaData = [];
+    }    
+    console.log(this.getAllSportmetaData);
+    this.loading = false;
+    this.displayLoader = false; 
+    */
+   
+
+    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports/'+this.resourceID;
+    //let Metaurl = this.baseAPIUrl+'sports/'+this.resourceID;
+
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists);
+      if (lists) {
+        this.getAllSportmetaData = lists;
+      } else {
+        this.getAllSportmetaData = [];
+      }
+
+      console.log(this.getAllSportmetaData);
+      this.loading = false;
+      this.displayLoader = false; 
+    
+    });
+   
   }
 
   
@@ -106,6 +146,37 @@ getAllSportmetaData: any = [];
     }
 
     console.log(this.countryCodeSelect);
+
+  }
+
+
+  async getCountryCodeListAPI()
+  {
+    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/countries';
+    //let Metaurl = this.baseAPIUrl+'countries';
+
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists)
+
+      try {
+        if (lists) {
+          this.countryCodeSelect = lists;
+          this.country = false;
+        }
+        else {
+          this.countryCodeSelect = [];
+          this.country = false;
+        }
+      } catch (error) {
+        console.log(error);
+        this.countryCodeSelect = [];
+        this.country = false;
+      }
+  
+      console.log(this.countryCodeSelect);
+  
+     
+    });
 
   }
 
@@ -150,11 +221,32 @@ getAllSportmetaData: any = [];
       "isUsed": false,
     }
 
+    /*
       await this.db.collection('sports').doc(this.resourceID).update(insertObj);
+    */
 
-      this.router.navigate(['/sports/list']);
 
-      this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");
+   console.log( insertObj);
+   console.log( JSON.stringify(insertObj));
+   //return;
+   
+    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports/'+this.resourceID;
+    //let Metaurl = this.baseAPIUrl+'sports/update/'this.resourceID;
+
+    this.http.put<any>(Metaurl, insertObj  ).subscribe(
+        data => {
+          
+          console.log(data);
+          this.router.navigate(['/sports/list']);
+          this.notification.isNotification(true, "Sports Meta Data", "Sport has been updated successfully.", "check-square");
+        
+        },
+        error => {
+          console.log(error);    
+        }
+    );
+
+
     
    
     } catch (error) {

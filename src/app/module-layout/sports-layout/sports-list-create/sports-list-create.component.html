@@ -9,11 +9,17 @@
 
                 <div class="form-group mb-3">
                     <label for="country_code">Create<span class="text-danger">*</span></label>
+                    <ng-select [items]="countryCodeSelect"
+                    bindLabel="name" bindValue="country_code"
+                    id="country_code" name="country_code" formControlName="country_code"
+                    placeholder="Select Country"  [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
+                    </ng-select>
+                <!--    
                     <select class="form-control select2" id="country_code" name="country_code" formControlName="country_code" [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
-                        
                         <option value="" disabled selected >Select Country</option>
                         <option *ngFor="let Countrydata of countryCodeSelect let i = index;" value="{{Countrydata.country_code}}">{{Countrydata.name}}</option>
                     </select>
+                -->
                     <div *ngIf="submitted && f.country_code.errors" class="invalid-feedback">
                         <div *ngIf="f.country_code.errors.required">Country Name is required.</div>
                     </div>
