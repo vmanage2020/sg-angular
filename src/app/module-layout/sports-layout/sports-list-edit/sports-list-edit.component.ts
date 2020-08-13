@@ -233,6 +233,21 @@ getAllSportmetaData: any = [];
     let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports/'+this.resourceID;
     //let Metaurl = this.baseAPIUrl+'sports/update/'this.resourceID;
 
+    this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
+      {
+            
+        console.log(data);
+        this.router.navigate(['/sports/list']);
+        this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");
+  
+      },
+      error => {
+        console.log(error);    
+      }
+      );
+  
+      
+    /*
     this.http.put<any>(Metaurl, insertObj  ).subscribe(
         data => {
           
@@ -245,7 +260,7 @@ getAllSportmetaData: any = [];
           console.log(error);    
         }
     );
-
+    */
 
     
    
