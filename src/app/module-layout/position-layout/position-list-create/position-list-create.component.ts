@@ -64,7 +64,7 @@ export class PositionListCreateComponent implements OnInit {
         abbreviation: ['', Validators.required ],
         sport_id: [null, Validators.required ],
         sport_name: [null],
-        parent_position_id: [''],
+        parent_position_id: [null],
         parent_position_name: [''],
     });
   }
