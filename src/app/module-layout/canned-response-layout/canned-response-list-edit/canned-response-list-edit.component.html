@@ -9,10 +9,17 @@
 
                 <div class="form-group mb-3">
                     <label for="sport_id"> Sport<span class="text-danger">*</span></label>
+                    <ng-select [items]="getSportsArray" [ngModel]="getCannedResponseValueArray.sport_id"
+                    bindLabel="name" bindValue="sport_id"
+                    id="sport_id" name="sport_id" formControlName="sport_id"
+                    placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                    </ng-select>
+                    <!--
                     <select class="form-control select2" [ngModel]="getCannedResponseValueArray.sport_id" id="sport_id" name="sport_id" formControlName="sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
                         <option value="" disabled selected >Select Sport</option>
                         <option *ngFor="let SportData of getSportsArray let i = index;" value="{{SportData.sport_id}}">{{SportData.name}}</option>
                     </select>
+                    -->
                     <div *ngIf="submitted && f.sport_id.errors" class="invalid-feedback">
                         <div *ngIf="f.sport_id.errors.required">Sport Name is required.</div>
                     </div>

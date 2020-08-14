@@ -12,7 +12,7 @@
                     <ng-select [items]="getSportsArray"
                     bindLabel="name" bindValue="sport_id"
                     id="sport_id" name="sport_id" formControlName="sport_id"
-                    placeholder="Select Sport" (change)="OnSportChange($event)" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                    placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
                     </ng-select>
                     <!--
                     <select class="form-control select2" id="sport_id" name="sport_id" formControlName="sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">

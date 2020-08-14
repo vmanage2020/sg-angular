@@ -11,9 +11,11 @@ import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
-
 import { NgiNotificationService } from 'ngi-notification';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-canned-response-list-edit',
@@ -61,7 +63,7 @@ export class CannedResponseListEditComponent implements OnInit {
     submitted = false;
     createcannedresponseForm: FormGroup;
   
-    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService) { 
+    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
        this.createForm(); 
     }
     
@@ -69,7 +71,7 @@ export class CannedResponseListEditComponent implements OnInit {
       this.createcannedresponseForm = this.formBuilder.group({
           canned_response_title: ['', Validators.required ],
           canned_response_description: ['', Validators.required ],
-          sport_id: ['', Validators.required ],
+          sport_id: [null, Validators.required ],
           sport_name: [''],
           organization_id: [''],
           organization_name: [''],
@@ -81,8 +83,10 @@ export class CannedResponseListEditComponent implements OnInit {
     ngOnInit() {
       this.uid = this.cookieService.getCookie('uid');
       this.orgId = localStorage.getItem('org_id');
-      this.getCannedResponseInfo();
-      this.getAllSports();
+      //this.getCannedResponseInfo();
+      this.getCannedResponseInfoAPI();
+      //this.getAllSports();
+      this.getAllSportsAPI();
       this.loading = false;
       this.displayLoader = false;
     }
@@ -106,6 +110,31 @@ export class CannedResponseListEditComponent implements OnInit {
         
     }
 
+    
+    async getCannedResponseInfoAPI(){
+             
+      let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/cannedresponse/'+this.resourceID;
+      //let Metaurl = this.baseAPIUrl+'cannedresponse/'+this.resourceID;
+
+      this.restApiService.lists(Metaurl).subscribe( lists => {
+        console.log('---lists----', lists);
+        if (lists) {
+          this.getCannedResponseValueData = lists;
+          this.getCannedResponseValueArray = this.getCannedResponseValueData; 
+        } else {
+          this.getCannedResponseValueData = [];
+          this.getCannedResponseValueArray = this.getCannedResponseValueData; 
+        }
+
+        console.log(this.getCannedResponseValueArray);
+
+        this.loading = false;
+        this.displayLoader = false; 
+      
+      });
+
+      
+    }
    
 
     async getAllSports(){    
@@ -117,6 +146,33 @@ export class CannedResponseListEditComponent implements OnInit {
       console.log(this.getSportsArray);
   
     }
+
+    
+    async getAllSportsAPI(){
+      
+      let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
+      //let Metaurl = this.baseAPIUrl+'sports';
+  
+      this.restApiService.lists(Metaurl).subscribe( lists => {
+        console.log('---lists----', lists)
+  
+        try {
+  
+        this.getSportsData = lists;
+        this.getSportsArray = this.getSportsData;
+        
+        } catch (error) {
+        
+          console.log(error);
+          this.getSportsArray = [];
+          
+        }
+    
+        console.log(this.getSportsArray);
+        
+      });
+  
+    } 
   
      
     get f() { return this.createcannedresponseForm.controls; }
@@ -164,14 +220,31 @@ export class CannedResponseListEditComponent implements OnInit {
         "sort_order": 0,
       }
          
-      
-        await this.db.collection('CannedResponse').doc(this.resourceID).update(insertObj);
-
-        
-        this.router.navigate(['/cannedresponse/list']);
-  
+        /*
+        await this.db.collection('CannedResponse').doc(this.resourceID).update(insertObj);        
+        this.router.navigate(['/cannedresponse/list']);  
         this.notification.isNotification(true, "Canned Response Data", "Canned Response has been updated successfully.", "check-square");
+        */
+
+         
+       let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/cannedresponse/'+this.resourceID;
+       //let Metaurl = this.baseAPIUrl+'cannedresponse/'this.resourceID;
+   
+       this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
+         {
+               
+           console.log(data);
+           this.router.navigate(['/cannedresponse/list']);  
+           this.notification.isNotification(true, "Canned Response Data", "Canned Response has been updated successfully.", "check-square");
         
+         },
+         error => {
+           console.log(error);    
+         }
+         );
+
+
+
       } catch (error) {
         
         console.log(error);
