@@ -10,6 +10,11 @@ import { NgiNotificationService } from 'ngi-notification';
 
 import { DOCUMENT } from '@angular/common';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
+
+
 @Component({
   selector: 'app-position-list',
   templateUrl: './position-list.component.html',
@@ -29,10 +34,11 @@ export class PositionListComponent implements OnInit {
   loading = true;
   displayLoader: any = true;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document) { }
+  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient) { }
 
   ngOnInit() { 
-    this.getPositionMeta();  
+    //this.getPositionMeta();  
+    this.getPositionMetaAPI();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -50,6 +56,40 @@ export class PositionListComponent implements OnInit {
     this.displayLoader = false; 
  
     console.log(this.data);
+
+  }
+
+
+  async getPositionMetaAPI(){
+
+   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positions';
+   //let Metaurl = this.baseAPIUrl+'positions';
+
+   this.restApiService.lists(Metaurl).subscribe( lists => {
+     console.log('---lists----', lists)
+
+     try {
+
+      this.getAllPositionmetaData = lists;
+      this.data = this.getAllPositionmetaData;
+      this.dtTrigger.next();
+      this.loading = false;
+      this.displayLoader = false;      
+
+     } catch (error) {
+      
+       console.log(error);
+       this.data = [];
+       this.dtTrigger.next();
+       this.loading = false;
+       this.displayLoader = false;
+       
+     }
+ 
+     console.log(this.data);
+ 
+    
+   });
 
   }
  

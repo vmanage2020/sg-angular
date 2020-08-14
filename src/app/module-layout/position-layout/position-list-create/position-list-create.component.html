@@ -9,10 +9,17 @@
 
                 <div class="form-group mb-3">
                     <label for="sport_id"> Sport<span class="text-danger">*</span></label>
+                    <ng-select [items]="getSportsArray"
+                    bindLabel="name" bindValue="sport_id"
+                    id="sport_id" name="sport_id" formControlName="sport_id"
+                    placeholder="Select Sport" (change)="OnSportChange($event)" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                    </ng-select>
+                    <!--
                     <select class="form-control select2" id="sport_id" name="sport_id" formControlName="sport_id" (change)="OnSportChange($event)" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
                         <option value="" disabled selected >Select Sport</option>
                         <option *ngFor="let SportData of getSportsArray let i = index;" value="{{SportData.sport_id}}">{{SportData.name}}</option>
                     </select>
+                    -->
                     <div *ngIf="submitted && f.sport_id.errors" class="invalid-feedback">
                         <div *ngIf="f.sport_id.errors.required">Sport Name is required.</div>
                     </div>
@@ -20,10 +27,17 @@
 
                 <div class="form-group mb-3">
                     <label for="parent_position_id"> Parent Position </label>
+                    <ng-select [items]="getPositionsArray"
+                    bindLabel="name" bindValue="position_id"
+                    id="parent_position_id" name="parent_position_id" formControlName="parent_position_id"
+                    placeholder="Select Parent Position">
+                    </ng-select>
+                    <!--
                     <select class="form-control select2" id="parent_position_id" name="parent_position_id" formControlName="parent_position_id" >
                         <option value="" disabled selected >Select Parent Position</option>
                         <option *ngFor="let PositionData of getPositionsArray let i = index;" value="{{PositionData.position_id}}">{{PositionData.name}}</option>
                     </select>
+                    -->
                     <!--
                     <div *ngIf="submitted && f.country_code.errors" class="invalid-feedback">
                         <div *ngIf="f.country_code.errors.required">Parent Position is required.</div>

@@ -164,13 +164,15 @@ export class SportsListCreateComponent implements OnInit {
     /*
       let createObjRoot = await this.db.collection('sports').add(insertObj);
       await createObjRoot.set({ sport_id: createObjRoot.id }, { merge: true });
+      this.router.navigate(['/sports/list']);
+      this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");
     */
    
    console.log( insertObj);
    console.log( JSON.stringify(insertObj));
    //return;
-   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports/';
-   //let Metaurl = this.baseAPIUrl+'sports/';
+   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
+   //let Metaurl = this.baseAPIUrl+'sports';
 
    this.restApiService.create(Metaurl,insertObj).subscribe(data=> 
     {
@@ -184,23 +186,6 @@ export class SportsListCreateComponent implements OnInit {
       console.log(error);    
     }
     );
-   
-   /*
-   
-    this.http.post<any>(Metaurl, insertObj  ).subscribe(
-        data => {
-          
-          console.log(data);
-          this.router.navigate(['/sports/list']);
-          this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");
-
-        },
-        error => {
-          console.log(error);    
-        }
-    );
-   */
-      
       
     } catch (error) {
       

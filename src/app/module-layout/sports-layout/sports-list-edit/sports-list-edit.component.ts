@@ -93,18 +93,6 @@ getAllSportmetaData: any = [];
 
   
   async getSportsMetaAPI(){
-  /*
-    this.getAllSportmeta = await this.db.collection('sports').doc(this.resourceID).get();
-    if (this.getAllSportmeta.exists) {
-      this.getAllSportmetaData = this.getAllSportmeta.data();
-    } else {
-      this.getAllSportmetaData = [];
-    }    
-    console.log(this.getAllSportmetaData);
-    this.loading = false;
-    this.displayLoader = false; 
-    */
-   
 
     let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports/'+this.resourceID;
     //let Metaurl = this.baseAPIUrl+'sports/'+this.resourceID;
@@ -223,12 +211,9 @@ getAllSportmetaData: any = [];
 
     /*
       await this.db.collection('sports').doc(this.resourceID).update(insertObj);
+      this.router.navigate(['/sports/list']);
+      this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");
     */
-
-
-   console.log( insertObj);
-   console.log( JSON.stringify(insertObj));
-   //return;
    
     let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports/'+this.resourceID;
     //let Metaurl = this.baseAPIUrl+'sports/update/'this.resourceID;
@@ -246,24 +231,6 @@ getAllSportmetaData: any = [];
       }
       );
   
-      
-    /*
-    this.http.put<any>(Metaurl, insertObj  ).subscribe(
-        data => {
-          
-          console.log(data);
-          this.router.navigate(['/sports/list']);
-          this.notification.isNotification(true, "Sports Meta Data", "Sport has been updated successfully.", "check-square");
-        
-        },
-        error => {
-          console.log(error);    
-        }
-    );
-    */
-
-    
-   
     } catch (error) {
       
       console.log(error);

@@ -11,8 +11,11 @@ import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
-
 import { NgiNotificationService } from 'ngi-notification';
+
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-position-list-edit',
@@ -58,7 +61,7 @@ export class PositionListEditComponent implements OnInit {
     submitted = false;
     createpositionForm: FormGroup;
   
-    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService) { 
+    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
        this.createForm(); 
     }
     
@@ -75,8 +78,10 @@ export class PositionListEditComponent implements OnInit {
     
   
     ngOnInit() {
-      this.getPosition();
-      this.getAllSports();
+      //this.getPosition();
+      this.getPositionAPI();
+      //this.getAllSports();
+      this.getAllSportsAPI();
       this.loading = false;
       this.displayLoader = false;
     }
@@ -100,6 +105,31 @@ export class PositionListEditComponent implements OnInit {
         
     }
 
+    
+    async getPositionAPI(){   
+      
+        let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positions/'+this.resourceID;
+        //let Metaurl = this.baseAPIUrl+'positions/'+this.resourceID;
+
+        this.restApiService.lists(Metaurl).subscribe( lists => {
+          console.log('---lists----', lists);
+          if (lists) {
+            this.getPositionValueData = lists;
+            this.getPositionValueArray = this.getPositionValueData; 
+          } else {
+            this.getPositionValueData = [];
+            this.getPositionValueArray = this.getPositionValueData; 
+          }
+
+          console.log(this.getPositionValueArray);
+          this.getAllPositionBySportAPI(this.getPositionValueData.sport_id, this.uid)
+          this.loading = false;
+          this.displayLoader = false; 
+        
+        });
+      
+    }
+
     async getAllSports(){    
       
       this.getSports = await this.db.collection('sports').orderBy('sport_id').get();
@@ -108,12 +138,43 @@ export class PositionListEditComponent implements OnInit {
       console.log(this.getSportsArray);
   
     }
+
+    
+    async getAllSportsAPI(){    
+        
+   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
+   //let Metaurl = this.baseAPIUrl+'sports';
+
+   this.restApiService.lists(Metaurl).subscribe( lists => {
+     console.log('---lists----', lists)
+
+     try {
+
+      this.getSportsData = lists;
+      this.getSportsArray = this.getSportsData;
+      
+     } catch (error) {
+      
+       console.log(error);
+       this.getSportsArray = [];
+       
+     }
+ 
+     console.log(this.getSportsArray);
+     
+   });
+
   
-    OnSportChange(event) {
-      console.log(event.target.value);
-      this.getAllPositionBySport(event.target.value, this.uid)
     }
   
+    OnSportChange(event) {
+      //var sport_id_value = event.target.value;
+      var sport_id_value = event.sport_id;
+      console.log(sport_id_value);
+      //this.getAllPositionBySport(sport_id_value, this.uid);
+      this.getAllPositionBySportAPI(sport_id_value, this.uid);
+    }
+
     
     async getAllPositionBySport(sport_id,user_id){    
       
@@ -121,6 +182,33 @@ export class PositionListEditComponent implements OnInit {
       this.getPositionsData = await this.getPositions.docs.map((doc: any) => doc.data());
       this.getPositionsArray = this.getPositionsData; 
       console.log(this.getPositionsArray);
+  
+    }
+
+    async getAllPositionBySportAPI(sport_id,user_id){    
+      
+          
+   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positions';
+   //let Metaurl = this.baseAPIUrl+'positions';
+
+   this.restApiService.lists(Metaurl).subscribe( lists => {
+     console.log('---lists----', lists)
+
+     try {
+
+      this.getPositionsData = lists;
+      this.getPositionsArray = this.getPositionsData;
+      
+     } catch (error) {
+      
+       console.log(error);
+       this.getPositionsArray = [];
+       
+     }
+ 
+     console.log(this.getPositionsArray);
+     
+   });
   
     }
   
@@ -173,13 +261,29 @@ export class PositionListEditComponent implements OnInit {
       }
         
       
-        await this.db.collection('positions').doc(this.resourceID).update(insertObj);
-
-        
-        this.router.navigate(['/positions/list']);
-  
+       /*
+        await this.db.collection('positions').doc(this.resourceID).update(insertObj);        
+        this.router.navigate(['/positions/list']);  
         this.notification.isNotification(true, "Position Data", "Position has been added successfully.", "check-square");
+        */
+
+       let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positions/'+this.resourceID;
+       //let Metaurl = this.baseAPIUrl+'positions/'this.resourceID;
+   
+       this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
+         {
+               
+           console.log(data);
+           this.router.navigate(['/positions/list']);  
+           this.notification.isNotification(true, "Position Data", "Position has been added successfully.", "check-square");
         
+         },
+         error => {
+           console.log(error);    
+         }
+         );
+     
+
       } catch (error) {
         
         console.log(error);

@@ -12,6 +12,8 @@ import { DOCUMENT } from '@angular/common';
 
 import { RestApiService } from '../../../shared/rest-api.services';
 
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-sports-list',
   templateUrl: './sports-list.component.html',
@@ -31,7 +33,7 @@ export class SportsListComponent implements OnInit {
   loading = true;
   displayLoader: any = true;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService) { }
+  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient) { }
 
   ngOnInit() { 
     //this.getSportMeta();  

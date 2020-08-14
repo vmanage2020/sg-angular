@@ -63,9 +63,10 @@ export class PositionCreateComponent implements OnInit {
     this.injectedData = this.injector.get('injectData');
     this.createPositionsForm = this.formBuilder.group({
       sport_id: [null, [Validators.required]],
-      sport_name: [''],
-      name: ['', [Validators.required]],
+      sport_name: [null],
+      name: [null, [Validators.required]],
       abbreviation: ['', [Validators.required]],
+      position_id: [null],
       parent_position_id: [null],
       parent_position_name: [null],
       parent_position_abbreviation: [null]
