@@ -12,6 +12,11 @@ import { DOCUMENT } from '@angular/common';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
+
+
 @Component({
   selector: 'app-level-list',
   templateUrl: './level-list.component.html',
@@ -34,13 +39,14 @@ export class LevelListComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService) { }
+  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient) { }
 
   ngOnInit() { 
 
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
-    this.getLevel();  
+    //this.getLevel();  
+    this.getLevelAPI();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -67,6 +73,49 @@ export class LevelListComponent implements OnInit {
     console.log(this.data);
 
   }
+
+  
+  async getLevelAPI(){
+
+    console.log(this.orgId);
+    if(this.orgId=='') {
+      //this.getAllLevel = await this.db.collection('levels').orderBy('sport_id').get();
+    } else {
+      //this.getAllLevel = await this.db.collection('levels').where('organization_id', '==', this.orgId).get();
+    }
+
+    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levels';
+    //let Metaurl = this.baseAPIUrl+'positions';
+ 
+    
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists)
+ 
+      try {
+ 
+       this.getAllLevelData = lists;
+       this.data = this.getAllLevelData;
+       this.dtTrigger.next();
+       this.loading = false;
+       this.displayLoader = false;      
+ 
+      } catch (error) {
+       
+        console.log(error);
+        this.data = [];
+        this.dtTrigger.next();
+        this.loading = false;
+        this.displayLoader = false;
+        
+      }
+  
+      console.log(this.data);
+  
+     
+    });
+ 
+   }
+  
  
   listLevel(){
     this.router.navigate(['/level/list']);
@@ -90,9 +139,29 @@ export class LevelListComponent implements OnInit {
       this.notification.isConfirmation('', '', 'Level Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
           console.log("yes");
+
+          /*
           await this.db.collection('levels').doc(resourceId).delete();
           this.notification.isNotification(true, "Level Data", "Level Data has been deleted successfully.", "check-square");
-          this.refreshPage();
+          */
+       
+          let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levels/'+resourceId;
+          //let Metaurl = this.baseAPIUrl+'levels/'+resourceId;
+
+          this.restApiService.remove(Metaurl).subscribe(data=> 
+            {
+                  
+              console.log(data);
+              this.notification.isNotification(true, "Level Data", "Level Data has been deleted successfully.", "check-square");
+              this.refreshPage();
+            },
+            error => {
+              console.log(error);    
+            }
+            );
+
+            
+          
         } else {
           console.log("no");
         }

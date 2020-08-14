@@ -212,6 +212,8 @@ export class PositionListCreateComponent implements OnInit {
     /*
       let createObjRoot = await this.db.collection('positions').add(insertObj);
       await createObjRoot.set({ position_id: createObjRoot.id }, { merge: true });
+      this.router.navigate(['/positions/list']);
+      this.notification.isNotification(true, "Position Data", "Position has been added successfully.", "check-square");
     */
 
    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positions';

@@ -11,9 +11,11 @@ import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
-
 import { NgiNotificationService } from 'ngi-notification';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-level-list-view',
@@ -59,7 +61,7 @@ export class LevelListViewComponent implements OnInit {
     submitted = false;
     createlevelForm: FormGroup;
   
-    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService) { 
+    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
        this.createForm(); 
     }
     
@@ -78,8 +80,10 @@ export class LevelListViewComponent implements OnInit {
     ngOnInit() {
       this.uid = this.cookieService.getCookie('uid');
       this.orgId = localStorage.getItem('org_id');
-      this.getLevelInfo();
-      this.getAllSports();
+      //this.getLevelInfo();
+      this.getLevelInfoAPI();
+      //this.getAllSports();
+      this.getAllSportsAPI();
       this.loading = false;
       this.displayLoader = false;
     }
@@ -102,6 +106,30 @@ export class LevelListViewComponent implements OnInit {
       this.displayLoader = false; 
         
     }
+
+    async getLevelInfoAPI(){   
+       
+      let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levels/'+this.resourceID;
+      //let Metaurl = this.baseAPIUrl+'levels/'+this.resourceID;
+
+      this.restApiService.lists(Metaurl).subscribe( lists => {
+        console.log('---lists----', lists);
+        if (lists) {
+          this.getLevelValueData = lists;
+          this.getLevelValueArray = this.getLevelValueData; 
+        } else {
+          this.getLevelValueData = [];
+          this.getLevelValueArray = this.getLevelValueData; 
+        }
+
+        console.log(this.getLevelValueArray);
+
+        this.loading = false;
+        this.displayLoader = false; 
+      
+      });
+     
+    }
    
 
     async getAllSports(){    
@@ -114,6 +142,33 @@ export class LevelListViewComponent implements OnInit {
   
     }
   
+    
+  async getAllSportsAPI(){
+    
+    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
+    //let Metaurl = this.baseAPIUrl+'sports';
+ 
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists)
+ 
+      try {
+ 
+       this.getSportsData = lists;
+       this.getSportsArray = this.getSportsData;
+       
+      } catch (error) {
+       
+        console.log(error);
+        this.getSportsArray = [];
+        
+      }
+  
+      console.log(this.getSportsArray);
+      
+    });
+ 
+   } 
+ 
      
     get f() { return this.createlevelForm.controls; }
   
