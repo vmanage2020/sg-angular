@@ -78,14 +78,16 @@ export class LevelListComponent implements OnInit {
   async getLevelAPI(){
 
     console.log(this.orgId);
+    let Metaurl= '';
     if(this.orgId=='') {
-      //this.getAllLevel = await this.db.collection('levels').orderBy('sport_id').get();
+      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levels';
+      //let Metaurl = this.baseAPIUrl+'levels';
     } else {
-      //this.getAllLevel = await this.db.collection('levels').where('organization_id', '==', this.orgId).get();
+      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levelsbyorg/'+this.orgId;
+      //let Metaurl = this.baseAPIUrl+'levelsbyorg/'+this.orgId;
     }
 
-    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levels';
-    //let Metaurl = this.baseAPIUrl+'positions';
+    
  
     
     this.restApiService.lists(Metaurl).subscribe( lists => {
