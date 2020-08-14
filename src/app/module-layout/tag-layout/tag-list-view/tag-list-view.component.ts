@@ -11,8 +11,11 @@ import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
-
 import { NgiNotificationService } from 'ngi-notification';
+
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -59,7 +62,7 @@ export class TagListViewComponent implements OnInit {
     submitted = false;
     createtagForm: FormGroup;
   
-    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService) { 
+    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
        this.createForm(); 
     }
     
@@ -76,8 +79,10 @@ export class TagListViewComponent implements OnInit {
     ngOnInit() {
       this.uid = this.cookieService.getCookie('uid');
       this.orgId = localStorage.getItem('org_id');
-      this.getTagInfo();
-      this.getAllSports();
+      //this.getTagInfo();
+      this.getTagInfoAPI();
+      //this.getAllSports();
+      this.getAllSportsAPI();
       this.loading = false;
       this.displayLoader = false;
     }
@@ -100,7 +105,32 @@ export class TagListViewComponent implements OnInit {
       this.displayLoader = false; 
         
     }
-   
+
+    
+    async getTagInfoAPI(){
+             
+      let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/tags/'+this.resourceID;
+      //let Metaurl = this.baseAPIUrl+'tags/'+this.resourceID;
+
+      this.restApiService.lists(Metaurl).subscribe( lists => {
+        console.log('---lists----', lists);
+        if (lists) {
+          this.getTagValueData = lists;
+          this.getTagValueArray = this.getTagValueData; 
+        } else {
+          this.getTagValueData = [];
+          this.getTagValueArray = this.getTagValueData; 
+        }
+
+        console.log(this.getTagValueArray);
+
+        this.loading = false;
+        this.displayLoader = false; 
+      
+      });
+
+      
+    }
 
     async getAllSports(){    
       
@@ -112,7 +142,33 @@ export class TagListViewComponent implements OnInit {
   
     }
   
-     
+    
+  async getAllSportsAPI(){
+    
+    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
+    //let Metaurl = this.baseAPIUrl+'sports';
+ 
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists)
+ 
+      try {
+ 
+       this.getSportsData = lists;
+       this.getSportsArray = this.getSportsData;
+       
+      } catch (error) {
+       
+        console.log(error);
+        this.getSportsArray = [];
+        
+      }
+  
+      console.log(this.getSportsArray);
+      
+    });
+ 
+   } 
+
     get f() { return this.createtagForm.controls; }
   
     async onSubmit(form) {
