@@ -134,8 +134,13 @@ export class PositionListCreateComponent implements OnInit {
   
   async getAllPositionBySportAPI(sport_id,user_id){    
        
-   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positions';
+   //let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positions';
    //let Metaurl = this.baseAPIUrl+'positions';
+
+   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positionsbysports/'+sport_id;
+   //let Metaurl = this.baseAPIUrl+'positionsbysports/'+sport_id;
+
+   
 
    this.restApiService.lists(Metaurl).subscribe( lists => {
      console.log('---lists----', lists)
