@@ -1,15 +1,21 @@
-  import { Component, OnInit } from '@angular/core';
-  import * as firebase from 'firebase';
-  import { Subject } from 'rxjs';
-  
-  import 'rxjs/add/operator/map';
-  
-  import { Router } from '@angular/router';
-  
-  import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
-  
-  import { CookieService } from 'src/app/core/services/cookie.service';
-  
+import { Component, OnInit } from '@angular/core';
+import * as firebase from 'firebase';
+import { Subject } from 'rxjs';
+
+import 'rxjs/add/operator/map';
+
+import { Router } from '@angular/router';
+
+import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
+
+import { CookieService } from 'src/app/core/services/cookie.service';
+
+import { NgiNotificationService } from 'ngi-notification';
+
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
+
 
   @Component({
     selector: 'app-coachmeta-create',
@@ -57,7 +63,7 @@
       submitted = false;
       createplayermetaForm: FormGroup;
     
-      constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService) { 
+      constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
          this.createForm(); 
       }
       
@@ -65,10 +71,10 @@
         this.createplayermetaForm = this.formBuilder.group({
             auth_uid: [''],
             organization_id: [''],
-            sport_id: ['', Validators.required ],
+            sport_id: [null, Validators.required ],
             sport_name: [''],
             field_name: ['', Validators.required ],
-            field_type: ['', Validators.required ],
+            field_type: [null, Validators.required ],
             is_required: ['', Validators.required ],
             is_editable: ['', Validators.required ],
             is_deletable: ['', Validators.required ],
@@ -80,8 +86,10 @@
       
     
       ngOnInit() {
-        this.getSports();  
-        this.getTypes();  
+        //this.getSports();
+        this.getSportsAPI();  
+        //this.getTypes(); 
+        this.getTypesAPI();  
         this.is_required_value = false;
         this.is_editable_value = false;
         this.is_deletable_value = false;
@@ -93,16 +101,53 @@
         this.getAllSportmeta = await this.db.collection('sports').orderBy('sport').get();
         this.getAllSportmetaData = await this.getAllSportmeta.docs.map((doc: any) => doc.data());
       }
+      
+      async getSportsAPI(){
+        
+        let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
+        //let Metaurl = this.baseAPIUrl+'sports';
+    
+        this.restApiService.lists(Metaurl).subscribe( lists => {
+          console.log('---lists----', lists)
+    
+          try {
+    
+          this.getAllSportmetaData = lists;
+          
+          } catch (error) {
+          
+            console.log(error);
+            this.getAllSportmetaData = [];
+            
+          }
+      
+          console.log(this.getAllSportmetaData);
+          
+        });
+    
+      }
     
       async getTypes(){
+        this.getAllTypemetaData = this.getAllTypemetaDataArray;
+      }
+
+      async getTypesAPI(){
         this.getAllTypemetaData = this.getAllTypemetaDataArray;
       }
     
     
       OnFieldTypeChange(event) {
-        console.log(event);
-        console.log(event.target.value);
-        if(event.target.value!='Text Field') { 
+        /*
+          console.log(event);
+          console.log(event.target.value);
+          if(event.target.value!='Text Field') { 
+            this.addnewfield(); 
+          }
+        */  
+       console.log(event);
+        var field_type_value = event.name;
+        console.log(field_type_value);
+        if(field_type_value!='Text Field') { 
           this.addnewfield(); 
         }
       }
@@ -142,12 +187,21 @@
         this.uid = this.cookieService.getCookie('uid');
         this.orgId = localStorage.getItem('org_id');
       
-          this.getSelectedSportmeta = await this.db.collection('sports').doc(form.value.sport_id).get();
+        /*
+        this.getSelectedSportmeta = await this.db.collection('sports').doc(form.value.sport_id).get();
         if (this.getSelectedSportmeta.exists) {
           this.getSelectedSportmetaData = this.getSelectedSportmeta.data();
         } else {
           this.getSelectedSportmetaData = [];
         } 
+        */
+
+        for(let sports of this.getAllSportmetaData){
+          if(form.value.sport_id==sports.sport_id)
+            {
+              this.getSelectedSportmetaData.name = sports.name;
+            }      
+        }
     
           if(form.value.is_required == true) { this.is_required_form_value = 'true'; } else { this.is_required_form_value = 'false'; }
           if(form.value.is_editable == true) { this.is_editable_form_value = 'true'; } else { this.is_editable_form_value = 'false'; }
@@ -182,11 +236,29 @@
         }
     
           //console.log(insertObj); return false;
-     
+          /*
           let createObjRoot = await this.db.collection('coachcustomfield').add(insertObj);
           await createObjRoot.set({ field_id: createObjRoot.id }, { merge: true });
           this.router.navigate(['/coachmeta']);
-    
+          */
+
+         let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/coachcustomfield';
+         //let Metaurl = this.baseAPIUrl+'tags';
+   
+         this.restApiService.create(Metaurl,insertObj).subscribe(data=> 
+           {
+                 
+             console.log(data);
+             this.router.navigate(['/coachmeta']);
+             this.notification.isNotification(true, "Coach Meta Data", "Coach Meta has been added successfully.", "check-square");
+   
+           },
+           error => {
+             console.log(error);    
+           }
+           );
+
+           
         } catch (error) {
           
           console.log(error);

@@ -142,10 +142,7 @@ export class ManagermetaComponent implements OnInit {
            error => {
              console.log(error);    
            }
-           );
-
-          
-          
+           ); 
 
         } else {
           console.log("no");
