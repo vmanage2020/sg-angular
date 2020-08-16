@@ -9,9 +9,16 @@
 
                 <div class="form-group mb-3">
                     <label for="sport_id">Sport<span class="text-danger">*</span></label>
+                    <ng-select [items]="getAllSportmetaData" [(ngModel)]="getAllPlayermetaData.sport_id"
+                    bindLabel="name" bindValue="sport_id"
+                    id="sport_id" name="sport_id" formControlName="sport_id"
+                    placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                    </ng-select>
+                    <!--
                     <select class="form-control select2" id="sport_id" name="sport_id" formControlName="sport_id"  [(ngModel)]="getAllPlayermetaData.sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
                         <option *ngFor="let Sportdata of getAllSportmetaData let i = index;" [ngValue]="Sportdata.sport_id">{{Sportdata.name}}</option>
                     </select>
+                    -->
                     <div *ngIf="submitted && f.sport_id.errors" class="invalid-feedback">
                         <div *ngIf="f.sport_id.errors.required">Sport Name is required.</div>
                     </div>
@@ -28,9 +35,16 @@
  
                 <div class="form-group mb-3">
                     <label for="field_type">Field Type<span class="text-danger">*</span></label>
+                    <ng-select [items]="getAllTypemetaData" [(ngModel)]="getAllPlayermetaData.field_type"
+                    bindLabel="name" bindValue="name"
+                    id="field_type" name="field_type" formControlName="field_type"
+                    placeholder="Select Field Type" (change)="OnFieldTypeChange($event)" [ngClass]="{ 'is-invalid': submitted && f.field_type.errors }">
+                    </ng-select> 
+                    <!--
                     <select class="form-control select2" id="field_type" name="field_type" formControlName="field_type" [(ngModel)]="getAllPlayermetaData.field_type" [ngClass]="{ 'is-invalid': submitted && f.field_type.errors }">
                         <option *ngFor="let Typedata of getAllTypemetaData let i = index;" [ngValue]="Typedata.name">{{Typedata.name}}</option>
                     </select>
+                    -->
                     <div *ngIf="submitted && f.field_type.errors" class="invalid-feedback">
                         <div *ngIf="f.field_type.errors.required">Field Type is required.</div>
                     </div>

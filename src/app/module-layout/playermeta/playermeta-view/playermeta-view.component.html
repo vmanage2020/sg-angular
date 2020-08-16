@@ -40,24 +40,24 @@
             <div class="form-group mb-3">
                 <label for="product-reference" style="width:200px;">Is Required </label>
                 
-                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_required === 'true'"><span class="badge badge-success" >Yes</span></div>
-                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_required === 'false'"><span class="badge badge-warning" >No</span></div>
+                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_required === true || getAllPlayermetaData.is_required === 'true'"><span class="badge badge-success" >Yes</span></div>
+                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_required === false || getAllPlayermetaData.is_required === 'false'"><span class="badge badge-warning" >No</span></div>
             </div>
 
             <div class="form-group mb-3">
                 <label for="product-name" style="width:200px;">Is Editable </label>
                 
-                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_editable === 'true'"><span class="badge badge-success" >Yes</span></div>
-                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_editable === 'false'"><span class="badge badge-warning" >No</span></div>
+                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_editable === true || getAllPlayermetaData.is_editable === 'true'"><span class="badge badge-success" >Yes</span></div>
+                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_editable === false || getAllPlayermetaData.is_editable === 'false'"><span class="badge badge-warning" >No</span></div>
             </div>
 
             <div class="form-group mb-3">
                 <label for="product-name" style="width:200px;">Is Deletable  </label>
                 
-                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_deletable === 'true'"><span class="badge badge-success" >Yes</span></div>
-                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_deletable === 'false'"><span class="badge badge-warning" >No</span></div>
+                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_deletable === true || getAllPlayermetaData.is_deletable === 'true'"><span class="badge badge-success" >Yes</span></div>
+                <div class=" form-check-inline" *ngIf="getAllPlayermetaData.is_deletable === false || getAllPlayermetaData.is_deletable === 'false'"><span class="badge badge-warning" >No</span></div>
             </div>
-
+            
             <div class="col-12">
                 <div class="text-center mb-3">
                     <button (click)="listPlayermeta()" type="button" class="btn w-sm btn-light waves-effect" style="float:left;">Cancel</button>

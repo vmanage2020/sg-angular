@@ -7,6 +7,13 @@ import 'rxjs/add/operator/map';
 
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+
+import { NgiNotificationService } from 'ngi-notification';
+
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-playermeta-view',
   templateUrl: './playermeta-view.component.html',
@@ -28,10 +35,11 @@ export class PlayermetaViewComponent implements OnInit {
   loading = true;
   displayLoader: any = true;
   
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { }
   
   ngOnInit() { 
-    this.getPlayerMeta();  
+    //this.getPlayerMeta();  
+    this.getPlayerMetaAPI();  
   }
 
   async getPlayerMeta(){
@@ -44,6 +52,28 @@ export class PlayermetaViewComponent implements OnInit {
     
     this.loading = false;
     this.displayLoader = false; 
+  }
+  
+  async getPlayerMetaAPI(){
+      
+    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/playermetadata/'+this.resourceID;
+    //let Metaurl = this.baseAPIUrl+'playermetadata/'+this.resourceID;
+
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists);
+      if (lists) {
+        this.getAllPlayermetaData = lists;
+      } else {
+        this.getAllPlayermetaData = [];
+      }
+
+      console.log(this.getAllPlayermetaData);
+
+      this.loading = false;
+      this.displayLoader = false; 
+    
+    });
+
   }
 
 

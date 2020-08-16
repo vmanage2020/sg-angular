@@ -100,7 +100,6 @@ export class ManagermetaCreateComponent implements OnInit {
       this.getAllSportmeta = await this.db.collection('sports').orderBy('sport').get();
       this.getAllSportmetaData = await this.getAllSportmeta.docs.map((doc: any) => doc.data());
     }
-
     
     async getSportsAPI(){
       

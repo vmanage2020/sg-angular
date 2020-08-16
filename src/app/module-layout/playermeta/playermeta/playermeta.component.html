@@ -55,18 +55,18 @@
                         </td>
     
                         <td>
-                            <div *ngIf="Playerdata.is_required === 'true'"><span class="badge badge-success" >Yes</span></div>
-                            <div *ngIf="Playerdata.is_required === 'false'"><span class="badge badge-warning" >No</span></div>
+                            <div *ngIf="Playerdata.is_required === true || Playerdata.is_required === 'true'"><span class="badge badge-success" >Yes</span></div>
+                            <div *ngIf="Playerdata.is_required === false || Playerdata.is_required === 'false'"><span class="badge badge-warning" >No</span></div>
                         </td>
     
                         <td>
-                            <div *ngIf="Playerdata.is_editable === 'true'"><span class="badge badge-success" >Yes</span></div>
-                            <div *ngIf="Playerdata.is_editable === 'false'"><span class="badge badge-warning" >No</span></div>
+                            <div *ngIf="Playerdata.is_editable === true || Playerdata.is_editable === 'true'"><span class="badge badge-success" >Yes</span></div>
+                            <div *ngIf="Playerdata.is_editable === false || Playerdata.is_editable === 'false'"><span class="badge badge-warning" >No</span></div>
                         </td>
 
                         <td>
-                            <div *ngIf="Playerdata.is_deletable === 'true'"><span class="badge badge-success" >Yes</span></div>
-                            <div *ngIf="Playerdata.is_deletable === 'false'"><span class="badge badge-warning" >No</span></div>
+                            <div *ngIf="Playerdata.is_deletable === true || Playerdata.is_deletable === 'true'"><span class="badge badge-success" >Yes</span></div>
+                            <div *ngIf="Playerdata.is_deletable === false || Playerdata.is_deletable === 'false'"><span class="badge badge-warning" >No</span></div>
                         </td>
     
                         <td>

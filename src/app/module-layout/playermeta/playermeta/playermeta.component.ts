@@ -10,6 +10,10 @@ import { NgiNotificationService } from 'ngi-notification';
 
 import { DOCUMENT } from '@angular/common';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-playermeta',
   templateUrl: './playermeta.component.html',
@@ -29,10 +33,14 @@ export class PlayermetaComponent implements OnInit {
   loading = true;
   displayLoader: any = true;
 
-  constructor(private router: Router,private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document) { }
+  uid: any;
+  orgId: any;
+
+  constructor(private router: Router,private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient) { }
 
   ngOnInit() { 
-    this.getPlayerMeta();  
+    //this.getPlayerMeta();  
+    this.getPlayerMetaAPI();  
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -49,6 +57,47 @@ export class PlayermetaComponent implements OnInit {
     this.loading = false;
     this.displayLoader = false; 
  
+  }
+
+  async getPlayerMetaAPI(){
+    
+    console.log('orgId',this.orgId);
+    let Metaurl= '';
+    if(this.orgId=='') {
+      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/playermetadata';
+      //let Metaurl = this.baseAPIUrl+'tags';
+    } else {
+      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/playermetadatabyorg/'+this.orgId;
+      //let Metaurl = this.baseAPIUrl+'tagsbyorg/'+this.orgId;
+    }
+
+    Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/playermetadata';
+    
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists)
+ 
+      try {
+ 
+       this.getAllPlayermetaData = lists;
+       this.data = this.getAllPlayermetaData;
+       this.dtTrigger.next();
+       this.loading = false;
+       this.displayLoader = false;      
+ 
+      } catch (error) {
+       
+        console.log(error);
+        this.data = [];
+        this.dtTrigger.next();
+        this.loading = false;
+        this.displayLoader = false;
+        
+      }
+  
+      console.log(this.data);
+       
+    });
+
   }
  
   listPlayermeta(){
@@ -73,9 +122,27 @@ export class PlayermetaComponent implements OnInit {
       this.notification.isConfirmation('', '', 'Player Custom Meta Field', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
           console.log("yes");
+          /*
           await this.db.collection('playermetadata').doc(resourceId).delete();
           this.notification.isNotification(true, "Player Custom Field", "Custom Field has been deleted successfully.", "check-square");
           this.refreshPage();
+          */
+
+          
+         let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/playermetadata/'+resourceId;
+         //let Metaurl = this.baseAPIUrl+'playermetadata/'+resourceId;
+
+         this.restApiService.remove(Metaurl).subscribe(data=> 
+           {
+              console.log(data);
+              this.notification.isNotification(true, "Player Custom Field", "Custom Field has been deleted successfully.", "check-square");
+              this.refreshPage();
+           },
+           error => {
+             console.log(error);    
+           }
+           );
+           
         } else {
           console.log("no");
         }
