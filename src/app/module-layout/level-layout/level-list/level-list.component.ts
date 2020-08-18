@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -24,7 +24,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LevelListComponent implements OnInit {
 
-  db: any = firebase.firestore();
   value: any = [];
   getAllLevel: any = [];
   getAllLevelData: any = [];
@@ -45,7 +44,6 @@ export class LevelListComponent implements OnInit {
 
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
-    //this.getLevel();  
     this.getLevelAPI();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -53,43 +51,17 @@ export class LevelListComponent implements OnInit {
       processing: true
     }; 
   }
-
-  async getLevel(){
-    console.log(this.orgId);
-    if(this.orgId=='') {
-      this.getAllLevel = await this.db.collection('levels').orderBy('sport_id').get();
-    } else {
-      this.getAllLevel = await this.db.collection('levels').where('organization_id', '==', this.orgId).get();
-    }
-
-    //this.getAllLevel = await this.db.collection('levels').orderBy('sport_id').get();
-
-    this.getAllLevelData = await this.getAllLevel.docs.map((doc: any) => doc.data());
-    this.data = this.getAllLevelData;
-    this.dtTrigger.next();
-    this.loading = false;
-    this.displayLoader = false; 
- 
-    console.log(this.data);
-
-  }
-
-  
+   
   async getLevelAPI(){
 
     console.log(this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
-      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levels';
-      //let Metaurl = this.baseAPIUrl+'levels';
+      Metaurl='levels';
     } else {
-      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levelsbyorg/'+this.orgId;
-      //let Metaurl = this.baseAPIUrl+'levelsbyorg/'+this.orgId;
+      Metaurl='levelsbyorg/'+this.orgId;
     }
 
-    
- 
-    
     this.restApiService.lists(Metaurl).subscribe( lists => {
       console.log('---lists----', lists)
  
@@ -141,14 +113,8 @@ export class LevelListComponent implements OnInit {
       this.notification.isConfirmation('', '', 'Level Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
           console.log("yes");
-
-          /*
-          await this.db.collection('levels').doc(resourceId).delete();
-          this.notification.isNotification(true, "Level Data", "Level Data has been deleted successfully.", "check-square");
-          */
        
-          let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levels/'+resourceId;
-          //let Metaurl = this.baseAPIUrl+'levels/'+resourceId;
+          let Metaurl='levels/'+resourceId;
 
           this.restApiService.remove(Metaurl).subscribe(data=> 
             {
@@ -160,9 +126,7 @@ export class LevelListComponent implements OnInit {
             error => {
               console.log(error);    
             }
-            );
-
-            
+            );            
           
         } else {
           console.log("no");

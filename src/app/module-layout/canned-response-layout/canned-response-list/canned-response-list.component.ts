@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -24,7 +24,6 @@ import { HttpClient } from '@angular/common/http';
 export class CannedResponseListComponent implements OnInit {
 
 
-  db: any = firebase.firestore();
   value: any = [];
   getAllCannedResponse: any = [];
   getAllCannedResponseData: any = [];
@@ -45,7 +44,6 @@ export class CannedResponseListComponent implements OnInit {
 
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
-    //this.getCannedResponses();  
     this.getCannedResponsesAPI();  
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -53,37 +51,15 @@ export class CannedResponseListComponent implements OnInit {
       processing: true
     }; 
   }
-
-  async getCannedResponses(){
-    console.log(this.orgId);
-    if(this.orgId=='') {
-      this.getAllCannedResponse = await this.db.collection('CannedResponse').orderBy('sport_id').get();
-    } else {
-      this.getAllCannedResponse = await this.db.collection('CannedResponse').where('organization_id', '==', this.orgId).get();
-    }
-
-    //this.getAllCannedResponse = await this.db.collection('CannedResponse').orderBy('sport_id').get();
-
-    this.getAllCannedResponseData = await this.getAllCannedResponse.docs.map((doc: any) => doc.data());
-    this.data = this.getAllCannedResponseData;
-    this.dtTrigger.next();
-    this.loading = false;
-    this.displayLoader = false; 
  
-    console.log(this.data);
-
-  }
-
   async getCannedResponsesAPI(){
     
     console.log(this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
-      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/cannedresponse';
-      //let Metaurl = this.baseAPIUrl+'cannedresponse';
+      Metaurl= 'cannedresponse';
     } else {
-      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/cannedresponsebyorg/'+this.orgId;
-      //let Metaurl = this.baseAPIUrl+'cannedresponsebyorg/'+this.orgId;
+      Metaurl = 'cannedresponsebyorg/'+this.orgId;
     }
     
     this.restApiService.lists(Metaurl).subscribe( lists => {
@@ -134,17 +110,11 @@ export class CannedResponseListComponent implements OnInit {
     try {
       this.notification.isConfirmation('', '', 'CannedResponse Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
-          console.log("yes");
-          /*
-          await this.db.collection('CannedResponse').doc(resourceId).delete();
-          this.notification.isNotification(true, "CannedResponse Data", "CannedResponse Data has been deleted successfully.", "check-square");
-          this.refreshPage();
-          */
+          console.log("yes"); 
 
           
-         let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/cannedresponse/'+resourceId;
-         //let Metaurl = this.baseAPIUrl+'cannedresponse/'+resourceId;
-
+         let Metaurl= 'cannedresponse/'+resourceId;
+        
          this.restApiService.remove(Metaurl).subscribe(data=> 
            {                 
              console.log(data);

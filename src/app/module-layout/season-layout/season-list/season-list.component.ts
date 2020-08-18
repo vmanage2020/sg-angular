@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -12,6 +12,10 @@ import { DOCUMENT } from '@angular/common';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-season-list',
   templateUrl: './season-list.component.html',
@@ -19,7 +23,6 @@ import { CookieService } from 'src/app/core/services/cookie.service';
 })
 export class SeasonListComponent implements OnInit {
 
-  db: any = firebase.firestore();
   value: any = [];
   getAllSeasons: any = [];
   getAllSeasonsData: any = [];
@@ -34,13 +37,12 @@ export class SeasonListComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService) { }
+  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient) { }
 
   ngOnInit() { 
-
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
-    this.getSeasons();  
+    this.getSeasonsAPI();  
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -48,23 +50,43 @@ export class SeasonListComponent implements OnInit {
     }; 
   }
 
-  async getSeasons(){
-    console.log(this.orgId);
+  async getSeasonsAPI(){
+   
+    console.log('orgId',this.orgId);
+    let Metaurl= '';
     if(this.orgId=='') {
-      this.getAllSeasons = await this.db.collection('seasons').orderBy('sports_id').get();
+      Metaurl='seasons';
     } else {
-      this.getAllSeasons = await this.db.collection('seasons').where('organization_id', '==', this.orgId).get();
+      Metaurl='seasonsbyorg/'+this.orgId;
     }
 
-    //this.getAllLevel = await this.db.collection('levels').orderBy('sport_id').get();
+    Metaurl='seasons';
 
-    this.getAllSeasonsData = await this.getAllSeasons.docs.map((doc: any) => doc.data());
-    this.data = this.getAllSeasonsData;
-    this.dtTrigger.next();
-    this.loading = false;
-    this.displayLoader = false; 
+        
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists)
  
-    console.log(this.data);
+      try {
+ 
+       this.getAllSeasonsData = lists;
+       this.data = this.getAllSeasonsData;
+       this.dtTrigger.next();
+       this.loading = false;
+       this.displayLoader = false;      
+ 
+      } catch (error) {
+       
+        console.log(error);
+        this.data = [];
+        this.dtTrigger.next();
+        this.loading = false;
+        this.displayLoader = false;
+        
+      }
+  
+      console.log(this.data);
+ 
+    });
 
   }
  
@@ -90,9 +112,20 @@ export class SeasonListComponent implements OnInit {
       this.notification.isConfirmation('', '', 'Seasons Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
           console.log("yes");
-          await this.db.collection('seasons').doc(resourceId).delete();
-          this.notification.isNotification(true, "Seasons Data", "Seasons Data has been deleted successfully.", "check-square");
-          this.refreshPage();
+          
+          let Metaurl='seasons/'+resourceId;
+        
+         this.restApiService.remove(Metaurl).subscribe(data=> 
+           {
+              console.log(data);
+              this.notification.isNotification(true, "Seasons Data", "Seasons Data has been deleted successfully.", "check-square");
+              this.refreshPage();
+           },
+           error => {
+             console.log(error);    
+           }
+           );
+          
         } else {
           console.log("no");
         }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -22,7 +22,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PositionListComponent implements OnInit {
 
-  db: any = firebase.firestore();
   value: any = [];
   getAllPositionmeta: any = [];
   getAllPositionmetaData: any = [];
@@ -37,7 +36,6 @@ export class PositionListComponent implements OnInit {
   constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient) { }
 
   ngOnInit() { 
-    //this.getPositionMeta();  
     this.getPositionMetaAPI();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -46,25 +44,10 @@ export class PositionListComponent implements OnInit {
     }; 
   }
 
-  async getPositionMeta(){
-
-    this.getAllPositionmeta = await this.db.collection('positions').orderBy('position_id').get();
-    this.getAllPositionmetaData = await this.getAllPositionmeta.docs.map((doc: any) => doc.data());
-    this.data = this.getAllPositionmetaData;
-    this.dtTrigger.next();
-    this.loading = false;
-    this.displayLoader = false; 
- 
-    console.log(this.data);
-
-  }
-
-
   async getPositionMetaAPI(){
 
-   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positions';
-   //let Metaurl = this.baseAPIUrl+'positions';
-
+   let Metaurl='positions';
+  
    this.restApiService.lists(Metaurl).subscribe( lists => {
      console.log('---lists----', lists)
 
@@ -115,9 +98,22 @@ export class PositionListComponent implements OnInit {
       this.notification.isConfirmation('', '', 'Player Custom Meta Field', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
           console.log("yes");
-          //await this.db.collection('playermetadata').doc(resourceId).delete();
-          this.notification.isNotification(true, "Player Custom Field", "Custom Field has been deleted successfully.", "check-square");
-          this.refreshPage();
+          
+          let Metaurl='positions/'+resourceId;
+
+          this.restApiService.remove(Metaurl).subscribe(data=> 
+            {
+                  
+              console.log(data);
+              this.notification.isNotification(true, "Position Data", "Position Data has been deleted successfully.", "check-square");
+              this.refreshPage();
+            },
+            error => {
+              console.log(error);    
+            }
+            );
+
+
         } else {
           console.log("no");
         }
@@ -126,7 +122,7 @@ export class PositionListComponent implements OnInit {
       })
     } catch (error) {
       console.log(error);
-      this.notification.isNotification(true, "Player Custom Meta Field", "Unable to delete.Please try again later.", "times-circle");
+      this.notification.isNotification(true, "Position Data", "Unable to delete.Please try again later.", "times-circle");
     }
   }
  

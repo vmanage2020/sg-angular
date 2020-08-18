@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import * as firebase from 'firebase';
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -25,8 +24,6 @@ import { HttpClient } from '@angular/common/http';
   })
   export class ManagermetaEditComponent implements OnInit {
   
-  
-    db: any = firebase.firestore();
     value: any = [];
     getAllplayermeta: any = [];
     getAllPlayermetaData: any = [];
@@ -91,59 +88,15 @@ import { HttpClient } from '@angular/common/http';
   
   
     ngOnInit() { 
-      
-      //this.getPlayerMeta();  
       this.getPlayerMetaAPI();
-      //this.getSports();  
       this.getSportsAPI();  
-      //this.getTypes();  
       this.getTypesAPI();  
     }
-  
-    async getPlayerMeta(){
-      this.getAllplayermeta = await this.db.collection('managercustomfield').doc(this.resourceID).get();
-      if (this.getAllplayermeta.exists) {
-        this.getAllPlayermetaData = this.getAllplayermeta.data();
-      } else {
-        this.getAllPlayermetaData = [];
-      }
-  
-      console.log(this.getAllPlayermetaData);
-  
-  
-      if(this.getAllPlayermetaData.is_required=='true')
-      {
-        this.is_required_value = true;
-      }
-  
-      if(this.getAllPlayermetaData.is_editable=='true')
-      {
-        this.is_editable_value = true;
-      }
-  
-      if(this.getAllPlayermetaData.is_deletable=='true')
-      {
-        this.is_deletable_value = true;
-      }
-  
-      if(this.getAllPlayermetaData.field_type=='Text Field')
-      {
-        this.getAllPlayermetaData.field_value = this.getAllPlayermetaData.value[0];
-      } else {
-        this.getAllPlayermetaData.field_value = [this.getAllPlayermetaData.value];
-      }
-  
-      
-  
-      this.loading = false;
-      this.displayLoader = false; 
-    }
-
+   
     async getPlayerMetaAPI(){
       
-      let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/managercustomfield/'+this.resourceID;
-      //let Metaurl = this.baseAPIUrl+'managercustomfield/'+this.resourceID;
-
+      let Metaurl='managercustomfield/'+this.resourceID;
+       
       this.restApiService.lists(Metaurl).subscribe( lists => {
         console.log('---lists----', lists);
         if (lists) {
@@ -183,17 +136,11 @@ import { HttpClient } from '@angular/common/http';
       });
 
     }
-      
-    async getSports(){
-      this.getAllSportmeta = await this.db.collection('sports').orderBy('sport').get();
-      this.getAllSportmetaData = await this.getAllSportmeta.docs.map((doc: any) => doc.data()); 
-    }
-      
+       
     async getSportsAPI(){
       
-      let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
-      //let Metaurl = this.baseAPIUrl+'sports';
-  
+      let Metaurl='sports';
+     
       this.restApiService.lists(Metaurl).subscribe( lists => {
         console.log('---lists----', lists)
   
@@ -213,10 +160,6 @@ import { HttpClient } from '@angular/common/http';
       });
   
     } 
-
-    async getTypes(){
-      this.getAllTypemetaData = this.getAllTypemetaDataArray; 
-    }
 
     async getTypesAPI(){
       this.getAllTypemetaData = this.getAllTypemetaDataArray; 
@@ -243,14 +186,6 @@ import { HttpClient } from '@angular/common/http';
     }
 
     OnFieldTypeChange(event) {
-      /*
-        console.log(event);
-        console.log(event.target.value);
-        if(event.target.value!='Text Field') { 
-          this.addnewfield(); 
-        }
-      */  
-      
       var field_type_value = event.name;
       console.log(field_type_value);
       if(field_type_value!='Text Field') { 
@@ -275,16 +210,7 @@ import { HttpClient } from '@angular/common/http';
   
       this.uid = this.cookieService.getCookie('uid');
       this.orgId = localStorage.getItem('org_id');
-    
-      /*
-        this.getSelectedSportmeta = await this.db.collection('sports').doc(form.value.sport_id).get();
-      if (this.getSelectedSportmeta.exists) {
-        this.getSelectedSportmetaData = this.getSelectedSportmeta.data();
-      } else {
-        this.getSelectedSportmetaData = [];
-      } 
-      */
-
+     
       for(let sports of this.getAllSportmetaData){
         if(form.value.sport_id==sports.sport_id)
           {
@@ -321,15 +247,9 @@ import { HttpClient } from '@angular/common/http';
       "is_active": false,
       "is_deleted": false,
     }
-      
-      
-      /*
-      await this.db.collection('managercustomfield').doc(this.resourceID).update(insertObj);
-      this.router.navigate(['/managermeta']);
-      */
+       
 
-     let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/managercustomfield/'+this.resourceID;
-     //let Metaurl = this.baseAPIUrl+'managercustomfield/'this.resourceID;
+     let Metaurl='managercustomfield/'+this.resourceID; 
  
      this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
        {

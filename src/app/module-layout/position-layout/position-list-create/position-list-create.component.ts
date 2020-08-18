@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -24,7 +24,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PositionListCreateComponent implements OnInit {
 
-  db: any = firebase.firestore();
   value: any = [];
 
   
@@ -71,26 +70,16 @@ export class PositionListCreateComponent implements OnInit {
   
 
   ngOnInit() {
-    //this.getAllSports();
     this.getAllSportsAPI();
     this.loading = false;
     this.displayLoader = false;
   }
 
-  async getAllSports(){    
-    
-    this.getSports = await this.db.collection('sports').orderBy('sport_id').get();
-    this.getSportsData = await this.getSports.docs.map((doc: any) => doc.data());
-    this.getSportsArray = this.getSportsData; 
-    console.log(this.getSportsArray);
-
-  }
-
+ 
   async getAllSportsAPI(){
     
-   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
-   //let Metaurl = this.baseAPIUrl+'sports';
-
+   let Metaurl='sports';
+ 
    this.restApiService.lists(Metaurl).subscribe( lists => {
      console.log('---lists----', lists)
 
@@ -113,34 +102,15 @@ export class PositionListCreateComponent implements OnInit {
   } 
 
   OnSportChange(event) {
-    //console.log(event);
-    //var sport_id_value = event.target.value;
     var sport_id_value = event.sport_id;
     console.log(sport_id_value);
-    //this.getAllPositionBySport(sport_id_value, this.uid);
     this.getAllPositionBySportAPI(sport_id_value, this.uid);
-  }
-
-  
-  async getAllPositionBySport(sport_id,user_id){    
-    
-    this.getPositions = await this.db.collection('positions').where('sport_id', '==', sport_id).get();
-    this.getPositionsData = await this.getPositions.docs.map((doc: any) => doc.data());
-    this.getPositionsArray = this.getPositionsData; 
-    console.log(this.getPositionsArray);
-
   }
 
   
   async getAllPositionBySportAPI(sport_id,user_id){    
        
-   //let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positions';
-   //let Metaurl = this.baseAPIUrl+'positions';
-
-   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positionsbysports/'+sport_id;
-   //let Metaurl = this.baseAPIUrl+'positionsbysports/'+sport_id;
-
-   
+   let Metaurl='positionsbysports/'+sport_id;
 
    this.restApiService.lists(Metaurl).subscribe( lists => {
      console.log('---lists----', lists)
@@ -213,16 +183,9 @@ export class PositionListCreateComponent implements OnInit {
       "updated_uid": "",
       "sort_order": 0,
     }
+ 
 
-    /*
-      let createObjRoot = await this.db.collection('positions').add(insertObj);
-      await createObjRoot.set({ position_id: createObjRoot.id }, { merge: true });
-      this.router.navigate(['/positions/list']);
-      this.notification.isNotification(true, "Position Data", "Position has been added successfully.", "check-square");
-    */
-
-   let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/positions';
-   //let Metaurl = this.baseAPIUrl+'positions';
+   let Metaurl='positions'; 
 
    this.restApiService.create(Metaurl,insertObj).subscribe(data=> 
     {
@@ -263,24 +226,7 @@ export class PositionListCreateComponent implements OnInit {
   }
 
   async deletePosition(resourceId: string, resourceName: string){
-    
-    try {
-      this.notification.isConfirmation('', '', 'Player Custom Meta Field', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
-        if (dataIndex[0]) {
-          console.log("yes");
-          //await this.db.collection('playermetadata').doc(resourceId).delete();
-          this.notification.isNotification(true, "Player Custom Field", "Custom Field has been deleted successfully.", "check-square");
-          this.refreshPage();
-        } else {
-          console.log("no");
-        }
-      }, (err) => {
-        console.log(err);
-      })
-    } catch (error) {
-      console.log(error);
-      this.notification.isNotification(true, "Player Custom Meta Field", "Unable to delete.Please try again later.", "times-circle");
-    }
+     
   }
  
   refreshPage() {

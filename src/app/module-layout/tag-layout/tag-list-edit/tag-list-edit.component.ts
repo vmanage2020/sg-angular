@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -27,7 +27,6 @@ export class TagListEditComponent implements OnInit {
 
   resourceID = this.route.snapshot.paramMap.get('resourceId'); 
   
-    db: any = firebase.firestore();
     value: any = [];
   
     
@@ -79,38 +78,15 @@ export class TagListEditComponent implements OnInit {
     ngOnInit() {
       this.uid = this.cookieService.getCookie('uid');
       this.orgId = localStorage.getItem('org_id');
-      //this.getTagInfo();
       this.getTagInfoAPI();
-      //this.getAllSports();
       this.getAllSportsAPI();
       this.loading = false;
       this.displayLoader = false;
     }
-
-    async getTagInfo(){   
-       
-      this.getTagValue = await this.db.collection('Tags').doc(this.resourceID).get();
-      if (this.getTagValue.exists) {
-        this.getTagValueData = await this.getTagValue.data();
-      } else {
-        this.getTagValueData = [];
-      }
-    
-      this.getTagValueArray = this.getTagValueData; 
-      console.log(this.getTagValueArray);
-
-      //this.getAllPositionBySport(this.getPositionValueData.sport_id, this.uid)
-    
-      this.loading = false;
-      this.displayLoader = false; 
-        
-    }
-
-    
+     
     async getTagInfoAPI(){
              
-      let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/tags/'+this.resourceID;
-      //let Metaurl = this.baseAPIUrl+'tags/'+this.resourceID;
+      let Metaurl = 'tags/'+this.resourceID;
 
       this.restApiService.lists(Metaurl).subscribe( lists => {
         console.log('---lists----', lists);
@@ -132,22 +108,10 @@ export class TagListEditComponent implements OnInit {
       
     }
    
-
-    async getAllSports(){    
-      
-      //this.getSports = await this.db.collection('sports').orderBy('sport_id').get();
-      this.getSports = await this.db.collection('/organization').doc(this.orgId).collection('/sports').orderBy('sport_id').get();
-      this.getSportsData = await this.getSports.docs.map((doc: any) => doc.data());
-      this.getSportsArray = this.getSportsData; 
-      console.log(this.getSportsArray);
-  
-    }
-
-    
+ 
   async getAllSportsAPI(){
     
-    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
-    //let Metaurl = this.baseAPIUrl+'sports';
+    let Metaurl = 'sports';
  
     this.restApiService.lists(Metaurl).subscribe( lists => {
       console.log('---lists----', lists)
@@ -208,17 +172,8 @@ export class TagListEditComponent implements OnInit {
         "updated_uid": "",
         "sort_order": 0,
       }
-         
-        /*
-        await this.db.collection('Tags').doc(this.resourceID).update(insertObj);
-        this.router.navigate(['/tags/list']);
-        this.notification.isNotification(true, "Tag Data", "Tag has been updated successfully.", "check-square");
-        */
 
-
-        
-       let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/tags/'+this.resourceID;
-       //let Metaurl = this.baseAPIUrl+'tags/'this.resourceID;
+      let Metaurl = 'tags/'+this.resourceID;
    
        this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
          {
@@ -259,24 +214,6 @@ export class TagListEditComponent implements OnInit {
   }
 
   async deleteTag(resourceId: string, resourceName: string){
-    
-    try {
-      this.notification.isConfirmation('', '', 'Tags Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
-        if (dataIndex[0]) {
-          console.log("yes");
-          await this.db.collection('Tags').doc(resourceId).delete();
-          this.notification.isNotification(true, "Tags Data", "Tags Data has been deleted successfully.", "check-square");
-          this.refreshPage();
-        } else {
-          console.log("no");
-        }
-      }, (err) => {
-        console.log(err);
-      })
-    } catch (error) {
-      console.log(error);
-      this.notification.isNotification(true, "Tags Data", "Unable to delete.Please try again later.", "times-circle");
-    }
   }
  
  refreshPage() {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -23,8 +23,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ManagermetaCreateComponent implements OnInit {
 
-  
-    db: any = firebase.firestore();
     value: any = [];
     getAllSportmeta: any = [];
     getAllSportmetaData: any = [];
@@ -85,9 +83,7 @@ export class ManagermetaCreateComponent implements OnInit {
     
   
     ngOnInit() {
-      //this.getSports();
       this.getSportsAPI();  
-      //this.getTypes(); 
       this.getTypesAPI();  
       this.is_required_value = false;
       this.is_editable_value = false;
@@ -95,17 +91,12 @@ export class ManagermetaCreateComponent implements OnInit {
       this.loading = false;
       this.displayLoader = false;
     }
-  
-    async getSports(){
-      this.getAllSportmeta = await this.db.collection('sports').orderBy('sport').get();
-      this.getAllSportmetaData = await this.getAllSportmeta.docs.map((doc: any) => doc.data());
-    }
+   
     
     async getSportsAPI(){
       
-      let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
-      //let Metaurl = this.baseAPIUrl+'sports';
-  
+      let Metaurl='sports';
+     
       this.restApiService.lists(Metaurl).subscribe( lists => {
         console.log('---lists----', lists)
   
@@ -125,25 +116,14 @@ export class ManagermetaCreateComponent implements OnInit {
       });
   
     } 
-  
-    async getTypes(){
-      this.getAllTypemetaData = this.getAllTypemetaDataArray;
-    }
-
+   
     async getTypesAPI(){
       this.getAllTypemetaData = this.getAllTypemetaDataArray;
     }
   
   
     OnFieldTypeChange(event) {
-    /*
-      console.log(event);
-      console.log(event.target.value);
-      if(event.target.value!='Text Field') { 
-        this.addnewfield(); 
-      }
-    */  
-   console.log(event);
+    console.log(event);
     var field_type_value = event.name;
     console.log(field_type_value);
     if(field_type_value!='Text Field') { 
@@ -165,16 +145,7 @@ export class ManagermetaCreateComponent implements OnInit {
   
       this.uid = this.cookieService.getCookie('uid');
       this.orgId = localStorage.getItem('org_id');
-    
-      /*
-        this.getSelectedSportmeta = await this.db.collection('sports').doc(form.value.sport_id).get();
-      if (this.getSelectedSportmeta.exists) {
-        this.getSelectedSportmetaData = this.getSelectedSportmeta.data();
-      } else {
-        this.getSelectedSportmetaData = [];
-      } 
-      */
-
+     
       for(let sports of this.getAllSportmetaData){
         if(form.value.sport_id==sports.sport_id)
           {
@@ -214,16 +185,9 @@ export class ManagermetaCreateComponent implements OnInit {
           "is_deleted": false,
       }
   
-        //console.log(insertObj); return false;
-        /*
-        let createObjRoot = await this.db.collection('managercustomfield').add(insertObj);
-        await createObjRoot.set({ field_id: createObjRoot.id }, { merge: true });
-        this.notification.isNotification(true, "Tag Data", "Tag has been added successfully.", "check-square");
-        */
-
-       let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/managercustomfield';
-       //let Metaurl = this.baseAPIUrl+'tags';
- 
+      
+       let Metaurl='managercustomfield';
+      
        this.restApiService.create(Metaurl,insertObj).subscribe(data=> 
          {
                

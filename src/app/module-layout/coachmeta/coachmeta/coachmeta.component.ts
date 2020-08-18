@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -21,8 +21,6 @@ import { HttpClient } from '@angular/common/http';
   })
   export class CoachmetaComponent implements OnInit {
    
-  
-    db: any = firebase.firestore();
     value: any = [];
     getAllplayermeta: any = [];
     getAllPlayermetaData: any = [];
@@ -40,7 +38,6 @@ import { HttpClient } from '@angular/common/http';
     constructor(private router: Router,private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient) { }
   
     ngOnInit() { 
-      //this.getPlayerMeta();  
       this.getPlayerMetaAPI();  
       this.dtOptions = {
         pagingType: 'full_numbers',
@@ -48,32 +45,18 @@ import { HttpClient } from '@angular/common/http';
         processing: true
       }; 
     }
-  
-    async getPlayerMeta(){
-  
-      this.getAllplayermeta = await this.db.collection('coachcustomfield').orderBy('sport_id').get();
-      this.getAllPlayermetaData = await this.getAllplayermeta.docs.map((doc: any) => doc.data());
-      this.data = this.getAllPlayermetaData;
-      this.dtTrigger.next();
-      this.loading = false;
-      this.displayLoader = false; 
-   
-    }
-
-    
+     
   async getPlayerMetaAPI(){
     
     console.log('orgId',this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
-      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/coachcustomfield';
-      //let Metaurl = this.baseAPIUrl+'tags';
+      Metaurl='coachcustomfield';
     } else {
-      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/coachcustomfieldbyorg/'+this.orgId;
-      //let Metaurl = this.baseAPIUrl+'tagsbyorg/'+this.orgId;
+      Metaurl='coachcustomfieldbyorg/'+this.orgId;
     }
 
-    Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/coachcustomfield';
+    Metaurl='coachcustomfield';
     
     this.restApiService.lists(Metaurl).subscribe( lists => {
       console.log('---lists----', lists)
@@ -124,16 +107,9 @@ import { HttpClient } from '@angular/common/http';
         this.notification.isConfirmation('', '', 'Coach Custom Meta Field', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
           if (dataIndex[0]) {
             console.log("yes");
-            /*
-            await this.db.collection('coachcustomfield').doc(resourceId).delete();
-            this.notification.isNotification(true, "Coach Custom Field", "Custom Field has been deleted successfully.", "check-square");
-            this.refreshPage();
-            */
-
-            
-         let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/coachcustomfield/'+resourceId;
-         //let Metaurl = this.baseAPIUrl+'tags/'+resourceId;
-
+             
+         let Metaurl='coachcustomfield/'+resourceId;
+         
          this.restApiService.remove(Metaurl).subscribe(data=> 
            {
               console.log(data);

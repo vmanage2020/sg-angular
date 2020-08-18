@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
-import * as firebase from 'firebase';
+//import * as firebase from 'firebase';
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -30,7 +29,7 @@ export class SportsListEditComponent implements OnInit {
 
   resourceID = this.route.snapshot.paramMap.get('resourceId'); 
 
-  db: any = firebase.firestore();
+  //db: any = firebase.firestore();
   value: any = [];
    
   country: any = [];
@@ -68,34 +67,15 @@ getAllSportmeta: any = [];
 getAllSportmetaData: any = [];
 
   ngOnInit() { 
-    //this.getSportsMeta();  
     this.getSportsMetaAPI();  
-    //this.getCountryCodeList();
     this.getCountryCodeListAPI();
     this.loading = false;
     this.displayLoader = false;
-    
   }
-
-  async getSportsMeta(){
-    this.getAllSportmeta = await this.db.collection('sports').doc(this.resourceID).get();
-    if (this.getAllSportmeta.exists) {
-      this.getAllSportmetaData = this.getAllSportmeta.data();
-    } else {
-      this.getAllSportmetaData = [];
-    }
-
-    console.log(this.getAllSportmetaData);
-
-    this.loading = false;
-    this.displayLoader = false; 
-  }
-
   
   async getSportsMetaAPI(){
 
-    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports/'+this.resourceID;
-    //let Metaurl = this.baseAPIUrl+'sports/'+this.resourceID;
+    let Metaurl = 'sports/'+this.resourceID;
 
     this.restApiService.lists(Metaurl).subscribe( lists => {
       console.log('---lists----', lists);
@@ -113,35 +93,10 @@ getAllSportmetaData: any = [];
    
   }
 
-  
-  async getCountryCodeList() {
-    // console.log("getcountrylist")
-    this.country = true;
-    let getAllCountryResponse: any = await this.dropDownService.getAllCountry();
-    try {
-      if (getAllCountryResponse.status) {
-        this.countryCodeSelect = getAllCountryResponse.data;
-        this.country = false;
-      }
-      else {
-        this.countryCodeSelect = [];
-        this.country = false;
-      }
-    } catch (error) {
-      console.log(error);
-      this.countryCodeSelect = [];
-      this.country = false;
-    }
-
-    console.log(this.countryCodeSelect);
-
-  }
-
 
   async getCountryCodeListAPI()
   {
-    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/countries';
-    //let Metaurl = this.baseAPIUrl+'countries';
+    let Metaurl = 'countries';
 
     this.restApiService.lists(Metaurl).subscribe( lists => {
       console.log('---lists----', lists)
@@ -209,14 +164,7 @@ getAllSportmetaData: any = [];
       "isUsed": false,
     }
 
-    /*
-      await this.db.collection('sports').doc(this.resourceID).update(insertObj);
-      this.router.navigate(['/sports/list']);
-      this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");
-    */
-   
-    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports/'+this.resourceID;
-    //let Metaurl = this.baseAPIUrl+'sports/update/'this.resourceID;
+    let Metaurl = 'sports/'+this.resourceID;
 
     this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
       {
@@ -257,25 +205,7 @@ getAllSportmetaData: any = [];
   }
 
   async deleteSports(resourceId: string, resourceName: string){
-    
-    try {
-      this.notification.isConfirmation('', '', 'Player Custom Meta Field', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
-        if (dataIndex[0]) {
-          console.log("yes");
-          //await this.db.collection('playermetadata').doc(resourceId).delete();
-          this.notification.isNotification(true, "Player Custom Field", "Custom Field has been deleted successfully.", "check-square");
-          this.refreshPage();
-        } else {
-          console.log("no");
-        }
-      }, (err) => {
-        console.log(err);
-      })
-    } catch (error) {
-      console.log(error);
-      this.notification.isNotification(true, "Player Custom Meta Field", "Unable to delete.Please try again later.", "times-circle");
-    }
-  }
+   }
  
  refreshPage() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;

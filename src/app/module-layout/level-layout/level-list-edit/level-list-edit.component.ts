@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -26,7 +26,6 @@ export class LevelListEditComponent implements OnInit {
 
   resourceID = this.route.snapshot.paramMap.get('resourceId'); 
   
-    db: any = firebase.firestore();
     value: any = [];
   
     
@@ -80,38 +79,16 @@ export class LevelListEditComponent implements OnInit {
     ngOnInit() {
       this.uid = this.cookieService.getCookie('uid');
       this.orgId = localStorage.getItem('org_id');
-      //this.getLevelInfo();
       this.getLevelInfoAPI();
-      //this.getAllSports();
       this.getAllSportsAPI();
       this.loading = false;
       this.displayLoader = false;
     }
-
-    async getLevelInfo(){   
-       
-      this.getLevelValue = await this.db.collection('levels').doc(this.resourceID).get();
-      if (this.getLevelValue.exists) {
-        this.getLevelValueData = await this.getLevelValue.data();
-      } else {
-        this.getLevelValueData = [];
-      }
     
-      this.getLevelValueArray = this.getLevelValueData; 
-      console.log(this.getLevelValueArray);
-
-      //this.getAllPositionBySport(this.getPositionValueData.sport_id, this.uid)
-    
-      this.loading = false;
-      this.displayLoader = false; 
-        
-    }
-   
     async getLevelInfoAPI(){   
        
-      let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levels/'+this.resourceID;
-      //let Metaurl = this.baseAPIUrl+'levels/'+this.resourceID;
-
+      let Metaurl='levels/'+this.resourceID;
+ 
       this.restApiService.lists(Metaurl).subscribe( lists => {
         console.log('---lists----', lists);
         if (lists) {
@@ -130,23 +107,11 @@ export class LevelListEditComponent implements OnInit {
       });
      
     }
-
-    async getAllSports(){    
-      
-      //this.getSports = await this.db.collection('sports').orderBy('sport_id').get();
-      this.getSports = await this.db.collection('/organization').doc(this.orgId).collection('/sports').orderBy('sport_id').get();
-      this.getSportsData = await this.getSports.docs.map((doc: any) => doc.data());
-      this.getSportsArray = this.getSportsData; 
-      console.log(this.getSportsArray);
-  
-    }
-
-    
+     
   async getAllSportsAPI(){
     
-    let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/sports';
-    //let Metaurl = this.baseAPIUrl+'sports';
- 
+    let Metaurl='sports';
+  
     this.restApiService.lists(Metaurl).subscribe( lists => {
       console.log('---lists----', lists)
  
@@ -209,16 +174,9 @@ export class LevelListEditComponent implements OnInit {
         "updated_uid": "",
         "sort_order": 0,
       }
-        
-        /*
-        await this.db.collection('levels').doc(this.resourceID).update(insertObj);        
-        this.router.navigate(['/level/list']);  
-        this.notification.isNotification(true, "Level Data", "Level has been updated successfully.", "check-square");
-        */
-
-       let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/levels/'+this.resourceID;
-       //let Metaurl = this.baseAPIUrl+'levels/'this.resourceID;
    
+       let Metaurl='levels/'+this.resourceID;
+     
        this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
          {
                
@@ -259,25 +217,7 @@ export class LevelListEditComponent implements OnInit {
     
     async deleteLevel(resourceId: string, resourceName: string){
       
-      try {
-        this.notification.isConfirmation('', '', 'Level Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
-          if (dataIndex[0]) {
-            console.log("yes");
-            //await this.db.collection('levels').doc(resourceId).delete();
-            this.notification.isNotification(true, "Level Data", "Level Data has been deleted successfully.", "check-square");
-            this.refreshPage();
-          } else {
-            console.log("no");
-          }
-        }, (err) => {
-          console.log(err);
-        })
-      } catch (error) {
-        console.log(error);
-        this.notification.isNotification(true, "Level Data", "Unable to delete.Please try again later.", "times-circle");
-      }
     }
-
 
     refreshPage() {
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -10,8 +10,11 @@ import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
-
 import { NgiNotificationService } from 'ngi-notification';
+
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-season-list-create',
@@ -20,7 +23,6 @@ import { NgiNotificationService } from 'ngi-notification';
 })
 export class SeasonListCreateComponent implements OnInit {
 
-  db: any = firebase.firestore();
   value: any = [];
 
   
@@ -52,7 +54,7 @@ export class SeasonListCreateComponent implements OnInit {
   submitted = false;
   createseasonForm: FormGroup;
 
-  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService) { 
+  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
      this.createForm(); 
   }
   
@@ -61,7 +63,7 @@ export class SeasonListCreateComponent implements OnInit {
         season_name: ['', Validators.required ],
         season_start_date: ['', Validators.required ],
         season_end_date: ['', Validators.required ],
-        sport_id: ['', Validators.required ],
+        sport_id: [null, Validators.required ],
         sport_name: [''],
         season: [''],
         organization_id: [''],
@@ -76,21 +78,37 @@ export class SeasonListCreateComponent implements OnInit {
     this.orgId = localStorage.getItem('org_id');
     this.orgName = localStorage.getItem('org_name');
     this.orgAbbrev = localStorage.getItem('org_abbrev');
-    this.getAllSports();
-    //this.loading = false;
-    //this.displayLoader = false;
-  }
-
-  async getAllSports(){    
-    
-    //this.getSports = await this.db.collection('sports').orderBy('sport_id').get();
-    this.getSports = await this.db.collection('/organization').doc(this.orgId).collection('/sports').orderBy('sport_id').get();
-    this.getSportsData = await this.getSports.docs.map((doc: any) => doc.data());
-    this.getSportsArray = this.getSportsData; 
-    console.log(this.getSportsArray);
+    this.getAllSportsAPI();
     this.loading = false;
     this.displayLoader = false;
   }
+ 
+  
+  async getAllSportsAPI(){
+      
+    let Metaurl='sports';
+    
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists)
+
+      try {
+
+        this.getSportsData = lists;
+        this.getSportsArray = this.getSportsData;
+
+      } catch (error) {
+      
+        console.log(error);
+        this.getSportsData = [];
+        this.getSportsArray = this.getSportsData;
+        
+      }
+  
+      console.log(this.getSportsArray);
+      
+    });
+
+  } 
 
    
   get f() { return this.createseasonForm.controls; }
@@ -121,8 +139,10 @@ export class SeasonListCreateComponent implements OnInit {
     let insertObj = {
       "season_name": form.value.season_name,
       "season": form.value.season_name,
-      "season_start_date": new Date(form.value.season_start_date),
-      "season_end_date": new Date(form.value.season_end_date),
+      //"season_start_date": new Date(form.value.season_start_date),
+      //"season_end_date": new Date(form.value.season_end_date),
+      "season_start_date": form.value.season_start_date,
+      "season_end_date": form.value.season_end_date,
       "sports_id": form.value.sport_id,
       "sports_name": form.value.sport_name,
       "isUsed": false,
@@ -136,15 +156,24 @@ export class SeasonListCreateComponent implements OnInit {
       "sort_order": 0,
     }
 
-    //console.log(insertObj); return false;
+    console.log('insertObj',insertObj); 
+    //return;
+ 
+    let Metaurl='seasons';
+ 
+    this.restApiService.create(Metaurl,insertObj).subscribe(data=> 
+      {
+            
+        console.log(data);
+        this.router.navigate(['/season/list']);
+        this.notification.isNotification(true, "Seasons Data", "Seasons has been added successfully.", "check-square");
+        
+      },
+      error => {
+        console.log(error);    
+      }
+      );
 
-      let createObjRoot = await this.db.collection('seasons').add(insertObj);
-      await createObjRoot.set({ season_id: createObjRoot.id }, { merge: true });
-      
-      this.router.navigate(['/season/list']);
-
-      this.notification.isNotification(true, "Seasons Data", "Seasons has been added successfully.", "check-square");
-      
     } catch (error) {
       
       console.log(error);
@@ -169,24 +198,7 @@ export class SeasonListCreateComponent implements OnInit {
   }
 
   async deleteSeason(resourceId: string, resourceName: string){
-    
-    try {
-      this.notification.isConfirmation('', '', 'Seasons Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
-        if (dataIndex[0]) {
-          console.log("yes");
-          await this.db.collection('seasons').doc(resourceId).delete();
-          this.notification.isNotification(true, "Seasons Data", "Seasons Data has been deleted successfully.", "check-square");
-          this.refreshPage();
-        } else {
-          console.log("no");
-        }
-      }, (err) => {
-        console.log(err);
-      })
-    } catch (error) {
-      console.log(error);
-      this.notification.isNotification(true, "Seasons Data", "Unable to delete.Please try again later.", "times-circle");
-    }
+     
   }
  
  refreshPage() {

@@ -7,6 +7,8 @@ import { retry, catchError, map } from 'rxjs/operators';
 
 import { BehaviorSubject } from 'rxjs';
 
+import { environment } from './../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,8 +20,8 @@ export class RestApiService {
 	public dataStore: {} = {};
 	readonly tasks  = this._list.asObservable();
 
-   baseAPIUrl = 'https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/';
-
+    //baseAPIUrl = 'http://13.229.116.53:3000/';
+    baseAPIUrl     = environment.api;
 
 	// Http Options
   	httpOptions = {
@@ -29,7 +31,7 @@ export class RestApiService {
 	}
 
 	lists(apiPath: string, isStore?: boolean, listKey?: string): Observable<any> {
-		return this.http.get<any>( apiPath, this.httpOptions)
+		return this.http.get<any>( this.baseAPIUrl+apiPath, this.httpOptions)
 			.pipe(
 				map(response => {
                     //console.log('----response---', response)
@@ -58,7 +60,7 @@ export class RestApiService {
 		if( httpOptions ) {
 			this.httpOptions = httpOptions;
 		}
-		return this.http.post<any>(apiPath, formData, this.httpOptions)
+		return this.http.post<any>(this.baseAPIUrl+apiPath, formData, this.httpOptions)
 			.pipe(
 				map(response => response),
 				catchError(this.handleError)
@@ -66,7 +68,7 @@ export class RestApiService {
 	}
 
 	update(apiPath: string, formData: any) {//this.baseAPIUrl +
-		return this.http.put<any>( apiPath, formData) 
+		return this.http.put<any>(this.baseAPIUrl+apiPath, formData) 
 		  .pipe(
 			map(response => response),
 			catchError(this.handleError)
@@ -75,7 +77,7 @@ export class RestApiService {
 
     // HttpClient API delete() method => Delete
   remove(apiPath: string ){
-    return this.http.delete<any>( apiPath, this.httpOptions)
+    return this.http.delete<any>(this.baseAPIUrl+apiPath, this.httpOptions)
     .pipe(
       map(response => response),
       catchError(this.handleError)

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -16,6 +16,10 @@ import { NgiNotificationService } from 'ngi-notification';
 
 import { DatePipe } from '@angular/common';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-season-list-edit',
   templateUrl: './season-list-edit.component.html',
@@ -25,7 +29,6 @@ export class SeasonListEditComponent implements OnInit {
 
   resourceID = this.route.snapshot.paramMap.get('resourceId'); 
   
-    db: any = firebase.firestore();
     value: any = [];
   
     getSeasonValue: any = [];
@@ -58,7 +61,7 @@ export class SeasonListEditComponent implements OnInit {
     submitted = false;
     createseasonForm: FormGroup;
   
-    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService,private datePipe: DatePipe) { 
+    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService,private datePipe: DatePipe, private restApiService: RestApiService, private http:HttpClient) { 
        this.createForm(); 
     }
     
@@ -82,54 +85,66 @@ export class SeasonListEditComponent implements OnInit {
       this.orgId = localStorage.getItem('org_id');
       this.orgName = localStorage.getItem('org_name');
       this.orgAbbrev = localStorage.getItem('org_abbrev');
-      this.getSeasonInfo();
-      this.getAllSports();
-      //this.loading = false;
-      //this.displayLoader = false;
+      this.getSeasonInfoAPI();
+      this.getAllSportsAPI();
+      this.loading = false;
+      this.displayLoader = false;
     }
 
-    sdate:any;
-    edate:any;
-
-    async getSeasonInfo(){   
-       
-      this.getSeasonValue = await this.db.collection('seasons').doc(this.resourceID).get();
-      if (this.getSeasonValue.exists) {
-        this.getSeasonValueData = await this.getSeasonValue.data();
-      } else {
-        this.getSeasonValueData = [];
-      }
     
-      this.getSeasonValueArray = this.getSeasonValueData; 
-      //console.log(this.getSeasonValueArray);
-      
-      //console.log(this.getSeasonValueArray.season_start_date);
-      console.log(this.getSeasonValueArray.season_start_date.toDate());
-      console.log(new Date(this.getSeasonValueArray.season_start_date.toDate()));
-
-
-      this.sdate = this.datePipe.transform(this.getSeasonValueArray.season_start_date.toDate(), 'MM/dd/yyyy');
-      this.edate = this.datePipe.transform(this.getSeasonValueArray.season_end_date.toDate(), 'MM/dd/yyyy');
-      
-       
-      //this.getAllPositionBySport(this.getPositionValueData.sport_id, this.uid)
     
-      this.loading = false;
-      this.displayLoader = false; 
-        
+    async getSeasonInfoAPI(){   
+       
+      let Metaurl='seasons/'+this.resourceID;
+ 
+      this.restApiService.lists(Metaurl).subscribe( lists => {
+        console.log('---lists----', lists);
+        if (lists) {
+          this.getSeasonValueData = lists;
+          this.getSeasonValueArray = this.getSeasonValueData; 
+        } else {
+          this.getSeasonValueData = [];
+          this.getSeasonValueArray = this.getSeasonValueData; 
+        }
+
+        console.log(this.getSeasonValueArray);
+
+        this.loading = false;
+        this.displayLoader = false; 
+      
+      });
+     
     }
    
-
-    async getAllSports(){    
-      
-      //this.getSports = await this.db.collection('sports').orderBy('sport_id').get();
-      this.getSports = await this.db.collection('/organization').doc(this.orgId).collection('/sports').orderBy('sport_id').get();
-      this.getSportsData = await this.getSports.docs.map((doc: any) => doc.data());
-      this.getSportsArray = this.getSportsData; 
+    
+  async getAllSportsAPI(){
+    
+    let Metaurl='sports';
+  
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists)
+ 
+      try {
+ 
+       this.getSportsData = lists;
+       this.getSportsArray = this.getSportsData;
+       
+      } catch (error) {
+       
+        console.log(error);
+        this.getSportsArray = [];
+        
+      }
+  
       console.log(this.getSportsArray);
-  
-    }
-  
+      
+    });
+ 
+   } 
+   
+    sdate:any;
+    edate:any;
+ 
      
     get f() { return this.createseasonForm.controls; }
   
@@ -173,12 +188,22 @@ export class SeasonListEditComponent implements OnInit {
       "updated_uid": "",
       "sort_order": 0,
     }
-      
-        await this.db.collection('seasons').doc(this.resourceID).update(insertObj);
-        
+       
+    let Metaurl='seasons/'+this.resourceID;
+       
+    this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
+      {
+            
+        console.log(data);
         this.router.navigate(['/season/list']);
-  
         this.notification.isNotification(true, "Season Data", "Season has been updated successfully.", "check-square");
+      
+      },
+      error => {
+        console.log(error);    
+      }
+      );
+
         
       } catch (error) {
         
@@ -206,24 +231,7 @@ export class SeasonListEditComponent implements OnInit {
     }
   
     async deleteSeason(resourceId: string, resourceName: string){
-      
-      try {
-        this.notification.isConfirmation('', '', 'Seasons Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
-          if (dataIndex[0]) {
-            console.log("yes");
-            await this.db.collection('seasons').doc(resourceId).delete();
-            this.notification.isNotification(true, "Seasons Data", "Seasons Data has been deleted successfully.", "check-square");
-            this.refreshPage();
-          } else {
-            console.log("no");
-          }
-        }, (err) => {
-          console.log(err);
-        })
-      } catch (error) {
-        console.log(error);
-        this.notification.isNotification(true, "Seasons Data", "Unable to delete.Please try again later.", "times-circle");
-      }
+       
     }
    
    refreshPage() {

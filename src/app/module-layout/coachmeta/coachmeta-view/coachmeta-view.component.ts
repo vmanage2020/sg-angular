@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import * as firebase from 'firebase';
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -21,7 +20,6 @@ import { HttpClient } from '@angular/common/http';
   })
   export class CoachmetaViewComponent implements OnInit {
       
-      db: any = firebase.firestore();
       value: any = [];
       getAllplayermeta: any = [];
       getAllPlayermetaData: any = [];
@@ -38,26 +36,12 @@ import { HttpClient } from '@angular/common/http';
       constructor(private router: Router, private route: ActivatedRoute, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { }
       
       ngOnInit() {    
-        //this.getPlayerMeta();  
         this.getPlayerMetaAPI();  
       }
     
-      async getPlayerMeta(){
-        this.getAllplayermeta = await this.db.collection('coachcustomfield').doc(this.resourceID).get();
-        if (this.getAllplayermeta.exists) {
-          this.getAllPlayermetaData = this.getAllplayermeta.data();
-        } else {
-          this.getAllPlayermetaData = [];
-        }
-        
-        this.loading = false;
-        this.displayLoader = false; 
-      }
-    
-      async getPlayerMetaAPI(){
+       async getPlayerMetaAPI(){
       
-        let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/coachcustomfield/'+this.resourceID;
-        //let Metaurl = this.baseAPIUrl+'coachcustomfield/'+this.resourceID;
+        let Metaurl='coachcustomfield/'+this.resourceID;
   
         this.restApiService.lists(Metaurl).subscribe( lists => {
           console.log('---lists----', lists);

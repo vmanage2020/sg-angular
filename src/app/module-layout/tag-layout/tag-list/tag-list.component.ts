@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -23,7 +23,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TagListComponent implements OnInit {
 
-  db: any = firebase.firestore();
   value: any = [];
   getAllTags: any = [];
   getAllTagsData: any = [];
@@ -41,12 +40,8 @@ export class TagListComponent implements OnInit {
   constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient) { }
 
   ngOnInit() { 
-
     this.uid = this.cookieService.getCookie('uid');
-   
     this.orgId = localStorage.getItem('org_id');
-   // console.log(this.uid+"_____"+this.orgId);
-    //this.getTags();  
     this.getTagsAPI();  
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -55,37 +50,14 @@ export class TagListComponent implements OnInit {
     }; 
   }
 
-  async getTags(){
-    console.log(this.orgId);
-    if(this.orgId=='') {
-      this.getAllTags = await this.db.collection('Tags').orderBy('sport_id').get();
-    } else {
-      this.getAllTags = await this.db.collection('Tags').where('organization_id', '==', this.orgId).get();
-    }
-
-    //this.getAllLevel = await this.db.collection('levels').orderBy('sport_id').get();
-
-    this.getAllTagsData = await this.getAllTags.docs.map((doc: any) => doc.data());
-    this.data = this.getAllTagsData;
-    this.dtTrigger.next();
-    this.loading = false;
-    this.displayLoader = false; 
- 
-    console.log(this.data);
-
-  }
-
- 
   async getTagsAPI(){
 
     console.log(this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
-      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/tags';
-      //let Metaurl = this.baseAPIUrl+'tags';
+      Metaurl = 'tags';
     } else {
-      Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/tagsbyorg/'+this.orgId;
-      //let Metaurl = this.baseAPIUrl+'tagsbyorg/'+this.orgId;
+      Metaurl = 'tagsbyorg/'+this.orgId;
     }
     
     this.restApiService.lists(Metaurl).subscribe( lists => {
@@ -141,14 +113,8 @@ export class TagListComponent implements OnInit {
       this.notification.isConfirmation('', '', 'Tags Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
           console.log("yes");
-          /*
-          await this.db.collection('Tags').doc(resourceId).delete();
-          this.notification.isNotification(true, "Tags Data", "Tags Data has been deleted successfully.", "check-square");
-          this.refreshPage();
-          */
 
-         let Metaurl='https://cors-anywhere.herokuapp.com/http://13.229.116.53:3000/tags/'+resourceId;
-         //let Metaurl = this.baseAPIUrl+'tags/'+resourceId;
+          let Metaurl = 'tags/'+resourceId;
 
          this.restApiService.remove(Metaurl).subscribe(data=> 
            {
