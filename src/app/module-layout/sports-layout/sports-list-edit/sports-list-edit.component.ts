@@ -20,6 +20,8 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { SportsCrudService } from '../sports-crud.service';
+
 @Component({
   selector: 'app-sports-list-edit',
   templateUrl: './sports-list-edit.component.html',
@@ -48,7 +50,15 @@ export class SportsListEditComponent implements OnInit {
   submitted = false;
   editsportsForm: FormGroup;
 
-  constructor(private router: Router,private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService,private dropDownService: DropdownService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+  constructor(private router: Router,
+    private route: ActivatedRoute, 
+    private formBuilder: FormBuilder,
+    private sportsCrudService: SportsCrudService, 
+    public cookieService: CookieService,
+    private dropDownService: DropdownService, 
+    private notification: NgiNotificationService, 
+    private restApiService: RestApiService, 
+    private http:HttpClient) { 
     this.editForm(); 
  }
 
@@ -69,8 +79,8 @@ getAllSportmetaData: any = [];
   ngOnInit() { 
     this.getSportsMetaAPI();  
     this.getCountryCodeListAPI();
-    this.loading = false;
-    this.displayLoader = false;
+    //this.loading = false;
+    //this.displayLoader = false;
   }
   
   async getSportsMetaAPI(){
@@ -96,7 +106,15 @@ getAllSportmetaData: any = [];
 
   async getCountryCodeListAPI()
   {
-    let Metaurl = 'countries';
+
+    if(this.sportsCrudService.countrydataStore.country.length > 0)
+    {
+      this.countryCodeSelect = this.sportsCrudService.countrydataStore.country;
+      this.country = false;
+    }else{
+      setTimeout(() => { this.getCountryCodeListAPI() }, 1000);
+    }
+    /* let Metaurl = 'countries';
 
     this.restApiService.lists(Metaurl).subscribe( lists => {
       console.log('---lists----', lists)
@@ -119,7 +137,7 @@ getAllSportmetaData: any = [];
       console.log(this.countryCodeSelect);
   
      
-    });
+    }); */
 
   }
 
@@ -170,6 +188,10 @@ getAllSportmetaData: any = [];
       {
             
         console.log(data);
+
+        this.sportsCrudService.dataStore.sports.push(data);
+        this.sportsCrudService._sports.next(Object.assign({}, this.sportsCrudService.dataStore).sports);
+
         this.router.navigate(['/sports/list']);
         this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");
   

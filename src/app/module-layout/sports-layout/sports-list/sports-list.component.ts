@@ -14,6 +14,8 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { SportsCrudService } from '../sports-crud.service';
+
 
 
 @Component({
@@ -34,7 +36,12 @@ export class SportsListComponent implements OnInit {
   loading = true;
   displayLoader: any = true;
   
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient) { }
+  constructor(private router: Router, 
+    private sportsCrudService: SportsCrudService, 
+    private notification: NgiNotificationService, 
+    @Inject(DOCUMENT) private _document: Document, 
+    private restApiService: RestApiService, 
+    private http:HttpClient) { }
 
   ngOnInit() {
   this.getSportMetaAPI();  
@@ -48,8 +55,26 @@ export class SportsListComponent implements OnInit {
  
   async getSportMetaAPI(){
 
-    let Metaurl = 'sports';
+    
 
+   
+    if( this.sportsCrudService.dataStore.sports.length > 0)
+    {
+      console.log('---sports length----', this.sportsCrudService.dataStore.sports)
+
+      this.getAllSportmetaData = this.sportsCrudService.dataStore.sports;
+      this.data = this.getAllSportmetaData;
+      this.dtTrigger.next();
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getSportMetaAPI() }, 1000);
+    }
+
+   /* 
+   let Metaurl = 'sports';
    this.restApiService.lists(Metaurl).subscribe( lists => {
      console.log('---lists----', lists)
 
@@ -74,7 +99,7 @@ export class SportsListComponent implements OnInit {
      console.log(this.data);
  
     
-   });
+   }); */
 
   }
 

@@ -1,19 +1,65 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpHeaderResponse } from '@angular/common/http';
-import { Observable, of, Subject, throwError } from "rxjs";
+import { Observable, of, Subject, throwError, BehaviorSubject } from "rxjs";
 import { retry, catchError, tap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
 import { TitleCasePipe } from '@angular/common';
+
+
+import { RestApiService } from '../../shared/rest-api.services';
+import { get } from 'lodash';
+
 // const admin = require('firebase-admin');
 @Injectable({
   providedIn: 'root'
 })
 export class SportsCrudService {
   adminref: any = firebase.firestore();
-  constructor(private titlecasePipe: TitleCasePipe, ) { }
 
+  public _sports = new BehaviorSubject<any[]>([]);
+  public dataStore:{ sports: any } = { sports: [] };
+  readonly connections = this._sports.asObservable();
+
+  public _country = new BehaviorSubject<any[]>([]);
+  public countrydataStore:{ country: any } = { country: [] };
+  readonly connections1 = this._country.asObservable();
+
+  constructor(private titlecasePipe: TitleCasePipe, private restApiService: RestApiService) { 
+    this.sportsList('sports');
+    this.getCountryCodeListAPI('countries');
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    const message = get(error, 'message') || 'Something bad happened; please try again later.';
+    return throwError(message);
+  }
+
+  sportsList( url ){
+    this.restApiService.lists(url).subscribe((data: any) => {
+      console.log('---data----', data)
+      this.dataStore.sports = data;
+      this._sports.next(Object.assign({}, this.dataStore).sports);
+      // console.log(this.dataStore);
+
+    },
+      catchError(this.handleError)
+    );
+  }
+
+  getCountryCodeListAPI(url)
+  {
+    this.restApiService.lists(url).subscribe((data: any) => {
+      console.log('---data----', data)
+      this.countrydataStore.country = data;
+      this._country.next(Object.assign({}, this.countrydataStore).country);
+      // console.log(this.dataStore);
+
+    },
+      catchError(this.handleError)
+    );
+  }
 
   /*Create Sport*/
   async createSport(createSportObj: any) {

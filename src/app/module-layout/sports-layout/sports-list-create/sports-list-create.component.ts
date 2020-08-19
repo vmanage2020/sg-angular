@@ -18,6 +18,8 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { SportsCrudService } from '../sports-crud.service';
+
 @Component({
   selector: 'app-sports-list-create',
   templateUrl: './sports-list-create.component.html',
@@ -44,7 +46,14 @@ export class SportsListCreateComponent implements OnInit {
   submitted = false;
   createsportsForm: FormGroup;
 
-  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService,private dropDownService: DropdownService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+  constructor(private router: Router, 
+    private formBuilder: FormBuilder,
+    public cookieService: CookieService,
+    private sportsCrudService: SportsCrudService, 
+    private dropDownService: DropdownService, 
+    private notification: NgiNotificationService, 
+    private restApiService: RestApiService, 
+    private http:HttpClient) { 
      this.createForm(); 
   }
   
@@ -61,13 +70,26 @@ export class SportsListCreateComponent implements OnInit {
 
   ngOnInit() {
     this.getCountryCodeListAPI();
-    this.loading = false;
-    this.displayLoader = false;
+    //this.loading = false;
+    //this.displayLoader = false;
   }
  
   async getCountryCodeListAPI()
   {
-     let Metaurl = 'countries';
+
+    if(this.sportsCrudService.countrydataStore.country.length > 0)
+    {
+      this.countryCodeSelect = this.sportsCrudService.countrydataStore.country;
+      this.country = false;
+
+      this.loading = false;
+      this.displayLoader = false;
+
+    }else{
+      setTimeout(() => { this.getCountryCodeListAPI() }, 1000);
+    }
+
+     /* let Metaurl = 'countries';
 
     this.restApiService.lists(Metaurl).subscribe( lists => {
       console.log('---lists----', lists)
@@ -90,7 +112,7 @@ export class SportsListCreateComponent implements OnInit {
       console.log(this.countryCodeSelect);
   
      
-    });
+    }); */
 
   }
  
@@ -141,6 +163,9 @@ export class SportsListCreateComponent implements OnInit {
     {
           
       console.log(data);
+      this.sportsCrudService.dataStore.sports.push(data);
+      this.sportsCrudService._sports.next(Object.assign({}, this.sportsCrudService.dataStore).sports);
+
       this.router.navigate(['/sports/list']);
       this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");
 
