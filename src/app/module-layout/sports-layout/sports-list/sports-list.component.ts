@@ -64,7 +64,9 @@ export class SportsListComponent implements OnInit {
 
       this.getAllSportmetaData = this.sportsCrudService.dataStore.sports;
       this.data = this.getAllSportmetaData;
-      this.dtTrigger.next();
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
       this.loading = false;
       this.displayLoader = false;  
 
