@@ -18,10 +18,13 @@ import { HttpClient } from '@angular/common/http';
 
 import { CannedResponseCrudService } from '../canned-response-crud.service';
 
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-canned-response-list',
   templateUrl: './canned-response-list.component.html',
-  styleUrls: ['./canned-response-list.component.scss']
+  styleUrls: ['./canned-response-list.component.scss'],
+  providers: [NGXLogger]
 })
 export class CannedResponseListComponent implements OnInit {
 
@@ -42,7 +45,7 @@ export class CannedResponseListComponent implements OnInit {
 
   reloading = true;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient, private cannedresponseCrudService: CannedResponseCrudService) { }
+  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient, private cannedresponseCrudService: CannedResponseCrudService,private logger: NGXLogger) { }
 
   ngOnInit() { 
     this.cannedresponseCrudService.dataStore.cannedresponses = [];
@@ -57,12 +60,11 @@ export class CannedResponseListComponent implements OnInit {
   }
  
   async getCannedResponsesAPI(){
-
-    
+    this.logger.debug('Tags List API Start Here====>', new Date().toUTCString());    
     if( this.cannedresponseCrudService.dataStore.cannedresponses.length > 0)
     {
       console.log('---tags length----', this.cannedresponseCrudService.dataStore.cannedresponses)
-
+      this.logger.debug('Tags List API Start Here====>', new Date().toUTCString());
       this.getAllCannedResponseData = this.cannedresponseCrudService.dataStore.cannedresponses;
       this.data = this.getAllCannedResponseData;
       setTimeout(() => {
@@ -72,14 +74,11 @@ export class CannedResponseListComponent implements OnInit {
       this.displayLoader = false;  
 
     }else {
-
-      if(this.reloading==true) {
-        console.log("reloading");
-        this.reloading=false;
-        setTimeout(() => { this.getCannedResponsesAPI(); }, 1000);
-      }
+ 
+      setTimeout(() => { this.getCannedResponsesAPI(); }, 1000);
       
-      
+      this.loading = false;
+      this.displayLoader = false; 
     }
 
 
@@ -138,7 +137,7 @@ export class CannedResponseListComponent implements OnInit {
   }
 
   async deleteCannedResponses(resourceId: string, resourceName: string){
-    
+    this.logger.debug('Canned Response Delete API Start Here====>', new Date().toUTCString());   
     try {
       this.notification.isConfirmation('', '', 'CannedResponse Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
@@ -148,8 +147,17 @@ export class CannedResponseListComponent implements OnInit {
          let Metaurl= 'cannedresponse/'+resourceId;
         
          this.restApiService.remove(Metaurl).subscribe(data=> 
-           {                 
+           {       
+            this.logger.debug('Canned Response Delete API End Here====>', new Date().toUTCString());             
              console.log(data);
+        
+             this.cannedresponseCrudService.dataStore.cannedresponses = [];
+              this.orgId = localStorage.getItem('org_id');
+              if(this.orgId=='') {
+                this.cannedresponseCrudService.cannedresponsesList('cannedresponse');
+              } else {
+                this.cannedresponseCrudService.cannedresponsesList('cannedresponsebyorg/'+this.orgId+'');
+              }
              this.notification.isNotification(true, "CannedResponse Data", "CannedResponse Data has been deleted successfully.", "check-square");
              this.refreshPage();
            },

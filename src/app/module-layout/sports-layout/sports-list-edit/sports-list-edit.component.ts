@@ -22,10 +22,13 @@ import { HttpClient } from '@angular/common/http';
 
 import { SportsCrudService } from '../sports-crud.service';
 
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-sports-list-edit',
   templateUrl: './sports-list-edit.component.html',
-  styleUrls: ['./sports-list-edit.component.scss']
+  styleUrls: ['./sports-list-edit.component.scss'],
+  providers: [NGXLogger]
 })
 export class SportsListEditComponent implements OnInit {
 
@@ -58,7 +61,8 @@ export class SportsListEditComponent implements OnInit {
     private dropDownService: DropdownService, 
     private notification: NgiNotificationService, 
     private restApiService: RestApiService, 
-    private http:HttpClient) { 
+    private http:HttpClient,
+    private logger: NGXLogger) { 
     this.editForm(); 
  }
 
@@ -84,18 +88,20 @@ getAllSportmetaData: any = [];
   }
   
   async getSportsMetaAPI(){
+    this.logger.debug('Sport Data By ID API Start Here====>', new Date().toUTCString());   
 
     let Metaurl = 'sports/'+this.resourceID;
 
     this.restApiService.lists(Metaurl).subscribe( lists => {
-      console.log('---lists----', lists);
+      //console.log('---lists----', lists);
+      this.logger.debug('Sport Data By ID API End Here====>', new Date().toUTCString());   
       if (lists) {
         this.getAllSportmetaData = lists;
       } else {
         this.getAllSportmetaData = [];
       }
 
-      console.log(this.getAllSportmetaData);
+      //console.log(this.getAllSportmetaData);
       this.loading = false;
       this.displayLoader = false; 
     
@@ -168,8 +174,8 @@ getAllSportmetaData: any = [];
       }      
     }
 
-    console.log(form.value.country_code);
-    console.log(form.value.country);
+    //console.log(form.value.country_code);
+    //console.log(form.value.country);
      
 
     let insertObj = {
@@ -182,12 +188,15 @@ getAllSportmetaData: any = [];
       "isUsed": false,
     }
 
+    this.logger.debug('Sport Update API Start Here====>', new Date().toUTCString());   
+
     let Metaurl = 'sports/'+this.resourceID;
 
     this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
       {
-            
-        console.log(data);
+        //console.log(data);
+        this.logger.debug('Sport Update API End Here====>', new Date().toUTCString());   
+
         this.sportsCrudService.dataStore.sports = [];
         this.sportsCrudService.sportsList('sports');
         //this.sportsCrudService.dataStore.sports.push(data);

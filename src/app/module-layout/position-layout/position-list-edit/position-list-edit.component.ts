@@ -17,10 +17,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { PositionCrudService } from '../position-crud.service';
+
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-position-list-edit',
   templateUrl: './position-list-edit.component.html',
-  styleUrls: ['./position-list-edit.component.scss']
+  styleUrls: ['./position-list-edit.component.scss'],
+  providers: [NGXLogger]
 })
 export class PositionListEditComponent implements OnInit {
 
@@ -60,7 +65,8 @@ export class PositionListEditComponent implements OnInit {
     submitted = false;
     createpositionForm: FormGroup;
   
-    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient, private positionCrudService:PositionCrudService,
+      private logger: NGXLogger) { 
        this.createForm(); 
     }
     
@@ -79,17 +85,16 @@ export class PositionListEditComponent implements OnInit {
     ngOnInit() {
       this.getPositionAPI();
       this.getAllSportsAPI();
-      this.loading = false;
-      this.displayLoader = false;
     }
   
     
     async getPositionAPI(){   
-      
+      this.logger.debug('Position Data By ID API Start Here====>', new Date().toUTCString());   
         let Metaurl='positions/'+this.resourceID;
 
         this.restApiService.lists(Metaurl).subscribe( lists => {
-          console.log('---lists----', lists);
+          //console.log('---lists----', lists);
+          this.logger.debug('Position Data By ID API End Here====>', new Date().toUTCString());   
           if (lists) {
             this.getPositionValueData = lists;
             this.getPositionValueArray = this.getPositionValueData; 
@@ -98,7 +103,7 @@ export class PositionListEditComponent implements OnInit {
             this.getPositionValueArray = this.getPositionValueData; 
           }
 
-          console.log(this.getPositionValueArray);
+          //console.log(this.getPositionValueArray);
           this.getAllPositionBySportAPI(this.getPositionValueData.sport_id, this.uid)
           this.loading = false;
           this.displayLoader = false; 
@@ -108,7 +113,31 @@ export class PositionListEditComponent implements OnInit {
     } 
     
     async getAllSportsAPI(){    
-        
+    
+      
+    this.logger.debug('Sports Master API Start Here====>', new Date().toUTCString());
+    if( this.positionCrudService.sportsdataStore.sports.length > 0)
+    {
+      //console.log('---sports length----', this.positionCrudService.dataStore.sports)
+      this.logger.debug('Sports Master API End Here====>', new Date().toUTCString());
+      this.getSportsArray = this.positionCrudService.sportsdataStore.sports;
+      this.data = this.getSportsArray;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getAllSportsAPI() }, 1000);
+      this.loading = false;
+      this.displayLoader = false;
+    }
+
+
+
+      /*
    let Metaurl='sports';
    
    this.restApiService.lists(Metaurl).subscribe( lists => {
@@ -129,13 +158,13 @@ export class PositionListEditComponent implements OnInit {
      console.log(this.getSportsArray);
      
    });
-
+   */
   
     }
   
     OnSportChange(event) {
       var sport_id_value = event.sport_id;
-      console.log(sport_id_value);
+      //console.log(sport_id_value);
       this.getAllPositionBySportAPI(sport_id_value, this.uid);
     }
 
@@ -146,7 +175,7 @@ export class PositionListEditComponent implements OnInit {
     
 
    this.restApiService.lists(Metaurl).subscribe( lists => {
-     console.log('---lists----', lists)
+     //console.log('---lists----', lists)
 
      try {
 
@@ -160,7 +189,7 @@ export class PositionListEditComponent implements OnInit {
        
      }
  
-     console.log(this.getPositionsArray);
+     //console.log(this.getPositionsArray);
      
    });
   
@@ -198,8 +227,8 @@ export class PositionListEditComponent implements OnInit {
           }      
       }
   
-      console.log(form.value.country_code);
-      console.log(form.value.country);
+      //console.log(form.value.country_code);
+      //console.log(form.value.country);
         
       
       let insertObj = {
@@ -215,14 +244,23 @@ export class PositionListEditComponent implements OnInit {
         "sort_order": 0,
       }
          
-      console.log('insertObj',insertObj);
+      //console.log('insertObj',insertObj);
+      this.logger.debug('Position Update ID API Start Here====>', new Date().toUTCString());   
 
        let Metaurl='positions/'+this.resourceID;
        
        this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
          {
-               
-           console.log(data);
+           //console.log(data);
+           this.logger.debug('Position Data By ID API End Here====>', new Date().toUTCString());   
+
+           
+          this.positionCrudService.dataStore.positions = [];
+          this.positionCrudService.positionsList('positions');
+          //this.positionCrudService.dataStore.positions.push(data);
+          //this.positionCrudService.dataStore.positions = [data].concat(this.positionCrudService.dataStore.positions);
+          //this.positionCrudService._positions.next(Object.assign({}, this.positionCrudService.dataStore).positions);
+          
            this.router.navigate(['/positions/list']);  
            this.notification.isNotification(true, "Position Data", "Position has been added successfully.", "check-square");
         

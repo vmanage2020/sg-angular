@@ -38,7 +38,7 @@ export class SportsCrudService {
 
   sportsList( url ){
     this.restApiService.lists(url).subscribe((data: any) => {
-      console.log('---data----', data)
+      //console.log('---data----', data)
       this.dataStore.sports = data;
       this._sports.next(Object.assign({}, this.dataStore).sports);
       // console.log(this.dataStore);
@@ -51,7 +51,7 @@ export class SportsCrudService {
   getCountryCodeListAPI(url)
   {
     this.restApiService.lists(url).subscribe((data: any) => {
-      console.log('---data----', data)
+      //console.log('---data----', data)
       this.countrydataStore.country = data;
       this._country.next(Object.assign({}, this.countrydataStore).country);
       // console.log(this.dataStore);

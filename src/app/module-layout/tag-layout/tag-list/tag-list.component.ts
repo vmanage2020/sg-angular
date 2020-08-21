@@ -18,10 +18,13 @@ import { HttpClient } from '@angular/common/http';
 
 import { TagCrudService } from '../tag-crud.service';
 
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-tag-list',
   templateUrl: './tag-list.component.html',
-  styleUrls: ['./tag-list.component.scss']
+  styleUrls: ['./tag-list.component.scss'],
+  providers: [NGXLogger]
 })
 export class TagListComponent implements OnInit {
 
@@ -39,7 +42,7 @@ export class TagListComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient, private tagCrudService: TagCrudService) { }
+  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient, private tagCrudService: TagCrudService,private logger: NGXLogger) { }
 
   ngOnInit() { 
     this.uid = this.cookieService.getCookie('uid');
@@ -53,11 +56,11 @@ export class TagListComponent implements OnInit {
   }
 
   async getTagsAPI(){
-
+    this.logger.debug('Tags List API Start Here====>', new Date().toUTCString());
     if( this.tagCrudService.dataStore.tags.length > 0)
     {
       console.log('---tags length----', this.tagCrudService.dataStore.tags)
-
+      this.logger.debug('Tags List API Start Here====>', new Date().toUTCString());
       this.getAllTagsData = this.tagCrudService.dataStore.tags;
       this.data = this.getAllTagsData;
       setTimeout(() => {
@@ -69,6 +72,8 @@ export class TagListComponent implements OnInit {
     }else {
 
       setTimeout(() => { this.getTagsAPI() }, 1000);
+      this.loading = false;
+      this.displayLoader = false;
     }
 
 
@@ -130,7 +135,7 @@ export class TagListComponent implements OnInit {
   }
 
   async deleteTag(resourceId: string, resourceName: string){
-    
+    this.logger.debug('Tag Delete API Start Here====>', new Date().toUTCString());   
     try {
       this.notification.isConfirmation('', '', 'Tags Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
@@ -140,8 +145,17 @@ export class TagListComponent implements OnInit {
 
          this.restApiService.remove(Metaurl).subscribe(data=> 
            {
-                 
+            this.logger.debug('Tag Delete API End Here====>', new Date().toUTCString());   
              console.log(data);
+            
+             this.tagCrudService.dataStore.tags = [];
+             this.orgId = localStorage.getItem('org_id');
+             if(this.orgId=='') {
+               this.tagCrudService.tagsList('tags');
+             } else {
+               this.tagCrudService.tagsList('tagsbyorg/'+this.orgId+'');
+             }
+            
              this.notification.isNotification(true, "Tags Data", "Tags Data has been deleted successfully.", "check-square");
              this.refreshPage();
            },

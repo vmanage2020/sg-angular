@@ -20,17 +20,22 @@ export class PositionCrudService {
   uid: any;
   orgId: any;
 
-  public _cannedresponses = new BehaviorSubject<any[]>([]);
-  public dataStore:{ cannedresponses: any } = { cannedresponses: [] };
-  readonly connections = this._cannedresponses.asObservable();
+  public _positions = new BehaviorSubject<any[]>([]);
+  public dataStore:{ positions: any } = { positions: [] };
+  readonly connections = this._positions.asObservable();
+
+  public _sports = new BehaviorSubject<any[]>([]);
+  public sportsdataStore:{ sports: any } = { sports: [] };
+  readonly sportsconnections = this._sports.asObservable();
 
   public _country = new BehaviorSubject<any[]>([]);
   public countrydataStore:{ country: any } = { country: [] };
   readonly connections1 = this._country.asObservable();
 
   constructor(private titlecasePipe: TitleCasePipe, private restApiService: RestApiService ) {  
-    //this.cannedresponsesList('cannedresponse');
+    this.positionsList('positions');
     //this.getCountryCodeListAPI('countries');
+    this.getSportsListAPI('sports');
    }
 
 
@@ -39,11 +44,25 @@ export class PositionCrudService {
     return throwError(message);
   }
   
-  cannedresponsesList( url ){
+  positionsList( url ){
     this.restApiService.lists(url).subscribe((data: any) => {
-      console.log('---data----', data)
-      this.dataStore.cannedresponses = data;
-      this._cannedresponses.next(Object.assign({}, this.dataStore).cannedresponses);
+      //console.log('---data----', data)
+      this.dataStore.positions = data;
+      this._positions.next(Object.assign({}, this.dataStore).positions);
+      // console.log(this.dataStore);
+
+    },
+      catchError(this.handleError)
+    );
+  }
+
+  
+  getSportsListAPI(url)
+  {
+    this.restApiService.lists(url).subscribe((data: any) => {
+      //console.log('---data----', data)
+      this.sportsdataStore.sports = data;
+      this._sports.next(Object.assign({}, this.sportsdataStore).sports);
       // console.log(this.dataStore);
 
     },
@@ -54,7 +73,7 @@ export class PositionCrudService {
   getCountryCodeListAPI(url)
   {
     this.restApiService.lists(url).subscribe((data: any) => {
-      console.log('---data----', data)
+      //console.log('---data----', data)
       this.countrydataStore.country = data;
       this._country.next(Object.assign({}, this.countrydataStore).country);
       // console.log(this.dataStore);

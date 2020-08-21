@@ -20,10 +20,13 @@ import { HttpClient } from '@angular/common/http';
 
 import { SportsCrudService } from '../sports-crud.service';
 
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-sports-list-create',
   templateUrl: './sports-list-create.component.html',
-  styleUrls: ['./sports-list-create.component.scss']
+  styleUrls: ['./sports-list-create.component.scss'],
+  providers: [NGXLogger]
 })
 export class SportsListCreateComponent implements OnInit {
 
@@ -53,7 +56,8 @@ export class SportsListCreateComponent implements OnInit {
     private dropDownService: DropdownService, 
     private notification: NgiNotificationService, 
     private restApiService: RestApiService, 
-    private http:HttpClient) { 
+    private http:HttpClient,
+    private logger: NGXLogger) { 
      this.createForm(); 
   }
   
@@ -140,9 +144,10 @@ export class SportsListCreateComponent implements OnInit {
       }      
     }
 
+    /*
     console.log(form.value.country_code);
     console.log(form.value.country);
-     
+     */
 
     let insertObj = {
       "sport": form.value.name,
@@ -157,12 +162,14 @@ export class SportsListCreateComponent implements OnInit {
       "isUsed": false,
     }
   
+    this.logger.debug('Sports Add API Start Here====>', new Date().toUTCString());
+
     let Metaurl = 'sports';
 
    this.restApiService.create(Metaurl,insertObj).subscribe(data=> 
     {
-          
-      console.log(data);
+      this.logger.debug('Sports Add API End Here====>', new Date().toUTCString());    
+      //console.log(data);
       this.sportsCrudService.dataStore.sports = [];
       this.sportsCrudService.sportsList('sports');
       //this.sportsCrudService.dataStore.sports.push(data);

@@ -14,11 +14,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { PositionCrudService } from '../position-crud.service';
+
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-position-list',
   templateUrl: './position-list.component.html',
-  styleUrls: ['./position-list.component.scss']
+  styleUrls: ['./position-list.component.scss'],
+  providers: [NGXLogger]
 })
 export class PositionListComponent implements OnInit {
 
@@ -33,7 +37,7 @@ export class PositionListComponent implements OnInit {
   loading = true;
   displayLoader: any = true;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient) { }
+  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient, private positionCrudService: PositionCrudService, private logger: NGXLogger) { }
 
   ngOnInit() { 
     this.getPositionMetaAPI();
@@ -45,7 +49,29 @@ export class PositionListComponent implements OnInit {
   }
 
   async getPositionMetaAPI(){
+    
+    this.logger.debug('Positions List API Start Here====>', new Date().toUTCString());
+    if( this.positionCrudService.dataStore.positions.length > 0)
+    {
+      //console.log('---sports length----', this.positionCrudService.dataStore.sports)
+      this.logger.debug('Positions List API End Here====>', new Date().toUTCString());
+      this.getAllPositionmetaData = this.positionCrudService.dataStore.positions;
+      this.data = this.getAllPositionmetaData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
 
+    }else {
+
+      setTimeout(() => { this.getPositionMetaAPI() }, 1000);
+      this.loading = false;
+      this.displayLoader = false;
+    }
+
+
+   /* 
    let Metaurl='positions';
   
    this.restApiService.lists(Metaurl).subscribe( lists => {
@@ -58,21 +84,16 @@ export class PositionListComponent implements OnInit {
       this.dtTrigger.next();
       this.loading = false;
       this.displayLoader = false;      
-
-     } catch (error) {
-      
+    } catch (error) {
        console.log(error);
        this.data = [];
        this.dtTrigger.next();
        this.loading = false;
        this.displayLoader = false;
-       
      }
- 
      console.log(this.data);
- 
-    
    });
+   */
 
   }
  
@@ -93,18 +114,18 @@ export class PositionListComponent implements OnInit {
   }
 
   async deletePosition(resourceId: string, resourceName: string){
-    
+    this.logger.debug('Postion Delete API Start Here====>', new Date().toUTCString());   
     try {
       this.notification.isConfirmation('', '', 'Player Custom Meta Field', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
-          console.log("yes");
-          
+          //console.log("yes");
           let Metaurl='positions/'+resourceId;
 
           this.restApiService.remove(Metaurl).subscribe(data=> 
             {
+              this.logger.debug('Position Delete API End Here====>', new Date().toUTCString());   
                   
-              console.log(data);
+              //console.log(data);
               this.notification.isNotification(true, "Position Data", "Position Data has been deleted successfully.", "check-square");
               this.refreshPage();
             },

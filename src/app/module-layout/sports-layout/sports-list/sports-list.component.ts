@@ -59,7 +59,7 @@ export class SportsListComponent implements OnInit {
     this.logger.debug('Sports List API Start Here====>', new Date().toUTCString());
     if( this.sportsCrudService.dataStore.sports.length > 0)
     {
-      console.log('---sports length----', this.sportsCrudService.dataStore.sports)
+      //console.log('---sports length----', this.sportsCrudService.dataStore.sports)
       this.logger.debug('Sports List API End Here====>', new Date().toUTCString());
       this.getAllSportmetaData = this.sportsCrudService.dataStore.sports;
       this.data = this.getAllSportmetaData;
@@ -72,6 +72,8 @@ export class SportsListComponent implements OnInit {
     }else {
 
       setTimeout(() => { this.getSportMetaAPI() }, 1000);
+      this.loading = false;
+      this.displayLoader = false;
     }
 
    /* 
@@ -125,14 +127,14 @@ export class SportsListComponent implements OnInit {
     try {
       this.notification.isConfirmation('', '', 'Player Custom Meta Field', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
-          console.log("yes");
+          //console.log("yes");
          
           let Metaurl = 'sports/'+resourceId;
 
           this.restApiService.remove(Metaurl).subscribe(data=> 
             {
                   
-              console.log(data);
+              //console.log(data);
               this.notification.isNotification(true, "Sports Data", "Sports Data has been deleted successfully.", "check-square");
               this.refreshPage();
             },

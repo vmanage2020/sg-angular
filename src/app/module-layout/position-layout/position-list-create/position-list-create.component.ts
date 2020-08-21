@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -17,10 +16,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { PositionCrudService } from '../position-crud.service';
+
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-position-list-create',
   templateUrl: './position-list-create.component.html',
-  styleUrls: ['./position-list-create.component.scss']
+  styleUrls: ['./position-list-create.component.scss'],
+  providers: [NGXLogger]
 })
 export class PositionListCreateComponent implements OnInit {
 
@@ -53,7 +57,8 @@ export class PositionListCreateComponent implements OnInit {
   submitted = false;
   createpositionForm: FormGroup;
 
-  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient, private positionCrudService:PositionCrudService,
+    private logger: NGXLogger) { 
      this.createForm(); 
   }
   
@@ -71,22 +76,45 @@ export class PositionListCreateComponent implements OnInit {
 
   ngOnInit() {
     this.getAllSportsAPI();
-    this.loading = false;
-    this.displayLoader = false;
   }
 
  
   async getAllSportsAPI(){
     
+    this.logger.debug('Sports Master API Start Here====>', new Date().toUTCString());
+    if( this.positionCrudService.sportsdataStore.sports.length > 0)
+    {
+      //console.log('---sports length----', this.positionCrudService.dataStore.sports)
+      this.logger.debug('Sports Master API End Here====>', new Date().toUTCString());
+      this.getSportsArray = this.positionCrudService.sportsdataStore.sports;
+      this.data = this.getSportsArray;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getAllSportsAPI() }, 1000);
+      this.loading = false;
+      this.displayLoader = false;
+    }
+
+    
+   /*  
    let Metaurl='sports';
  
    this.restApiService.lists(Metaurl).subscribe( lists => {
-     console.log('---lists----', lists)
+     //console.log('---lists----', lists)
 
      try {
 
       this.getSportsData = lists;
       this.getSportsArray = this.getSportsData;
+      
+      this.loading = false;
+      this.displayLoader = false;
       
      } catch (error) {
       
@@ -95,9 +123,10 @@ export class PositionListCreateComponent implements OnInit {
        
      }
  
-     console.log(this.getSportsArray);
+     //console.log(this.getSportsArray);
      
    });
+   */
 
   } 
 
@@ -108,15 +137,15 @@ export class PositionListCreateComponent implements OnInit {
   }
 
   
-  async getAllPositionBySportAPI(sport_id,user_id){    
-       
+  async getAllPositionBySportAPI(sport_id,user_id){ 
+
+   this.logger.debug('Positions Master By Sports API Start Here====>', new Date().toUTCString());    
    let Metaurl='positionsbysports/'+sport_id;
 
    this.restApiService.lists(Metaurl).subscribe( lists => {
-     console.log('---lists----', lists)
-
+  
      try {
-
+      this.logger.debug('Positions Master By Sports API End Here====>', new Date().toUTCString());    
       this.getPositionsData = lists;
       this.getPositionsArray = this.getPositionsData;
       
@@ -127,7 +156,7 @@ export class PositionListCreateComponent implements OnInit {
        
      }
  
-     console.log(this.getPositionsArray);
+     //console.log(this.getPositionsArray);
      
    });
 
@@ -165,8 +194,8 @@ export class PositionListCreateComponent implements OnInit {
         }      
     }
 
-    console.log(form.value.country_code);
-    console.log(form.value.country);
+    //console.log(form.value.country_code);
+    //console.log(form.value.country);
       
     
     let insertObj = {
@@ -184,13 +213,21 @@ export class PositionListCreateComponent implements OnInit {
       "sort_order": 0,
     }
  
+    this.logger.debug('Positions Create API Start Here====>', new Date().toUTCString());      
 
    let Metaurl='positions'; 
 
    this.restApiService.create(Metaurl,insertObj).subscribe(data=> 
     {
-          
-      console.log(data);
+      this.logger.debug('Positions Create API End Here====>', new Date().toUTCString());          
+      //console.log(data);
+
+      this.positionCrudService.dataStore.positions = [];
+      this.positionCrudService.positionsList('positions');
+      //this.positionCrudService.dataStore.positions.push(data);
+      //this.positionCrudService.dataStore.positions = [data].concat(this.positionCrudService.dataStore.positions);
+      //this.positionCrudService._positions.next(Object.assign({}, this.positionCrudService.dataStore).positions);
+
       this.router.navigate(['/positions/list']);
       this.notification.isNotification(true, "Position Data", "Position has been added successfully.", "check-square");
 
