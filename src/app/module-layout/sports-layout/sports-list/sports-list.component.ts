@@ -54,10 +54,7 @@ export class SportsListComponent implements OnInit {
 
  
   async getSportMetaAPI(){
-
-    
-
-   
+ 
     if( this.sportsCrudService.dataStore.sports.length > 0)
     {
       console.log('---sports length----', this.sportsCrudService.dataStore.sports)

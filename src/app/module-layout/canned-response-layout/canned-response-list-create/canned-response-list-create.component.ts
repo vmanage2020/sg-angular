@@ -16,6 +16,8 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { CannedResponseCrudService } from '../canned-response-crud.service';
+
 @Component({
   selector: 'app-canned-response-list-create',
   templateUrl: './canned-response-list-create.component.html',
@@ -54,7 +56,7 @@ export class CannedResponseListCreateComponent implements OnInit {
   submitted = false;
   createcannedresponseForm: FormGroup;
 
-  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient, private cannedresponseCrudService: CannedResponseCrudService) { 
      this.createForm(); 
   }
   
@@ -155,7 +157,19 @@ export class CannedResponseListCreateComponent implements OnInit {
      this.restApiService.create(Metaurl,insertObj).subscribe(data=> 
        {
              
-         console.log(data);
+        console.log(data);
+        this.cannedresponseCrudService.dataStore.cannedresponses = [];
+        this.orgId = localStorage.getItem('org_id');
+        if(this.orgId=='') {
+          this.cannedresponseCrudService.cannedresponsesList('cannedresponse');
+        } else {
+          this.cannedresponseCrudService.cannedresponsesList('cannedresponsebyorg/'+this.orgId+'');
+        }
+        
+        //this.cannedresponseCrudService.dataStore.cannedresponses.push(data);
+        //this.cannedresponseCrudService.dataStore.cannedresponses = [data].concat(this.cannedresponseCrudService.dataStore.cannedresponses); 
+        //this.cannedresponseCrudService._cannedresponses.next(Object.assign({}, this.cannedresponseCrudService.dataStore).cannedresponses);
+        
          this.router.navigate(['/cannedresponse/list']);
          this.notification.isNotification(true, "Canned Response Data", "Canned Response has been added successfully.", "check-square");
    

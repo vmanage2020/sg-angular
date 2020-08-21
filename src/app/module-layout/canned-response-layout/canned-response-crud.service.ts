@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpHeaderResponse } from '@angular/common/http';
-import { Observable, of, Subject, throwError } from "rxjs";
+import { Observable, of, Subject, throwError, BehaviorSubject } from "rxjs";
 import { retry, catchError, tap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -10,13 +10,74 @@ import { TitleCasePipe } from '@angular/common';
 // const admin = require('firebase-admin');
 
 import { CommonCrudService } from '../../../app/core/services/common-crud.service'
+
+import { RestApiService } from '../../shared/rest-api.services';
+import { get } from 'lodash';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CannedResponseCrudService {
   adminref: any = firebase.firestore();
 
-  constructor(private titlecasePipe: TitleCasePipe, private commonService: CommonCrudService) { }
+  uid: any;
+  orgId: any;
+
+  public _cannedresponses = new BehaviorSubject<any[]>([]);
+  public dataStore:{ cannedresponses: any } = { cannedresponses: [] };
+  readonly connections = this._cannedresponses.asObservable();
+
+  public _country = new BehaviorSubject<any[]>([]);
+  public countrydataStore:{ country: any } = { country: [] };
+  readonly connections1 = this._country.asObservable();
+
+  constructor(private titlecasePipe: TitleCasePipe, private commonService: CommonCrudService, private restApiService: RestApiService) {
+
+     
+  //this.uid = this.cookieService.getCookie('uid');
+  this.orgId = localStorage.getItem('org_id');
+  if(this.orgId=='') {
+    this.cannedresponsesList('cannedresponse');
+  } else {
+    this.cannedresponsesList('cannedresponsebyorg/'+this.orgId+'');
+  }
+    
+    this.getCountryCodeListAPI('countries');
+
+   }
+
+
+   private handleError(error: HttpErrorResponse) {
+    const message = get(error, 'message') || 'Something bad happened; please try again later.';
+    return throwError(message);
+  }
+  
+  cannedresponsesList( url ){
+    this.restApiService.lists(url).subscribe((data: any) => {
+      console.log('---data----', data)
+      this.dataStore.cannedresponses = data;
+      this._cannedresponses.next(Object.assign({}, this.dataStore).cannedresponses);
+      // console.log(this.dataStore);
+
+    },
+      catchError(this.handleError)
+    );
+  }
+
+  getCountryCodeListAPI(url)
+  {
+    this.restApiService.lists(url).subscribe((data: any) => {
+      console.log('---data----', data)
+      this.countrydataStore.country = data;
+      this._country.next(Object.assign({}, this.countrydataStore).country);
+      // console.log(this.dataStore);
+
+    },
+      catchError(this.handleError)
+    );
+  }
+
+
   async createCannedResponse(createcannedResponseObj: any) {
     try {
       const collectionName = "CannedResponse";

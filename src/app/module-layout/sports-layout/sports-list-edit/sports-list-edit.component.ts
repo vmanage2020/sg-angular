@@ -188,9 +188,11 @@ getAllSportmetaData: any = [];
       {
             
         console.log(data);
-
-        this.sportsCrudService.dataStore.sports.push(data);
-        this.sportsCrudService._sports.next(Object.assign({}, this.sportsCrudService.dataStore).sports);
+        this.sportsCrudService.dataStore.sports = [];
+        this.sportsCrudService.sportsList('sports');
+        //this.sportsCrudService.dataStore.sports.push(data);
+        //this.sportsCrudService.dataStore.sports = [data].concat(this.sportsCrudService.dataStore.sports);
+        //this.sportsCrudService._sports.next(Object.assign({}, this.sportsCrudService.dataStore).sports);
 
         this.router.navigate(['/sports/list']);
         this.notification.isNotification(true, "Sports Meta Data", "Sport has been added successfully.", "check-square");

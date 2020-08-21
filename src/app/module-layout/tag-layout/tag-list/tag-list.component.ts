@@ -16,6 +16,8 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { TagCrudService } from '../tag-crud.service';
+
 @Component({
   selector: 'app-tag-list',
   templateUrl: './tag-list.component.html',
@@ -37,7 +39,7 @@ export class TagListComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient) { }
+  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient, private tagCrudService: TagCrudService) { }
 
   ngOnInit() { 
     this.uid = this.cookieService.getCookie('uid');
@@ -52,6 +54,25 @@ export class TagListComponent implements OnInit {
 
   async getTagsAPI(){
 
+    if( this.tagCrudService.dataStore.tags.length > 0)
+    {
+      console.log('---tags length----', this.tagCrudService.dataStore.tags)
+
+      this.getAllTagsData = this.tagCrudService.dataStore.tags;
+      this.data = this.getAllTagsData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getTagsAPI() }, 1000);
+    }
+
+
+    /*
     console.log(this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
@@ -85,7 +106,8 @@ export class TagListComponent implements OnInit {
   
      
     });
- 
+    */
+
    }
   
  

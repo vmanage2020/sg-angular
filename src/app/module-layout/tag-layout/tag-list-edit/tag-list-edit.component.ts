@@ -17,6 +17,8 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { TagCrudService } from '../tag-crud.service';
+
 
 @Component({
   selector: 'app-tag-list-edit',
@@ -61,7 +63,7 @@ export class TagListEditComponent implements OnInit {
     submitted = false;
     createtagForm: FormGroup;
   
-    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient, private tagCrudService: TagCrudService) { 
        this.createForm(); 
     }
     
@@ -179,6 +181,17 @@ export class TagListEditComponent implements OnInit {
          {
                
            console.log(data);
+           this.tagCrudService.dataStore.tags = [];
+           this.orgId = localStorage.getItem('org_id');
+          if(this.orgId=='') {
+            this.tagCrudService.tagsList('tags');
+          } else {
+            this.tagCrudService.tagsList('tagsbyorg/'+this.orgId+'');
+          }
+          
+           //this.tagCrudService.dataStore.tags.push(data);
+           //this.tagCrudService._tags.next(Object.assign({}, this.tagCrudService.dataStore).tags);
+
            this.router.navigate(['/tags/list']);
            this.notification.isNotification(true, "Tag Data", "Tag has been updated successfully.", "check-square");
            

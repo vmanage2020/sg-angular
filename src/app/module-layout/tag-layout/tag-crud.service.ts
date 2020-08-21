@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpHeaderResponse } from '@angular/common/http';
-import { Observable, of, Subject, throwError } from "rxjs";
+import { Observable, of, Subject, throwError, BehaviorSubject } from "rxjs";
 import { retry, catchError, tap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -9,13 +9,71 @@ import * as firebase from 'firebase';
 import { TitleCasePipe } from '@angular/common';
 // const admin = require('firebase-admin');
 import { CommonCrudService } from '../../../app/core/services/common-crud.service'
+
+import { RestApiService } from '../../shared/rest-api.services';
+import { get } from 'lodash';
+
 @Injectable({
   providedIn: 'root'
 })
 export class TagCrudService {
   adminref: any = firebase.firestore();
 
-  constructor(private titlecasePipe: TitleCasePipe, private commonService: CommonCrudService) { }
+  uid: any;
+  orgId: any;
+
+  public _tags = new BehaviorSubject<any[]>([]);
+  public dataStore:{ tags: any } = { tags: [] };
+  readonly connections = this._tags.asObservable();
+
+  public _country = new BehaviorSubject<any[]>([]);
+  public countrydataStore:{ country: any } = { country: [] };
+  readonly connections1 = this._country.asObservable();
+
+  constructor(private titlecasePipe: TitleCasePipe, private commonService: CommonCrudService, private restApiService: RestApiService) {
+    
+  //this.uid = this.cookieService.getCookie('uid');
+  this.orgId = localStorage.getItem('org_id');
+  if(this.orgId=='') {
+    this.tagsList('tags');
+  } else {
+    this.tagsList('tagsbyorg/'+this.orgId+'');
+  }
+    
+    this.getCountryCodeListAPI('countries');
+   }
+
+  private handleError(error: HttpErrorResponse) {
+    const message = get(error, 'message') || 'Something bad happened; please try again later.';
+    return throwError(message);
+  }
+  
+  tagsList( url ){
+    this.restApiService.lists(url).subscribe((data: any) => {
+      console.log('---data----', data)
+      this.dataStore.tags = data;
+      this._tags.next(Object.assign({}, this.dataStore).tags);
+      // console.log(this.dataStore);
+
+    },
+      catchError(this.handleError)
+    );
+  }
+
+  getCountryCodeListAPI(url)
+  {
+    this.restApiService.lists(url).subscribe((data: any) => {
+      console.log('---data----', data)
+      this.countrydataStore.country = data;
+      this._country.next(Object.assign({}, this.countrydataStore).country);
+      // console.log(this.dataStore);
+
+    },
+      catchError(this.handleError)
+    );
+  }
+
+
   async createTag(createTagObj: any) {
     try {
       const collectionName = "Tags";

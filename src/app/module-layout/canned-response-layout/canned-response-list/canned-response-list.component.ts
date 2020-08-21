@@ -16,6 +16,8 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { CannedResponseCrudService } from '../canned-response-crud.service';
+
 @Component({
   selector: 'app-canned-response-list',
   templateUrl: './canned-response-list.component.html',
@@ -38,7 +40,7 @@ export class CannedResponseListComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient) { }
+  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient, private cannedresponseCrudService: CannedResponseCrudService) { }
 
   ngOnInit() { 
 
@@ -53,7 +55,29 @@ export class CannedResponseListComponent implements OnInit {
   }
  
   async getCannedResponsesAPI(){
+
     
+    if( this.cannedresponseCrudService.dataStore.cannedresponses.length > 0)
+    {
+      console.log('---tags length----', this.cannedresponseCrudService.dataStore.cannedresponses)
+
+      this.getAllCannedResponseData = this.cannedresponseCrudService.dataStore.cannedresponses;
+      this.data = this.getAllCannedResponseData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getCannedResponsesAPI() }, 1000);
+    }
+
+
+
+    
+    /*
     console.log(this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
@@ -86,7 +110,7 @@ export class CannedResponseListComponent implements OnInit {
       console.log(this.data);
      
     });
-
+    */
   }
  
   listCannedResponses(){
