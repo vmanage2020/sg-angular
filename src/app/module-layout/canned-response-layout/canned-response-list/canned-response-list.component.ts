@@ -40,10 +40,12 @@ export class CannedResponseListComponent implements OnInit {
   uid: any;
   orgId: any;
 
+  reloading = true;
+
   constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient, private cannedresponseCrudService: CannedResponseCrudService) { }
 
   ngOnInit() { 
-
+    this.cannedresponseCrudService.dataStore.cannedresponses = [];
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
     this.getCannedResponsesAPI();  
@@ -71,7 +73,13 @@ export class CannedResponseListComponent implements OnInit {
 
     }else {
 
-      setTimeout(() => { this.getCannedResponsesAPI() }, 1000);
+      if(this.reloading==true) {
+        console.log("reloading");
+        this.reloading=false;
+        setTimeout(() => { this.getCannedResponsesAPI(); }, 1000);
+      }
+      
+      
     }
 
 

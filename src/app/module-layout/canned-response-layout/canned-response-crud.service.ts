@@ -36,6 +36,7 @@ export class CannedResponseCrudService {
      
   //this.uid = this.cookieService.getCookie('uid');
   this.orgId = localStorage.getItem('org_id');
+  console.log(this.orgId);
   if(this.orgId=='') {
     this.cannedresponsesList('cannedresponse');
   } else {

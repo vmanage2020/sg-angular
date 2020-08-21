@@ -23,7 +23,7 @@ import { SharedService } from './shared/shared.service';
 import { SharedModule } from './shared/shared.module';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
- 
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger'; 
 
 @NgModule({
   declarations: [
@@ -41,7 +41,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     //   databaseURL: '',
     // }),
     AngularFirestoreModule,
-    AngularFireAuthModule 
+    AngularFireAuthModule,
+    LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR})  
   ],
   providers: [
     // {provide: LocationStrategy, useClass: HashLocationStrategy},

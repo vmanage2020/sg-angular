@@ -16,12 +16,13 @@ import { HttpClient } from '@angular/common/http';
 
 import { SportsCrudService } from '../sports-crud.service';
 
-
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-sports-list',
   templateUrl: './sports-list.component.html',
-  styleUrls: ['./sports-list.component.scss']
+  styleUrls: ['./sports-list.component.scss'],
+  providers: [NGXLogger]
 })
 export class SportsListComponent implements OnInit {
 
@@ -41,7 +42,8 @@ export class SportsListComponent implements OnInit {
     private notification: NgiNotificationService, 
     @Inject(DOCUMENT) private _document: Document, 
     private restApiService: RestApiService, 
-    private http:HttpClient) { }
+    private http:HttpClient,
+    private logger: NGXLogger) { }
 
   ngOnInit() {
   this.getSportMetaAPI();  
@@ -54,11 +56,11 @@ export class SportsListComponent implements OnInit {
 
  
   async getSportMetaAPI(){
- 
+    this.logger.debug('Sports List API Start Here====>', new Date().toUTCString());
     if( this.sportsCrudService.dataStore.sports.length > 0)
     {
       console.log('---sports length----', this.sportsCrudService.dataStore.sports)
-
+      this.logger.debug('Sports List API End Here====>', new Date().toUTCString());
       this.getAllSportmetaData = this.sportsCrudService.dataStore.sports;
       this.data = this.getAllSportmetaData;
       setTimeout(() => {
