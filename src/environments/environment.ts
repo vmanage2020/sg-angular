@@ -1,6 +1,8 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+// api: "http://13.229.116.53:3000/",
+// api: "http://13.250.46.60:3000/",
 
 export const environment = { 
   api: "http://13.229.116.53:3000/",
