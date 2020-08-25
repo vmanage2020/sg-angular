@@ -75,10 +75,11 @@ export class CannedResponseListComponent implements OnInit {
 
     }else {
  
-      setTimeout(() => { this.getCannedResponsesAPI(); }, 1000);
+      setTimeout(() => { this.getCannedResponsesAPI();
+        this.loading = false;
+        this.displayLoader = false; 
+       }, 1000);
       
-      this.loading = false;
-      this.displayLoader = false; 
     }
 
 

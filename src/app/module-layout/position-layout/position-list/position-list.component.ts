@@ -65,9 +65,11 @@ export class PositionListComponent implements OnInit {
 
     }else {
 
-      setTimeout(() => { this.getPositionMetaAPI() }, 1000);
-      this.loading = false;
-      this.displayLoader = false;
+      setTimeout(() => { this.getPositionMetaAPI()
+        this.loading = false;
+        this.displayLoader = false;
+       }, 1000);
+     
     }
 
 

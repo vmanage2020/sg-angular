@@ -71,9 +71,11 @@ export class SportsListComponent implements OnInit {
 
     }else {
 
-      setTimeout(() => { this.getSportMetaAPI() }, 1000);
-      this.loading = false;
-      this.displayLoader = false;
+      setTimeout(() => { this.getSportMetaAPI() 
+        this.loading = false;
+        this.displayLoader = false;
+      }, 1000);
+      
     }
 
    /* 

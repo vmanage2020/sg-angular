@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 import { Router } from '@angular/router';
+
 import { ActivatedRoute } from '@angular/router';
 
 import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
@@ -17,10 +18,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { CoachMetaService } from '../coachmeta-service';
+
+import { NGXLogger } from 'ngx-logger';
+
   @Component({
     selector: 'app-coachmeta-edit',
     templateUrl: './coachmeta-edit.component.html',
-    styleUrls: ['./coachmeta-edit.component.scss']
+    styleUrls: ['./coachmeta-edit.component.scss'],
+    providers: [NGXLogger]
   })
   export class CoachmetaEditComponent implements OnInit {
   
@@ -64,7 +70,16 @@ import { HttpClient } from '@angular/common/http';
     submitted = false;
     editplayermetaForm: FormGroup;
   
-    constructor(private router: Router,private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+    constructor(
+      private router: Router,
+      private route: ActivatedRoute, 
+      private formBuilder: FormBuilder,
+      public cookieService: CookieService, 
+      private notification: NgiNotificationService, 
+      private restApiService: RestApiService, 
+      private http:HttpClient, 
+      private coachCrudService:CoachMetaService,
+      private logger: NGXLogger) { 
       this.editForm(); 
    }
   
@@ -88,6 +103,7 @@ import { HttpClient } from '@angular/common/http';
   
   
     ngOnInit() { 
+      this.orgId = localStorage.getItem('org_id');
       this.getPlayerMetaAPI();  
       this.getSportsAPI();  
       this.getTypesAPI();  
@@ -138,7 +154,28 @@ import { HttpClient } from '@angular/common/http';
     }
    
     async getSportsAPI(){
-      
+     
+      this.logger.debug('Sports Master API Start Here====>', new Date().toUTCString());
+      if( this.coachCrudService.sportsdataStore.sports.length > 0)
+      {
+        //console.log('---sports length----', this.coachCrudService.dataStore.sports)
+        this.logger.debug('Sports Master API End Here====>', new Date().toUTCString());
+        this.getAllSportmetaData = this.coachCrudService.sportsdataStore.sports;
+        this.data = this.getAllSportmetaData;
+        setTimeout(() => {
+          this.dtTrigger.next();
+        });
+        this.loading = false;
+        this.displayLoader = false;  
+
+      }else {
+
+        setTimeout(() => { this.getSportsAPI() }, 1000);
+        this.loading = false;
+        this.displayLoader = false;
+      }
+  
+      /*
       let Metaurl='sports';
      
       this.restApiService.lists(Metaurl).subscribe( lists => {
@@ -158,7 +195,8 @@ import { HttpClient } from '@angular/common/http';
         console.log(this.getAllSportmetaData);
         
       });
-  
+      */
+
     } 
    
     async getTypesAPI(){
@@ -247,13 +285,30 @@ import { HttpClient } from '@angular/common/http';
       "is_active": false,
       "is_deleted": false,
     }
-       
+    
+     this.logger.debug('Coach Meta Create API Start Here====>', new Date().toUTCString());                   
+
      let Metaurl='coachcustomfield/'+this.resourceID;
      
      this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
        {
-             
-         console.log(data);
+         
+       this.logger.debug('Coach Meta Create API End Here====>', new Date().toUTCString());          
+       //console.log(data);
+
+       this.coachCrudService.dataStore.coachs = [];
+       let Metaurl= '';
+       if(this.orgId=='') {
+       Metaurl='coachcustomfield';
+       } else {
+       Metaurl='coachcustomfieldbyorg/'+this.orgId;
+       }
+       this.coachCrudService.coachsList(Metaurl);
+       //this.coachCrudService.dataStore.coachs.push(data);
+       //this.coachCrudService.dataStore.coachs = [data].concat(this.coachCrudService.dataStore.coachs);
+       //this.coachCrudService._coachs.next(Object.assign({}, this.coachCrudService.dataStore).coachs);
+
+
          this.router.navigate(['/coachmeta']);
          this.notification.isNotification(true, "Coach Meta Data", "Coach Meta has been updated successfully.", "check-square");
          

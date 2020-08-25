@@ -1,15 +1,106 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpHeaderResponse } from '@angular/common/http';
+import { Observable, of, Subject, throwError, BehaviorSubject } from "rxjs";
+import { retry, catchError, tap, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { AngularFirestore } from '@angular/fire/firestore';
+
 import * as firebase from 'firebase';
 import { TitleCasePipe } from '@angular/common';
 import * as moment from 'moment';
 import { element } from 'protractor';
+
+import { RestApiService } from '../../shared/rest-api.services';
+import { get } from 'lodash';
+
 @Injectable({
   providedIn: 'root'
 })
 
 export class SeasonCrudService {
+  
   adminref: any = firebase.firestore();
-  constructor(private titlecasePipe: TitleCasePipe, ) { }
+  value: any = [];
+
+  uid: any;
+  orgId: any;
+
+  public _seasons = new BehaviorSubject<any[]>([]);
+  public dataStore:{ seasons: any } = { seasons: [] };
+  readonly connections = this._seasons.asObservable();
+
+  public _sports = new BehaviorSubject<any[]>([]);
+  public sportsdataStore:{ sports: any } = { sports: [] };
+  readonly sportsconnections = this._sports.asObservable();
+
+  public _country = new BehaviorSubject<any[]>([]);
+  public countrydataStore:{ country: any } = { country: [] };
+  readonly connections1 = this._country.asObservable();
+
+  constructor(private titlecasePipe: TitleCasePipe, private restApiService: RestApiService) { 
+    this.orgId = localStorage.getItem('org_id');
+    console.log('orgId',this.orgId);
+    let Metaurl= '';
+    if(this.orgId=='') {
+      Metaurl='seasons';
+    } else {
+      Metaurl='seasonsbyorg/'+this.orgId;
+    }
+    console.log('Metaurl',Metaurl);
+    this.seasonsList(Metaurl);
+    //this.getCountryCodeListAPI('countries');
+    this.getSportsListAPI('sports');
+ }
+
+ 
+
+private handleError(error: HttpErrorResponse) {
+const message = get(error, 'message') || 'Something bad happened; please try again later.';
+return throwError(message);
+}
+
+seasonsList( url ){
+this.restApiService.lists(url).subscribe((data: any) => {
+  //console.log('---data----', data)
+  this.dataStore.seasons = data.reverse();
+  this._seasons.next(Object.assign({}, this.dataStore).seasons);
+  // console.log(this.dataStore);
+
+},
+  catchError(this.handleError)
+);
+}
+
+
+getSportsListAPI(url)
+{
+this.restApiService.lists(url).subscribe((data: any) => {
+  //console.log('---data----', data)
+  this.sportsdataStore.sports = data;
+  this._sports.next(Object.assign({}, this.sportsdataStore).sports);
+  // console.log(this.dataStore);
+
+},
+  catchError(this.handleError)
+);
+}
+
+getCountryCodeListAPI(url)
+{
+this.restApiService.lists(url).subscribe((data: any) => {
+  //console.log('---data----', data)
+  this.countrydataStore.country = data;
+  this._country.next(Object.assign({}, this.countrydataStore).country);
+  // console.log(this.dataStore);
+
+},
+  catchError(this.handleError)
+);
+}
+
+
+
+
   async createSeason(createSeasonObj: any) {
     try {
       const seasonObj = JSON.parse(JSON.stringify(createSeasonObj));

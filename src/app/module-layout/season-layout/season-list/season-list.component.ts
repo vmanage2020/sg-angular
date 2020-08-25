@@ -16,10 +16,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { SeasonCrudService } from '../season-crud.service';
+
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-season-list',
   templateUrl: './season-list.component.html',
-  styleUrls: ['./season-list.component.scss']
+  styleUrls: ['./season-list.component.scss'],
+  providers: [NGXLogger]
 })
 export class SeasonListComponent implements OnInit {
 
@@ -37,7 +42,15 @@ export class SeasonListComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient) { }
+  constructor(
+    private router: Router, 
+    private notification: NgiNotificationService, 
+    @Inject(DOCUMENT) private _document: Document,
+    public cookieService: CookieService, 
+    private restApiService: RestApiService, 
+    private http:HttpClient, 
+    private seasonCrudService:SeasonCrudService,
+    private logger: NGXLogger) { }
 
   ngOnInit() { 
     this.uid = this.cookieService.getCookie('uid');
@@ -51,7 +64,30 @@ export class SeasonListComponent implements OnInit {
   }
 
   async getSeasonsAPI(){
-   
+       
+    this.logger.debug('Season Master API Start Here====>', new Date().toUTCString());
+    if( this.seasonCrudService.dataStore.seasons.length > 0)
+    {
+      console.log('---Season length----', this.seasonCrudService.dataStore.seasons)
+      this.logger.debug('Season Master API End Here====>', new Date().toUTCString());
+      this.getAllSeasonsData = this.seasonCrudService.dataStore.seasons;
+      this.data = this.getAllSeasonsData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getSeasonsAPI()
+        this.loading = false;
+        this.displayLoader = false;
+      }, 1000);
+
+    }
+
+    /*
     console.log('orgId',this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
@@ -87,6 +123,7 @@ export class SeasonListComponent implements OnInit {
       console.log(this.data);
  
     });
+    */
 
   }
  
@@ -111,13 +148,30 @@ export class SeasonListComponent implements OnInit {
     try {
       this.notification.isConfirmation('', '', 'Seasons Data', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
-          console.log("yes");
+          //console.log("yes");
           
+          this.logger.debug('Season Delete API End Here====>', new Date().toUTCString());    
+
           let Metaurl='seasons/'+resourceId;
         
-         this.restApiService.remove(Metaurl).subscribe(data=> 
+          this.restApiService.remove(Metaurl).subscribe(data=> 
            {
-              console.log(data);
+            this.logger.debug('Season Delete API End Here====>', new Date().toUTCString());          
+            //console.log(data);
+    
+            this.seasonCrudService.dataStore.seasons = [];
+            let Metaurl= '';
+            if(this.orgId=='') {
+              Metaurl='seasons';
+            } else {
+              Metaurl='seasonsbyorg/'+this.orgId;
+            }
+            this.seasonCrudService.seasonsList(Metaurl);
+            //this.playerCrudService.dataStore.players.push(data);
+            //this.playerCrudService.dataStore.players = [data].concat(this.playerCrudService.dataStore.players);
+            //this.playerCrudService._players.next(Object.assign({}, this.playerCrudService.dataStore).players);
+
+
               this.notification.isNotification(true, "Seasons Data", "Seasons Data has been deleted successfully.", "check-square");
               this.refreshPage();
            },

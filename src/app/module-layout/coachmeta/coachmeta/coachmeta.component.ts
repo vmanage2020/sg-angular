@@ -14,10 +14,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { CoachMetaService } from '../coachmeta-service';
+
+import { NGXLogger } from 'ngx-logger';
+
   @Component({
     selector: 'app-coachmeta',
     templateUrl: './coachmeta.component.html',
-    styleUrls: ['./coachmeta.component.scss']
+    styleUrls: ['./coachmeta.component.scss'],
+    providers: [NGXLogger]
   })
   export class CoachmetaComponent implements OnInit {
    
@@ -35,9 +40,17 @@ import { HttpClient } from '@angular/common/http';
     uid: any;
     orgId: any;
 
-    constructor(private router: Router,private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient) { }
+    constructor(
+      private router: Router,
+      private notification: NgiNotificationService, 
+      @Inject(DOCUMENT) private _document: Document, 
+      private restApiService: RestApiService, 
+      private http:HttpClient, 
+      private coachCrudService:CoachMetaService,
+      private logger: NGXLogger) { }
   
     ngOnInit() { 
+      this.orgId = localStorage.getItem('org_id');
       this.getPlayerMetaAPI();  
       this.dtOptions = {
         pagingType: 'full_numbers',
@@ -47,7 +60,30 @@ import { HttpClient } from '@angular/common/http';
     }
      
   async getPlayerMetaAPI(){
-    
+    console.log('---Coach length----', this.coachCrudService.dataStore.coachs.length)
+    this.logger.debug('Coach Master API Start Here====>', new Date().toUTCString());
+    if( this.coachCrudService.dataStore.coachs.length > 0)
+    {
+      //console.log('---sports length----', this.playerCrudService.dataStore.sports.length)
+      this.logger.debug('Coach Master API End Here====>', new Date().toUTCString());
+      this.getAllPlayermetaData = this.coachCrudService.dataStore.coachs;
+      this.data = this.getAllPlayermetaData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getPlayerMetaAPI() 
+      this.loading = false;
+      this.displayLoader = false;
+      }, 1000);
+      
+    }
+
+    /*
     console.log('orgId',this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
@@ -82,7 +118,7 @@ import { HttpClient } from '@angular/common/http';
       console.log(this.data);
        
     });
-
+    */
   }
    
     listCoachmeta(){
@@ -106,13 +142,30 @@ import { HttpClient } from '@angular/common/http';
       try {
         this.notification.isConfirmation('', '', 'Coach Custom Meta Field', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
           if (dataIndex[0]) {
-            console.log("yes");
-             
+          //console.log("yes");
+
+          this.logger.debug('Coach Meta Delete API Start Here====>', new Date().toUTCString());  
+
          let Metaurl='coachcustomfield/'+resourceId;
          
          this.restApiService.remove(Metaurl).subscribe(data=> 
            {
-              console.log(data);
+            this.logger.debug('Coach Meta Delete API End Here====>', new Date().toUTCString());          
+            //console.log(data);
+    
+            this.coachCrudService.dataStore.coachs = [];
+            let Metaurl= '';
+            if(this.orgId=='') {
+            Metaurl='coachcustomfield';
+            } else {
+            Metaurl='coachcustomfieldbyorg/'+this.orgId;
+            }
+            this.coachCrudService.coachsList(Metaurl);
+            //this.coachCrudService.dataStore.coachs.push(data);
+            //this.coachCrudService.dataStore.coachs = [data].concat(this.coachCrudService.dataStore.coachs);
+            //this.coachCrudService._coachs.next(Object.assign({}, this.coachCrudService.dataStore).coachs);
+
+
               this.notification.isNotification(true, "Coach Custom Field", "Custom Field has been deleted successfully.", "check-square");
               this.refreshPage();
            },

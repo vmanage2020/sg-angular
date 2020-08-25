@@ -14,10 +14,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { PlayerMetaService } from '../playermeta-service';
+
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-playermeta',
   templateUrl: './playermeta.component.html',
-  styleUrls: ['./playermeta.component.scss']
+  styleUrls: ['./playermeta.component.scss'],
+  providers: [NGXLogger]
 })
 export class PlayermetaComponent implements OnInit {
 
@@ -35,9 +40,16 @@ export class PlayermetaComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router,private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient) { }
+  constructor(private router: Router,
+    private notification: NgiNotificationService, 
+    @Inject(DOCUMENT) private _document: Document, 
+    private restApiService: RestApiService, 
+    private http:HttpClient, 
+    private playerCrudService:PlayerMetaService,
+    private logger: NGXLogger) { }
 
   ngOnInit() { 
+    this.orgId = localStorage.getItem('org_id');
     this.getPlayerMetaAPI();  
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -47,7 +59,30 @@ export class PlayermetaComponent implements OnInit {
   }
  
   async getPlayerMetaAPI(){
-    
+    console.log('---players length----', this.playerCrudService.dataStore.players.length)
+    this.logger.debug('Player Master API Start Here====>', new Date().toUTCString());
+    if( this.playerCrudService.dataStore.players.length > 0)
+    {
+      //console.log('---sports length----', this.playerCrudService.dataStore.sports)
+      this.logger.debug('Player Master API End Here====>', new Date().toUTCString());
+      this.getAllPlayermetaData = this.playerCrudService.dataStore.players;
+      this.data = this.getAllPlayermetaData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getPlayerMetaAPI()
+        this.loading = false;
+        this.displayLoader = false;
+      }, 1000);
+      
+    }
+
+    /*
     console.log('orgId',this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
@@ -82,6 +117,7 @@ export class PlayermetaComponent implements OnInit {
       console.log(this.data);
        
     });
+    */
 
   }
  
@@ -106,13 +142,31 @@ export class PlayermetaComponent implements OnInit {
     try {
       this.notification.isConfirmation('', '', 'Player Custom Meta Field', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
-          console.log("yes");
-           
+         //console.log("yes");
+         
+         this.logger.debug('Player Meta Delete API Start Here====>', new Date().toUTCString());          
+
          let Metaurl='playermetadata/'+resourceId;
         
          this.restApiService.remove(Metaurl).subscribe(data=> 
            {
-              console.log(data);
+              
+            this.logger.debug('Player Meta Delete API End Here====>', new Date().toUTCString());          
+            //console.log(data);
+    
+            this.playerCrudService.dataStore.players = [];
+            let Metaurl= '';
+            if(this.orgId=='') {
+            Metaurl='playermetadata';
+            } else {
+            Metaurl='playermetadatabyorg/'+this.orgId;
+            }
+            this.playerCrudService.playersList(Metaurl);
+            //this.playerCrudService.dataStore.players.push(data);
+            //this.playerCrudService.dataStore.players = [data].concat(this.playerCrudService.dataStore.players);
+            //this.playerCrudService._players.next(Object.assign({}, this.playerCrudService.dataStore).players);
+
+
               this.notification.isNotification(true, "Player Custom Field", "Custom Field has been deleted successfully.", "check-square");
               this.refreshPage();
            },

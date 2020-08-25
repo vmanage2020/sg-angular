@@ -14,10 +14,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { ManagerMetaService } from '../managermeta-service';
+
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-managermeta',
   templateUrl: './managermeta.component.html',
-  styleUrls: ['./managermeta.component.scss']
+  styleUrls: ['./managermeta.component.scss'],
+  providers: [NGXLogger]
 })
 export class ManagermetaComponent implements OnInit {
  
@@ -35,9 +40,17 @@ export class ManagermetaComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router,private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient) { }
+  constructor(
+    private router: Router,
+    private notification: NgiNotificationService, 
+    @Inject(DOCUMENT) private _document: Document, 
+    private restApiService: RestApiService, 
+    private http:HttpClient, 
+    private managerCrudService:ManagerMetaService,
+    private logger: NGXLogger) { }
 
   ngOnInit() { 
+    this.orgId = localStorage.getItem('org_id');
     this.getPlayerMetaAPI();  
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -47,7 +60,30 @@ export class ManagermetaComponent implements OnInit {
   }
  
   async getPlayerMetaAPI(){
-    
+    console.log('---manager length----', this.managerCrudService.dataStore.managers.length)
+    this.logger.debug('Manager Master API Start Here====>', new Date().toUTCString());
+    if( this.managerCrudService.dataStore.managers.length > 0)
+    {
+      //console.log('---manager length----', this.managerCrudService.dataStore.managers)
+      this.logger.debug('Manager Master API End Here====>', new Date().toUTCString());
+      this.getAllPlayermetaData = this.managerCrudService.dataStore.managers;
+      this.data = this.getAllPlayermetaData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getPlayerMetaAPI()
+        this.loading = false;
+        this.displayLoader = false;
+      }, 1000);
+      
+    }
+ 
+    /*
     console.log('orgId',this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
@@ -82,6 +118,7 @@ export class ManagermetaComponent implements OnInit {
       console.log(this.data);
        
     });
+    */
 
   }
  
@@ -106,13 +143,30 @@ export class ManagermetaComponent implements OnInit {
     try {
       this.notification.isConfirmation('', '', 'Manager Custom Meta Field', ' Are you sure to delete ' + resourceName + ' ?', 'question-circle', 'Yes', 'No', 'custom-ngi-confirmation-wrapper').then(async (dataIndex) => {
         if (dataIndex[0]) {
-          console.log("yes");
+          //console.log("yes");
            
+          this.logger.debug('Manager Meta Delete API Start Here====>', new Date().toUTCString());          
           let Metaurl='managercustomfield/'+resourceId;
           
          this.restApiService.remove(Metaurl).subscribe(data=> 
            {
-              console.log(data);
+              
+            this.logger.debug('Manager Meta Delete API End Here====>', new Date().toUTCString());          
+            //console.log(data);
+    
+            this.managerCrudService.dataStore.managers = [];
+            let Metaurl= '';
+            if(this.orgId=='') {
+            Metaurl='managercustomfield';
+            } else {
+            Metaurl='managercustomfieldbyorg/'+this.orgId;
+            }
+            this.managerCrudService.managersList(Metaurl);
+            //this.managerCrudService.dataStore.managers.push(data);
+            //this.managerCrudService.dataStore.managers = [data].concat(this.managerCrudService.dataStore.managers);
+            //this.managerCrudService._managers.next(Object.assign({}, this.managerCrudService.dataStore).managers);
+
+
               this.notification.isNotification(true, "Manager Custom Field", "Custom Field has been deleted successfully.", "check-square");
               this.refreshPage();
            },

@@ -16,10 +16,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
   
+import { ManagerMetaService } from '../managermeta-service';
+
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-managermeta-create',
   templateUrl: './managermeta-create.component.html',
-  styleUrls: ['./managermeta-create.component.scss']
+  styleUrls: ['./managermeta-create.component.scss'],
+  providers: [NGXLogger]
 })
 export class ManagermetaCreateComponent implements OnInit {
 
@@ -60,7 +65,15 @@ export class ManagermetaCreateComponent implements OnInit {
     submitted = false;
     createplayermetaForm: FormGroup;
   
-    constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+    constructor(
+      private router: Router, 
+      private formBuilder: FormBuilder,
+      public cookieService: CookieService, 
+      private notification: NgiNotificationService, 
+      private restApiService: RestApiService, 
+      private http:HttpClient, 
+      private managerCrudService:ManagerMetaService,
+      private logger: NGXLogger) { 
        this.createForm(); 
     }
     
@@ -83,6 +96,7 @@ export class ManagermetaCreateComponent implements OnInit {
     
   
     ngOnInit() {
+      this.orgId = localStorage.getItem('org_id');
       this.getSportsAPI();  
       this.getTypesAPI();  
       this.is_required_value = false;
@@ -95,6 +109,28 @@ export class ManagermetaCreateComponent implements OnInit {
     
     async getSportsAPI(){
       
+      
+    this.logger.debug('Sports Master API Start Here====>', new Date().toUTCString());
+    if( this.managerCrudService.sportsdataStore.sports.length > 0)
+    {
+      //console.log('---sports length----', this.managerCrudService.sportsdataStore.sports)
+      this.logger.debug('Sports Master API End Here====>', new Date().toUTCString());
+      this.getAllSportmetaData = this.managerCrudService.sportsdataStore.sports;
+      this.data = this.getAllSportmetaData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getSportsAPI() }, 1000);
+      this.loading = false;
+      this.displayLoader = false;
+    }
+
+      /*
       let Metaurl='sports';
      
       this.restApiService.lists(Metaurl).subscribe( lists => {
@@ -114,7 +150,7 @@ export class ManagermetaCreateComponent implements OnInit {
         console.log(this.getAllSportmetaData);
         
       });
-  
+      */
     } 
    
     async getTypesAPI(){
@@ -185,13 +221,29 @@ export class ManagermetaCreateComponent implements OnInit {
           "is_deleted": false,
       }
   
-      
+      this.logger.debug('Manager Meta Delete API Start Here====>', new Date().toUTCString());          
+          
        let Metaurl='managercustomfield';
       
        this.restApiService.create(Metaurl,insertObj).subscribe(data=> 
          {
                
-           console.log(data);
+          this.logger.debug('Manager Meta Delete API End Here====>', new Date().toUTCString());          
+          //console.log(data);
+  
+          this.managerCrudService.dataStore.managers = [];
+          let Metaurl= '';
+          if(this.orgId=='') {
+          Metaurl='managercustomfield';
+          } else {
+          Metaurl='managercustomfieldbyorg/'+this.orgId;
+          }
+          this.managerCrudService.managersList(Metaurl);
+          //this.managerCrudService.dataStore.managers.push(data);
+          //this.managerCrudService.dataStore.managers = [data].concat(this.managerCrudService.dataStore.managers);
+          //this.managerCrudService._managers.next(Object.assign({}, this.managerCrudService.dataStore).managers);
+
+
            this.router.navigate(['/managermeta']);
            this.notification.isNotification(true, "Manager Meta Data", "Manager Meta has been added successfully.", "check-square");
  

@@ -71,9 +71,11 @@ export class TagListComponent implements OnInit {
 
     }else {
 
-      setTimeout(() => { this.getTagsAPI() }, 1000);
-      this.loading = false;
-      this.displayLoader = false;
+      setTimeout(() => { this.getTagsAPI()
+        this.loading = false;
+        this.displayLoader = false;
+      }, 1000);
+      
     }
 
 

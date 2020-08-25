@@ -17,10 +17,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { PlayerMetaService } from '../playermeta-service';
+
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-playermeta-edit',
   templateUrl: './playermeta-edit.component.html',
-  styleUrls: ['./playermeta-edit.component.scss']
+  styleUrls: ['./playermeta-edit.component.scss'],
+  providers: [NGXLogger]
 })
 export class PlayermetaEditComponent implements OnInit {
 
@@ -64,7 +69,16 @@ export class PlayermetaEditComponent implements OnInit {
   submitted = false;
   editplayermetaForm: FormGroup;
 
-  constructor(private router: Router,private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute, 
+    private formBuilder: FormBuilder,
+    public cookieService: CookieService, 
+    private notification: NgiNotificationService, 
+    private restApiService: RestApiService, 
+    private http:HttpClient, 
+    private playerCrudService:PlayerMetaService,
+    private logger: NGXLogger) { 
     this.editForm(); 
  }
  
@@ -137,7 +151,30 @@ export class PlayermetaEditComponent implements OnInit {
   }
  
   async getSportsAPI(){
-      
+
+        
+    this.logger.debug('Sports Master API Start Here====>', new Date().toUTCString());
+    if( this.playerCrudService.sportsdataStore.sports.length > 0)
+    {
+      //console.log('---sports length----', this.playerCrudService.dataStore.sports)
+      this.logger.debug('Sports Master API End Here====>', new Date().toUTCString());
+      this.getAllSportmetaData = this.playerCrudService.sportsdataStore.sports;
+      this.data = this.getAllSportmetaData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getSportsAPI() }, 1000);
+      this.loading = false;
+      this.displayLoader = false;
+    }
+
+
+    /*  
     let Metaurl='sports';
     
     this.restApiService.lists(Metaurl).subscribe( lists => {
@@ -157,6 +194,7 @@ export class PlayermetaEditComponent implements OnInit {
       console.log(this.getAllSportmetaData);
       
     });
+    */
 
   } 
   
@@ -250,12 +288,29 @@ export class PlayermetaEditComponent implements OnInit {
   }
     
   
+   this.logger.debug('Player Meta Update API Start Here====>', new Date().toUTCString()); 
+
    let Metaurl='playermetadata/'+this.resourceID;
   
    this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
      {
            
-       console.log(data);
+      this.logger.debug('Player Meta Update API End Here====>', new Date().toUTCString());          
+      //console.log(data);
+
+      this.playerCrudService.dataStore.players = [];
+      let Metaurl= '';
+      if(this.orgId=='') {
+      Metaurl='playermetadata';
+      } else {
+      Metaurl='playermetadatabyorg/'+this.orgId;
+      }
+      this.playerCrudService.playersList(Metaurl);
+      //this.playerCrudService.dataStore.positions.push(data);
+      //this.playerCrudService.dataStore.positions = [data].concat(this.playerCrudService.dataStore.positions);
+      //this.playerCrudService._positions.next(Object.assign({}, this.playerCrudService.dataStore).positions);
+      
+
        this.router.navigate(['/playermeta']);
        this.notification.isNotification(true, "Player Meta Data", "Player Meta has been updated successfully.", "check-square");
        

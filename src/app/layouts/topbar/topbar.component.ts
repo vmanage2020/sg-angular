@@ -9,6 +9,14 @@ declare var $scope: any;
 import { apiURL, Constant } from '../../core/services/config';
 import { DropdownService } from '../../core/services/dropdown.service';
 
+
+
+import { PlayerMetaService } from '../../module-layout/playermeta/playermeta-service';
+
+import { CoachMetaService } from '../../module-layout/coachmeta/coachmeta-service';
+
+import { ManagerMetaService } from '../../module-layout/managermeta/managermeta-service';
+
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
@@ -41,6 +49,7 @@ export class TopbarComponent implements OnInit {
   sysSelect = false;
   orgCount: number = 1;
   uid: any;
+  orgId: any;
   sysAdminWithId: boolean = false;
   showMsg = false;
   data: any;
@@ -50,7 +59,9 @@ export class TopbarComponent implements OnInit {
   @Output() mobileMenuButtonClicked = new EventEmitter();
   role: any;
   unAuthorizedActive: boolean = false;
-  constructor(private dropDownService: DropdownService, public sharedService: SharedService, public cookieService: CookieService, private router: Router, private authService: AuthenticationService, public dataService: DataService, ) {
+  constructor(private dropDownService: DropdownService, public sharedService: SharedService, public cookieService: CookieService, private router: Router, private authService: AuthenticationService, public dataService: DataService,
+    private managerCrudService:ManagerMetaService,private coachCrudService:CoachMetaService,private playerCrudService:PlayerMetaService,
+     ) {
     sharedService.missionAnnounced$.subscribe((data: any) => {
       // this.data = data;
       if (data.action === "organizationFilter") {
@@ -217,6 +228,42 @@ export class TopbarComponent implements OnInit {
       localStorage.setItem('org_abbrev', event.abbrev);
     }
     this.showMsg = false;
+
+    /* 
+    this.playerCrudService.dataStore.players.length = 0;
+    this.coachCrudService.dataStore.coachs.length = 0;
+    this.managerCrudService.dataStore.managers.length = 0;
+    */
+
+    
+   this.orgId = localStorage.getItem('org_id');
+    let Metaurl= '';
+    
+    this.playerCrudService.dataStore.players = [];
+    if(this.orgId=='') {
+    Metaurl='playermetadata';
+    } else {
+    Metaurl='playermetadatabyorg/'+this.orgId;
+    }
+    await this.playerCrudService.playersList(Metaurl);
+
+    
+    this.coachCrudService.dataStore.coachs = [];
+    if(this.orgId=='') {
+    Metaurl='coachcustomfield';
+    } else {
+    Metaurl='coachcustomfieldbyorg/'+this.orgId;
+    }
+    await this.coachCrudService.coachsList(Metaurl);
+
+    this.managerCrudService.dataStore.managers = [];
+    if(this.orgId=='') {
+    Metaurl='managercustomfield';
+    } else {
+    Metaurl='managercustomfieldbyorg/'+this.orgId;
+    }
+    await this.managerCrudService.managersList(Metaurl);
+    
     this.router.navigate(['/welcome']);
   }
   /**

@@ -17,10 +17,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { ManagerMetaService } from '../managermeta-service';
+
+import { NGXLogger } from 'ngx-logger';
+
   @Component({
     selector: 'app-managermeta-edit',
     templateUrl: './managermeta-edit.component.html',
-    styleUrls: ['./managermeta-edit.component.scss']
+    styleUrls: ['./managermeta-edit.component.scss'],
+    providers: [NGXLogger]
   })
   export class ManagermetaEditComponent implements OnInit {
   
@@ -64,7 +69,16 @@ import { HttpClient } from '@angular/common/http';
     submitted = false;
     editplayermetaForm: FormGroup;
   
-    constructor(private router: Router,private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+    constructor(
+      private router: Router,
+      private route: ActivatedRoute, 
+      private formBuilder: FormBuilder,
+      public cookieService: CookieService, 
+      private notification: NgiNotificationService, 
+      private restApiService: RestApiService, 
+      private http:HttpClient, 
+      private managerCrudService:ManagerMetaService,
+      private logger: NGXLogger) { 
       this.editForm(); 
    }
   
@@ -88,6 +102,7 @@ import { HttpClient } from '@angular/common/http';
   
   
     ngOnInit() { 
+      this.orgId = localStorage.getItem('org_id');
       this.getPlayerMetaAPI();
       this.getSportsAPI();  
       this.getTypesAPI();  
@@ -139,6 +154,29 @@ import { HttpClient } from '@angular/common/http';
        
     async getSportsAPI(){
       
+      
+      
+    this.logger.debug('Sports Master API Start Here====>', new Date().toUTCString());
+    if( this.managerCrudService.sportsdataStore.sports.length > 0)
+    {
+      //console.log('---sports length----', this.managerCrudService.sportsdataStore.sports)
+      this.logger.debug('Sports Master API End Here====>', new Date().toUTCString());
+      this.getAllSportmetaData = this.managerCrudService.sportsdataStore.sports;
+      this.data = this.getAllSportmetaData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getSportsAPI() }, 1000);
+      this.loading = false;
+      this.displayLoader = false;
+    }
+
+      /*
       let Metaurl='sports';
      
       this.restApiService.lists(Metaurl).subscribe( lists => {
@@ -158,7 +196,7 @@ import { HttpClient } from '@angular/common/http';
         console.log(this.getAllSportmetaData);
         
       });
-  
+      */
     } 
 
     async getTypesAPI(){
@@ -248,14 +286,30 @@ import { HttpClient } from '@angular/common/http';
       "is_deleted": false,
     }
        
+    this.logger.debug('Manager Meta Delete API Start Here====>', new Date().toUTCString());    
 
      let Metaurl='managercustomfield/'+this.resourceID; 
  
      this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
        {
              
-         console.log(data);
-         this.router.navigate(['/managermeta']);
+        this.logger.debug('Manager Meta Delete API End Here====>', new Date().toUTCString());          
+        //console.log(data);
+
+        this.managerCrudService.dataStore.managers = [];
+        let Metaurl= '';
+        if(this.orgId=='') {
+        Metaurl='managercustomfield';
+        } else {
+        Metaurl='managercustomfieldbyorg/'+this.orgId;
+        }
+        this.managerCrudService.managersList(Metaurl);
+        //this.managerCrudService.dataStore.managers.push(data);
+        //this.managerCrudService.dataStore.managers = [data].concat(this.managerCrudService.dataStore.managers);
+        //this.managerCrudService._managers.next(Object.assign({}, this.managerCrudService.dataStore).managers);
+
+
+        this.router.navigate(['/managermeta']);
          this.notification.isNotification(true, "Manager Meta Data", "Manager Meta has been updated successfully.", "check-square");
          
        },
