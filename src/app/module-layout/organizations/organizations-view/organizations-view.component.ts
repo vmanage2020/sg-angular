@@ -14,6 +14,8 @@ import * as moment from 'moment';
 
 import { TitleCasePipe } from '@angular/common';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-organizations-view',
   templateUrl: './organizations-view.component.html',
@@ -47,7 +49,11 @@ export class OrganizationsViewComponent implements OnInit {
   selectedRoles: any = [];
   
   
-  constructor(private router: Router, private route: ActivatedRoute,public cookieService: CookieService, private titlecasePipe: TitleCasePipe,) { }
+  constructor(private router: Router, 
+    private route: ActivatedRoute,
+    public cookieService: CookieService,
+    private restApiService: RestApiService, 
+    private titlecasePipe: TitleCasePipe,) { }
   
 
   ngOnInit() {
@@ -77,70 +83,73 @@ export class OrganizationsViewComponent implements OnInit {
     }
 
     */
-   
-
-    this.getUser = await this.db.collection('/organization').doc(this.resourceID).get();
-
-    if (this.getUser.exists) {
-   
+        //this.getRoles();
+        //this.getPlayers();
+        //this.getGuardians();
+  
+        /*
+        let roles_by_seasons = [];
+      let roleBySeasonInfo = await this.db.collection('/users').doc(this.resourceID).collection('roles_by_season').get();
+      let rolesList: any =  await roleBySeasonInfo.docs.map((doc: any) => doc.data());
       
-
-      //this.getRoles();
-      //this.getPlayers();
-      //this.getGuardians();
-
-      /*
-      let roles_by_seasons = [];
-    let roleBySeasonInfo = await this.db.collection('/users').doc(this.resourceID).collection('roles_by_season').get();
-    let rolesList: any =  await roleBySeasonInfo.docs.map((doc: any) => doc.data());
-    
-    if (rolesList) {
-      rolesList.forEach(element => {
-        if (element !== null) {
-          roles_by_seasons.push(this.titlecasePipe.transform(element.role))
-        }
-      });
-    }
-      */
-      this.getUserData = this.getUser.data();
-
-      
-    console.log(this.getUserData.avatar);
-    if (this.getUserData.avatar==null) {
-      this.getUserData.avatarstatus==1;
-      console.log("getUserData.avatarstatus=1");
-    } else {
-      this.getUserData.avatarstatus==2;
-      console.log("getUserData.avatarstatus=2");
-    }
-
-      console.log(this.getUserData.avatarstatus);
-      console.log(this.getUserData.nationalGoverningOrganizations);
-
-      console.log(this.getUserData.stateGoverningOrganizations);
-      
-
-      this.sportsRef = await this.db.collection('/organization').doc(this.resourceID).collection('/sports').where('isDeleted', '==', false).get();
-      this.sportsRefData =  await this.sportsRef.docs.map((doc: any) => doc.data());
-
-      console.log(this.sportsRefData);
-
-      if (this.sportsRefData) {  
-        let sportsRefValue: any = [];
-          this.sportsRefData.forEach(element => {
-            if (element !== null) {
-              sportsRefValue.push( element.name )
-            }
-          });
-
-        this.getUserData.sportsRef = sportsRefValue;
-      } else {
-        this.getUserData.sportsRef = [];
+      if (rolesList) {
+        rolesList.forEach(element => {
+          if (element !== null) {
+            roles_by_seasons.push(this.titlecasePipe.transform(element.role))
+          }
+        });
       }
+        */
 
-    } else {
-      this.getUserData = [];
-    }
+    this.restApiService.lists('organization/'+this.resourceID).subscribe( res => {
+
+      this.getUserData = res;
+      /* if (this.getUser.exists) {
+   
+        this.getUserData = this.getUser.data();
+  
+        
+      console.log(this.getUserData.avatar);
+      if (this.getUserData.avatar==null) {
+        this.getUserData.avatarstatus==1;
+        console.log("getUserData.avatarstatus=1");
+      } else {
+        this.getUserData.avatarstatus==2;
+        console.log("getUserData.avatarstatus=2");
+      }
+  
+        console.log(this.getUserData.avatarstatus);
+        console.log(this.getUserData.nationalGoverningOrganizations);
+  
+        console.log(this.getUserData.stateGoverningOrganizations);
+        
+  
+        this.sportsRef = await this.db.collection('/organization').doc(this.resourceID).collection('/sports').where('isDeleted', '==', false).get();
+        this.sportsRefData =  await this.sportsRef.docs.map((doc: any) => doc.data());
+  
+        console.log(this.sportsRefData);
+  
+        if (this.sportsRefData) {  
+          let sportsRefValue: any = [];
+            this.sportsRefData.forEach(element => {
+              if (element !== null) {
+                sportsRefValue.push( element.name )
+              }
+            });
+  
+          this.getUserData.sportsRef = sportsRefValue;
+        } else {
+          this.getUserData.sportsRef = [];
+        }
+  
+      } else {
+        this.getUserData = [];
+      } */
+
+    })
+    //this.getUser = await this.db.collection('/organization').doc(this.resourceID).get();
+
+   
     
 
     /*

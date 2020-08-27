@@ -56,10 +56,21 @@
 
                 <div class="form-group mb-3">
                     <label for="state">State<span class="text-danger">*</span></label>
-                    <select class="form-control select2" id="state" name="state" formControlName="state" [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
+                    <!-- <select class="form-control select2" id="state" name="state" formControlName="state" [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
                         <option value="" disabled selected>Select State</option>
-                        <option *ngFor="let Sportdata of getAllSportmetaData let i = index;" value="{{Sportdata.sport_id}}">{{Sportdata.name}}</option>
-                    </select>
+                        <option *ngFor="let Sportdata of getAllStates let i = index;" value="{{Sportdata.sport_id}}">{{Sportdata.name}}</option>
+                    </select> -->
+                    
+
+                    <ng-select [items]="getAllStates"
+                    id="state" name="state" formControlName="state"
+                   bindLabel="name"
+                   bindValue="state_code"
+                   [multiple]="false"
+                   placeholder="Select State"
+                   [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
+                    </ng-select>
+
                     <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
                         <div *ngIf="f.state.errors.required">Sport Name is required.</div>
                     </div>
@@ -76,10 +87,21 @@
  
                 <div class="form-group mb-3">
                     <label for="country_code">Country <span class="text-danger">*</span></label>
-                    <select class="form-control select2" id="country_code" name="country_code" formControlName="country_code" [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
+                   <!--  <select class="form-control select2" id="country_code" name="country_code" formControlName="country_code" [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
                         <option value="" disabled selected>Select Field Type</option>
-                        <option *ngFor="let Typedata of getAllTypemetaData let i = index;">{{Typedata.name}}</option>
-                    </select>
+                        <option *ngFor="let Typedata of getAllCountrymetaData let i = index;">{{Typedata.name}}</option>
+                    </select> -->
+
+                    <ng-select [items]="getAllCountrymetaData"
+                    id="country_code" name="country_code" formControlName="country_code"
+                   bindLabel="name"
+                   bindValue="country_code"
+                   [multiple]="false"
+                   placeholder="Select Country"
+                   (change)="selectedCountry($event)"
+                   [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
+                    </ng-select>
+
                     <div *ngIf="submitted && f.country_code.errors" class="invalid-feedback">
                         <div *ngIf="f.country_code.errors.required">Field Type is required.</div>
                     </div>
@@ -131,7 +153,7 @@
                     <ng-select [items]="getAllSportmetaData"
                     id="sports" name="sports" formControlName="sports"
                    bindLabel="name"
-                   bindValue="id"
+                   bindValue="_id"
                    [multiple]="true"
                    placeholder="Select Sports Offered"
                    (change)="OnSportChange($event,orgCreateForm)"
@@ -148,12 +170,13 @@
                     </div>
                 </div>
 
-                <div class="row" *ngIf="orgCreateForm?.value.sports">
+               
+                <!-- <div class="row" *ngIf="createorganizationForm?.value.sports">
                     <div class="col-12 mt-2 heading">
                       <h4>Governing Body Details</h4>
                     </div>
                   </div>
-                  <div class="row" *ngIf="orgCreateForm?.value.sports">
+                  <div class="row" *ngIf="createorganizationForm?.value.sports">
                     <div class="col-12 mt-2 mb-0 pl-0">
                       <div formArrayName="governing_body_info">
                         <table id="basic-datatable" class="table table-responsive datatables dt-responsive nowrap mb-0">
@@ -168,7 +191,7 @@
                           </thead>
                           <tbody>
                             <tr class="border"
-                              *ngFor="let individualGoverningInfo of orgCreateForm?.get('governing_body_info')?.controls; let governingBodyIndex = index"
+                              *ngFor="let individualGoverningInfo of createorganizationForm?.get('governing_body_info')?.controls; let governingBodyIndex = index"
                               [formGroupName]="governingBodyIndex">
                               <td class="border p-1 pt-2">{{individualGoverningInfo.value.sport_name}}</td>
                               <td class="border p-1 verticalAlign">
@@ -176,14 +199,14 @@
                                   <input type="radio" value="true" (input)="closeErrors('National')"
                                     [id]="individualGoverningInfo.get('is_national_true').value"
                                     formControlName="is_national_governing_organization"
-                                    (click)="getnationalList($event,orgCreateForm,governingBodyIndex,individualGoverningInfo)">
+                                    (click)="getnationalList($event,createorganizationForm,governingBodyIndex,individualGoverningInfo)">
                                   <label [for]="individualGoverningInfo.get('is_national_true').value"> Yes </label>
                                 </div>
                                 <div class="radio  mx-2 form-check-inline">
                                   <input type="radio" value="false" (input)="closeErrors('National')"
                                     [id]="individualGoverningInfo.get('is_national_false').value"
                                     formControlName="is_national_governing_organization"
-                                    (click)="getnationalList($event,orgCreateForm,governingBodyIndex,individualGoverningInfo)">
+                                    (click)="getnationalList($event,createorganizationForm,governingBodyIndex,individualGoverningInfo)">
                                   <label [for]="individualGoverningInfo.get('is_national_false').value"> No </label>
                                 </div>
       
@@ -200,7 +223,7 @@
                                     *ngIf="individualGoverningInfo.get('is_select_dropdown_for_national').value"
                                     bindValue="organization_id" [clearable]="false" id="selectSuffix"
                                     placeholder="Select national governing body organization" name="organization_id"
-                                    (change)="nationalDropdown($event,orgCreateForm,governingBodyIndex)"
+                                    (change)="nationalDropdown($event,createorganizationForm,governingBodyIndex)"
                                     formControlName="national_governing_organization_id">
                                   </ng-select>
                                   <p class="text-center" *ngIf="individualGoverningInfo.get('is_hypen_for_national').value">-
@@ -211,13 +234,13 @@
                                 <div class="radio  mx-2 form-check-inline">
                                   <input type="radio" value="true" [id]="individualGoverningInfo.get('is_state_true').value"
                                     formControlName="is_state_governing_organization" (input)="closeErrors('State')"
-                                    (click)="getstateList($event,orgCreateForm,governingBodyIndex)">
+                                    (click)="getstateList($event,createorganizationForm,governingBodyIndex)">
                                   <label [for]="individualGoverningInfo.get('is_state_true').value"> Yes </label>
                                 </div>
                                 <div class="radio   mx-2 form-check-inline">
                                   <input type="radio" value="false" [id]="individualGoverningInfo.get('is_state_false').value"
                                     formControlName="is_state_governing_organization" (input)="closeErrors('State')"
-                                    (click)="getstateList($event,orgCreateForm,governingBodyIndex)">
+                                    (click)="getstateList($event,createorganizationForm,governingBodyIndex)">
                                   <label [for]="individualGoverningInfo.get('is_state_false').value"> No </label>
                                 </div>
                                 <div
@@ -231,8 +254,8 @@
                                   <ng-select [items]="individualGoverningInfo.get('lov_for_state').value" bindLabel="name"
                                     appendTo="body" *ngIf="individualGoverningInfo.get('is_select_dropdown_for_state').value"
                                     bindValue="organization_id" id="selectSuffix" [loading]="stateGoverning"
-                                    (change)="stateDropdown($event,orgCreateForm,governingBodyIndex)" [clearable]="false"
-                                    [disabled]="!orgCreateForm.value.state && !orgCreateForm.value.country_code"
+                                    (change)="stateDropdown($event,createorganizationForm,governingBodyIndex)" [clearable]="false"
+                                    [disabled]="!createorganizationForm.value.state && !createorganizationForm.value.country_code"
                                     placeholder="Select state governing body organization" name="organization_id"
                                     formControlName="state_governing_organization_id">
                                   </ng-select>
@@ -245,7 +268,7 @@
                       </div>
                     </div>
       
-                  </div>
+                  </div> -->
 
                 <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Primary Contact Details</h5>
 
@@ -276,10 +299,20 @@
  
                 <div class="form-group mb-3">
                     <label for="primary_suffix">Suffix</label>
-                    <select class="form-control select2" id="primary_suffix" name="primary_suffix" formControlName="primary_suffix">
+                    <!-- <select class="form-control select2" id="primary_suffix" name="primary_suffix" formControlName="primary_suffix">
                         <option value="" disabled selected>Select Suffix</option>
                         <option *ngFor="let Typedata of getUserSuffixDataArray let i = index;">{{Typedata.name}}</option>
-                    </select>
+                    </select> -->
+
+                    <ng-select [items]="getUserSuffixDataArray"
+                    id="primary_suffix" name="primary_suffix" formControlName="primary_suffix"
+                   bindLabel="name"
+                   bindValue="id"
+                   [multiple]="false"
+                   placeholder="Select Suffix"
+                   [ngClass]="{ 'is-invalid': submitted && f.primary_suffix.errors }">
+                    </ng-select>
+
                 </div> 
              
                 <div class="form-group mb-3">
@@ -315,10 +348,20 @@
  
                 <div class="form-group mb-3">
                     <label for="secondary_suffix">Suffix</label>
-                    <select class="form-control select2" id="secondary_suffix" name="secondary_suffix" formControlName="secondary_suffix">
+                    <!-- <select class="form-control select2" id="secondary_suffix" name="secondary_suffix" formControlName="secondary_suffix">
                         <option value="" disabled selected>Select Suffix</option>
                         <option *ngFor="let Typedata of getUserSuffixDataArray let i = index;">{{Typedata.name}}</option>
-                    </select>
+                    </select> -->
+
+                    <ng-select [items]="getUserSuffixDataArray"
+                    id="secondary_suffix" name="secondary_suffix" formControlName="secondary_suffix"
+                   bindLabel="name"
+                   bindValue="id"
+                   [multiple]="false"
+                   placeholder="Select Suffix"
+                   [ngClass]="{ 'is-invalid': submitted && f.secondary_suffix.errors }">
+                    </ng-select>
+
                 </div> 
              
                 <div class="form-group mb-3">

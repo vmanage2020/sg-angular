@@ -13,6 +13,8 @@ import { DOCUMENT } from '@angular/common';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
+import { OrganizationsService } from './../organizations.service';
+
 @Component({
   selector: 'app-organizations',
   templateUrl: './organizations.component.html',
@@ -42,7 +44,11 @@ export class OrganizationsComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router,private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService) { }
+  constructor(private router: Router,
+    private notification: NgiNotificationService, 
+    @Inject(DOCUMENT) private _document: Document,
+    private organizationsService: OrganizationsService,
+    public cookieService: CookieService) { }
 
   ngOnInit() {
     this.uid = this.cookieService.getCookie('uid');
@@ -57,7 +63,20 @@ export class OrganizationsComponent implements OnInit {
 
   async getPlayerList(){
 
-    if(this.orgId=='') {
+
+    if(this.organizationsService.orgdataStore.org.length > 0)
+    {
+      console.log('----org----', this.organizationsService.orgdataStore.org)
+      this.data = this.organizationsService.orgdataStore.org;
+      this.dtTrigger.next();
+      this.loading = false;
+      this.displayLoader = false;
+
+    }else{
+      setTimeout(() => { this.getPlayerList() 
+      }, 1000);
+    }
+    /* if(this.orgId=='') {
 
       this.getOrganizationlist = await this.db.collection('organization').get();
    
@@ -75,7 +94,7 @@ export class OrganizationsComponent implements OnInit {
     this.data = this.getOrganizationlistData;
     this.dtTrigger.next();
     this.loading = false;
-    this.displayLoader = false; 
+    this.displayLoader = false;  */
  
   }
 

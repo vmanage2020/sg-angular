@@ -2,14 +2,106 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
 import { TitleCasePipe } from '@angular/common';
+
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpHeaderResponse } from '@angular/common/http';
+import { Observable, of, Subject, throwError, BehaviorSubject } from "rxjs";
+import { retry, catchError, tap, map } from 'rxjs/operators';
+
+import { RestApiService } from '../../shared/rest-api.services';
+import { get } from 'lodash';
+
 @Injectable({
   providedIn: 'root'
 })
 export class OrganizationsService {
 
-  adminref: any = firebase.firestore();
 
-  constructor(private titlecasePipe: TitleCasePipe) { }
+  public _sports = new BehaviorSubject<any[]>([]);
+  public dataStore:{ sports: any } = { sports: [] };
+  readonly connections = this._sports.asObservable();
+
+  public _country = new BehaviorSubject<any[]>([]);
+  public countrydataStore:{ country: any } = { country: [] };
+  readonly connections1 = this._country.asObservable();
+
+  public _state = new BehaviorSubject<any[]>([]);
+  public statedataStore:{ state: any } = { state: [] };
+  readonly connections2 = this._state.asObservable();
+
+  public _org = new BehaviorSubject<any[]>([]);
+  public orgdataStore:{ org: any } = { org: [] };
+  readonly connections3 = this._org.asObservable();
+
+  adminref: any = firebase.firestore();
+  orgId: any;
+
+  constructor(private titlecasePipe: TitleCasePipe, private restApiService: RestApiService) { 
+
+    this.orgId = localStorage.getItem('org_id');
+
+    //if(this.orgId=='') {
+      this.organizationsList('organization');
+    /* }else{
+
+    } */
+
+    
+    
+    this.sportsList('sports');
+    this.statesList('states');
+    this.getCountryCodeListAPI('countries');
+
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    const message = get(error, 'message') || 'Something bad happened; please try again later.';
+    return throwError(message);
+  }
+
+  organizationsList(url)
+  {
+    this.restApiService.lists(url).subscribe((data: any) => {
+      this.orgdataStore.org = data;
+      this._org.next(Object.assign({}, this.orgdataStore).org);
+    },
+      catchError(this.handleError)
+    );
+  }
+
+  sportsList( url ){
+    this.restApiService.lists(url).subscribe((data: any) => {
+      //console.log('---data----', data)
+      this.dataStore.sports = data;
+      this._sports.next(Object.assign({}, this.dataStore).sports);
+      // console.log(this.dataStore);
+
+    },
+      catchError(this.handleError)
+    );
+  }
+
+  statesList( url )
+  {
+    this.restApiService.lists(url).subscribe((data: any) => {
+      this.statedataStore.state = data;
+      this._state.next(Object.assign({}, this.statedataStore).state);
+      },
+      catchError(this.handleError)
+    );
+  }
+
+  getCountryCodeListAPI(url)
+  {
+    this.restApiService.lists(url).subscribe((data: any) => {
+      //console.log('---data----', data)
+      this.countrydataStore.country = data;
+      this._country.next(Object.assign({}, this.countrydataStore).country);
+      // console.log(this.dataStore);
+
+    },
+      catchError(this.handleError)
+    );
+  }
 
   async getOrganizationById(organizationObj: any) {
     try {

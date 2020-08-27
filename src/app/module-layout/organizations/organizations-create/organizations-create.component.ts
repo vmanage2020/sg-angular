@@ -12,6 +12,10 @@ import { CookieService } from 'src/app/core/services/cookie.service';
 
 import { apiURL, Constant } from '../../../core/services/config';
 
+import { OrganizationsService } from './../organizations.service';
+
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-organizations-create',
   templateUrl: './organizations-create.component.html',
@@ -23,7 +27,9 @@ export class OrganizationsCreateComponent implements OnInit {
   value: any = [];
   getAllSportmeta: any = [];
   getAllSportmetaData: any = [];
+  getAllCountrymetaData: any = [];
   getAllTypemeta: any = [];
+  getAllStates: any = [];
   getAllTypemetaData: any = [];
   
   
@@ -37,7 +43,17 @@ export class OrganizationsCreateComponent implements OnInit {
     { name: 'Text Field' }
   ]
 
+  getUserSuffixDataArray: any = [
+    {id: 'Sr',name: 'Sr'},
+    {id: 'Jr',name: 'Jr'},
+    {id: 'II',name: 'II'},
+    {id: 'III',name: 'III'},
+    {id: 'IV',name: 'IV'},
+    {id: 'V',name: 'V'}
+  ]
+
   data: any;
+  selectedCountryCode: any;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
 
@@ -62,7 +78,11 @@ export class OrganizationsCreateComponent implements OnInit {
 
 
 
-  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService) { 
+  constructor(private router: Router, 
+    private formBuilder: FormBuilder,
+    public cookieService: CookieService,
+    private restApiService: RestApiService,
+    private organizationsService: OrganizationsService) { 
      this.createForm(); 
   }
   
@@ -106,13 +126,18 @@ export class OrganizationsCreateComponent implements OnInit {
   
 
   ngOnInit() {
-    this.getSports();  
+    this.getState(); 
+    
+    this.getCountries();  
     this.getTypes();  
     this.is_required_value = false;
     this.is_editable_value = false;
     this.is_deletable_value = false;
     this.loading = false;
     this.displayLoader = false;
+
+    console.log( '---- this.selectedCountryCode----', this.selectedCountryCode)
+
   }
 
 
@@ -151,15 +176,19 @@ export class OrganizationsCreateComponent implements OnInit {
   }
 
   OnSportChange(event: any, form) {
+    return false;
     if (event.type === "focus") {
       if (!form.value.country_code) {
+        console.log('----markas touched----')
         form.controls.sports.markAsTouched();
       }
     }
     if (event.length !== 0 && event.type !== "focus") {
       this.showErrorInArr = [];
       //this.isSaveInWhichPosition();
-      event.forEach((sportInfo: any) => {
+      console.log('---event----', event)
+      console.log( '--governing_body_info value ---',this.createorganizationForm.controls['governing_body_info'].value )
+       event.forEach((sportInfo: any) => {
         let isSportExist = this.createorganizationForm.controls['governing_body_info'].value.filter(item => item.sport_id === sportInfo.sport_id);
         if (isSportExist.length !== 0) {
 
@@ -177,7 +206,7 @@ export class OrganizationsCreateComponent implements OnInit {
           this.getServiceForState(form.value.state, form.value.country_code, sportInfo.sport_id)
         }
       });
-      if (this.createorganizationForm.controls['governing_body_info'].value.length !== event.length) {
+     if (this.createorganizationForm.controls['governing_body_info'].value.length !== event.length) {
         if (this.createorganizationForm.controls['governing_body_info'].value) {
           this.createorganizationForm.controls['governing_body_info'].value.forEach((formValue: any, index) => {
             let removeGoverningBody = event.filter(eachSport => eachSport.sport_id === formValue.sport_id);
@@ -190,11 +219,18 @@ export class OrganizationsCreateComponent implements OnInit {
         }
       }
     } else if (event.type !== "focus" && event.length === 0) {
+
+      console.log('----else sports----')
       this.governingBodyArr.removeAt(0);
       form.patchValue({
         sports: ''
       })
     }
+  }
+
+  OnSportChangebyCountry(event: any, form)
+  {
+
   }
 
   
@@ -205,8 +241,9 @@ export class OrganizationsCreateComponent implements OnInit {
       "sport_id": sportId
     }
 
-    /*
-    let getNationalGoverningDropdownResponse: any = await this.dropDownService.getAllNationalGoverningBody(getNationalGoverningDropdownRequest);
+    console.log('---getNationalGoverningDropdownRequest---', getNationalGoverningDropdownRequest)
+    
+   /*  let getNationalGoverningDropdownResponse: any = await this.dropDownService.getAllNationalGoverningBody(getNationalGoverningDropdownRequest);
     try {
       if (getNationalGoverningDropdownResponse.status) {
         if (getNationalGoverningDropdownResponse.data && getNationalGoverningDropdownResponse.data.length !== 0) {
@@ -223,13 +260,10 @@ export class OrganizationsCreateComponent implements OnInit {
           this.isNationalDropdownEmpty(sportId);
         }
       } else {
-        this.isNationalDropdownEmpty(sportId);
-      }
-    } catch (error) {
-      console.log(error);
+        this.isNationalDropdownEmpty(sportId);organizationsportbyid
       this.isNationalDropdownEmpty(sportId);
-    }
-    */
+    } */
+   
   }
   isNationalDropdownEmpty(sportId: any) {
     //this.nationalOrgInfo = [];
@@ -291,9 +325,58 @@ export class OrganizationsCreateComponent implements OnInit {
     //this.stateGoverning = false;
   }
 
-  async getSports(){
-    this.getAllSportmeta = await this.db.collection('sports').orderBy('sport').get();
-    this.getAllSportmetaData = await this.getAllSportmeta.docs.map((doc: any) => doc.data());
+  async getState()
+  {
+    if(this.organizationsService.statedataStore.state.length > 0)
+    {
+      console.log('---state----', this.organizationsService.statedataStore.state )
+      this.getAllStates = this.organizationsService.statedataStore.state
+    }else{
+      setTimeout(() => { this.getState() 
+      }, 1000);
+    }
+  }
+
+  async getCountries()
+  {
+    if(this.organizationsService.countrydataStore.country.length > 0)
+    {
+      console.log( this.organizationsService.countrydataStore.country )
+      this.getAllCountrymetaData = this.organizationsService.countrydataStore.country
+    }else{
+      setTimeout(() => { this.getCountries() 
+      }, 1000);
+    }
+  }
+
+  selectedCountry(event: any)
+  {
+    if( event != undefined && event.country_code != '')
+    {
+      this.selectedCountryCode = event.country_code
+      this.getSports(this.selectedCountryCode); 
+    }
+    
+  }
+
+  async getSports( country ){
+
+    this.restApiService.lists('sportsbycountry/'+country).subscribe( sports => {
+      console.log( '--- sports----', sports)
+      this.getAllSportmetaData = sports;
+    })
+    /* if( this.organizationsService.dataStore.sports.length > 0)
+    {
+      this.getAllSportmetaData = this.organizationsService.dataStore.sports
+    }else{
+      setTimeout(() => { this.getSports() 
+      }, 1000);
+    } */
+    
+    
+    //this.restApiService.lists
+    /*this.getAllSportmeta = await this.db.collection('sports').orderBy('sport').get();
+    this.getAllSportmetaData = await this.getAllSportmeta.docs.map((doc: any) => doc.data());*/
   }
 
   async getTypes(){
@@ -305,6 +388,7 @@ export class OrganizationsCreateComponent implements OnInit {
 
   async onSubmit(form) {
     console.log("form submit");
+    console.log('----form----', form)
     try {
       this.submitted = true;
       if (form.invalid) {
@@ -323,41 +407,68 @@ export class OrganizationsCreateComponent implements OnInit {
   
     let createOrgObj = form.value;
 
+    var countryname = '';
+    for(let country of this.getAllCountrymetaData){
+      if(form.value.country_code==country.country_code)
+      {
+        countryname = country.name;
+      }      
+    }
+
+    var statename = '';
+    for(let state of this.getAllStates){
+      if(form.value.state==state.state_code)
+      {
+        statename = state.name;
+      }      
+    }
+
+
     const organizationObj: any = {
       organization_id: '',
       name: createOrgObj.name || "",
       abbrev: createOrgObj.abbrev || "",
       mobile_phone: createOrgObj.phone || "",
+      phone: createOrgObj.phone || "",
       avatar: createOrgObj.avatar || '',
       fax: createOrgObj.fax || "",
       email_address: createOrgObj.email || "",
       website: createOrgObj.website || "",
       state_code: createOrgObj.state || "",
-      state: createOrgObj.state_name || "",
+      state: statename || "",
       country_code: createOrgObj.country_code || "",
-      country: createOrgObj.country_name || "",
+      country: countryname || "",
       street1: createOrgObj.street1 || "",
       street2: createOrgObj.street2 || "",
       city: createOrgObj.city || "",
       postal_code: createOrgObj.postal_code || "",
       created_datetime: new Date(),
       created_uid: this.uid,
-      governing_body_info: createOrgObj.governing_body_info || "",
+      governing_body_info: [],//createOrgObj.governing_body_info || "",
       sports: createOrgObj.sports || "",
       governing_key_array_fields: ''
     }
 
-    let createObjOrg: any = [];
+
+    console.log('----organizationObj----', organizationObj)
+
+    this.restApiService.create('organization',organizationObj).subscribe(resorg => {
+      console.log('---resorg-----', resorg)
+      this.organizationsService.orgdataStore.org.push(resorg)
+      this.router.navigate(['/organizations']); 
+    });
+
+    /* let createObjOrg: any = [];
     createObjOrg = await this.db.collection('organization').add(organizationObj);
       await createObjOrg.set({ organization_id: createObjOrg.id }, { merge: true });
-      this.router.navigate(['/organizations']);
+      this.router.navigate(['/organizations']); */
 
 
 
     return false;
 
     
-      this.getSelectedSportmeta = await this.db.collection('sports').doc(form.value.sport_id).get();
+     /*  this.getSelectedSportmeta = await this.db.collection('sports').doc(form.value.sport_id).get();
     if (this.getSelectedSportmeta.exists) {
       this.getSelectedSportmetaData = this.getSelectedSportmeta.data();
     } else {
@@ -388,7 +499,7 @@ export class OrganizationsCreateComponent implements OnInit {
 
       let createObjRoot = await this.db.collection('playermetadata').add(insertObj);
       await createObjRoot.set({ field_id: createObjRoot.id }, { merge: true });
-      this.router.navigate(['/playermeta']);
+      this.router.navigate(['/playermeta']); */
 
     } catch (error) {
       
