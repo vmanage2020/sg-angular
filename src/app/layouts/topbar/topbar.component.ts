@@ -17,6 +17,8 @@ import { CoachMetaService } from '../../module-layout/coachmeta/coachmeta-servic
 
 import { ManagerMetaService } from '../../module-layout/managermeta/managermeta-service';
 
+import { OrganizationsService } from '../../module-layout/organizations/organizations.service';
+
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
@@ -59,9 +61,17 @@ export class TopbarComponent implements OnInit {
   @Output() mobileMenuButtonClicked = new EventEmitter();
   role: any;
   unAuthorizedActive: boolean = false;
-  constructor(private dropDownService: DropdownService, public sharedService: SharedService, public cookieService: CookieService, private router: Router, private authService: AuthenticationService, public dataService: DataService,
-    private managerCrudService:ManagerMetaService,private coachCrudService:CoachMetaService,private playerCrudService:PlayerMetaService,
-     ) {
+  constructor(
+    private dropDownService: DropdownService, 
+    public sharedService: SharedService, 
+    public cookieService: CookieService, 
+    private router: Router, 
+    private authService: AuthenticationService, 
+    public dataService: DataService,
+    private managerCrudService:ManagerMetaService,
+    private coachCrudService:CoachMetaService,
+    private playerCrudService:PlayerMetaService,
+    private organizationsService:OrganizationsService) {
     sharedService.missionAnnounced$.subscribe((data: any) => {
       // this.data = data;
       if (data.action === "organizationFilter") {
@@ -166,6 +176,21 @@ export class TopbarComponent implements OnInit {
   }
 
   async getOrganizationList() {
+    
+    if(this.organizationsService.orgdataStore.org.length > 0)
+    {
+      console.log('----org----', this.organizationsService.orgdataStore.org)
+      this.orgInfo =  this.organizationsService.orgdataStore.org;
+      this.organizationListLoader = false;
+      this.cookieService.setCookie('orgDropDown', JSON.stringify(this.orgInfo), 1);
+      this.organizationListLoader = false;
+    }else{
+      setTimeout(() => { this.getOrganizationList() 
+        this.organizationListLoader = false;
+      }, 1000);
+    }
+
+    /*
     // this.organizationListLoader = true;
     let organizationListResponse: any = await this.dropDownService.getOrganizationList();
     try {
@@ -182,15 +207,16 @@ export class TopbarComponent implements OnInit {
       this.orgInfo = [];
       this.organizationListLoader = false;
     }
-
+    */
   }
+
   closeToast() {
     this.showMsg = false;
   }
   addOrganization() {
     // this.sharedService.sendData({action:'addOrganization'});
     this.sharedService.announceMission({ action: 'addOrganization' })
-    this.router.navigate(['/organization']);
+    this.router.navigate(['/organizations']);
 
   }
   addUser() {

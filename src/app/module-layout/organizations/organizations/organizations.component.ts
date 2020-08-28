@@ -68,12 +68,16 @@ export class OrganizationsComponent implements OnInit {
     {
       console.log('----org----', this.organizationsService.orgdataStore.org)
       this.data = this.organizationsService.orgdataStore.org;
-      this.dtTrigger.next();
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
       this.loading = false;
-      this.displayLoader = false;
+      this.displayLoader = false;  
 
     }else{
       setTimeout(() => { this.getPlayerList() 
+        this.loading = false;
+        this.displayLoader = false;
       }, 1000);
     }
     /* if(this.orgId=='') {

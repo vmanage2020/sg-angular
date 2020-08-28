@@ -12,14 +12,20 @@ import { CookieService } from 'src/app/core/services/cookie.service';
 
 import { apiURL, Constant } from '../../../core/services/config';
 
+import { NgiNotificationService } from 'ngi-notification';
+
 import { OrganizationsService } from './../organizations.service';
 
 import { RestApiService } from '../../../shared/rest-api.services';
 
+import { NGXLogger } from 'ngx-logger';
+
+
 @Component({
   selector: 'app-organizations-create',
   templateUrl: './organizations-create.component.html',
-  styleUrls: ['./organizations-create.component.scss']
+  styleUrls: ['./organizations-create.component.scss'],
+  providers: [NGXLogger]
 })
 export class OrganizationsCreateComponent implements OnInit {
 
@@ -81,8 +87,10 @@ export class OrganizationsCreateComponent implements OnInit {
   constructor(private router: Router, 
     private formBuilder: FormBuilder,
     public cookieService: CookieService,
+    private notification: NgiNotificationService, 
     private restApiService: RestApiService,
-    private organizationsService: OrganizationsService) { 
+    private organizationsService: OrganizationsService,
+    private logger: NGXLogger) { 
      this.createForm(); 
   }
   
@@ -452,10 +460,30 @@ export class OrganizationsCreateComponent implements OnInit {
 
     console.log('----organizationObj----', organizationObj)
 
+    this.logger.debug('Manager Meta Delete API Start Here====>', new Date().toUTCString());      
+
     this.restApiService.create('organization',organizationObj).subscribe(resorg => {
-      console.log('---resorg-----', resorg)
-      this.organizationsService.orgdataStore.org.push(resorg)
-      this.router.navigate(['/organizations']); 
+      
+              
+      this.logger.debug('Manager Meta Delete API End Here====>', new Date().toUTCString());          
+      //console.log(data);
+
+      this.organizationsService.orgdataStore.org = [];
+      let Metaurl= '';
+
+      Metaurl='organization';
+      this.organizationsService.organizationsList(Metaurl);
+      //this.managerCrudService.dataStore.managers.push(data);
+      //this.managerCrudService.dataStore.managers = [data].concat(this.managerCrudService.dataStore.managers);
+      //this.managerCrudService._managers.next(Object.assign({}, this.managerCrudService.dataStore).managers);
+
+
+      //console.log('---resorg-----', resorg)
+      //this.organizationsService.orgdataStore.org.push(resorg)
+      //this.router.navigate(['/organizations']); 
+      this.router.navigate(['/organizations']);
+      this.notification.isNotification(true, "Organization Data", "Organization has been added successfully.", "check-square");
+
     });
 
     /* let createObjOrg: any = [];
