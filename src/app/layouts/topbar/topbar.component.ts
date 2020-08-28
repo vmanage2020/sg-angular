@@ -261,10 +261,16 @@ export class TopbarComponent implements OnInit {
     this.managerCrudService.dataStore.managers.length = 0;
     */
 
+
+
     
-   this.orgId = localStorage.getItem('org_id');
+    this.orgId = localStorage.getItem('org_id');
     let Metaurl= '';
     
+    this.organizationsService.orgdataStore.org = [];
+    Metaurl='organization';
+    await this.organizationsService.organizationsList(Metaurl);
+
     this.playerCrudService.dataStore.players = [];
     if(this.orgId=='') {
     Metaurl='playermetadata';
