@@ -44,7 +44,7 @@
                     <label for="level_of_play">Level of play</label>
                     
                     <ng-select [items]="levelList" [ngModel]="getUserData.athlete_1_level" 
-                        formControlName="level_of_play" bindLabel="level_name" [loading]="levelSelect"
+                        formControlName="level_of_play" bindLabel="level_name"
                         [clearable]="false"  [ngClass]="{ 'is-invalid': submitted && f.level_of_play.errors }"
                         bindValue="level_name" placeholder="Select level of play">
                       </ng-select>
@@ -100,12 +100,12 @@
                 <div class="form-group mb-3">
                     <label for="state">State</label>
                     <ng-select [items]="stateList" [ngModel]="getUserData.athlete_1_state_1" bindLabel="name" bindValue="state_code" placeholder="Select state" [clearable]="false"
-                    name="state"  formControlName="state" [loading]="state">
+                    name="state"  formControlName="state" >
                   </ng-select> 
                 </div> 
                 <div class="form-group mb-3">
                     <label for="country">Country</label>
-                    <ng-select [items]="countryCodeList" [ngModel]="getUserData.athlete_1_country_1" formControlName="country" bindLabel="name" [clearable]="false" [loading]="country"
+                    <ng-select [items]="countryCodeList" [ngModel]="getUserData.athlete_1_country_1" formControlName="country" bindLabel="name" [clearable]="false" 
                       bindValue="country_code" placeholder="Select country" name="country">
                     </ng-select> 
                 </div>

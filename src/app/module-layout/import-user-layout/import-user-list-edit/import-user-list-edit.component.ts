@@ -47,7 +47,7 @@ import { RESOURCE_CACHE_PROVIDER } from '@angular/platform-browser-dynamic';
       { name: 'Male' },
       { name: 'Female' }
     ];
-    
+    levelList: any = [];
     stateList: any; 
     countryCodeList: any = [
       { name: 'United State', country_code:'US' },

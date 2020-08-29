@@ -48,7 +48,6 @@ export class CannedResponseListComponent implements OnInit {
   constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient, private cannedresponseCrudService: CannedResponseCrudService,private logger: NGXLogger) { }
 
   ngOnInit() { 
-    this.cannedresponseCrudService.dataStore.cannedresponses = [];
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
     this.getCannedResponsesAPI();  

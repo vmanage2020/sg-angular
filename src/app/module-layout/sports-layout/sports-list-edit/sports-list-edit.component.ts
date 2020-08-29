@@ -208,7 +208,11 @@ getAllSportmetaData: any = [];
   
       },
       error => {
-        console.log(error);    
+        console.log(error);
+        this.notification.isNotification(true, "Sports Error", error.message, "exclamation-circle");  
+        this.editsportsForm.patchValue( {'name':null} );
+        this.displayLoader = false;
+        this.loading = false;    
       }
       );
   

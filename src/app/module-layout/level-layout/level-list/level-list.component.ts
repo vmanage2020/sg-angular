@@ -16,11 +16,15 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { LevelService } from '../level-service';
+
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-level-list',
   templateUrl: './level-list.component.html',
-  styleUrls: ['./level-list.component.scss']
+  styleUrls: ['./level-list.component.scss'],
+  providers: [NGXLogger]
 })
 export class LevelListComponent implements OnInit {
 
@@ -38,7 +42,15 @@ export class LevelListComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient) { }
+  constructor(
+    private router: Router, 
+    private notification: NgiNotificationService, 
+    @Inject(DOCUMENT) private _document: Document,
+    public cookieService: CookieService, 
+    private restApiService: RestApiService, 
+    private http:HttpClient, 
+    private levelCrudService: LevelService, 
+    private logger: NGXLogger) { }
 
   ngOnInit() { 
 
@@ -54,6 +66,32 @@ export class LevelListComponent implements OnInit {
    
   async getLevelAPI(){
 
+
+    this.logger.debug('Levels List API Start Here====>', new Date().toUTCString());
+    if( this.levelCrudService.dataStore.levels.length > 0)
+    {
+      //console.log('---levels length----', this.levelCrudService.dataStore.levels)
+      this.logger.debug('Levels List API End Here====>', new Date().toUTCString());
+      this.getAllLevelData = this.levelCrudService.dataStore.levels;
+      this.data = this.getAllLevelData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
+
+    }else {
+
+      setTimeout(() => { this.getLevelAPI()
+        this.loading = false;
+        this.displayLoader = false;
+       }, 1000);
+     
+    }
+
+
+
+    /*
     console.log(this.orgId);
     let Metaurl= '';
     if(this.orgId=='') {
@@ -87,7 +125,7 @@ export class LevelListComponent implements OnInit {
   
      
     });
- 
+    */
    }
   
  

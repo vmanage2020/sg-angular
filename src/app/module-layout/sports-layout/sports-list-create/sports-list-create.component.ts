@@ -180,7 +180,11 @@ export class SportsListCreateComponent implements OnInit {
 
     },
     error => {
-      console.log(error);    
+      console.log(error); 
+      this.notification.isNotification(true, "Sports Error", error.message, "exclamation-circle");  
+      this.createsportsForm.patchValue( {'name':null} );
+      this.displayLoader = false;
+      this.loading = false;
     }
     );
       

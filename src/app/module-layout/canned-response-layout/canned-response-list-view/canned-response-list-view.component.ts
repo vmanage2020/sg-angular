@@ -59,8 +59,8 @@ export class CannedResponseListViewComponent implements OnInit {
       this.orgId = localStorage.getItem('org_id');
       this.getCannedResponseInfoAPI();
       this.getAllSportsAPI();
-      this.loading = false;
-      this.displayLoader = false;
+      //this.loading = false;
+      //this.displayLoader = false;
     }
  
     

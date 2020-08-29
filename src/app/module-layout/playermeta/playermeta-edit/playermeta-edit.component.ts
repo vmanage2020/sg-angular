@@ -317,6 +317,10 @@ export class PlayermetaEditComponent implements OnInit {
      },
      error => {
        console.log(error);    
+        this.notification.isNotification(true, "Player Meta Error", error.message, "exclamation-circle");  
+        this.editplayermetaForm.patchValue( {'field_name':null} );
+        this.displayLoader = false;
+        this.loading = false;    
      }
      );
 

@@ -17,6 +17,8 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { LevelService } from '../level-service';
+
 @Component({
   selector: 'app-level-list-edit',
   templateUrl: './level-list-edit.component.html',
@@ -60,7 +62,7 @@ export class LevelListEditComponent implements OnInit {
     submitted = false;
     createlevelForm: FormGroup;
   
-    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient, private levelService:LevelService) { 
        this.createForm(); 
     }
     
@@ -180,13 +182,29 @@ export class LevelListEditComponent implements OnInit {
        this.restApiService.update(Metaurl,insertObj).subscribe(data=> 
          {
                
-           console.log(data);
+            console.log(data);
+            this.levelService.dataStore.levels = [];
+            this.orgId = localStorage.getItem('org_id');
+            if(this.orgId=='') {
+              this.levelService.levelsList('levels');
+            } else {
+              this.levelService.levelsList('levelsbyorg/'+this.orgId+'');
+            }
+            
+            //this.levelService.dataStore.levels.push(data);
+            //this.levelService.dataStore.levels = [data].concat(this.levelService.dataStore.levels); 
+            //this.levelService._levels.next(Object.assign({}, this.levelService.dataStore).levels);
+            
            this.router.navigate(['/level/list']);  
            this.notification.isNotification(true, "Level Data", "Level has been updated successfully.", "check-square");
         
          },
          error => {
            console.log(error);    
+            this.notification.isNotification(true, "Level Error", error.message, "exclamation-circle");  
+            this.createlevelForm.patchValue( {'level_name':null} );
+            this.displayLoader = false;
+            this.loading = false;  
          }
          );
         

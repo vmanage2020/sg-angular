@@ -82,8 +82,8 @@ export class TagListEditComponent implements OnInit {
       this.orgId = localStorage.getItem('org_id');
       this.getTagInfoAPI();
       this.getAllSportsAPI();
-      this.loading = false;
-      this.displayLoader = false;
+      //this.loading = false;
+      //this.displayLoader = false;
     }
      
     async getTagInfoAPI(){
@@ -198,6 +198,10 @@ export class TagListEditComponent implements OnInit {
          },
          error => {
            console.log(error);    
+            this.notification.isNotification(true, "Tag Error", error.message, "exclamation-circle");  
+            this.createtagForm.patchValue( {'tag_name':null} );
+            this.displayLoader = false;
+            this.loading = false;  
          }
          );
 

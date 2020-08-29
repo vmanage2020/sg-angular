@@ -85,8 +85,9 @@ export class RestApiService {
   }
 
 	private handleError(error: HttpErrorResponse) {
-		const message = get(error, 'message') || 'Something bad happened; please try again later.';
-		return throwError(message);
+		//const message = get(error, 'message') || 'Something bad happened; please try again later.';
+		//return throwError(message);
+		return throwError(error.error);
 	}
 
 }

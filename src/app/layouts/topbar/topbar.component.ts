@@ -19,6 +19,12 @@ import { ManagerMetaService } from '../../module-layout/managermeta/managermeta-
 
 import { OrganizationsService } from '../../module-layout/organizations/organizations.service';
 
+import { CannedResponseCrudService } from '../../module-layout/canned-response-layout/canned-response-crud.service';
+
+import { TagCrudService } from '../../module-layout/tag-layout/tag-crud.service';
+
+import { LevelService } from '../../module-layout/level-layout/level-service';
+
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
@@ -71,7 +77,10 @@ export class TopbarComponent implements OnInit {
     private managerCrudService:ManagerMetaService,
     private coachCrudService:CoachMetaService,
     private playerCrudService:PlayerMetaService,
-    private organizationsService:OrganizationsService) {
+    private organizationsService:OrganizationsService,
+    private cannedResponseCrudService:CannedResponseCrudService,
+    private tagCrudService:TagCrudService,
+    private levelCrudService:LevelService) {
     sharedService.missionAnnounced$.subscribe((data: any) => {
       // this.data = data;
       if (data.action === "organizationFilter") {
@@ -269,7 +278,9 @@ export class TopbarComponent implements OnInit {
     
     this.organizationsService.orgdataStore.org = [];
     Metaurl='organization';
+    console.log('Metaurl',Metaurl);
     await this.organizationsService.organizationsList(Metaurl);
+
 
     this.playerCrudService.dataStore.players = [];
     if(this.orgId=='') {
@@ -277,6 +288,7 @@ export class TopbarComponent implements OnInit {
     } else {
     Metaurl='playermetadatabyorg/'+this.orgId;
     }
+    console.log('Metaurl',Metaurl);
     await this.playerCrudService.playersList(Metaurl);
 
     
@@ -286,7 +298,9 @@ export class TopbarComponent implements OnInit {
     } else {
     Metaurl='coachcustomfieldbyorg/'+this.orgId;
     }
+    console.log('Metaurl',Metaurl);
     await this.coachCrudService.coachsList(Metaurl);
+
 
     this.managerCrudService.dataStore.managers = [];
     if(this.orgId=='') {
@@ -294,8 +308,39 @@ export class TopbarComponent implements OnInit {
     } else {
     Metaurl='managercustomfieldbyorg/'+this.orgId;
     }
+    console.log('Metaurl',Metaurl);
     await this.managerCrudService.managersList(Metaurl);
-    
+
+
+    this.tagCrudService.dataStore.tags = [];
+    if(this.orgId=='') {
+    Metaurl='tags';
+    } else {
+    Metaurl='tagsbyorg/'+this.orgId;
+    }
+    console.log('Metaurl',Metaurl);
+    await this.tagCrudService.tagsList(Metaurl);
+
+ 
+    this.cannedResponseCrudService.dataStore.cannedresponses = [];
+    if(this.orgId=='') {
+    Metaurl='cannedresponse';
+    } else {
+    Metaurl='cannedresponsebyorg/'+this.orgId;
+    }
+    console.log('Metaurl',Metaurl);
+    await this.cannedResponseCrudService.cannedresponsesList(Metaurl);
+
+    this.levelCrudService.dataStore.levels = [];
+    if(this.orgId=='') {
+    Metaurl='levels';
+    } else {
+    Metaurl='levelsbyorg/'+this.orgId;
+    }
+    console.log('Metaurl',Metaurl);
+    await this.levelCrudService.levelsList(Metaurl);
+
+
     this.router.navigate(['/welcome']);
   }
   /**

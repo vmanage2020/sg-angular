@@ -163,7 +163,11 @@ export class TagListCreateComponent implements OnInit {
 
         },
         error => {
-          console.log(error);    
+          console.log(error);  
+          this.notification.isNotification(true, "Tag Error", error.message, "exclamation-circle");  
+          this.createtagForm.patchValue( {'tag_name':null} );
+          this.displayLoader = false;
+          this.loading = false;    
         }
         );
 

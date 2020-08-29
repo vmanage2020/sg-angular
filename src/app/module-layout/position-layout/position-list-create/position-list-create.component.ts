@@ -234,6 +234,10 @@ export class PositionListCreateComponent implements OnInit {
     },
     error => {
       console.log(error);    
+      this.notification.isNotification(true, "Position Error", error.message, "exclamation-circle");  
+      this.createpositionForm.patchValue( {'name':null} );
+      this.displayLoader = false;
+      this.loading = false;
     }
     );
 

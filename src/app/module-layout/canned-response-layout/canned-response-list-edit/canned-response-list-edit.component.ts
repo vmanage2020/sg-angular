@@ -208,7 +208,11 @@ export class CannedResponseListEditComponent implements OnInit {
         
          },
          error => {
-           console.log(error);    
+           console.log(error);  
+            this.notification.isNotification(true, "Canned Response Error", error.message, "exclamation-circle");  
+            this.createcannedresponseForm.patchValue( {'canned_response_title':null} );
+            this.displayLoader = false;
+            this.loading = false;    
          }
          );
 

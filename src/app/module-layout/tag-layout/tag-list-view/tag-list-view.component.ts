@@ -82,8 +82,8 @@ export class TagListViewComponent implements OnInit {
       this.getTagInfoAPI();
       //this.getAllSports();
       this.getAllSportsAPI();
-      this.loading = false;
-      this.displayLoader = false;
+      //this.loading = false;
+      //this.displayLoader = false;
     }
      
     async getTagInfoAPI(){

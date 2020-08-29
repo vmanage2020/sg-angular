@@ -37,7 +37,14 @@ export class PositionListComponent implements OnInit {
   loading = true;
   displayLoader: any = true;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document, private restApiService: RestApiService, private http:HttpClient, private positionCrudService: PositionCrudService, private logger: NGXLogger) { }
+  constructor(
+  private router: Router, 
+  private notification: NgiNotificationService, 
+  @Inject(DOCUMENT) private _document: Document, 
+  private restApiService: RestApiService, 
+  private http:HttpClient, 
+  private positionCrudService: PositionCrudService, 
+  private logger: NGXLogger) { }
 
   ngOnInit() { 
     this.getPositionMetaAPI();

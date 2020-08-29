@@ -315,6 +315,10 @@ import { NGXLogger } from 'ngx-logger';
        },
        error => {
          console.log(error);    
+          this.notification.isNotification(true, "Manager Meta Error", error.message, "exclamation-circle");  
+          this.editplayermetaForm.patchValue( {'field_name':null} );
+          this.displayLoader = false;
+          this.loading = false;  
        }
        );
 

@@ -132,7 +132,7 @@
             </li>
 
             
-            <li [ngStyle]="{'display': sysAdminWithId ? 'block' : 'none' }" *ngIf="custAdmin || admin" class="isChild" >
+            <li [ngStyle]="{'display': sysAdminWithId ? 'none' : 'none' }" *ngIf="custAdmin || admin" class="isChild" >
                 <a class="waves-effect" aria-expanded="false" [ngClass]="{'is-active': teamDropDown}">
                     <span> Team Management *</span>
                     <span class="menu-arrow"></span>

@@ -266,7 +266,11 @@ export class PlayermetaCreateComponent implements OnInit {
 
        },
        error => {
-         console.log(error);    
+         console.log(error); 
+          this.notification.isNotification(true, "Player Meta Error", error.message, "exclamation-circle");  
+          this.createplayermetaForm.patchValue( {'field_name':null} );
+          this.displayLoader = false;
+          this.loading = false;   
        }
        );
 
