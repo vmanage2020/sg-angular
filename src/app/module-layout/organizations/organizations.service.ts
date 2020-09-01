@@ -32,6 +32,10 @@ export class OrganizationsService {
   public orgdataStore:{ org: any } = { org: [] };
   readonly connections3 = this._org.asObservable();
 
+  public _orgdd = new BehaviorSubject<any[]>([]);
+  public orgdddataStore:{ orgdd: any } = { orgdd: [] };
+  readonly connections4 = this._orgdd.asObservable();
+
   adminref: any = firebase.firestore();
   orgId: any;
 
@@ -50,7 +54,7 @@ export class OrganizationsService {
     this.sportsList('sports');
     this.statesList('states');
     this.getCountryCodeListAPI('countries');
-
+    this.organizationsDropDownList('organization');
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -63,6 +67,16 @@ export class OrganizationsService {
     this.restApiService.lists(url).subscribe((data: any) => {
       this.orgdataStore.org = data;
       this._org.next(Object.assign({}, this.orgdataStore).org);
+    },
+      catchError(this.handleError)
+    );
+  }
+
+  organizationsDropDownList(url)
+  {
+    this.restApiService.lists(url).subscribe((data: any) => {
+      this.orgdddataStore.orgdd = data;
+      this._orgdd.next(Object.assign({}, this.orgdddataStore).orgdd);
     },
       catchError(this.handleError)
     );

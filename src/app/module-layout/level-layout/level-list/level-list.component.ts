@@ -66,8 +66,10 @@ export class LevelListComponent implements OnInit {
    
   async getLevelAPI(){
 
-
-    this.logger.debug('Levels List API Start Here====>', new Date().toUTCString());
+    if(this.loading==true) {
+      this.logger.debug('Levels List API Start Here====>', new Date().toUTCString());
+    }
+    
     if( this.levelCrudService.dataStore.levels.length > 0)
     {
       //console.log('---levels length----', this.levelCrudService.dataStore.levels)

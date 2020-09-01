@@ -11,6 +11,8 @@ import { DropdownService } from '../../core/services/dropdown.service';
 
 
 
+import { RestApiService } from '../../shared/rest-api.services';
+
 import { PlayerMetaService } from '../../module-layout/playermeta/playermeta-service';
 
 import { CoachMetaService } from '../../module-layout/coachmeta/coachmeta-service';
@@ -80,7 +82,8 @@ export class TopbarComponent implements OnInit {
     private organizationsService:OrganizationsService,
     private cannedResponseCrudService:CannedResponseCrudService,
     private tagCrudService:TagCrudService,
-    private levelCrudService:LevelService) {
+    private levelCrudService:LevelService,
+    private restApiService: RestApiService) {
     sharedService.missionAnnounced$.subscribe((data: any) => {
       // this.data = data;
       if (data.action === "organizationFilter") {
@@ -185,16 +188,17 @@ export class TopbarComponent implements OnInit {
   }
 
   async getOrganizationList() {
-    
-    if(this.organizationsService.orgdataStore.org.length > 0)
+    console.log('getOrganizationList',this.organizationsService.orgdddataStore.orgdd.length);
+    if(this.organizationsService.orgdddataStore.orgdd.length > 0)
     {
-      console.log('----org----', this.organizationsService.orgdataStore.org)
-      this.orgInfo =  this.organizationsService.orgdataStore.org;
+      console.log('----orgdd----', this.organizationsService.orgdddataStore.orgdd)
+      this.orgInfo =  this.organizationsService.orgdddataStore.orgdd;
       this.organizationListLoader = false;
-      this.cookieService.setCookie('orgDropDown', JSON.stringify(this.orgInfo), 1);
+      //this.cookieService.setCookie('orgDropDown', JSON.stringify(this.orgInfo), 1);
       this.organizationListLoader = false;
     }else{
       setTimeout(() => { this.getOrganizationList() 
+        this.orgInfo = [];
         this.organizationListLoader = false;
       }, 1000);
     }
@@ -246,6 +250,8 @@ export class TopbarComponent implements OnInit {
   }
 
   async getOrganizationInfo(event: any) {
+    console.log(event);
+    /*
     let organizationDetails: any = await this.dropDownService.getOrganizationDetailsById(event.organization_id);
     if (organizationDetails.status) {
       this.cookieService.setCookie('organizationDetails', JSON.stringify(organizationDetails.data), 1);
@@ -263,24 +269,57 @@ export class TopbarComponent implements OnInit {
       localStorage.setItem('org_abbrev', event.abbrev);
     }
     this.showMsg = false;
-
+    */
     /* 
     this.playerCrudService.dataStore.players.length = 0;
     this.coachCrudService.dataStore.coachs.length = 0;
     this.managerCrudService.dataStore.managers.length = 0;
     */
 
-
-
+   console.log('----xyz org----', this.organizationsService.orgdataStore.org)
+   let OrgIDValue = ''; 
+    if(event.organization_id==1) {
+      OrgIDValue = event._id;
+    } else {
+      OrgIDValue = event.organization_id;
+    }
+   this.restApiService.lists('organization/'+OrgIDValue).subscribe( res => {
+    let organizationDetails = res;
     
+    console.log('organizationDetails',organizationDetails);
+
+    if (organizationDetails) {
+      //this.cookieService.setCookie('organizationDetails', JSON.stringify(organizationDetails), 1);
+    }
+
+    this.sharedService.announceMission({ action: 'organizationFilter', data: event });
+    if ((this.cookieService.getCookie('admin'))) {
+      this.selectedOrg = event.organization_name;
+      localStorage.setItem('org_id', event.organization_id)
+      localStorage.setItem('org_name', event.organization_name)
+      localStorage.setItem('org_abbrev', event.organization_abbrev);
+    } else if (this.cookieService.getCookie('sysAdmin')) {
+      this.selectedOrg = event.name;
+      localStorage.setItem('org_id', event.organization_id)
+      localStorage.setItem('org_name', event.name)
+      localStorage.setItem('org_abbrev', event.abbrev);
+    }
+    this.showMsg = false;
+   
+   });
+
+     
+
+
+    /*
     this.orgId = localStorage.getItem('org_id');
     let Metaurl= '';
     
     this.organizationsService.orgdataStore.org = [];
     Metaurl='organization';
-    console.log('Metaurl',Metaurl);
+    //console.log('Metaurl',Metaurl);
     await this.organizationsService.organizationsList(Metaurl);
-
+    
 
     this.playerCrudService.dataStore.players = [];
     if(this.orgId=='') {
@@ -288,7 +327,7 @@ export class TopbarComponent implements OnInit {
     } else {
     Metaurl='playermetadatabyorg/'+this.orgId;
     }
-    console.log('Metaurl',Metaurl);
+    //console.log('Metaurl',Metaurl);
     await this.playerCrudService.playersList(Metaurl);
 
     
@@ -298,7 +337,7 @@ export class TopbarComponent implements OnInit {
     } else {
     Metaurl='coachcustomfieldbyorg/'+this.orgId;
     }
-    console.log('Metaurl',Metaurl);
+    //console.log('Metaurl',Metaurl);
     await this.coachCrudService.coachsList(Metaurl);
 
 
@@ -308,7 +347,7 @@ export class TopbarComponent implements OnInit {
     } else {
     Metaurl='managercustomfieldbyorg/'+this.orgId;
     }
-    console.log('Metaurl',Metaurl);
+    //console.log('Metaurl',Metaurl);
     await this.managerCrudService.managersList(Metaurl);
 
 
@@ -318,7 +357,7 @@ export class TopbarComponent implements OnInit {
     } else {
     Metaurl='tagsbyorg/'+this.orgId;
     }
-    console.log('Metaurl',Metaurl);
+    //console.log('Metaurl',Metaurl);
     await this.tagCrudService.tagsList(Metaurl);
 
  
@@ -328,7 +367,7 @@ export class TopbarComponent implements OnInit {
     } else {
     Metaurl='cannedresponsebyorg/'+this.orgId;
     }
-    console.log('Metaurl',Metaurl);
+    //console.log('Metaurl',Metaurl);
     await this.cannedResponseCrudService.cannedresponsesList(Metaurl);
 
     this.levelCrudService.dataStore.levels = [];
@@ -337,10 +376,18 @@ export class TopbarComponent implements OnInit {
     } else {
     Metaurl='levelsbyorg/'+this.orgId;
     }
-    console.log('Metaurl',Metaurl);
+    //console.log('Metaurl',Metaurl);
     await this.levelCrudService.levelsList(Metaurl);
+    */
 
-
+   this.organizationsService.orgdataStore.org.length = 0;
+   this.tagCrudService.dataStore.tags.length = 0;
+   this.cannedResponseCrudService.dataStore.cannedresponses.length = 0;
+   this.levelCrudService.dataStore.levels.length = 0;
+   this.playerCrudService.dataStore.players.length = 0;
+   this.coachCrudService.dataStore.coachs.length = 0;
+   this.managerCrudService.dataStore.managers.length = 0;
+  
     this.router.navigate(['/welcome']);
   }
   /**
