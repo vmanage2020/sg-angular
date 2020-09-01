@@ -90,6 +90,8 @@ export class OrganizationsService {
     );
   }
 
+  
+
   getCountryCodeListAPI(url)
   {
     this.restApiService.lists(url).subscribe((data: any) => {
@@ -101,6 +103,16 @@ export class OrganizationsService {
     },
       catchError(this.handleError)
     );
+  }
+
+  //getbidId
+  selectedOrgId = new BehaviorSubject<any>('')
+  currentEditOrgId = this.selectedOrgId.asObservable();
+
+
+  editOrgData(id)
+  {
+    this.selectedOrgId.next(id)
   }
 
   async getOrganizationById(organizationObj: any) {

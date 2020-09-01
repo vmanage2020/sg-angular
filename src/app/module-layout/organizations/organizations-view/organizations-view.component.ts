@@ -16,6 +16,8 @@ import { TitleCasePipe } from '@angular/common';
 
 import { RestApiService } from '../../../shared/rest-api.services';
 
+import { OrganizationsService } from './../organizations.service';
+
 @Component({
   selector: 'app-organizations-view',
   templateUrl: './organizations-view.component.html',
@@ -53,6 +55,7 @@ export class OrganizationsViewComponent implements OnInit {
     private route: ActivatedRoute,
     public cookieService: CookieService,
     private restApiService: RestApiService, 
+    private organizationsService: OrganizationsService,
     private titlecasePipe: TitleCasePipe,) { }
   
 
@@ -184,7 +187,10 @@ export class OrganizationsViewComponent implements OnInit {
   }
   
   editOrganization(resourceId: string){
-    this.router.navigate(['/organizations/edit/'+resourceId]);
+    console.log('----resourceId----', resourceId)
+    this.router.navigate(['/organizations/create'])
+    this.organizationsService.editOrgData(resourceId)
+    //this.router.navigate(['/organizations/edit/'+resourceId]);
   }
 
   refreshPage() {
