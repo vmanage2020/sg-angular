@@ -29,7 +29,7 @@
             "styles": [
               "src/assets/scss/bootstrap.scss",
               "src/assets/scss/app.scss",
-              "src/assets/scss/icons.scss",  
+              "src/assets/scss/icons.scss",
               "src/assets/js/flatpickr/flatpickr.min.css",
               "src/assets/js/multiselect/multi-select.css",
               "src/assets/js/quill/quill.core.css",
@@ -39,7 +39,7 @@
             ],
             "scripts": [
               "./node_modules/apexcharts/dist/apexcharts.min.js",
-              "node_modules/jquery/dist/jquery.min.js",  
+              "node_modules/jquery/dist/jquery.min.js",
               "src/assets/js/vendor/vendor.min.js",
               "src/assets/js/flatpickr/flatpickr.min.js",
               "src/assets/js/multiselect/jquery.multi-select.js",
@@ -188,5 +188,8 @@
       }
     }
   },
-  "defaultProject": "angular"
+  "defaultProject": "angular",
+  "cli": {
+    "analytics": "041dd5f8-79cb-444d-a824-58e088401f63"
+  }
 }

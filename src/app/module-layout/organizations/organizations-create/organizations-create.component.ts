@@ -153,6 +153,45 @@ export class OrganizationsCreateComponent implements OnInit {
 
     console.log( '---- this.selectedCountryCode----', this.selectedCountryCode)
 
+    let Orgval = this.organizationsService.selectedOrgId.getValue()
+    if (Orgval != '') {
+      this.selectedOrgId(Orgval)
+      this.organizationsService.selectedOrgId.next('')
+    }
+
+  }
+
+  selectedOrgId( id )
+  {
+    console.log('----edit org id----', id)
+
+    this.restApiService.lists('organization/'+id).subscribe( orgs => {
+      console.log('----orgs----', orgs)
+        this.getSports( orgs.country_code );
+        
+        this.createorganizationForm.patchValue({
+          name: orgs.name,
+          abbrev: orgs.abbrev[0],
+          street1: orgs.street1,
+          street2: orgs.street2[0],
+          city: orgs.city,
+          state: orgs.state_code,
+          postal_code: orgs.postal_code,
+          country_code: orgs.country_code,
+          phone: orgs.mobile_phone,
+          fax: orgs.fax,
+          email: orgs.email_address,
+          website: orgs.website,
+          sports: orgs.sports,
+          primary_first_name: orgs.primary_first_name,
+          primary_middle_initial: orgs.primary_middle_initial,
+          primary_last_name: orgs.primary_last_name,
+          primary_admin_email: orgs.primary_admin_email,
+
+        })
+    }, err =>{
+      console.log('---error for fetching data----')
+    })
   }
 
 

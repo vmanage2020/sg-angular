@@ -115,7 +115,10 @@ export class OrganizationsComponent implements OnInit {
   }
   
   editOrganization(resourceId: string){
-    this.router.navigate(['/organizations/edit/'+resourceId]);
+    console.log('---resourceId---', resourceId)
+    this.router.navigate(['/organizations/create'])
+    this.organizationsService.editOrgData(resourceId)
+    //this.router.navigate(['/organizations/edit/'+resourceId]);
   }
 
   refreshPage() {
