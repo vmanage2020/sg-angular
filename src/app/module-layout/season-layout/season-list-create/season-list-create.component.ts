@@ -16,6 +16,10 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { SeasonCrudService } from '../season-crud.service';
+
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-season-list-create',
   templateUrl: './season-list-create.component.html',
@@ -54,7 +58,7 @@ export class SeasonListCreateComponent implements OnInit {
   submitted = false;
   createseasonForm: FormGroup;
 
-  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient) { 
+  constructor(private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService, private restApiService: RestApiService, private http:HttpClient, private seasonCrudService:SeasonCrudService) { 
      this.createForm(); 
   }
   
@@ -163,8 +167,20 @@ export class SeasonListCreateComponent implements OnInit {
  
     this.restApiService.create(Metaurl,insertObj).subscribe(data=> 
       {
-            
-        console.log(data);
+       //console.log(data);
+
+        this.seasonCrudService.dataStore.seasons = [];
+        this.orgId = localStorage.getItem('org_id');
+        if(this.orgId=='') {
+          this.seasonCrudService.seasonsList('seasons');
+        } else {
+          this.seasonCrudService.seasonsList('seasonsbyorg/'+this.orgId+'');
+        }
+        //this.seasonCrudService.dataStore.seasons.push(data);
+        //this.seasonCrudService.dataStore.seasons = [data].concat(this.seasonCrudService.dataStore.seasons);
+        //this.seasonCrudService._seasons.next(Object.assign({}, this.seasonCrudService.dataStore).seasons);
+
+
         this.router.navigate(['/season/list']);
         this.notification.isNotification(true, "Seasons Data", "Seasons has been added successfully.", "check-square");
         

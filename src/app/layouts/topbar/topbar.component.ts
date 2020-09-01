@@ -27,6 +27,10 @@ import { TagCrudService } from '../../module-layout/tag-layout/tag-crud.service'
 
 import { LevelService } from '../../module-layout/level-layout/level-service';
 
+import { PositionCrudService } from '../../module-layout/position-layout/position-crud.service';
+
+import { SeasonCrudService } from '../../module-layout/season-layout/season-crud.service';
+
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
@@ -83,6 +87,8 @@ export class TopbarComponent implements OnInit {
     private cannedResponseCrudService:CannedResponseCrudService,
     private tagCrudService:TagCrudService,
     private levelCrudService:LevelService,
+    private positionCrudService:PositionCrudService,
+    private seasonCrudService:SeasonCrudService,
     private restApiService: RestApiService) {
     sharedService.missionAnnounced$.subscribe((data: any) => {
       // this.data = data;
@@ -384,6 +390,8 @@ export class TopbarComponent implements OnInit {
    this.tagCrudService.dataStore.tags.length = 0;
    this.cannedResponseCrudService.dataStore.cannedresponses.length = 0;
    this.levelCrudService.dataStore.levels.length = 0;
+   this.positionCrudService.dataStore.positions.length = 0;
+   this.seasonCrudService.dataStore.seasons.length = 0;
    this.playerCrudService.dataStore.players.length = 0;
    this.coachCrudService.dataStore.coachs.length = 0;
    this.managerCrudService.dataStore.managers.length = 0;

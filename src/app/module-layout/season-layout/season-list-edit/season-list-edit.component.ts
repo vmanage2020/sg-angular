@@ -20,6 +20,10 @@ import { RestApiService } from '../../../shared/rest-api.services';
 
 import { HttpClient } from '@angular/common/http';
 
+import { SeasonCrudService } from '../season-crud.service';
+
+import { NGXLogger } from 'ngx-logger';
+
 @Component({
   selector: 'app-season-list-edit',
   templateUrl: './season-list-edit.component.html',
@@ -61,7 +65,7 @@ export class SeasonListEditComponent implements OnInit {
     submitted = false;
     createseasonForm: FormGroup;
   
-    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService,private datePipe: DatePipe, private restApiService: RestApiService, private http:HttpClient) { 
+    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService,private datePipe: DatePipe, private restApiService: RestApiService, private http:HttpClient, private seasonCrudService:SeasonCrudService) { 
        this.createForm(); 
     }
     
@@ -195,6 +199,18 @@ export class SeasonListEditComponent implements OnInit {
       {
             
         console.log(data);
+        
+        this.seasonCrudService.dataStore.seasons = [];
+        this.orgId = localStorage.getItem('org_id');
+        if(this.orgId=='') {
+          this.seasonCrudService.seasonsList('seasons');
+        } else {
+          this.seasonCrudService.seasonsList('seasonsbyorg/'+this.orgId+'');
+        }
+        //this.seasonCrudService.dataStore.seasons.push(data);
+        //this.seasonCrudService.dataStore.seasons = [data].concat(this.seasonCrudService.dataStore.seasons);
+        //this.seasonCrudService._seasons.next(Object.assign({}, this.seasonCrudService.dataStore).seasons);
+
         this.router.navigate(['/season/list']);
         this.notification.isNotification(true, "Season Data", "Season has been updated successfully.", "check-square");
       
