@@ -1,174 +1,208 @@
 <app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
 <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="card-box">
                 <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Organization Details</h5>
                 
-                <form class="needs-validation" name="createplayermetaForm" [formGroup]="createorganizationForm"
+                <form focusInvalidInput class="needs-validation" name="createplayermetaForm" [formGroup]="createorganizationForm"
                 (ngSubmit)="onSubmit(createorganizationForm)" novalidate>
                 
-                <div class="form-group mb-3">
-                    <label for="name">Organization Name<span class="text-danger">*</span></label>
-                    <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter Organization Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
-                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-                        <div *ngIf="f.name.errors.required">Organization Name is required.</div>
-                    </div>
-                
+
+                <div class="col-lg-12 row">
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="name">Organization Name<span class="text-danger">*</span></label>
+                      <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter Organization Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
+                      <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                          <div *ngIf="f.name.errors.required">Organization Name is required.</div>
+                      </div>
+                  
+                  </div>
+
+                  
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="abbrev">Abbreviation<span class="text-danger">*</span></label>
+                      <input type="text" id="abbrev" name="abbrev" formControlName="abbrev" class="form-control" placeholder="Enter Abbreviation Name" [ngClass]="{ 'is-invalid': submitted && f.abbrev.errors }"/>
+                      <div *ngIf="submitted && f.abbrev.errors" class="invalid-feedback">
+                          <div *ngIf="f.abbrev.errors.required">Abbreviation is required.</div>
+
+                          <p class="error text-danger" *ngIf="f.abbrev.errors?.minlength">The Abbreviation field minimum length {{f.abbrev.errors?.minlength.requiredLength}}</p>
+                          <p class="error text-danger" *ngIf="f.abbrev.errors?.maxlength">The Abbreviation field maximum length {{f.abbrev.errors?.maxlength.requiredLength}}</p>
+
+                      </div>
+                  
+                  </div>
                 </div>
+                
 
-                
-                <div class="form-group mb-3">
-                    <label for="abbrev">Abbreviation<span class="text-danger">*</span></label>
-                    <input type="text" id="abbrev" name="abbrev" formControlName="abbrev" class="form-control" placeholder="Enter Abbreviation Name" [ngClass]="{ 'is-invalid': submitted && f.abbrev.errors }"/>
-                    <div *ngIf="submitted && f.abbrev.errors" class="invalid-feedback">
-                        <div *ngIf="f.abbrev.errors.required">Abbreviation is required.</div>
-                    </div>
-                
+                <div class="col-lg-12 row">
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="street1">Street 1<span class="text-danger">*</span></label>
+                      <input type="text" id="street1" name="street1" formControlName="street1" class="form-control" placeholder="Enter Street 1" [ngClass]="{ 'is-invalid': submitted && f.street1.errors }"/>
+                      <div *ngIf="submitted && f.street1.errors" class="invalid-feedback">
+                          <div *ngIf="f.street1.errors.required">street 1 is required.</div>
+                      </div>
+                  
+                  </div>
+
+
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="street2">Street 2</label>
+                      <input type="text" id="street2" name="street2" formControlName="street2" class="form-control" placeholder="Enter Street 2" [ngClass]="{ 'is-invalid': submitted && f.street2.errors }"/>
+                      <div *ngIf="submitted && f.street2.errors" class="invalid-feedback">
+                          <div *ngIf="f.street2.errors.required">street 2 is required.</div>
+                      </div>
+                  
+                  </div> 
+
                 </div>
-
-                <div class="form-group mb-3">
-                    <label for="street1">Street 1<span class="text-danger">*</span></label>
-                    <input type="text" id="street1" name="street1" formControlName="street1" class="form-control" placeholder="Enter Street 1" [ngClass]="{ 'is-invalid': submitted && f.street1.errors }"/>
-                    <div *ngIf="submitted && f.street1.errors" class="invalid-feedback">
-                        <div *ngIf="f.street1.errors.required">street 1 is required.</div>
-                    </div>
                 
+                
+                <div class="col-lg-12 row">
+
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="city">City <span class="text-danger">*</span></label>
+                      <input type="text" id="city" name="city" formControlName="city" class="form-control" placeholder="Enter Field Name" [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
+                      <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                          <div *ngIf="f.city.errors.required">Field Name is required.</div>
+                          <p  class="error text-danger" *ngIf="f.city.errors?.pattern">Enter Field Name Alphabet text only</p>
+                      </div>
+                  
+                  </div> 
+
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="state">State<span class="text-danger">*</span></label>
+                      <!-- <select class="form-control select2" id="state" name="state" formControlName="state" [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
+                          <option value="" disabled selected>Select State</option>
+                          <option *ngFor="let Sportdata of getAllStates let i = index;" value="{{Sportdata.sport_id}}">{{Sportdata.name}}</option>
+                      </select> -->
+                      
+
+                      <ng-select [items]="getAllStates"
+                      id="state" name="state" formControlName="state"
+                    bindLabel="name"
+                    bindValue="state_code"
+                    [multiple]="false"
+                    placeholder="Select State"
+                    [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
+                      </ng-select>
+
+                      <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
+                          <div *ngIf="f.state.errors.required">Sport Name is required.</div>
+                      </div>
+                  </div>
+
                 </div>
-
-
-                <div class="form-group mb-3">
-                    <label for="street2">Street 2</label>
-                    <input type="text" id="street2" name="street2" formControlName="street2" class="form-control" placeholder="Enter Street 2" [ngClass]="{ 'is-invalid': submitted && f.street2.errors }"/>
-                    <div *ngIf="submitted && f.street2.errors" class="invalid-feedback">
-                        <div *ngIf="f.street2.errors.required">street 2 is required.</div>
-                    </div>
                 
-                </div> 
-                
-                <div class="form-group mb-3">
-                    <label for="city">City <span class="text-danger">*</span></label>
-                    <input type="text" id="city" name="city" formControlName="city" class="form-control" placeholder="Enter Field Name" [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
-                    <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
-                        <div *ngIf="f.city.errors.required">Field Name is required.</div>
-                    </div>
-                
-                </div> 
-
-                <div class="form-group mb-3">
-                    <label for="state">State<span class="text-danger">*</span></label>
-                    <!-- <select class="form-control select2" id="state" name="state" formControlName="state" [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
-                        <option value="" disabled selected>Select State</option>
-                        <option *ngFor="let Sportdata of getAllStates let i = index;" value="{{Sportdata.sport_id}}">{{Sportdata.name}}</option>
-                    </select> -->
+                <div class="col-lg-12 row">
+                  <div class="form-group mb-3 col-lg-6">
+                        <label for="postal_code">Postal Code<span class="text-danger">*</span></label>
+                        <input type="text" id="postal_code" name="postal_code" formControlName="postal_code" class="form-control" placeholder="Enter Postal Code" [ngClass]="{ 'is-invalid': submitted && f.postal_code.errors }"/>
+                        <div *ngIf="submitted && f.postal_code.errors" class="invalid-feedback">
+                            <div *ngIf="f.postal_code.errors.required">Postal Code is required.</div>
+                        </div>
                     
+                    </div>
+    
+                    <div class="form-group mb-3 col-lg-6">
+                        <label for="country_code">Country <span class="text-danger">*</span></label>
+                      <!--  <select class="form-control select2" id="country_code" name="country_code" formControlName="country_code" [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
+                            <option value="" disabled selected>Select Field Type</option>
+                            <option *ngFor="let Typedata of getAllCountrymetaData let i = index;">{{Typedata.name}}</option>
+                        </select> -->
 
-                    <ng-select [items]="getAllStates"
-                    id="state" name="state" formControlName="state"
-                   bindLabel="name"
-                   bindValue="state_code"
-                   [multiple]="false"
-                   placeholder="Select State"
-                   [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
-                    </ng-select>
+                        <ng-select [items]="getAllCountrymetaData"
+                        id="country_code" name="country_code" formControlName="country_code"
+                      bindLabel="name"
+                      bindValue="country_code"
+                      [multiple]="false"
+                      placeholder="Select Country"
+                      (change)="selectedCountry($event)"
+                      [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
+                        </ng-select>
 
-                    <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
-                        <div *ngIf="f.state.errors.required">Sport Name is required.</div>
+                        <div *ngIf="submitted && f.country_code.errors" class="invalid-feedback">
+                            <div *ngIf="f.country_code.errors.required">Field Type is required.</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group mb-3">
-                    <label for="postal_code">Postal Code<span class="text-danger">*</span></label>
-                    <input type="text" id="postal_code" name="postal_code" formControlName="postal_code" class="form-control" placeholder="Enter Postal Code" [ngClass]="{ 'is-invalid': submitted && f.postal_code.errors }"/>
-                    <div *ngIf="submitted && f.postal_code.errors" class="invalid-feedback">
-                        <div *ngIf="f.postal_code.errors.required">Postal Code is required.</div>
-                    </div>
                 
+
+
+                <div class="col-lg-12 row">
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="phone">Phone<span class="text-danger">*</span></label>
+                      <input type="text" id="phone" name="phone" formControlName="phone" class="form-control" placeholder="Enter Phone Number" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"/>
+                      <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+                          <div *ngIf="f.phone.errors.required">Field Name is required.</div>
+                          <p class="error text-danger" *ngIf="f.phone.errors?.minlength">The Phone field minimum length {{f.phone.errors?.minlength.requiredLength}}</p>
+                          
+                      </div>
+                  
+                  </div>
+
+                  
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="fax">Fax </label>
+                      <input type="text" id="fax" name="fax" formControlName="fax" class="form-control" placeholder="Enter Fax Number" [ngClass]="{ 'is-invalid': submitted && f.fax.errors }"/>
+                      <div *ngIf="submitted && f.fax.errors" class="invalid-feedback">
+                          <div *ngIf="f.fax.errors.required">Field Name is required.</div>
+                          <p class="error text-danger" *ngIf="f.fax.errors?.minlength">The Fax field minimum length {{f.fax.errors?.minlength.requiredLength}}</p>
+                      </div>
+                  
+                  </div>
+                </div>                
+                
+                <div class="col-lg-12 row">
+
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="email">Email<span class="text-danger">*</span></label>
+                      <input type="text" id="email" name="email" formControlName="email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                      <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                          <div *ngIf="f.email.errors.required">Field Name is required.</div>
+                          <p  class="error text-danger" *ngIf="f.email.errors?.pattern">Invaid Email pattern</p>
+                      </div>
+                  
+                  </div>
+
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="website">Website </label>
+                      <input type="text" id="website" name="website" formControlName="website" class="form-control" placeholder="Enter Website" [ngClass]="{ 'is-invalid': submitted && f.website.errors }"/>
+                      <div *ngIf="submitted && f.website.errors" class="invalid-feedback">
+                          <div *ngIf="f.website.errors.required">Field Name is required.</div>
+                          <p  class="error text-danger" *ngIf="f.website.errors?.pattern">Invaid Website pattern</p>
+                      </div>
+                  
+                  </div>
+                  
                 </div>
- 
-                <div class="form-group mb-3">
-                    <label for="country_code">Country <span class="text-danger">*</span></label>
-                   <!--  <select class="form-control select2" id="country_code" name="country_code" formControlName="country_code" [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
-                        <option value="" disabled selected>Select Field Type</option>
-                        <option *ngFor="let Typedata of getAllCountrymetaData let i = index;">{{Typedata.name}}</option>
-                    </select> -->
-
-                    <ng-select [items]="getAllCountrymetaData"
-                    id="country_code" name="country_code" formControlName="country_code"
-                   bindLabel="name"
-                   bindValue="country_code"
-                   [multiple]="false"
-                   placeholder="Select Country"
-                   (change)="selectedCountry($event)"
-                   [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
-                    </ng-select>
-
-                    <div *ngIf="submitted && f.country_code.errors" class="invalid-feedback">
-                        <div *ngIf="f.country_code.errors.required">Field Type is required.</div>
-                    </div>
-                </div>
-
-
-                                
-                <div class="form-group mb-3">
-                    <label for="phone">Phone<span class="text-danger">*</span></label>
-                    <input type="text" id="phone" name="phone" formControlName="phone" class="form-control" placeholder="Enter Phone Number" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"/>
-                    <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
-                        <div *ngIf="f.phone.errors.required">Field Name is required.</div>
-                    </div>
                 
-                </div>
 
-                
-                <div class="form-group mb-3">
-                    <label for="fax">Fax </label>
-                    <input type="text" id="fax" name="fax" formControlName="fax" class="form-control" placeholder="Enter Fax Number" [ngClass]="{ 'is-invalid': submitted && f.fax.errors }"/>
-                    <div *ngIf="submitted && f.fax.errors" class="invalid-feedback">
-                        <div *ngIf="f.fax.errors.required">Field Name is required.</div>
-                    </div>
-                
+                <div class="col-lg-12 row">
+                  <div class="form-group mb-3 col-lg-6">
+                      <label for="sports">Sports Offered <span class="text-danger">*</span></label>
+
+                      <ng-select [items]="getAllSportmetaData"
+                      id="sports" name="sports" formControlName="sports"
+                    bindLabel="name"
+                    bindValue="_id"
+                    [multiple]="true"
+                    placeholder="Select Sports Offered"
+                    (change)="OnSportChange($event,createorganizationForm)"
+                    [ngClass]="{ 'is-invalid': submitted && f.sports.errors }">
+                      </ng-select>
+                  <!--
+                      <select multiple="true" class="form-control select2" id="sports" name="sports" formControlName="sports" [ngClass]="{ 'is-invalid': submitted && f.sports.errors }">
+                          <option value="" disabled selected>Select Field Type</option>
+                          <option *ngFor="let Typedata of getAllTypemetaData let i = index;">{{Typedata.name}}</option>
+                      </select>
+                  -->
+                      <div *ngIf="submitted && f.sports.errors" class="invalid-feedback">
+                          <div *ngIf="f.sports.errors.required">Field Type is required.</div>
+                      </div>
+                  </div>
                 </div>
                 
-                <div class="form-group mb-3">
-                    <label for="email">Email<span class="text-danger">*</span></label>
-                    <input type="text" id="email" name="email" formControlName="email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
-                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                        <div *ngIf="f.email.errors.required">Field Name is required.</div>
-                    </div>
-                
-                </div>
-
-                <div class="form-group mb-3">
-                    <label for="website">Website </label>
-                    <input type="text" id="website" name="website" formControlName="website" class="form-control" placeholder="Enter Website" [ngClass]="{ 'is-invalid': submitted && f.website.errors }"/>
-                    <div *ngIf="submitted && f.website.errors" class="invalid-feedback">
-                        <div *ngIf="f.website.errors.required">Field Name is required.</div>
-                    </div>
-                
-                </div>
-
-                
-                <div class="form-group mb-3">
-                    <label for="sports">Sports Offered <span class="text-danger">*</span></label>
-
-                    <ng-select [items]="getAllSportmetaData"
-                    id="sports" name="sports" formControlName="sports"
-                   bindLabel="name"
-                   bindValue="_id"
-                   [multiple]="true"
-                   placeholder="Select Sports Offered"
-                   (change)="OnSportChange($event,createorganizationForm)"
-                   [ngClass]="{ 'is-invalid': submitted && f.sports.errors }">
-                    </ng-select>
-                <!--
-                    <select multiple="true" class="form-control select2" id="sports" name="sports" formControlName="sports" [ngClass]="{ 'is-invalid': submitted && f.sports.errors }">
-                        <option value="" disabled selected>Select Field Type</option>
-                        <option *ngFor="let Typedata of getAllTypemetaData let i = index;">{{Typedata.name}}</option>
-                    </select>
-                -->
-                    <div *ngIf="submitted && f.sports.errors" class="invalid-feedback">
-                        <div *ngIf="f.sports.errors.required">Field Type is required.</div>
-                    </div>
-                </div>
 
                
                 <!-- <div class="row" *ngIf="createorganizationForm?.value.sports">
@@ -270,107 +304,123 @@
       
                   </div> -->
 
-                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Primary Contact Details</h5>
 
-                <div class="form-group mb-3">
-                    <label for="primary_first_name">First Name<span class="text-danger">*</span></label>
-                    <input type="text" id="primary_first_name" name="primary_first_name" formControlName="primary_first_name" class="form-control" placeholder="Enter First Name" [ngClass]="{ 'is-invalid': submitted && f.primary_first_name.errors }"/>
-                    <div *ngIf="submitted && f.primary_first_name.errors" class="invalid-feedback">
-                        <div *ngIf="f.primary_first_name.errors.required">First Name is required.</div>
-                    </div>                
-                </div>
+                  <div class="col-lg-12 row">
+                    <div class="col-lg-6">
 
-                <div class="form-group mb-3">
-                    <label for="primary_middle_initial">Middle Initial</label>
-                    <input type="text" id="primary_middle_initial" name="primary_middle_initial" formControlName="primary_middle_initial" class="form-control" placeholder="Enter Middle Initial" [ngClass]="{ 'is-invalid': submitted && f.primary_middle_initial.errors }"/>
-                    <div *ngIf="submitted && f.primary_middle_initial.errors" class="invalid-feedback">
-                        <div *ngIf="f.primary_middle_initial.errors">Middle Initial check character lenght, Maximum 3 character.</div>
+                            <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Primary Contact Details</h5>
+
+                            <div class="form-group mb-3">
+                                <label for="primary_first_name">First Name<span class="text-danger">*</span></label>
+                                <input type="text" id="primary_first_name" name="primary_first_name" formControlName="primary_first_name" class="form-control" placeholder="Enter First Name" [ngClass]="{ 'is-invalid': submitted && f.primary_first_name.errors }"/>
+                                <div *ngIf="submitted && f.primary_first_name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.primary_first_name.errors.required">First Name is required.</div>
+                                    <p  class="error text-danger" *ngIf="f.primary_first_name.errors?.pattern">Enter Alphabet only</p>
+                                </div>                
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="primary_middle_initial">Middle Initial</label>
+                                <input type="text" id="primary_middle_initial" name="primary_middle_initial" formControlName="primary_middle_initial" class="form-control" placeholder="Enter Middle Initial" [ngClass]="{ 'is-invalid': submitted && f.primary_middle_initial.errors }"/>
+                                <div *ngIf="submitted && f.primary_middle_initial.errors" class="invalid-feedback">
+                                    <div *ngIf="f.primary_middle_initial.errors">Middle Initial check character lenght, Maximum 3 character.</div>
+                                    <p class="error text-danger" *ngIf="f.primary_middle_initial.errors?.maxlength">The Middle Initial field maximum length {{f.primary_middle_initial.errors?.maxlength.requiredLength}}</p>
+                                </div>
+                            </div>
+
+                            
+                            <div class="form-group mb-3">
+                                <label for="last_name">Last Name<span class="text-danger">*</span></label>
+                                <input type="text" id="primary_last_name" name="primary_last_name" formControlName="primary_last_name" class="form-control" placeholder="Enter Last Name" [ngClass]="{ 'is-invalid': submitted && f.primary_last_name.errors }"/>
+                                <div *ngIf="submitted && f.primary_last_name.errors" class="invalid-feedback">
+                                    <div *ngIf="f.primary_last_name.errors.required">Last Name is required.</div>
+                                    <p  class="error text-danger" *ngIf="f.primary_last_name.errors?.pattern">Enter Alphabet only</p>
+                                </div>                
+                            </div>
+            
+                            <div class="form-group mb-3">
+                                <label for="primary_suffix">Suffix</label>
+                                <!-- <select class="form-control select2" id="primary_suffix" name="primary_suffix" formControlName="primary_suffix">
+                                    <option value="" disabled selected>Select Suffix</option>
+                                    <option *ngFor="let Typedata of getUserSuffixDataArray let i = index;">{{Typedata.name}}</option>
+                                </select> -->
+
+                                <ng-select [items]="getUserSuffixDataArray"
+                                id="primary_suffix" name="primary_suffix" formControlName="primary_suffix"
+                              bindLabel="name"
+                              bindValue="id"
+                              [multiple]="false"
+                              placeholder="Select Suffix"
+                              [ngClass]="{ 'is-invalid': submitted && f.primary_suffix.errors }">
+                                </ng-select>
+
+                            </div> 
+                        
+                            <div class="form-group mb-3">
+                                <label for="primary_admin_email">Email Address<span class="text-danger">*</span></label>
+                                <input type="text" id="primary_admin_email" name="primary_admin_email" formControlName="primary_admin_email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.primary_admin_email.errors }"/>
+                                <div *ngIf="submitted && f.primary_admin_email.errors" class="invalid-feedback">
+                                    <div *ngIf="f.primary_admin_email.errors.required">Email is required.</div>
+                                    <div *ngIf="f.primary_admin_email.errors?.pattern">Enter a valid email address.</div>
+                                </div>                
+                            </div>
                     </div>
-                </div>
+                    <div class="col-lg-6">
 
-                
-                <div class="form-group mb-3">
-                    <label for="last_name">Last Name<span class="text-danger">*</span></label>
-                    <input type="text" id="primary_last_name" name="primary_last_name" formControlName="primary_last_name" class="form-control" placeholder="Enter Last Name" [ngClass]="{ 'is-invalid': submitted && f.primary_last_name.errors }"/>
-                    <div *ngIf="submitted && f.primary_last_name.errors" class="invalid-feedback">
-                        <div *ngIf="f.primary_last_name.errors.required">Last Name is required.</div>
-                    </div>                
-                </div>
- 
-                <div class="form-group mb-3">
-                    <label for="primary_suffix">Suffix</label>
-                    <!-- <select class="form-control select2" id="primary_suffix" name="primary_suffix" formControlName="primary_suffix">
-                        <option value="" disabled selected>Select Suffix</option>
-                        <option *ngFor="let Typedata of getUserSuffixDataArray let i = index;">{{Typedata.name}}</option>
-                    </select> -->
+                            <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Secondary Contact Details</h5>
 
-                    <ng-select [items]="getUserSuffixDataArray"
-                    id="primary_suffix" name="primary_suffix" formControlName="primary_suffix"
-                   bindLabel="name"
-                   bindValue="id"
-                   [multiple]="false"
-                   placeholder="Select Suffix"
-                   [ngClass]="{ 'is-invalid': submitted && f.primary_suffix.errors }">
-                    </ng-select>
+                            <div class="form-group mb-3">
+                                <label for="secondary_first_name">First Name</label>
+                                <input type="text" id="secondary_first_name" name="secondary_first_name" formControlName="secondary_first_name" class="form-control" placeholder="Enter First Name" />
+                            </div>
 
-                </div> 
-             
-                <div class="form-group mb-3">
-                    <label for="primary_admin_email">Email Address<span class="text-danger">*</span></label>
-                    <input type="text" id="primary_admin_email" name="primary_admin_email" formControlName="primary_admin_email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.primary_admin_email.errors }"/>
-                    <div *ngIf="submitted && f.primary_admin_email.errors" class="invalid-feedback">
-                        <div *ngIf="f.primary_admin_email.errors.required">Email is required.</div>
-                        <div *ngIf="f.primary_admin_email.errors?.pattern">Enter a valid email address.</div>
-                    </div>                
-                </div>
+                            <div class="form-group mb-3">
+                                <label for="secondary_middle_initial">Middle Initial</label>
+                                <input type="text" id="secondary_middle_initial" name="secondary_middle_initial" formControlName="secondary_middle_initial" class="form-control" placeholder="Enter Middle Initial" />
+                                <div *ngIf="submitted && f.secondary_middle_initial.errors" class="invalid-feedback">
+                                    <div *ngIf="f.secondary_middle_initial.errors">Middle Initial check character lenght, Maximum 3 character.</div>
+                                </div>
+                            </div>
 
-                
-                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Secondary Contact Details</h5>
+                            
+                            <div class="form-group mb-3">
+                                <label for="secondary_last_name">Last Name</label>
+                                <input type="text" id="secondary_last_name" name="secondary_last_name" formControlName="secondary_last_name" class="form-control" placeholder="Enter Last Name" />
+                            </div>
+            
+                            <div class="form-group mb-3">
+                                <label for="secondary_suffix">Suffix</label>
+                                <!-- <select class="form-control select2" id="secondary_suffix" name="secondary_suffix" formControlName="secondary_suffix">
+                                    <option value="" disabled selected>Select Suffix</option>
+                                    <option *ngFor="let Typedata of getUserSuffixDataArray let i = index;">{{Typedata.name}}</option>
+                                </select> -->
 
-                <div class="form-group mb-3">
-                    <label for="secondary_first_name">First Name</label>
-                    <input type="text" id="secondary_first_name" name="secondary_first_name" formControlName="secondary_first_name" class="form-control" placeholder="Enter First Name" />
-                </div>
+                                <ng-select [items]="getUserSuffixDataArray"
+                                id="secondary_suffix" name="secondary_suffix" formControlName="secondary_suffix"
+                              bindLabel="name"
+                              bindValue="id"
+                              [multiple]="false"
+                              placeholder="Select Suffix"
+                              [ngClass]="{ 'is-invalid': submitted && f.secondary_suffix.errors }">
+                                </ng-select>
 
-                <div class="form-group mb-3">
-                    <label for="secondary_middle_initial">Middle Initial</label>
-                    <input type="text" id="secondary_middle_initial" name="secondary_middle_initial" formControlName="secondary_middle_initial" class="form-control" placeholder="Enter Middle Initial" />
-                    <div *ngIf="submitted && f.secondary_middle_initial.errors" class="invalid-feedback">
-                        <div *ngIf="f.secondary_middle_initial.errors">Middle Initial check character lenght, Maximum 3 character.</div>
+                            </div> 
+                        
+                            <div class="form-group mb-3">
+                                <label for="email">Email Address</label>
+                                <input type="text" id="secondary_admin_email" name="secondary_admin_email" formControlName="secondary_admin_email" class="form-control" placeholder="Enter Email Address"/>
+                                <div *ngIf="submitted && f.secondary_admin_email.errors" class="invalid-feedback">
+                                    <div *ngIf="f.secondary_admin_email.errors?.pattern">Enter a valid email address.</div>
+                                </div>                
+                            </div>
                     </div>
-                </div>
+
+
+                  </div>
+                
 
                 
-                <div class="form-group mb-3">
-                    <label for="secondary_last_name">Last Name</label>
-                    <input type="text" id="secondary_last_name" name="secondary_last_name" formControlName="secondary_last_name" class="form-control" placeholder="Enter Last Name" />
-                </div>
- 
-                <div class="form-group mb-3">
-                    <label for="secondary_suffix">Suffix</label>
-                    <!-- <select class="form-control select2" id="secondary_suffix" name="secondary_suffix" formControlName="secondary_suffix">
-                        <option value="" disabled selected>Select Suffix</option>
-                        <option *ngFor="let Typedata of getUserSuffixDataArray let i = index;">{{Typedata.name}}</option>
-                    </select> -->
-
-                    <ng-select [items]="getUserSuffixDataArray"
-                    id="secondary_suffix" name="secondary_suffix" formControlName="secondary_suffix"
-                   bindLabel="name"
-                   bindValue="id"
-                   [multiple]="false"
-                   placeholder="Select Suffix"
-                   [ngClass]="{ 'is-invalid': submitted && f.secondary_suffix.errors }">
-                    </ng-select>
-
-                </div> 
-             
-                <div class="form-group mb-3">
-                    <label for="email">Email Address</label>
-                    <input type="text" id="secondary_admin_email" name="secondary_admin_email" formControlName="secondary_admin_email" class="form-control" placeholder="Enter Email Address"/>
-                    <div *ngIf="submitted && f.secondary_admin_email.errors" class="invalid-feedback">
-                        <div *ngIf="f.secondary_admin_email.errors?.pattern">Enter a valid email address.</div>
-                    </div>                
-                </div>
+                
 
                 <div class="col-12">
                     <div class="text-center mb-3">
