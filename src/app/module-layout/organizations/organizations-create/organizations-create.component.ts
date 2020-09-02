@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import * as firebase from 'firebase';
 import { Subject } from 'rxjs';
 
@@ -89,6 +89,7 @@ export class OrganizationsCreateComponent implements OnInit {
     public cookieService: CookieService,
     private notification: NgiNotificationService, 
     private restApiService: RestApiService,
+    private el: ElementRef,
     private organizationsService: OrganizationsService,
     private logger: NGXLogger) { 
      this.createForm(); 
@@ -98,7 +99,7 @@ export class OrganizationsCreateComponent implements OnInit {
     this.createorganizationForm = this.formBuilder.group({
       uid: [''],
       name: ['', [Validators.required]],
-      abbrev: ['', [Validators.required, Validators.maxLength(6), Validators.pattern('^[a-zA-Z]*$')]],
+      abbrev: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[a-zA-Z]*$')]],
       street1: ['', [Validators.required]],
       street2: [''],
       city: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
@@ -110,7 +111,7 @@ export class OrganizationsCreateComponent implements OnInit {
       phone: ['', Validators.compose([
         Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(10)
       ])],
-      fax: ['', [Validators.pattern('^[0-9-()]*$'), , Validators.minLength(10)]],
+      fax: ['', [Validators.pattern('^[0-9-()]*$'), Validators.minLength(10)]],
       email: ['', [Validators.required, Validators.pattern(this.regexp)]],
       website: ['', [Validators.pattern("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")]],
       sports: ['', [Validators.required]],
@@ -168,7 +169,7 @@ export class OrganizationsCreateComponent implements OnInit {
     this.restApiService.lists('organization/'+id).subscribe( orgs => {
       console.log('----orgs----', orgs)
         this.getSports( orgs.country_code );
-        
+
         this.createorganizationForm.patchValue({
           name: orgs.name,
           abbrev: orgs.abbrev[0],
@@ -448,8 +449,17 @@ export class OrganizationsCreateComponent implements OnInit {
       if (form.invalid) {
         console.log("form submit invalid");
         console.log(form);
+
+        const invalidControl = this.el.nativeElement.querySelector('.ng-invalid');
+        if (invalidControl) {
+          console.log('----invalidControl----', invalidControl)
+          invalidControl.focus();
+        }
+
         return;
       }
+
+      
       
     this.displayLoader = true;
     this.loading = true;
