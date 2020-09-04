@@ -22,6 +22,8 @@ import { SeasonListEditComponent } from './season-list-edit/season-list-edit.com
 
 import { DataTablesModule } from 'angular-datatables';
 
+import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 @NgModule({
   declarations: [SeasonCreateComponent, SeasonEditComponent, SeasonViewComponent, SeasonGridComponent, SeasonLayoutComponent, SeasonListComponent, SeasonListCreateComponent, SeasonListViewComponent, SeasonListEditComponent],
   imports: [
@@ -35,7 +37,9 @@ import { DataTablesModule } from 'angular-datatables';
     NgbPaginationModule,
     NgbTypeaheadModule,NgSelectModule,NgbDatepickerModule,FileUploadModule,NgbDropdownModule,
     Ng2SearchPipeModule,NgbAlertModule,
-    DataTablesModule
+    DataTablesModule,
+    BsDatepickerModule.forRoot(),
+    DatepickerModule.forRoot() 
   ],
   entryComponents:[
     SeasonCreateComponent, SeasonEditComponent, SeasonViewComponent, SeasonGridComponent

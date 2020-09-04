@@ -186,6 +186,12 @@ export class SeasonListCreateComponent implements OnInit {
         
       },
       error => {
+        this.displayLoader = false;
+        this.loading = false;
+        console.log(error.message);
+        if(error.message) {
+          this.notification.isNotification(true, "Seasons Error", error.message, "check-square");
+        }
         console.log(error);    
       }
       );
