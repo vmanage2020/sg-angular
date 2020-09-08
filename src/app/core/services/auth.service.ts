@@ -10,11 +10,18 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import {apiURL, Constant} from './config';
 import { Router } from '@angular/router';
 
+import { RestApiService } from '../../shared/rest-api.services';
+
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
     user: User;
 
-    constructor(private http: HttpClient, private cookieService: CookieService, private firestore: AngularFirestore, private firebaseAuth: AngularFireAuth, private router: Router) {
+    constructor(private http: HttpClient, 
+        private cookieService: CookieService, 
+        private firestore: AngularFirestore, 
+        private restApiService: RestApiService,
+        private firebaseAuth: AngularFireAuth, 
+        private router: Router) {
     }
     httpOptions = {
         headers: new HttpHeaders({
@@ -135,6 +142,9 @@ export class AuthenticationService {
         //         }
         //         return user;
         //     }));
+
+        //this.restApiService.signInWithEmailAndPassword(email, password)
+        //console.log('----email----',email,'----password-----',password);return false;
         return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password);
     }
 

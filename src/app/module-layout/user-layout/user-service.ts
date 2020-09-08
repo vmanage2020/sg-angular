@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpHeaderResponse } from '@angular/common/http';
-import { Observable, of, Subject, throwError } from "rxjs";
+import { Observable, of, Subject, throwError, BehaviorSubject } from "rxjs";
 import { retry, catchError, tap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
 import { TitleCasePipe } from '@angular/common';
-import * as _ from "lodash";
+import {get} from "lodash";
 import { toUnicode } from 'punycode';
+
+import { RestApiService } from '../../shared/rest-api.services';
+
 // const admin = require('firebase-admin');
 @Injectable({
     providedIn: 'root'
@@ -15,8 +18,47 @@ import { toUnicode } from 'punycode';
 export class UserService {
     adminref: any = firebase.firestore();
     adminSDKRef: any = firebase.firestore;
+    orgId: any;
 
-    constructor(private titlecasePipe: TitleCasePipe, ) { }
+    public _userlists = new BehaviorSubject<any[]>([]);
+  public dataStore:{ users: any } = { users: [] };
+  readonly connections = this._userlists.asObservable();
+
+    constructor(private titlecasePipe: TitleCasePipe, private restApiService: RestApiService) {
+
+        this.orgId = localStorage.getItem('org_id');
+
+        if(this.orgId!='') {
+            this.getUserList('usersbyorg/'+this.orgId)
+        }else{
+            this.getUserList('users')
+        }
+     }
+
+     private handleError(error: HttpErrorResponse) {
+        const message = get(error, 'message') || 'Something bad happened; please try again later.';
+        return throwError(message);
+      }
+
+     getUserList( url )
+     {
+        this.restApiService.lists(url).subscribe((data: any) => {
+            this.dataStore.users = data;
+            this._userlists.next(Object.assign({}, this.dataStore).users);
+          },
+            catchError(this.handleError)
+          );
+     }
+
+     //getUserId
+    selectedUserId = new BehaviorSubject<any>('')
+    currentEditUserId = this.selectedUserId.asObservable();
+
+
+    editUserData(id)
+    {
+        this.selectedUserId.next(id)
+    }
 
 
     /*Create Sport*/

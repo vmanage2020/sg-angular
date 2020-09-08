@@ -16,7 +16,7 @@ import { NgiNotificationService } from 'ngi-notification';
 
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-
+import { RestApiService } from '../../../shared/rest-api.services';
 
 @Component({
   selector: 'app-user-list-edit',
@@ -69,7 +69,12 @@ export class UserListEditComponent implements OnInit {
   //createUserForm: any[];
   roles: any = [];
 
-  constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,private notification: NgiNotificationService, public cookieService: CookieService) { 
+  constructor(private router: Router, 
+    private route: ActivatedRoute, 
+    private formBuilder: FormBuilder,
+    private notification: NgiNotificationService,
+    private restApiService: RestApiService, 
+    public cookieService: CookieService) { 
     this.createForm(); 
  }
 
@@ -116,7 +121,7 @@ createForm() {
   async getUserInfo(){
 
    
-    this.getUser = await this.db.collection('users').doc(this.resourceID).get();
+    /* this.getUser = await this.db.collection('users').doc(this.resourceID).get();
 
     if (this.getUser.exists) {
       
@@ -127,7 +132,13 @@ createForm() {
       this.getUserData = this.getUser.data();
     } else {
       this.getUserData = [];
-    }
+    } */
+
+    this.restApiService.lists('users/'+this.resourceID).subscribe( users => {
+      this.getUserData =  users;
+    }, error => {
+      console.log('---error API response----')
+    })
     
     if (this.getUserData.date_of_birth) {
       if(typeof(this.getUserData.date_of_birth) !== "string"){
@@ -314,8 +325,24 @@ createForm() {
 
   
   //let saveUserData = await this.db.collection('/users').add(userObj);
+    //console.log('-----userObj-----', userObj)
+    //return false;
 
-  let saveUserData = await this.db.collection('/users').doc(this.resourceID).update(userObj);
+    this.restApiService.update('users/'+this.resourceID,userObj).subscribe( users => {
+
+      this.notification.isNotification(true, "User Update", "User updated successfully.", "times-circle");   
+      this.router.navigate(['/users/list']);
+
+    },error => {
+      console.log('-----Error API update-----')
+      this.displayLoader = true;
+      this.loading = true;
+
+      this.notification.isNotification(true, "User Update", "Unable to insert.Issues on data.Please check data.", "times-circle"); 
+
+    })
+
+  /* let saveUserData = await this.db.collection('/users').doc(this.resourceID).update(userObj);
   if(this.resourceID) {
 
     //console.log(this.roles);
@@ -337,7 +364,7 @@ createForm() {
 
     this.notification.isNotification(true, "User Update", "Unable to insert.Issues on data.Please check data.", "times-circle");   
 
-  }
+  } */
   
   
     

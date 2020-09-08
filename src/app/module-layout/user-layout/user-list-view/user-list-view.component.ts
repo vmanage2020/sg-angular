@@ -14,6 +14,9 @@ import * as moment from 'moment';
 
 import { TitleCasePipe } from '@angular/common';
 
+import { UserService } from '../user-service'
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-user-list-view',
   templateUrl: './user-list-view.component.html',
@@ -44,7 +47,13 @@ export class UserListViewComponent implements OnInit {
   orgId: any;
   selectedRoles: any = [];
   
-  constructor(private router: Router, private route: ActivatedRoute,public cookieService: CookieService, private titlecasePipe: TitleCasePipe,) { }
+  constructor(private router: Router, 
+    private route: ActivatedRoute,
+    public cookieService: CookieService,
+     private titlecasePipe: TitleCasePipe,
+     private restApiService: RestApiService,
+     private userService: UserService
+     ) { }
   
   ngOnInit() { 
     this.uid = this.cookieService.getCookie('uid');
@@ -75,7 +84,7 @@ export class UserListViewComponent implements OnInit {
 
     //this.getUser = await this.db.collection('users').doc(this.resourceID).collection('roles_by_season').where('hasRoleEnabled','==',true).where('is_suspended','==',false).where('is_terminated','==',false).get();
 
-    this.getUser = await this.db.collection('users').doc(this.resourceID).get();
+   /*  this.getUser = await this.db.collection('users').doc(this.resourceID).get();
 
     if (this.getUser.exists) {
       
@@ -86,7 +95,19 @@ export class UserListViewComponent implements OnInit {
       this.getUserData = this.getUser.data();
     } else {
       this.getUserData = [];
-    }
+    } */
+
+    this.restApiService.lists('users/'+this.resourceID).subscribe( users =>{
+      console.log('----users----', users)
+
+      //this.getRoles();
+      //this.getPlayers();
+      //this.getGuardians();
+
+      this.getUserData =  users;
+    }, error => {
+      console.log('---error Api----')
+    })
     
     if (this.getUserData.date_of_birth) {
       if(typeof(this.getUserData.date_of_birth) !== "string"){

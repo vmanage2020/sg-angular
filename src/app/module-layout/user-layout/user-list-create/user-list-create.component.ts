@@ -14,6 +14,9 @@ import { apiURL, Constant } from '../../../core/services/config';
 
 import { NgiNotificationService } from 'ngi-notification';
 
+import { UserService } from '../user-service'
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-user-list-create',
   templateUrl: './user-list-create.component.html',
@@ -61,7 +64,12 @@ export class UserListCreateComponent implements OnInit {
   //createUserForm: any[];
   roles: any = [];
 
-  constructor(private router: Router, private formBuilder: FormBuilder,private notification: NgiNotificationService, public cookieService: CookieService) { 
+  constructor(private router: Router, 
+    private formBuilder: FormBuilder,
+    private notification: NgiNotificationService, 
+    private restApiService: RestApiService,
+    private userService: UserService,
+    public cookieService: CookieService) { 
     this.createForm(); 
  }
 
@@ -194,7 +202,19 @@ createForm() {
       organizations: [this.orgId]
   }
 
-  let saveUserData = await this.db.collection('/users').add(userObj);
+  //console.log('----userObj----', userObj);
+  //return false;
+
+  this.restApiService.create('users',userObj).subscribe( users => {
+    this.userService.dataStore.users.push( users )
+    this.router.navigate(['/users/list']);
+  }, error => {
+    console.log('----invalid to create users----')
+    this.displayLoader = true;
+    this.loading = true;
+    this.notification.isNotification(true, "User Add", "Unable to insert.Issues on data.Please check data.", "times-circle"); 
+  })
+  /* let saveUserData = await this.db.collection('/users').add(userObj);
   if(saveUserData.id) {
 
     userObj.user_id = saveUserData.id;
@@ -215,7 +235,7 @@ createForm() {
 
     this.notification.isNotification(true, "User Add", "Unable to insert.Issues on data.Please check data.", "times-circle");   
 
-  }
+  } */
   
   
     

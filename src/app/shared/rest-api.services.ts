@@ -52,6 +52,19 @@ export class RestApiService {
 			)
 	}
 
+	/* signInWithEmailAndPassword(email: string, password:string): Observable<any> {
+
+		var loginPath = '';
+		return this.http.get<any>( this.baseAPIUrl+loginPath, this.httpOptions)
+		.pipe(
+			map(response => {
+
+				return response;
+				}),
+				catchError(this.handleError)
+			)
+	} */
+
 	create(apiPath: string, formData: any, httpOptions?: any) {
 		/*
 		* apiPath represents path of the API

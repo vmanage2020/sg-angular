@@ -12,6 +12,8 @@ import { DOCUMENT } from '@angular/common';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
+import { UserService } from '../user-service'
+
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -35,7 +37,11 @@ export class UserListComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router,private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService) { }
+  constructor(private router: Router,
+    private notification: NgiNotificationService, 
+    @Inject(DOCUMENT) private _document: Document,
+    private userService: UserService,
+    public cookieService: CookieService) { }
 
   ngOnInit() {
     this.uid = this.cookieService.getCookie('uid');
@@ -50,8 +56,26 @@ export class UserListComponent implements OnInit {
 
   async getUserList(){
 
+    /* onservable code here starts */
+
+    if(this.userService.dataStore.users.length >0)
+    {
+      this.data = this.userService.dataStore.users;
+      this.dtTrigger.next();
+      this.loading = false;
+      this.displayLoader = false;
+      
+    }else{
+      setTimeout(() => {
+          this.getUserList();
+      }, 1000);
+    }
+    /* observable code ends here */
+
     //this.getAllplayerlist = await this.db.collection('users').orderBy('sport_id').get();
-    if(this.orgId=='') {
+
+
+    /* if(this.orgId=='') {
       this.getAllplayerlist = await this.db.collection('users').get();
     } else {
       console.log("orgId"+this.orgId);
@@ -67,7 +91,7 @@ export class UserListComponent implements OnInit {
     this.data = this.getAllPlayerlistData;
     this.dtTrigger.next();
     this.loading = false;
-    this.displayLoader = false; 
+    this.displayLoader = false;  */
  
   }
 
@@ -83,7 +107,7 @@ export class UserListComponent implements OnInit {
     this.router.navigate(['/users/viewlist/'+resourceId]);
   }
   
-  editUser(resourceId: string){
+  editUser(resourceId: string){    
     this.router.navigate(['/users/editlist/'+resourceId]);
   }
 
