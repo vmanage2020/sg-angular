@@ -76,6 +76,8 @@ export class OrganizationsCreateComponent implements OnInit {
   is_editable_value = false;
   is_deletable_value = false;
 
+  selectedOrganizationId: any;
+
   submitted = false;
   createorganizationForm: FormGroup;
 
@@ -165,7 +167,7 @@ export class OrganizationsCreateComponent implements OnInit {
   selectedOrgId( id )
   {
     console.log('----edit org id----', id)
-
+    this.selectedOrganizationId = id;
     this.restApiService.lists('organization/'+id).subscribe( orgs => {
       console.log('----orgs----', orgs)
         this.getSports( orgs.country_code );
@@ -444,104 +446,206 @@ export class OrganizationsCreateComponent implements OnInit {
   async onSubmit(form) {
     console.log("form submit");
     console.log('----form----', form)
-    try {
-      this.submitted = true;
-      if (form.invalid) {
-        console.log("form submit invalid");
-        console.log(form);
 
-        const invalidControl = this.el.nativeElement.querySelector('.ng-invalid');
-        if (invalidControl) {
-          console.log('----invalidControl----', invalidControl)
-          invalidControl.focus();
+    if( this.selectedOrganizationId == '')
+    {
+              try {
+                this.submitted = true;
+                if (form.invalid) {
+                  console.log("form submit invalid");
+                  console.log(form);
+
+                  const invalidControl = this.el.nativeElement.querySelector('.ng-invalid');
+                  if (invalidControl) {
+                    console.log('----invalidControl----', invalidControl)
+                    invalidControl.focus();
+                  }
+
+                  return;
+                }
+
+                
+                
+              this.displayLoader = true;
+              this.loading = true;
+              console.log("form submit valid");  
+              console.log(form);
+            
+              this.uid = this.cookieService.getCookie('uid');
+              this.orgId = localStorage.getItem('org_id');
+            
+              let createOrgObj = form.value;
+
+              var countryname = '';
+              for(let country of this.getAllCountrymetaData){
+                if(form.value.country_code==country.country_code)
+                {
+                  countryname = country.name;
+                }      
+              }
+
+              var statename = '';
+              for(let state of this.getAllStates){
+                if(form.value.state==state.state_code)
+                {
+                  statename = state.name;
+                }      
+              }
+
+
+              const organizationObj: any = {
+                organization_id: '',
+                name: createOrgObj.name || "",
+                abbrev: createOrgObj.abbrev || "",
+                mobile_phone: createOrgObj.phone || "",
+                phone: createOrgObj.phone || "",
+                avatar: createOrgObj.avatar || '',
+                fax: createOrgObj.fax || "",
+                email_address: createOrgObj.email || "",
+                website: createOrgObj.website || "",
+                state_code: createOrgObj.state || "",
+                state: statename || "",
+                country_code: createOrgObj.country_code || "",
+                country: countryname || "",
+                street1: createOrgObj.street1 || "",
+                street2: createOrgObj.street2 || "",
+                city: createOrgObj.city || "",
+                postal_code: createOrgObj.postal_code || "",
+                created_datetime: new Date(),
+                created_uid: this.uid,
+                governing_body_info: [],//createOrgObj.governing_body_info || "",
+                sports: createOrgObj.sports || "",
+                governing_key_array_fields: ''
+              }
+
+
+              console.log('----organizationObj----', organizationObj)
+
+              this.logger.debug('Manager Meta Delete API Start Here====>', new Date().toUTCString());      
+
+              this.restApiService.create('organization',organizationObj).subscribe(resorg => {
+                
+                        
+                this.logger.debug('Manager Meta Delete API End Here====>', new Date().toUTCString());          
+                //console.log(data);
+
+                this.organizationsService.orgdataStore.org = [];
+                let Metaurl= '';
+
+                Metaurl='organization';
+                this.organizationsService.organizationsList(Metaurl);
+                //this.managerCrudService.dataStore.managers.push(data);
+                //this.managerCrudService.dataStore.managers = [data].concat(this.managerCrudService.dataStore.managers);
+                //this.managerCrudService._managers.next(Object.assign({}, this.managerCrudService.dataStore).managers);
+
+
+                //console.log('---resorg-----', resorg)
+                //this.organizationsService.orgdataStore.org.push(resorg)
+                //this.router.navigate(['/organizations']); 
+                this.router.navigate(['/organizations']);
+                this.notification.isNotification(true, "Organization Data", "Organization has been added successfully.", "check-square");
+
+              });
+          } catch (error) {
+              
+            console.log(error);
+            
+          }
+    }else{
+      console.log('---edit process----')
+
+      try {
+        this.submitted = true;
+        if (form.invalid) {
+          console.log("form submit invalid");
+          console.log(form);
+
+          const invalidControl = this.el.nativeElement.querySelector('.ng-invalid');
+          if (invalidControl) {
+            console.log('----invalidControl----', invalidControl)
+            invalidControl.focus();
+          }
+
+          return;
         }
 
-        return;
-      }
+        this.displayLoader = true;
+              this.loading = true;
+              console.log("form submit valid");  
+              console.log(form);
+            
+              this.uid = this.cookieService.getCookie('uid');
+              this.orgId = localStorage.getItem('org_id');
+            
+              let createOrgObj = form.value;
 
-      
-      
-    this.displayLoader = true;
-    this.loading = true;
-    console.log("form submit valid");  
-    console.log(form);
-  
-    this.uid = this.cookieService.getCookie('uid');
-    this.orgId = localStorage.getItem('org_id');
-  
-    let createOrgObj = form.value;
+              var countryname = '';
+              for(let country of this.getAllCountrymetaData){
+                if(form.value.country_code==country.country_code)
+                {
+                  countryname = country.name;
+                }      
+              }
 
-    var countryname = '';
-    for(let country of this.getAllCountrymetaData){
-      if(form.value.country_code==country.country_code)
-      {
-        countryname = country.name;
-      }      
-    }
-
-    var statename = '';
-    for(let state of this.getAllStates){
-      if(form.value.state==state.state_code)
-      {
-        statename = state.name;
-      }      
-    }
+              var statename = '';
+              for(let state of this.getAllStates){
+                if(form.value.state==state.state_code)
+                {
+                  statename = state.name;
+                }      
+              }
 
 
-    const organizationObj: any = {
-      organization_id: '',
-      name: createOrgObj.name || "",
-      abbrev: createOrgObj.abbrev || "",
-      mobile_phone: createOrgObj.phone || "",
-      phone: createOrgObj.phone || "",
-      avatar: createOrgObj.avatar || '',
-      fax: createOrgObj.fax || "",
-      email_address: createOrgObj.email || "",
-      website: createOrgObj.website || "",
-      state_code: createOrgObj.state || "",
-      state: statename || "",
-      country_code: createOrgObj.country_code || "",
-      country: countryname || "",
-      street1: createOrgObj.street1 || "",
-      street2: createOrgObj.street2 || "",
-      city: createOrgObj.city || "",
-      postal_code: createOrgObj.postal_code || "",
-      created_datetime: new Date(),
-      created_uid: this.uid,
-      governing_body_info: [],//createOrgObj.governing_body_info || "",
-      sports: createOrgObj.sports || "",
-      governing_key_array_fields: ''
-    }
+              const organizationObj: any = {
+                organization_id: this.orgId || "",
+                name: createOrgObj.name || "",
+                abbrev: createOrgObj.abbrev || "",
+                mobile_phone: createOrgObj.phone || "",
+                phone: createOrgObj.phone || "",
+                avatar: createOrgObj.avatar || '',
+                fax: createOrgObj.fax || "",
+                email_address: createOrgObj.email || "",
+                website: createOrgObj.website || "",
+                state_code: createOrgObj.state || "",
+                state: statename || "",
+                country_code: createOrgObj.country_code || "",
+                country: countryname || "",
+                street1: createOrgObj.street1 || "",
+                street2: createOrgObj.street2 || "",
+                city: createOrgObj.city || "",
+                postal_code: createOrgObj.postal_code || "",
+                updated_datetime: new Date(),
+                updated_uid: this.uid,
+                governing_body_info: [],//createOrgObj.governing_body_info || "",
+                sports: createOrgObj.sports || "",
+                governing_key_array_fields: ''
+              }
 
 
-    console.log('----organizationObj----', organizationObj)
+              console.log('----organizationObj----', organizationObj)
 
-    this.logger.debug('Manager Meta Delete API Start Here====>', new Date().toUTCString());      
+              this.restApiService.update('organization/'+this.orgId,organizationObj).subscribe(resorg => {
 
-    this.restApiService.create('organization',organizationObj).subscribe(resorg => {
-      
+                this.organizationsService.orgdataStore.org = [];
+                let Metaurl= '';
+                
+                Metaurl='organization';
+                this.organizationsService.organizationsList(Metaurl);
+
+                this.router.navigate(['/organizations']);
+                this.notification.isNotification(true, "Organization Data", "Organization has been updated successfully.", "check-square");
+
+              },error => {
+                console.log('---error API response----')
+              })
+
+      }catch (error) {
               
-      this.logger.debug('Manager Meta Delete API End Here====>', new Date().toUTCString());          
-      //console.log(data);
-
-      this.organizationsService.orgdataStore.org = [];
-      let Metaurl= '';
-
-      Metaurl='organization';
-      this.organizationsService.organizationsList(Metaurl);
-      //this.managerCrudService.dataStore.managers.push(data);
-      //this.managerCrudService.dataStore.managers = [data].concat(this.managerCrudService.dataStore.managers);
-      //this.managerCrudService._managers.next(Object.assign({}, this.managerCrudService.dataStore).managers);
-
-
-      //console.log('---resorg-----', resorg)
-      //this.organizationsService.orgdataStore.org.push(resorg)
-      //this.router.navigate(['/organizations']); 
-      this.router.navigate(['/organizations']);
-      this.notification.isNotification(true, "Organization Data", "Organization has been added successfully.", "check-square");
-
-    });
-
+        console.log(error);
+        
+      }
+    }
+    
     /* let createObjOrg: any = [];
     createObjOrg = await this.db.collection('organization').add(organizationObj);
       await createObjOrg.set({ organization_id: createObjOrg.id }, { merge: true });
@@ -585,11 +689,11 @@ export class OrganizationsCreateComponent implements OnInit {
       await createObjRoot.set({ field_id: createObjRoot.id }, { merge: true });
       this.router.navigate(['/playermeta']); */
 
-    } catch (error) {
+    /* } catch (error) {
       
       console.log(error);
        
-    }
+    } */
   }
  
 
