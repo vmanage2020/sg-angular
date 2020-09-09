@@ -1,14 +1,65 @@
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 import { TitleCasePipe } from '@angular/common';
-import * as _ from "lodash";
+import {get} from "lodash";
+
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpHeaderResponse } from '@angular/common/http';
+
+import { Observable, of, Subject, throwError, BehaviorSubject } from "rxjs";
+import { retry, catchError, tap, map } from 'rxjs/operators';
+
+import { RestApiService } from '../../shared/rest-api.services';
 @Injectable({
     providedIn: 'root'
 })
 export class ImportLogService {
     adminref: any = firebase.firestore();
+    orgId: any;
 
-    constructor(private titlecasePipe: TitleCasePipe, ) { }
+    public _importusers = new BehaviorSubject<any[]>([]);
+  public dataStore:{ userlogs: any } = { userlogs: [] };
+  readonly connections = this._importusers.asObservable();
+
+  public _sports = new BehaviorSubject<any[]>([]);
+  public sportsdataStore:{ sports: any } = { sports: [] };
+  readonly connections1 = this._sports.asObservable();
+
+    constructor(private titlecasePipe: TitleCasePipe, 
+        private restApiService: RestApiService) { 
+
+            this.orgId = localStorage.getItem('org_id');
+            console.log('orgId',this.orgId);
+            
+            var url = 'importuserlogsdbyorg/'+this.orgId;
+            this.getUserlogs(url);
+
+            this.getSports('sports');
+        }
+
+        private handleError(error: HttpErrorResponse) {
+        const message = get(error, 'message') || 'Something bad happened; please try again later.';
+        return throwError(message);
+        }
+
+        getUserlogs( url)
+        {
+            this.restApiService.lists(url).subscribe( data => {
+                this.dataStore.userlogs = data.reverse();
+                this._importusers.next(Object.assign({}, this.dataStore).userlogs);
+            },
+                catchError(this.handleError)
+            );
+        }
+
+        getSports( url )
+        {
+            this.restApiService.lists(url).subscribe( data => {
+                this.sportsdataStore.sports = data.reverse();
+                this._sports.next(Object.assign({}, this.sportsdataStore).sports);
+            },
+                catchError(this.handleError)
+            );
+        }
 
     // get All users list
     async getImportUserList(getSportObj: any) {

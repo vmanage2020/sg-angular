@@ -12,6 +12,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
+import { ImportLogService } from '../importLog-service';
 @Component({
   selector: 'app-import-user-list',
   templateUrl: './import-user-list.component.html',
@@ -34,7 +35,11 @@ export class ImportUserListComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService) { }
+  constructor(private router: Router, 
+    private notification: NgiNotificationService,
+     @Inject(DOCUMENT) private _document: Document,
+     private importLogService: ImportLogService,
+     public cookieService: CookieService) { }
 
   ngOnInit() { 
 
@@ -50,7 +55,27 @@ export class ImportUserListComponent implements OnInit {
 
   async getLevel(){
     console.log(this.orgId);
-    if(this.orgId=='') {
+    
+    if(this.orgId !='') {
+      if(this.importLogService.dataStore.userlogs.length >0)
+      {
+        console.log('---logs----', this.importLogService.dataStore.userlogs)
+      
+        this.data = this.importLogService.dataStore.userlogs;
+        this.dtTrigger.next();
+        this.loading = false;
+        this.displayLoader = false;
+
+      }else{
+        setTimeout(() => {
+          this.getLevel();
+        }, 1000);
+      }
+
+    }
+    
+
+    /* if(this.orgId=='') {
       
       //this.getAllLevel = await this.db.collection('levels').orderBy('sport_id').get();
 
@@ -69,7 +94,7 @@ export class ImportUserListComponent implements OnInit {
     this.data = this.getAllLevelData;
     this.dtTrigger.next();
     this.loading = false;
-    this.displayLoader = false; 
+    this.displayLoader = false;  */
  
     console.log(this.data);
 

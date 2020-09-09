@@ -14,6 +14,9 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { SharedService } from 'src/app/shared/shared.service';
 import { NgiNotificationService } from 'ngi-notification';
 
+import { ImportLogService } from '../importLog-service'
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-import-user-list-create',
   templateUrl: './import-user-list-create.component.html',
@@ -74,7 +77,14 @@ export class ImportUserListCreateComponent implements OnInit {
   metadata: any;
   progress = 0;
 
-  constructor( private sharedService: SharedService, private injector: Injector, private router: Router, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService) { 
+  constructor( private sharedService: SharedService, 
+    private injector: Injector,
+     private router: Router,
+      private formBuilder: FormBuilder,
+      public cookieService: CookieService, 
+      private importLogService: ImportLogService,
+      private restApiService: RestApiService,
+      private notification: NgiNotificationService) { 
     
     this.userName = this.cookieService.getCookie('userName');
     this.userData = this.cookieService.getCookie('user');
@@ -183,11 +193,19 @@ export class ImportUserListCreateComponent implements OnInit {
 
   async getAllSports(){    
     
+    if(this.importLogService.sportsdataStore.sports.length > 0)
+    {
+      this.getSportsArray = this.importLogService.sportsdataStore.sports;
+    }else{
+      setTimeout(() => {
+          this.getAllSports();
+      }, 1000);
+    }
     //this.getSports = await this.db.collection('sports').orderBy('sport_id').get();
-    this.getSports = await this.db.collection('/organization').doc(this.orgId).collection('/sports').orderBy('sport_id').get();
+    /* this.getSports = await this.db.collection('/organization').doc(this.orgId).collection('/sports').orderBy('sport_id').get();
     this.getSportsData = await this.getSports.docs.map((doc: any) => doc.data());
     this.getSportsArray = this.getSportsData; 
-    console.log(this.getSportsArray);
+    console.log(this.getSportsArray); */
 
   }
 
@@ -196,10 +214,16 @@ export class ImportUserListCreateComponent implements OnInit {
     
     //this.getSports = await this.db.collection('sports').orderBy('sport_id').get();
     //this.getSeasons = await this.db.collection('/organization').doc(this.orgId).collection('/seasons').orderBy('season_id').get();
-    this.getSeasons = await this.db.collection('seasons').where('organization_id', '==', this.orgId).get();
+    console.log('----orgId----', this.orgId)
+    this.restApiService.lists('seasonsbyorg/'+ this.orgId).subscribe( seasons => {
+      this.getSeasonsArray = seasons
+    }, error => {
+      console.log('---error API response----')
+    })
+    /* this.getSeasons = await this.db.collection('seasons').where('organization_id', '==', this.orgId).get();
     this.getSeasonsData = await this.getSeasons.docs.map((doc: any) => doc.data());
     this.getSeasonsArray = this.getSeasonsData; 
-    console.log(this.getSeasonsArray);
+    console.log(this.getSeasonsArray); */
 
   }
 
@@ -489,15 +513,20 @@ async getSeasonBySport(sportId) {
 
 
 selectedSport(event, form) {
-   console.log(event.target.value);
-   for(let sports of this.getSportsArray){
-    if(event.target.value==sports.sport_id)
-      {
-        localStorage.setItem('SelectedSportName', sports.name);
-        form.value.sports_name = sports.name;
-      }      
-    }
-    this.getSeasonsBySport(event.target.value)
+   console.log('---event-----',event);
+   if( event != undefined && this.getSportsArray.length>0)
+   {
+    for(let sports of this.getSportsArray){
+      if(event.sport_id==sports.sport_id)
+        {
+          localStorage.setItem('SelectedSportName', sports.name);
+          form.value.sports_name = sports.name;
+        }      
+      }
+      //this.getSeasonsBySport(event.sport_id)
+   }
+   
+    
 }
 
 selectedSeason(event, form) {

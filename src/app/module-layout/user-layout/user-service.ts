@@ -27,8 +27,9 @@ export class UserService {
     constructor(private titlecasePipe: TitleCasePipe, private restApiService: RestApiService) {
 
         this.orgId = localStorage.getItem('org_id');
-
+        this.dataStore.users = [];
         if(this.orgId!='') {
+            console.log('---this.orgId---', this.orgId)
             this.getUserList('usersbyorg/'+this.orgId)
         }else{
             this.getUserList('users')

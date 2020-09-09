@@ -12,7 +12,8 @@
 
                     <ng-select [items]="getSportsArray" bindLabel="name" bindValue="sport_id"
                         id="sports_id" name="sports_id" formControlName="sports_id" 
-                        placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sports_id.errors }" (change)="selectedSport($event,createcannedresponseForm)">
+                        placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sports_id.errors }" 
+                        (change)="selectedSport($event,createcannedresponseForm)">
                     </ng-select>
                     <!--
                     <select class="form-control select2" id="sports_id" name="sports_id" formControlName="sports_id" [ngClass]="{ 'is-invalid': submitted && f.sports_id.errors }" (change)="selectedSport($event,createcannedresponseForm)">
