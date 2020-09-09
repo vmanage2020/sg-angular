@@ -231,10 +231,15 @@ export class ImportUserListCreateComponent implements OnInit {
     
     //this.getSports = await this.db.collection('sports').orderBy('sport_id').get();
     //this.getSeasons = await this.db.collection('/organization').doc(this.orgId).collection('/seasons').orderBy('season_id').get();
-    this.getSeasons = await this.db.collection('seasons').where('organization_id', '==', this.orgId).where('sports_id', '==', sid).get();
+    this.restApiService.lists('seasonsbysports/'+ sid).subscribe( seasons => {
+      this.getSeasonsArray = seasons
+    }, error => {
+      console.log('---error API response----')
+    })
+    /* this.getSeasons = await this.db.collection('seasons').where('organization_id', '==', this.orgId).where('sports_id', '==', sid).get();
     this.getSeasonsData = await this.getSeasons.docs.map((doc: any) => doc.data());
     this.getSeasonsArray = this.getSeasonsData; 
-    console.log(this.getSeasonsArray);
+    console.log(this.getSeasonsArray); */
 
   }
 
@@ -523,7 +528,7 @@ selectedSport(event, form) {
           form.value.sports_name = sports.name;
         }      
       }
-      //this.getSeasonsBySport(event.sport_id)
+      this.getSeasonsBySport(event.sport_id)
    }
    
     
