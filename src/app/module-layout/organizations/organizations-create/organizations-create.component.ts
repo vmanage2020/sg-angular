@@ -76,7 +76,7 @@ export class OrganizationsCreateComponent implements OnInit {
   is_editable_value = false;
   is_deletable_value = false;
 
-  selectedOrganizationId: any;
+  selectedOrganizationId: any = '';
 
   submitted = false;
   createorganizationForm: FormGroup;
@@ -190,7 +190,12 @@ export class OrganizationsCreateComponent implements OnInit {
           primary_middle_initial: orgs.primary_middle_initial,
           primary_last_name: orgs.primary_last_name,
           primary_admin_email: orgs.primary_admin_email,
-
+          primary_suffix: orgs.primary_suffix,
+          secondary_first_name: orgs.secondary_first_name,
+          secondary_middle_initial: orgs.secondary_middle_initial,
+          secondary_last_name: orgs.secondary_last_name,
+          secondary_suffix : orgs.secondary_suffix,
+          secondary_admin_email: orgs.secondary_admin_email
         })
     }, err =>{
       console.log('---error for fetching data----')
@@ -446,7 +451,9 @@ export class OrganizationsCreateComponent implements OnInit {
   async onSubmit(form) {
     console.log("form submit");
     console.log('----form----', form)
-
+    console.log('---this.selectedOrganizationId----', this.selectedOrganizationId)
+    //return false;
+    
     if( this.selectedOrganizationId == '')
     {
               try {
@@ -494,32 +501,45 @@ export class OrganizationsCreateComponent implements OnInit {
 
 
               const organizationObj: any = {
-                organization_id: '',
-                name: createOrgObj.name || "",
-                abbrev: createOrgObj.abbrev || "",
-                mobile_phone: createOrgObj.phone || "",
-                phone: createOrgObj.phone || "",
-                avatar: createOrgObj.avatar || '',
-                fax: createOrgObj.fax || "",
-                email_address: createOrgObj.email || "",
-                website: createOrgObj.website || "",
-                state_code: createOrgObj.state || "",
-                state: statename || "",
-                country_code: createOrgObj.country_code || "",
-                country: countryname || "",
-                street1: createOrgObj.street1 || "",
-                street2: createOrgObj.street2 || "",
-                city: createOrgObj.city || "",
-                postal_code: createOrgObj.postal_code || "",
-                created_datetime: new Date(),
-                created_uid: this.uid,
-                governing_body_info: [],//createOrgObj.governing_body_info || "",
-                sports: createOrgObj.sports || "",
-                governing_key_array_fields: ''
+                organization_id                 : '',
+                name                            : createOrgObj.name || "",
+                abbrev                          : createOrgObj.abbrev || "",
+                mobile_phone                    : createOrgObj.phone || "",
+                phone                           : createOrgObj.phone || "",
+                avatar                          : createOrgObj.avatar || '',
+                fax                             : createOrgObj.fax || "",
+                email_address                   : createOrgObj.email || "",
+                website                         : createOrgObj.website || "",
+                state_code                      : createOrgObj.state || "",
+                state                           : statename || "",
+                country_code                    : createOrgObj.country_code || "",
+                country                         : countryname || "",
+                street1                         : createOrgObj.street1 || "",
+                street2                         : createOrgObj.street2 || "",
+                city                            : createOrgObj.city || "",
+                postal_code                     : createOrgObj.postal_code || "",
+                created_datetime                : new Date(),
+                created_uid                     : this.uid,
+                governing_body_info             : [],//createOrgObj.governing_body_info || "",
+                sports                          : createOrgObj.sports || "",
+                governing_key_array_fields      : '',
+                primary_first_name              : createOrgObj.primary_first_name || "",
+                primary_middle_initial          : createOrgObj.primary_middle_initial || "",
+                primary_last_name               : createOrgObj.primary_last_name || "",
+                primary_suffix                  : createOrgObj.primary_suffix || "",
+                primary_admin_email             : createOrgObj.primary_admin_email || "",
+                primary_user_id                 : this.uid || "",
+                secondary_first_name            : createOrgObj.secondary_first_name || "",
+                secondary_middle_initial        : createOrgObj.secondary_middle_initial || "",
+                secondary_last_name             : createOrgObj.secondary_last_name || "",
+                secondary_suffix                : createOrgObj.secondary_suffix || "",
+                secondary_admin_email           : createOrgObj.secondary_admin_email || "",
+                secondary_user_id               : this.uid || ""
               }
 
 
-              console.log('----organizationObj----', organizationObj)
+              console.log('---- create organizationObj----', organizationObj)
+              //return false;
 
               this.logger.debug('Manager Meta Delete API Start Here====>', new Date().toUTCString());      
 
@@ -597,34 +617,47 @@ export class OrganizationsCreateComponent implements OnInit {
 
 
               const organizationObj: any = {
-                organization_id: this.orgId || "",
-                name: createOrgObj.name || "",
-                abbrev: createOrgObj.abbrev || "",
-                mobile_phone: createOrgObj.phone || "",
-                phone: createOrgObj.phone || "",
-                avatar: createOrgObj.avatar || '',
-                fax: createOrgObj.fax || "",
-                email_address: createOrgObj.email || "",
-                website: createOrgObj.website || "",
-                state_code: createOrgObj.state || "",
-                state: statename || "",
-                country_code: createOrgObj.country_code || "",
-                country: countryname || "",
-                street1: createOrgObj.street1 || "",
-                street2: createOrgObj.street2 || "",
-                city: createOrgObj.city || "",
-                postal_code: createOrgObj.postal_code || "",
-                updated_datetime: new Date(),
-                updated_uid: this.uid,
-                governing_body_info: [],//createOrgObj.governing_body_info || "",
-                sports: createOrgObj.sports || "",
-                governing_key_array_fields: ''
+                organization_id                 : this.selectedOrganizationId || "",
+                name                            : createOrgObj.name || "",
+                abbrev                          : createOrgObj.abbrev || "",
+                mobile_phone                    : createOrgObj.phone || "",
+                phone                           : createOrgObj.phone || "",
+                avatar                          : createOrgObj.avatar || '',
+                fax                             : createOrgObj.fax || "",
+                email_address                   : createOrgObj.email || "",
+                website                         : createOrgObj.website || "",
+                state_code                      : createOrgObj.state || "",
+                state                           : statename || "",
+                country_code                    : createOrgObj.country_code || "",
+                country                         : countryname || "",
+                street1                         : createOrgObj.street1 || "",
+                street2                         : createOrgObj.street2 || "",
+                city                            : createOrgObj.city || "",
+                postal_code                     : createOrgObj.postal_code || "",
+                updated_datetime                : new Date(),
+                updated_uid                     : this.uid,
+                governing_body_info             : [],//createOrgObj.governing_body_info || "",
+                sports                          : createOrgObj.sports || "",
+                governing_key_array_fields      : '',
+                primary_first_name              : createOrgObj.primary_first_name || "",
+                primary_middle_initial          : createOrgObj.primary_middle_initial || "",
+                primary_last_name               : createOrgObj.primary_last_name || "",
+                primary_suffix                  : createOrgObj.primary_suffix || "",
+                primary_admin_email             : createOrgObj.primary_admin_email || "",
+                primary_user_id                 : this.uid || "",
+                secondary_first_name            : createOrgObj.secondary_first_name || "",
+                secondary_middle_initial        : createOrgObj.secondary_middle_initial || "",
+                secondary_last_name             : createOrgObj.secondary_last_name || "",
+                secondary_suffix                : createOrgObj.secondary_suffix || "",
+                secondary_admin_email           : createOrgObj.secondary_admin_email || "",
+                secondary_user_id               : this.uid || ""
               }
 
 
-              console.log('----organizationObj----', organizationObj)
+              console.log('----update organizationObj----', organizationObj)
+              //return false;
 
-              this.restApiService.update('organization/'+this.orgId,organizationObj).subscribe(resorg => {
+              this.restApiService.update('organization/'+this.selectedOrganizationId,organizationObj).subscribe(resorg => {
 
                 this.organizationsService.orgdataStore.org = [];
                 let Metaurl= '';

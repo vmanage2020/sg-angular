@@ -35,6 +35,7 @@ export class OrganizationsViewComponent implements OnInit {
   getUserData: any = [];
   sportsRef: any = [];
   sportsRefData: any = [];
+  sportList:any;
   
   data: any;
   dtOptions: DataTables.Settings = {};
@@ -49,7 +50,7 @@ export class OrganizationsViewComponent implements OnInit {
   uid: any;
   orgId: any;
   selectedRoles: any = [];
-  
+  sportsName: any[]  = [];
   
   constructor(private router: Router, 
     private route: ActivatedRoute,
@@ -62,11 +63,30 @@ export class OrganizationsViewComponent implements OnInit {
   ngOnInit() {
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
-    this.getOrganizationInfo();  
+    this.getSports();
+    setTimeout(() => {
+      this.getOrganizationInfo();  
+    }, 3000);
+    
+    
     console.log(this.resourceID);
 
   }
 
+  async getSports()
+  {
+    if(this.organizationsService.dataStore.sports.length>0)
+    {
+      this.sportList = this.organizationsService.dataStore.sports;
+
+      
+    }else{
+      setTimeout(() => {
+        this.getSports()
+      }, 1000);
+    }
+  }
+  
   async getOrganizationInfo(){
 
     /*
@@ -105,8 +125,19 @@ export class OrganizationsViewComponent implements OnInit {
         */
 
     this.restApiService.lists('organization/'+this.resourceID).subscribe( res => {
-
+      console.log('----res----', res)
       this.getUserData = res;
+
+      console.log('---this.sportList----', this.sportList)
+      if( this.sportList.length >0)
+      {
+        this.sportList.forEach( sp => {
+          if(res.sports.indexOf(sp._id) !== -1){
+            this.sportsName.push(sp.name)
+          }
+        })
+      }
+      console.log('----this.sportsName----', this.sportsName)
       /* if (this.getUser.exists) {
    
         this.getUserData = this.getUser.data();

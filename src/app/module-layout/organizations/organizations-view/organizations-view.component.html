@@ -149,7 +149,11 @@
                             <label for="product-name" style="width:200px;">Primary Contact </label>
                             
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.primary_first_name}} </label>
+                                <label for="inlineRadio2"> {{getUserData.primary_first_name}},
+                                    {{getUserData.primary_last_name}},{{getUserData.primary_middle_initial}},
+                                    {{getUserData.primary_suffix}},
+                                    {{getUserData.primary_admin_email}}
+                                </label>
                             </div>
                         </div>
 
@@ -157,15 +161,18 @@
                             <label for="product-name" style="width:200px;">Secondary Contact </label>
                             
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.field_type}} </label>
+                                <label for="inlineRadio2"> {{getUserData.secondary_first_name}},
+                                    {{getUserData.secondary_last_name}},{{getUserData.secondary_middle_initial}},
+                                    {{getUserData.secondary_suffix}},
+                                    {{getUserData.secondary_admin_email}} </label>
                             </div>
                         </div>
                         
                         <div class="form-group mb-3">
                             <label for="product-reference" style="width:200px;">Sports Offered </label>
-                            
+                           
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.sportsRef}} </label>
+                                <label for="inlineRadio2" *ngIf="sportsName.length>0"> {{sportsName}} </label>
                                 
                             </div> 
                         </div>
