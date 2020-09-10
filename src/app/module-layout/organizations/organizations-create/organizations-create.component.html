@@ -25,8 +25,8 @@
                       <div *ngIf="submitted && f.abbrev.errors" class="invalid-feedback">
                           <div *ngIf="f.abbrev.errors.required">Abbreviation is required.</div>
 
-                          <p class="error text-danger" *ngIf="f.abbrev.errors?.minlength">The Abbreviation field minimum length {{f.abbrev.errors?.minlength.requiredLength}}</p>
-                          <p class="error text-danger" *ngIf="f.abbrev.errors?.maxlength">The Abbreviation field maximum length {{f.abbrev.errors?.maxlength.requiredLength}}</p>
+                          <p class="error text-danger" *ngIf="f.abbrev.errors?.minlength">Abbreviation should contain at least {{f.abbrev.errors?.minlength.requiredLength}} characters</p>
+                          <p class="error text-danger" *ngIf="f.abbrev.errors?.maxlength">Abbreviation should contain at least {{f.abbrev.errors?.maxlength.requiredLength}} characters</p>
 
                       </div>
                   
@@ -121,7 +121,7 @@
                         </ng-select>
 
                         <div *ngIf="submitted && f.country_code.errors" class="invalid-feedback">
-                            <div *ngIf="f.country_code.errors.required">Field Type is required.</div>
+                            <div *ngIf="f.country_code.errors.required">Country is required.</div>
                         </div>
                     </div>
                 </div>
@@ -134,8 +134,8 @@
                       <label for="phone">Phone<span class="text-danger">*</span></label>
                       <input type="text" id="phone" name="phone" formControlName="phone" class="form-control" placeholder="Enter Phone Number" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"/>
                       <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
-                          <div *ngIf="f.phone.errors.required">Field Name is required.</div>
-                          <p class="error text-danger" *ngIf="f.phone.errors?.minlength">The Phone field minimum length {{f.phone.errors?.minlength.requiredLength}}</p>
+                          <div *ngIf="f.phone.errors.required">Phone number is required.</div>
+                          <p class="error text-danger" *ngIf="f.phone.errors?.minlength">The Phone number minimum length {{f.phone.errors?.minlength.requiredLength}}</p>
                           
                       </div>
                   
@@ -146,8 +146,8 @@
                       <label for="fax">Fax </label>
                       <input type="text" id="fax" name="fax" formControlName="fax" class="form-control" placeholder="Enter Fax Number" [ngClass]="{ 'is-invalid': submitted && f.fax.errors }"/>
                       <div *ngIf="submitted && f.fax.errors" class="invalid-feedback">
-                          <div *ngIf="f.fax.errors.required">Field Name is required.</div>
-                          <p class="error text-danger" *ngIf="f.fax.errors?.minlength">The Fax field minimum length {{f.fax.errors?.minlength.requiredLength}}</p>
+                          <div *ngIf="f.fax.errors.required">Fax number is required.</div>
+                          <p class="error text-danger" *ngIf="f.fax.errors?.minlength">The Fax number minimum length {{f.fax.errors?.minlength.requiredLength}}</p>
                       </div>
                   
                   </div>
@@ -159,7 +159,7 @@
                       <label for="email">Email<span class="text-danger">*</span></label>
                       <input type="text" id="email" name="email" formControlName="email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
                       <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                          <div *ngIf="f.email.errors.required">Field Name is required.</div>
+                          <div *ngIf="f.email.errors.required">Email ID is required.</div>
                           <p  class="error text-danger" *ngIf="f.email.errors?.pattern">Invaid Email pattern</p>
                       </div>
                   
@@ -169,7 +169,7 @@
                       <label for="website">Website </label>
                       <input type="text" id="website" name="website" formControlName="website" class="form-control" placeholder="Enter Website" [ngClass]="{ 'is-invalid': submitted && f.website.errors }"/>
                       <div *ngIf="submitted && f.website.errors" class="invalid-feedback">
-                          <div *ngIf="f.website.errors.required">Field Name is required.</div>
+                          <div *ngIf="f.website.errors.required">Website is required.</div>
                           <p  class="error text-danger" *ngIf="f.website.errors?.pattern">Invaid Website pattern</p>
                       </div>
                   
@@ -198,7 +198,7 @@
                       </select>
                   -->
                       <div *ngIf="submitted && f.sports.errors" class="invalid-feedback">
-                          <div *ngIf="f.sports.errors.required">Field Type is required.</div>
+                          <div *ngIf="f.sports.errors.required">Sports is required.</div>
                       </div>
                   </div>
                 </div>
