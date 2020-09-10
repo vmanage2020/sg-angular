@@ -24,6 +24,10 @@ export class UserService {
   public dataStore:{ users: any } = { users: [] };
   readonly connections = this._userlists.asObservable();
 
+  public _rolelists = new BehaviorSubject<any[]>([]);
+  public roledataStore:{ roles: any } = { roles: [] };
+  readonly connections1 = this._rolelists.asObservable();
+
     constructor(private titlecasePipe: TitleCasePipe, private restApiService: RestApiService) {
         /*
         this.orgId = localStorage.getItem('org_id');
@@ -47,6 +51,7 @@ export class UserService {
        }
        console.log('Metaurl',Metaurl);
        this.getUserList(Metaurl); 
+       this.getRoles('roles')
        
      }
 
@@ -64,6 +69,16 @@ export class UserService {
           },
             catchError(this.handleError)
           );
+     }
+
+     getRoles( url)
+     {
+        this.restApiService.lists(url).subscribe((data: any) => {
+            this.roledataStore.roles = data;
+            this._rolelists.next(Object.assign({}, this.roledataStore).roles);
+        },
+            catchError(this.handleError)
+        );
      }
 
      //getUserId

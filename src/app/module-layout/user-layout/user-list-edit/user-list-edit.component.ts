@@ -16,6 +16,8 @@ import { NgiNotificationService } from 'ngi-notification';
 
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+
+import { UserService } from '../user-service'
 import { RestApiService } from '../../../shared/rest-api.services';
 
 @Component({
@@ -36,7 +38,7 @@ export class UserListEditComponent implements OnInit {
   getUserRoleDataArray: any = [];
   roleList: any = [];
 
-  rolesArrayList: any[];
+  rolesArrayList: any = [];
 
   getUserSuffixDataArray: any = [
     { name: 'Sr' },
@@ -73,7 +75,8 @@ export class UserListEditComponent implements OnInit {
     private route: ActivatedRoute, 
     private formBuilder: FormBuilder,
     private notification: NgiNotificationService,
-    private restApiService: RestApiService, 
+    private restApiService: RestApiService,
+    private userService:UserService, 
     public cookieService: CookieService) { 
     this.createForm(); 
  }
@@ -135,19 +138,34 @@ createForm() {
     } */
 
     this.restApiService.lists('users/'+this.resourceID).subscribe( users => {
+      
+      console.log('---users----', users)
+      
+      users.roles.forEach( rr => { 
+        this.rolesArrayList.push(rr.role_id)
+      })
+      //this.rolesArrayList = users.roles;
+
       this.getUserData =  users;
+      this.createuserForm.patchValue({
+        first_name: users.first_name,
+        middle_initial: users.middle_initial,
+        last_name: users.last_name,
+        suffix: users.suffix,
+        email: users.email_address
+      })
     }, error => {
       console.log('---error API response----')
     })
     
-    if (this.getUserData.date_of_birth) {
+    /* if ( this.getUserData.date_of_birth != undefined && this.getUserData.date_of_birth !='') {
       if(typeof(this.getUserData.date_of_birth) !== "string"){
         this.getUserData.date_of_birth = moment(this.getUserData.date_of_birth.toDate()).format('MM-DD-YYYY').toString();
       }else{
         this.getUserData.date_of_birth = moment(this.getUserData.date_of_birth).format('MM-DD-YYYY').toString();
       }
       
-    }
+    } */
 
     console.log(this.getUserData);
 
@@ -241,7 +259,38 @@ createForm() {
   
  async getUserRoles(){
     
-  this.getUserRoleData = await this.db.collection('roles').orderBy('role_id').get();
+  if(this.userService.roledataStore.roles.length > 0)
+    {
+      this.roleList = this.userService.roledataStore.roles;
+      this.role = JSON.parse(localStorage.getItem('roleList'));
+      let roleListArr = this.role.map(roles => {
+        if (roles.role) {
+          return roles.role.toLowerCase(); 
+        }
+      });
+
+      this.roleList = this.roleList.filter(order => order.role_id !== "player" && order.role_id !== "guardian")
+          if (roleListArr.includes(Constant.admin)) {
+            this.roleList = this.roleList.filter(order => order.role_id !== "sys-admin");
+          }
+          if (roleListArr.includes(Constant.sysAdmin)) {
+            if (localStorage.getItem('org_id') === Constant.organization_id) {
+              this.roleList = this.roleList.filter(order => order.role_id === "sys-admin");
+            }
+            else {
+              this.roleList = this.roleList.filter(order => order.role_id !== "sys-admin");
+            }
+          }
+
+      console.log(this.roleList);
+
+    }else{
+      setTimeout(() => {
+          this.getUserRoles();
+      }, 1000);
+    }
+
+  /* this.getUserRoleData = await this.db.collection('roles').orderBy('role_id').get();
   this.roleList = await this.getUserRoleData.docs.map((doc: any) => doc.data());
   this.role = JSON.parse(localStorage.getItem('roleList'));
   let roleListArr = this.role.map(roles => {
@@ -261,9 +310,9 @@ createForm() {
         else {
           this.roleList = this.roleList.filter(order => order.role_id !== "sys-admin");
         }
-      }
+      }*/
 
-  console.log(this.roleList);
+  console.log(this.roleList); 
 }
 
   async getUserSuffix(){
@@ -285,6 +334,19 @@ createForm() {
       
     this.displayLoader = true;
     this.loading = true;
+
+    var roleArray = [];
+    if( this.roleList.length>0)
+    {
+      this.roleList.forEach( rol => {
+
+        if(this.roles.indexOf(rol.role_id) !== -1){
+          roleArray.push(rol)
+        }
+
+        
+      })
+    }
 
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
@@ -320,6 +382,7 @@ createForm() {
       is_invited: false,
       is_signup_completed: false,
       profile_image: '',
+      roles: roleArray,
       organizations: [this.orgId]
   }
 

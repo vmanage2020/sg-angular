@@ -44,7 +44,12 @@
                             <label for="product-reference" style="width:200px;">Roles </label>
                             
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.roles}} </label>
+                                <!-- <label for="inlineRadio2" *ngFor="let rr of getUserData.roles"> <p>{{rr.name}}</p> </label> -->
+                                
+                                    <div *ngFor="let rr of getUserData.roles">
+                                        <p>{{rr.name+","}}</p>
+                                      </div>
+                                
                             </div>
                             <div class="col-9 mt-3" id="customHeight">
                                 <div *ngFor="let role of selectedRoles;let i = index">

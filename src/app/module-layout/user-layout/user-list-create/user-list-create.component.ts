@@ -107,29 +107,41 @@ createForm() {
 
   async getUserRoles(){
     
-    this.getUserRoleData = await this.db.collection('roles').orderBy('role_id').get();
-    this.roleList = await this.getUserRoleData.docs.map((doc: any) => doc.data());
-    this.role = JSON.parse(localStorage.getItem('roleList'));
-    let roleListArr = this.role.map(roles => {
-      if (roles.role) {
-        return roles.role.toLowerCase(); 
-      }
-    });
+    /*this.getUserRoleData = await this.db.collection('roles').orderBy('role_id').get();
+    this.roleList = await this.getUserRoleData.docs.map((doc: any) => doc.data());*/
 
-    this.roleList = this.roleList.filter(order => order.role_id !== "player" && order.role_id !== "guardian")
-        if (roleListArr.includes(Constant.admin)) {
-          this.roleList = this.roleList.filter(order => order.role_id !== "sys-admin");
+    if(this.userService.roledataStore.roles.length > 0)
+    {
+      this.roleList = this.userService.roledataStore.roles;
+      this.role = JSON.parse(localStorage.getItem('roleList'));
+      let roleListArr = this.role.map(roles => {
+        if (roles.role) {
+          return roles.role.toLowerCase(); 
         }
-        if (roleListArr.includes(Constant.sysAdmin)) {
-          if (localStorage.getItem('org_id') === Constant.organization_id) {
-            this.roleList = this.roleList.filter(order => order.role_id === "sys-admin");
-          }
-          else {
+      });
+
+      this.roleList = this.roleList.filter(order => order.role_id !== "player" && order.role_id !== "guardian")
+          if (roleListArr.includes(Constant.admin)) {
             this.roleList = this.roleList.filter(order => order.role_id !== "sys-admin");
           }
-        }
+          if (roleListArr.includes(Constant.sysAdmin)) {
+            if (localStorage.getItem('org_id') === Constant.organization_id) {
+              this.roleList = this.roleList.filter(order => order.role_id === "sys-admin");
+            }
+            else {
+              this.roleList = this.roleList.filter(order => order.role_id !== "sys-admin");
+            }
+          }
 
-    console.log(this.roleList);
+      console.log(this.roleList);
+
+    }else{
+      setTimeout(() => {
+          this.getUserRoles();
+      }, 1000);
+    }
+
+    
   }
 
   async getUserSuffix(){
@@ -165,6 +177,24 @@ createForm() {
       return;
     } 
 
+
+    //let getRolesFromMaster = await this.db.collection('/roles').where('role_id', 'in', roles[0]).get();
+    //console.log('---this.roleList----', this.roleList);
+    //console.log('----this.roles-----', this.roles)
+    var roleArray = [];
+    if( this.roleList.length>0)
+    {
+      this.roleList.forEach( rol => {
+
+        if(this.roles.indexOf(rol.role_id) !== -1){
+          roleArray.push(rol)
+        }
+
+        
+      })
+    }
+   //console.log('----roleArray----', roleArray);
+
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
   
@@ -199,6 +229,7 @@ createForm() {
       is_invited: false,
       is_signup_completed: false,
       profile_image: '',
+      roles: roleArray,
       organizations: [this.orgId]
   }
 
@@ -207,6 +238,7 @@ createForm() {
 
   this.restApiService.create('users',userObj).subscribe( users => {
     this.userService.dataStore.users.push( users )
+    console.log('---insert users----', users)
     this.router.navigate(['/users/list']);
   }, error => {
     console.log('----invalid to create users----')
@@ -365,6 +397,7 @@ createForm() {
             status: true,
             data: "Success"
         }
+
     } catch (err) {
         console.log(err);
 
