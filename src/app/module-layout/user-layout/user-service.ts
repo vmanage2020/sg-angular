@@ -25,8 +25,9 @@ export class UserService {
   readonly connections = this._userlists.asObservable();
 
     constructor(private titlecasePipe: TitleCasePipe, private restApiService: RestApiService) {
-
+        /*
         this.orgId = localStorage.getItem('org_id');
+        console.log('---this.orgId---', this.orgId)
         this.dataStore.users = [];
         if(this.orgId!='') {
             console.log('---this.orgId---', this.orgId)
@@ -34,6 +35,19 @@ export class UserService {
         }else{
             this.getUserList('users')
         }
+        */
+
+       this.orgId = localStorage.getItem('org_id');
+       console.log('orgId',this.orgId);
+       let Metaurl= '';
+       if(this.orgId=='') {
+         Metaurl='users';
+       } else {
+         Metaurl='usersbyorg/'+this.orgId;
+       }
+       console.log('Metaurl',Metaurl);
+       this.getUserList(Metaurl); 
+       
      }
 
      private handleError(error: HttpErrorResponse) {
@@ -43,6 +57,7 @@ export class UserService {
 
      getUserList( url )
      {
+         console.log(url);
         this.restApiService.lists(url).subscribe((data: any) => {
             this.dataStore.users = data;
             this._userlists.next(Object.assign({}, this.dataStore).users);

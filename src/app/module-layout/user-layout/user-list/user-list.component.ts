@@ -56,8 +56,41 @@ export class UserListComponent implements OnInit {
 
   async getUserList(){
 
-    /* onservable code here starts */
+    
+    if( this.userService.dataStore.users.length > 0)
+    {
+      console.log('---Season length----', this.userService.dataStore.users);
+      this.getAllPlayerlistData = this.userService.dataStore.users;
+      this.data = this.getAllPlayerlistData;
+      setTimeout(() => {
+        this.dtTrigger.next();
+      });
+      this.loading = false;
+      this.displayLoader = false;  
 
+    }else {
+
+      if(this.loading == true ) {
+            
+        let Metaurl= '';
+        if(this.orgId=='') {
+          Metaurl='users';
+        } else {
+          Metaurl='usersbyorg/'+this.orgId;
+        }
+        await this.userService.getUserList(Metaurl);
+    
+        setTimeout(() => { 
+          this.getUserList()
+          this.loading = false;
+          this.displayLoader = false;
+        }, 1000);
+
+      }
+    }
+
+    /* onservable code here starts * /
+    console.log('this.userService.dataStore.users.length',this.userService.dataStore.users.length);
     if(this.userService.dataStore.users.length >0)
     {
       this.data = this.userService.dataStore.users;
@@ -68,6 +101,8 @@ export class UserListComponent implements OnInit {
     }else{
       setTimeout(() => {
           this.getUserList();
+          this.loading = false;
+          this.displayLoader = false;
       }, 1000);
     }
     /* observable code ends here */

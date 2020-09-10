@@ -67,9 +67,31 @@ export class ImportUserListComponent implements OnInit {
         this.displayLoader = false;
 
       }else{
+
+        if(this.loading == true ) {
+            
+          let Metaurl= '';
+          if(this.orgId=='') {
+            Metaurl='importuserlogs';
+          } else {
+            Metaurl='importuserlogsdbyorg/'+this.orgId;
+          }
+          await this.importLogService.getUserlogs(Metaurl);
+      
+          setTimeout(() => { 
+            this.getLevel()
+            this.loading = false;
+            this.displayLoader = false;
+          }, 1000);
+  
+        }
+
+        /*
         setTimeout(() => {
           this.getLevel();
         }, 1000);
+        */
+
       }
 
     }

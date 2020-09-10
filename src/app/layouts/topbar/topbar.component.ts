@@ -31,6 +31,8 @@ import { PositionCrudService } from '../../module-layout/position-layout/positio
 
 import { SeasonCrudService } from '../../module-layout/season-layout/season-crud.service';
 
+import { UserService } from '../../module-layout/user-layout/user-service'
+
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
@@ -89,6 +91,7 @@ export class TopbarComponent implements OnInit {
     private levelCrudService:LevelService,
     private positionCrudService:PositionCrudService,
     private seasonCrudService:SeasonCrudService,
+    private userService:UserService,
     private restApiService: RestApiService) {
     sharedService.missionAnnounced$.subscribe((data: any) => {
       // this.data = data;
@@ -395,6 +398,8 @@ export class TopbarComponent implements OnInit {
    this.playerCrudService.dataStore.players.length = 0;
    this.coachCrudService.dataStore.coachs.length = 0;
    this.managerCrudService.dataStore.managers.length = 0;
+   this.userService.dataStore.users.length = 0;
+   
   
     this.router.navigate(['/welcome']);
   }
