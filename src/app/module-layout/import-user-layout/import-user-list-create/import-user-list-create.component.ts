@@ -333,7 +333,7 @@ export class ImportUserListCreateComponent implements OnInit {
       userRegisterationDataObj.isActive = false;
   }
   
-  //console.log(userRegisterationDataObj); 
+  //console.log('------userRegisterationDataObj-----',userRegisterationDataObj); 
   //return false;
 
   /*
@@ -354,7 +354,7 @@ export class ImportUserListCreateComponent implements OnInit {
               console.log(userRegisterationDataObj); 
             }
     */
-  let importedUserSnapshot = await this.db.collection('/organization').doc(userRegisterationDataObj.organization_id).collection('/import_users_log').add(userRegisterationDataObj);
+ /*  let importedUserSnapshot = await this.db.collection('/organization').doc(userRegisterationDataObj.organization_id).collection('/import_users_log').add(userRegisterationDataObj);
   await importedUserSnapshot.set({ imported_file_id: importedUserSnapshot.id }, { merge: true })
 
     
@@ -362,7 +362,22 @@ export class ImportUserListCreateComponent implements OnInit {
       
       this.router.navigate(['/useruploads/list']);
 
-      this.notification.isNotification(true, "Import User Data", "Import Users has been added successfully.", "check-square");
+      this.notification.isNotification(true, "Import User Data", "Import Users has been added successfully.", "check-square"); */
+
+
+
+      this.restApiService.create('importuserlogs',userRegisterationDataObj).subscribe( importusers => {
+
+        this.importLogService.dataStore.userlogs.push(importusers);
+        
+        this.router.navigate(['/useruploads/list']);
+
+        this.notification.isNotification(true, "Import User Data", "Import Users has been added successfully.", "check-square");
+
+      },error =>{
+        console.log('-----Create API error response----')
+      })
+
       
     } catch (error) {
       
@@ -535,13 +550,13 @@ selectedSport(event, form) {
 }
 
 selectedSeason(event, form) {
-  console.log(event.target.value);
+  console.log('---season event-----',event);
   for(let seasons of this.getSeasonsArray){
-    if(event.target.value==seasons.season_id)
+    if(event.season_id==seasons.season_id)
       {
         localStorage.setItem('SelectedSeasonName', seasons.season_name);
-        localStorage.setItem('SelectedSeasonStartDate', seasons.season_start_date.toDate() || "0000-00-00");
-        localStorage.setItem('SelectedSeasonEndDate', seasons.season_end_date.toDate() || "0000-00-00");
+        localStorage.setItem('SelectedSeasonStartDate', seasons.season_start_date || "0000-00-00");
+        localStorage.setItem('SelectedSeasonEndDate', seasons.season_end_date || "0000-00-00");
         form.value.season_name = seasons.name;
         form.value.season_start_date = seasons.season_start_date;
         form.value.season_end_date = seasons.season_end_date;

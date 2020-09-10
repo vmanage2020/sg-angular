@@ -31,6 +31,7 @@
                     <label for="season_id"> Season<span class="text-danger">*</span></label>
                     <ng-select [items]="getSeasonsArray" bindLabel="season" bindValue="season_id"
                         id="season_id" name="season_id" formControlName="season_id" 
+                        (change)="selectedSeason($event,createcannedresponseForm)"
                         placeholder="Select Season" [ngClass]="{ 'is-invalid': submitted && f.season_id.errors }" >
                     </ng-select>
                     
