@@ -27,7 +27,8 @@
 
                           <p class="error text-danger" *ngIf="f.abbrev.errors?.minlength">Abbreviation should contain at least {{f.abbrev.errors?.minlength.requiredLength}} characters</p>
                           <p class="error text-danger" *ngIf="f.abbrev.errors?.maxlength">Abbreviation should contain at least {{f.abbrev.errors?.maxlength.requiredLength}} characters</p>
-
+                          <p class="error text-danger" *ngIf="f.abbrev.errors?.pattern">No spaces and numbers allowed in between characters</p>
+                          
                       </div>
                   
                   </div>
@@ -39,7 +40,7 @@
                       <label for="street1">Street 1<span class="text-danger">*</span></label>
                       <input type="text" id="street1" name="street1" formControlName="street1" class="form-control" placeholder="Enter Street 1" [ngClass]="{ 'is-invalid': submitted && f.street1.errors }"/>
                       <div *ngIf="submitted && f.street1.errors" class="invalid-feedback">
-                          <div *ngIf="f.street1.errors.required">street 1 is required.</div>
+                          <div *ngIf="f.street1.errors.required">Street 1 is required.</div>
                       </div>
                   
                   </div>
@@ -49,7 +50,7 @@
                       <label for="street2">Street 2</label>
                       <input type="text" id="street2" name="street2" formControlName="street2" class="form-control" placeholder="Enter Street 2" [ngClass]="{ 'is-invalid': submitted && f.street2.errors }"/>
                       <div *ngIf="submitted && f.street2.errors" class="invalid-feedback">
-                          <div *ngIf="f.street2.errors.required">street 2 is required.</div>
+                          <div *ngIf="f.street2.errors.required">Street 2 is required.</div>
                       </div>
                   
                   </div> 
@@ -63,8 +64,8 @@
                       <label for="city">City <span class="text-danger">*</span></label>
                       <input type="text" id="city" name="city" formControlName="city" class="form-control" placeholder="Enter Field Name" [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
                       <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
-                          <div *ngIf="f.city.errors.required">Field Name is required.</div>
-                          <p  class="error text-danger" *ngIf="f.city.errors?.pattern">Enter Field Name Alphabet text only</p>
+                          <div *ngIf="f.city.errors.required">City is required.</div>
+                          <p  class="error text-danger" *ngIf="f.city.errors?.pattern">Enter city name alphabet text only</p>
                       </div>
                   
                   </div> 
@@ -87,7 +88,7 @@
                       </ng-select>
 
                       <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
-                          <div *ngIf="f.state.errors.required">Sport Name is required.</div>
+                          <div *ngIf="f.state.errors.required">State is required.</div>
                       </div>
                   </div>
 
@@ -136,7 +137,7 @@
                       <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
                           <div *ngIf="f.phone.errors.required">Phone number is required.</div>
                           <p class="error text-danger" *ngIf="f.phone.errors?.minlength">The Phone number minimum length {{f.phone.errors?.minlength.requiredLength}}</p>
-                          
+                          <p class="error text-danger" *ngIf="f.phone.errors?.pattern">Phone number must be numbers only</p>
                       </div>
                   
                   </div>
@@ -148,6 +149,7 @@
                       <div *ngIf="submitted && f.fax.errors" class="invalid-feedback">
                           <div *ngIf="f.fax.errors.required">Fax number is required.</div>
                           <p class="error text-danger" *ngIf="f.fax.errors?.minlength">The Fax number minimum length {{f.fax.errors?.minlength.requiredLength}}</p>
+                          <p class="error text-danger" *ngIf="f.fax.errors?.pattern">Fax number must be numbers only</p>
                       </div>
                   
                   </div>
@@ -159,7 +161,7 @@
                       <label for="email">Email<span class="text-danger">*</span></label>
                       <input type="text" id="email" name="email" formControlName="email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
                       <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                          <div *ngIf="f.email.errors.required">Email ID is required.</div>
+                          <div *ngIf="f.email.errors.required">Email is required.</div>
                           <p  class="error text-danger" *ngIf="f.email.errors?.pattern">Invaid Email pattern</p>
                       </div>
                   
