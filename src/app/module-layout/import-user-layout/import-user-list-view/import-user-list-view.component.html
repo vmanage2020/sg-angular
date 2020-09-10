@@ -7,8 +7,8 @@
                 <div class="form-group mb-3">
                     <label for="product-name" style="width:200px;">Upload Date/Time </label>                     
                     <div class=" form-check-inline">
-                        <label for="inlineRadio2" *ngIf="getLevelValueArray.imported_datetime.toDate==''"> --- </label>
-                        <label for="inlineRadio2" *ngIf="getLevelValueArray.imported_datetime.toDate!=''"> {{getLevelValueArray.imported_datetime.toDate() | date}} </label>
+                        <label for="inlineRadio2" *ngIf="getLevelValueArray.imported_datetime==''"> --- </label>
+                        <label for="inlineRadio2" *ngIf="getLevelValueArray.imported_datetime!=''"> {{getLevelValueArray.imported_datetime | date}} </label>
                     </div>
                 </div> 
                 <div class="form-group mb-3">
@@ -34,8 +34,6 @@
                     <div class=" form-check-inline">
                         <label for="inlineRadio2"> {{getLevelValueArray.error_records || "0"}} </label>
                     </div>
-                </div>
-                <div class="form-group mb-3">
                     <label for="product-name" style="width:200px;">User Records Created</label>                     
                     <div class=" form-check-inline">
                         <label for="inlineRadio2"> {{getLevelValueArray.total_user_created || "0"}} </label>

@@ -14,6 +14,7 @@ import { CookieService } from 'src/app/core/services/cookie.service';
 
 import { NgiNotificationService } from 'ngi-notification';
 
+import { RestApiService } from '../../../shared/rest-api.services';
 
 @Component({
   selector: 'app-import-user-list-view',
@@ -59,7 +60,12 @@ export class ImportUserListViewComponent implements OnInit {
     submitted = false;
     createlevelForm: FormGroup;
   
-    constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService) { 
+    constructor(private router: Router, 
+      private route: ActivatedRoute, 
+      private formBuilder: FormBuilder,
+      public cookieService: CookieService,
+      private restApiService: RestApiService, 
+      private notification: NgiNotificationService) { 
        this.createForm(); 
     }
     
@@ -85,12 +91,24 @@ export class ImportUserListViewComponent implements OnInit {
     }
 
     async getLevelInfo(){   
- 
-      if(this.orgId) {
+      
+
+      this.restApiService.lists('importuserlogs/'+this.resourceID).subscribe( importlogs => {
+        console.log('----importlogs-----', JSON.stringify(importlogs) )
+        this.getLevelValueData = importlogs;
+        this.getLevelValueArray = importlogs;
+        //this.getLevelValueData = this.getLevelValueData[0];
+      }, error => {
+        console.log('----API error response-----')
+      })
+      /* if(this.orgId) {
         this.getLevelValue = await this.db.collection('/organization').doc(this.orgId).collection('/import_users_log').where('imported_file_id', '==', this.resourceID).get();
         this.getLevelValueData = await this.getLevelValue.docs.map((doc: any) => doc.data());
         console.log(this.getLevelValueData);      
       }
+
+      this.getLevelValueArray = this.getLevelValueData[0]; 
+      console.log(this.getLevelValueArray); */
       
       /*
       if (this.getLevelValue.exists) {
@@ -100,8 +118,7 @@ export class ImportUserListViewComponent implements OnInit {
       }
       */
     
-      this.getLevelValueArray = this.getLevelValueData[0]; 
-      console.log(this.getLevelValueArray);
+      
 
       //this.getAllPositionBySport(this.getPositionValueData.sport_id, this.uid)
     
