@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
-
+import { apiURL, Constant } from '../../../core/services/config';
 import * as moment from 'moment';
 
 import { TitleCasePipe } from '@angular/common';
@@ -46,6 +46,8 @@ export class UserListViewComponent implements OnInit {
   uid: any;
   orgId: any;
   selectedRoles: any = [];
+  roleList: any = [];
+  role:any;
   
   constructor(private router: Router, 
     private route: ActivatedRoute,
@@ -64,6 +66,39 @@ export class UserListViewComponent implements OnInit {
     
   }
 
+  async getUserRoles(){
+    
+    if(this.userService.roledataStore.roles.length > 0)
+      {
+        this.roleList = this.userService.roledataStore.roles;
+        this.role = JSON.parse(localStorage.getItem('roleList'));
+        let roleListArr = this.role.map(roles => {
+          if (roles.role) {
+            return roles.role.toLowerCase(); 
+          }
+        });
+  
+        this.roleList = this.roleList.filter(order => order.role_id !== "player" && order.role_id !== "guardian")
+            if (roleListArr.includes(Constant.admin)) {
+              this.roleList = this.roleList.filter(order => order.role_id !== "sys-admin");
+            }
+            if (roleListArr.includes(Constant.sysAdmin)) {
+              if (localStorage.getItem('org_id') === Constant.organization_id) {
+                this.roleList = this.roleList.filter(order => order.role_id === "sys-admin");
+              }
+              else {
+                this.roleList = this.roleList.filter(order => order.role_id !== "sys-admin");
+              }
+            }
+  
+        console.log(this.roleList);
+  
+      }else{
+        setTimeout(() => {
+            this.getUserRoles();
+        }, 1000);
+      }
+  }
 
   async getUserInfo(){
 
