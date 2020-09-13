@@ -207,7 +207,11 @@ export class TopbarComponent implements OnInit {
       this.organizationListLoader = false;
     }else{
       setTimeout(() => { this.getOrganizationList() 
-        this.orgInfo = [];
+
+       this.organizationsService.organizationsList('organization');
+       this.orgInfo = this.organizationsService.orgdddataStore.orgdd;
+       
+        //this.orgInfo = [];
         this.organizationListLoader = false;
       }, 1000);
     }
@@ -389,7 +393,7 @@ export class TopbarComponent implements OnInit {
     await this.levelCrudService.levelsList(Metaurl);
     */
 
-   this.organizationsService.orgdataStore.org.length = 0;
+   //this.organizationsService.orgdataStore.org.length = 0;
    this.tagCrudService.dataStore.tags.length = 0;
    this.cannedResponseCrudService.dataStore.cannedresponses.length = 0;
    this.levelCrudService.dataStore.levels.length = 0;
@@ -400,7 +404,7 @@ export class TopbarComponent implements OnInit {
    this.managerCrudService.dataStore.managers.length = 0;
    this.userService.dataStore.users.length = 0;
    
-  
+   
     this.router.navigate(['/welcome']);
   }
   /**
