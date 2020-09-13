@@ -116,7 +116,17 @@ export class CannedResponseListEditComponent implements OnInit {
      
     async getAllSportsAPI(){
       
-      let Metaurl = 'sports';
+      //let Metaurl='sports';
+  
+      this.orgId = localStorage.getItem('org_id');
+      console.log('orgId',this.orgId);
+      let Metaurl= '';
+      if(this.orgId=='') {
+      Metaurl='sports';
+      } else {
+      Metaurl='organizationsports/'+this.orgId;
+      }
+    
   
       this.restApiService.lists(Metaurl).subscribe( lists => {
         console.log('---lists----', lists)

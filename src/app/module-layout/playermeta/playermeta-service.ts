@@ -50,7 +50,14 @@ export class PlayerMetaService {
         console.log('Metaurl',Metaurl);
         this.playersList(Metaurl);
         //this.getCountryCodeListAPI('countries');
-        this.getSportsListAPI('sports');
+
+        if(this.orgId=='') {
+        Metaurl='sports';
+        } else {
+        Metaurl='organizationsports/'+this.orgId;
+        }
+        this.getSportsListAPI(Metaurl);
+        //this.getSportsListAPI('sports');
      }
 
      

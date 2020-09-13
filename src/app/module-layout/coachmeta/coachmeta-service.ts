@@ -50,7 +50,13 @@ export class CoachMetaService {
         console.log('Metaurl',Metaurl);
         this.coachsList(Metaurl);
         //this.getCountryCodeListAPI('countries');
-        this.getSportsListAPI('sports');
+        if(this.orgId=='') {
+        Metaurl='sports';
+        } else {
+        Metaurl='organizationsports/'+this.orgId;
+        }
+        this.getSportsListAPI(Metaurl);
+        //this.getSportsListAPI('sports');        
     }
     
    private handleError(error: HttpErrorResponse) {
