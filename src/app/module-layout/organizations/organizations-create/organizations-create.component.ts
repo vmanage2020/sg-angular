@@ -37,6 +37,8 @@ export class OrganizationsCreateComponent implements OnInit {
   getAllTypemeta: any = [];
   getAllStates: any = [];
   getAllTypemetaData: any = [];
+
+  public governingBodyInfo: FormArray;
   
   
   getSelectedSportmeta: any = [];
@@ -62,6 +64,11 @@ export class OrganizationsCreateComponent implements OnInit {
   selectedCountryCode: any;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
+
+  isSaveUp: any = false;
+  isSaveUpEnable: boolean = false;
+  isSaveDown: any = false;
+  stateGoverning: boolean = false;
 
   is_required_form_value = "false";
   is_editable_form_value = "false";
@@ -119,7 +126,7 @@ export class OrganizationsCreateComponent implements OnInit {
       sports: ['', [Validators.required]],
       avatar: [null],
       
-      //governing_body_info: this.formBuilder.array([this.getGoverningInfo()]),
+      governing_body_info: this.formBuilder.array([this.getGoverningInfo()]),
 
       primary_first_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       primary_middle_initial: ['', [Validators.pattern('^[a-zA-Z ]*$'), Validators.maxLength(3)]],
@@ -140,6 +147,8 @@ export class OrganizationsCreateComponent implements OnInit {
       secondary_suffix: [null],
       
     });
+
+    //this.governingBodyInfo = this.createorganizationForm.get('governing_body_info') as FormArray;
   }
   
 
@@ -186,6 +195,7 @@ export class OrganizationsCreateComponent implements OnInit {
           email: orgs.email_address,
           website: orgs.website,
           sports: orgs.sports,
+          governing_body_info: orgs.governing_body_info,
           primary_first_name: orgs.primary_first_name,
           primary_middle_initial: orgs.primary_middle_initial,
           primary_last_name: orgs.primary_last_name,
@@ -197,6 +207,28 @@ export class OrganizationsCreateComponent implements OnInit {
           secondary_suffix : orgs.secondary_suffix,
           secondary_admin_email: orgs.secondary_admin_email
         })
+
+        if(orgs.governing_body_info.length>0)
+        {
+          console.log('---orgs.governing_body_info----', orgs.governing_body_info)
+         /*  setTimeout(() => {
+            this.createorganizationForm.patchValue({
+              governing_body_info: orgs.governing_body_info
+            })
+          }, 1000); */
+          
+          /* var i=0;
+          orgs.governing_body_info.forEach( gov => {
+           
+              this.createorganizationForm.patchValue({
+                governing_body_info: orgs.governing_body_info
+              })
+            
+            i++
+            
+         }) */
+        }
+
     }, err =>{
       console.log('---error for fetching data----')
     })
@@ -238,7 +270,7 @@ export class OrganizationsCreateComponent implements OnInit {
   }
 
   OnSportChange(event: any, form) {
-    return false;
+    //return false;
     if (event.type === "focus") {
       if (!form.value.country_code) {
         console.log('----markas touched----')
@@ -303,6 +335,25 @@ export class OrganizationsCreateComponent implements OnInit {
       "sport_id": sportId
     }
 
+    this.restApiService.lists('organizationnationalgoverningbyid/'+country_code+'/'+sportId).subscribe( orgs => {
+      console.log('----orgs----', orgs)
+      if( orgs.length >0)
+      {
+        orgs.splice(0, 0, { organization_id: '', name: 'Select national governing body organization' });
+        this.governingBodyArr.value.forEach((eachGoverningBody, index) => {
+          if (eachGoverningBody.sport_id === sportId) {
+            this.governingBodyArr.at(index).patchValue({
+              lov_for_national: orgs
+            })
+          }
+        });
+      }else{
+        this.isNationalDropdownEmpty(sportId);
+      }
+
+    }, error => {
+      console.log('---error API response------')
+    })
     console.log('---getNationalGoverningDropdownRequest---', getNationalGoverningDropdownRequest)
     
    /*  let getNationalGoverningDropdownResponse: any = await this.dropDownService.getAllNationalGoverningBody(getNationalGoverningDropdownRequest);
@@ -322,11 +373,78 @@ export class OrganizationsCreateComponent implements OnInit {
           this.isNationalDropdownEmpty(sportId);
         }
       } else {
-        this.isNationalDropdownEmpty(sportId);organizationsportbyid
+        this.isNationalDropdownEmpty(sportId);1200 - 1ak
       this.isNationalDropdownEmpty(sportId);
     } */
    
   }
+
+  getstateList(event: any, form, rowIndex: any) {
+    try {
+      if (event.target.value === "false") {
+        this.governingBodyArr.at(rowIndex).patchValue({
+          is_select_dropdown_for_state: true,
+          is_hypen_for_state: false,
+          state_governing_organization_id: null,
+          state_governing_organization_name: '',
+        })
+      }
+      else {
+        this.governingBodyArr.at(rowIndex).patchValue({
+          is_select_dropdown_for_state: false,
+          is_hypen_for_state: true,
+          state_governing_organization_id: null,
+          state_governing_organization_name: '',
+        })
+      }
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
+  async getnationalList(event: any, form, rowIndex: any, individualObject: any) {
+    try {
+      if (event.target.value === "false") {
+        this.governingBodyArr.at(rowIndex).patchValue({
+          is_select_dropdown_for_national: true,
+          is_hypen_for_national: false,
+          national_governing_organization_name: '',
+          national_governing_organization_id: null
+        })
+      }
+      else {
+        this.governingBodyArr.at(rowIndex).patchValue({
+          is_select_dropdown_for_national: false,
+          is_hypen_for_national: true,
+          national_governing_organization_name: '',
+          national_governing_organization_id: null
+        })
+      }
+      console.log(this.governingBodyArr);
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
+
+  closeErrors(errorValue) {
+    this.isSaveInWhichPosition();
+    if (this.showErrorInArr && this.showErrorInArr.length !== 0) {
+      if (this.showErrorInArr[0].includes(errorValue.trim())) {
+        this.showErrorInArr = [];
+      }
+    }
+  }
+
+  isSaveInWhichPosition() {
+    if (this.isSaveUp) {
+      this.isSaveUp = false
+    } else if (this.isSaveDown) {
+      this.isSaveDown = false
+    }
+  }
+
   isNationalDropdownEmpty(sportId: any) {
     //this.nationalOrgInfo = [];
     this.governingBodyArr.value.forEach((eachGoverningBody, index) => {
@@ -341,11 +459,61 @@ export class OrganizationsCreateComponent implements OnInit {
     //this.nationalGoverning = false;
   }
 
+  nationalDropdown(event, form, rowIndex: any) {
+    if (event.organization_id) {
+      this.governingBodyArr.at(rowIndex).patchValue({
+        national_governing_organization_name: event.name
+      })
+    }
+    else {
+      this.governingBodyArr.at(rowIndex).patchValue({
+        national_governing_organization_id: null,
+        national_governing_organization_name: ''
+      })
+    }
+  }
+  stateDropdown(event, form, rowIndex) {
+    if (event.organization_id) {
+      this.governingBodyArr.at(rowIndex).patchValue({
+        state_governing_organization_name: event.name
+      })
+    }
+    else {
+      this.governingBodyArr.at(rowIndex).patchValue({
+        state_governing_organization_id: null,
+        state_governing_organization_name: ''
+      })
+    }
+  }
+  
+
   async getServiceForState(state, country_code, sportId) {
     //this.stateGoverning = true;
     let getStateGoverningDropdownRequest: any = {
       "state": state, "country": country_code, "sport_id": sportId
     }
+
+    this.restApiService.lists('organizationstategoverningbyid/'+country_code+'/'+state+'/'+sportId).subscribe( orgs => {
+      console.log('----orgs----', orgs)
+      if( orgs.length >0)
+      {
+        orgs.splice(0, 0, { organization_id: '', name: 'Select state governing body organization' });
+        this.stateGoverning = false;
+          this.governingBodyArr.value.forEach((eachGoverningBody, index) => {
+            if (eachGoverningBody.sport_id === sportId) {
+              this.governingBodyArr.at(index).patchValue({
+                lov_for_state: orgs
+              })
+            }
+          });
+      }else{
+        this.isStateDropdownEmpty(sportId);
+      }
+
+    }, error => {
+      console.log('---error API response------')
+    })
+
     /*
     let getStateGoverningDropdownResponse: any = await this.dropDownService.getAllStateGoverningBody(getStateGoverningDropdownRequest);
     console.log(getStateGoverningDropdownResponse);
@@ -520,7 +688,7 @@ export class OrganizationsCreateComponent implements OnInit {
                 postal_code                     : createOrgObj.postal_code || "",
                 created_datetime                : new Date(),
                 created_uid                     : this.uid,
-                governing_body_info             : [],//createOrgObj.governing_body_info || "",
+                governing_body_info             : createOrgObj.governing_body_info || "",
                 sports                          : createOrgObj.sports || "",
                 governing_key_array_fields      : '',
                 primary_first_name              : createOrgObj.primary_first_name || "",
@@ -636,7 +804,7 @@ export class OrganizationsCreateComponent implements OnInit {
                 postal_code                     : createOrgObj.postal_code || "",
                 updated_datetime                : new Date(),
                 updated_uid                     : this.uid,
-                governing_body_info             : [],//createOrgObj.governing_body_info || "",
+                governing_body_info             : createOrgObj.governing_body_info || "",
                 sports                          : createOrgObj.sports || "",
                 governing_key_array_fields      : '',
                 primary_first_name              : createOrgObj.primary_first_name || "",
