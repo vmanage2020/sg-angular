@@ -101,6 +101,7 @@ export class PlayermetaEditComponent implements OnInit {
 
 
   ngOnInit() { 
+    this.orgId = localStorage.getItem('org_id');
     this.getPlayerMetaAPI();  
     this.getSportsAPI();  
     this.getTypesAPI();  
