@@ -73,10 +73,12 @@ export class PositionListComponent implements OnInit {
     }else {
 
       setTimeout(() => { this.getPositionMetaAPI()
+        this.positionCrudService.positionsList('positions');
+        this.getAllPositionmetaData = this.positionCrudService.dataStore.positions;
         this.loading = false;
-        this.displayLoader = false;
+        this.displayLoader = false;            
        }, 1000);
-     
+ 
     }
 
 

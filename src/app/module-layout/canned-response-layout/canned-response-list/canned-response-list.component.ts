@@ -75,6 +75,14 @@ export class CannedResponseListComponent implements OnInit {
     }else {
  
       setTimeout(() => { this.getCannedResponsesAPI();
+        let Metaurl= '';
+        if(this.orgId=='' || this.orgId==1) {
+          Metaurl='cannedresponse';
+        } else {
+          Metaurl='cannedresponsebyorg/'+this.orgId;
+        }
+        this.cannedresponseCrudService.cannedresponsesList(Metaurl);
+        this.getAllCannedResponseData = this.cannedresponseCrudService.dataStore.cannedresponses; 
         this.loading = false;
         this.displayLoader = false; 
        }, 1000);

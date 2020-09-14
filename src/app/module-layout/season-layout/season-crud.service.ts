@@ -41,7 +41,7 @@ export class SeasonCrudService {
     this.orgId = localStorage.getItem('org_id');
     console.log('orgId',this.orgId);
     let Metaurl= '';
-    if(this.orgId=='') {
+    if(this.orgId=='' || this.orgId==1) {
       Metaurl='seasons';
     } else {
       Metaurl='seasonsbyorg/'+this.orgId;
@@ -49,7 +49,13 @@ export class SeasonCrudService {
     console.log('Metaurl',Metaurl);
     this.seasonsList(Metaurl);
     //this.getCountryCodeListAPI('countries');
-    this.getSportsListAPI('sports');
+
+    if(this.orgId=='' || this.orgId==1) {
+    Metaurl='sports';
+    } else {
+    Metaurl='organizationsports/'+this.orgId;
+    }
+    this.getSportsListAPI(Metaurl);
  }
 
  

@@ -72,9 +72,11 @@ export class SportsListComponent implements OnInit {
     }else {
 
       setTimeout(() => { this.getSportMetaAPI() 
+        this.sportsCrudService.sportsList('sports');
+        this.getAllSportmetaData = this.sportsCrudService.dataStore.sports;
         this.loading = false;
-        this.displayLoader = false;
-      }, 1000);
+        this.displayLoader = false;    
+      }, 1000); 
       
     }
 

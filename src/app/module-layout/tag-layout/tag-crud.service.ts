@@ -34,7 +34,7 @@ export class TagCrudService {
     
   //this.uid = this.cookieService.getCookie('uid');
   this.orgId = localStorage.getItem('org_id');
-  if(this.orgId=='') {
+  if(this.orgId=='' || this.orgId==1) {
     this.tagsList('tags');
   } else {
     this.tagsList('tagsbyorg/'+this.orgId+'');

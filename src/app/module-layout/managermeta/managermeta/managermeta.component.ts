@@ -77,6 +77,16 @@ export class ManagermetaComponent implements OnInit {
     }else {
 
       setTimeout(() => { this.getPlayerMetaAPI()
+
+        let Metaurl = '';
+        if(this.orgId=='' || this.orgId==1) {
+        Metaurl='managercustomfield';
+        } else {
+        Metaurl='managercustomfieldbyorg/'+this.orgId;
+        }  
+        this.managerCrudService.managersList(Metaurl);
+        this.getAllPlayermetaData = this.managerCrudService.dataStore.managers;  
+
         this.loading = false;
         this.displayLoader = false;
       }, 1000);

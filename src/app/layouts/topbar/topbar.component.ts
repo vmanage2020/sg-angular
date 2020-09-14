@@ -404,6 +404,9 @@ export class TopbarComponent implements OnInit {
    this.managerCrudService.dataStore.managers.length = 0;
    this.userService.dataStore.users.length = 0;
    
+   this.playerCrudService.sportsdataStore.sports.length = 0;
+   this.coachCrudService.sportsdataStore.sports.length = 0;
+   this.managerCrudService.sportsdataStore.sports.length = 0;
    
     this.router.navigate(['/welcome']);
   }

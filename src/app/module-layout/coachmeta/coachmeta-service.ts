@@ -42,7 +42,7 @@ export class CoachMetaService {
         this.orgId = localStorage.getItem('org_id');
         console.log('orgId',this.orgId);
         let Metaurl= '';
-        if(this.orgId=='') {
+        if(this.orgId=='' || this.orgId==1) {
         Metaurl='coachcustomfield';
         } else {
         Metaurl='coachcustomfieldbyorg/'+this.orgId;
@@ -50,7 +50,7 @@ export class CoachMetaService {
         console.log('Metaurl',Metaurl);
         this.coachsList(Metaurl);
         //this.getCountryCodeListAPI('countries');
-        if(this.orgId=='') {
+        if(this.orgId=='' || this.orgId==1) {
         Metaurl='sports';
         } else {
         Metaurl='organizationsports/'+this.orgId;

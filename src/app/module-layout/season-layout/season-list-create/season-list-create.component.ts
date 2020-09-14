@@ -95,7 +95,7 @@ export class SeasonListCreateComponent implements OnInit {
         this.orgId = localStorage.getItem('org_id');
         console.log('orgId',this.orgId);
         let Metaurl= '';
-        if(this.orgId=='') {
+        if(this.orgId=='' || this.orgId==1) {
         Metaurl='sports';
         } else {
         Metaurl='organizationsports/'+this.orgId;

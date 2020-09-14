@@ -77,6 +77,16 @@ import { NGXLogger } from 'ngx-logger';
     }else {
 
       setTimeout(() => { this.getPlayerMetaAPI() 
+         
+      let Metaurl = '';
+      if(this.orgId=='' || this.orgId==1) {
+        Metaurl='coachcustomfield';
+      } else {
+      Metaurl='coachcustomfieldbyorg/'+this.orgId;
+      }  
+      this.coachCrudService.coachsList(Metaurl);
+      this.getAllPlayermetaData = this.coachCrudService.dataStore.coachs;  
+
       this.loading = false;
       this.displayLoader = false;
       }, 1000);

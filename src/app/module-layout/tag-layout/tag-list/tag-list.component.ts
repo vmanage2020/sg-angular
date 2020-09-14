@@ -72,6 +72,14 @@ export class TagListComponent implements OnInit {
     }else {
 
       setTimeout(() => { this.getTagsAPI()
+        let Metaurl= '';
+        if(this.orgId=='' || this.orgId==1) {
+          Metaurl='tags';
+        } else {
+          Metaurl='tagsbyorg/'+this.orgId;
+        }
+        this.tagCrudService.tagsList(Metaurl);
+        this.getAllTagsData = this.tagCrudService.dataStore.tags; 
         this.loading = false;
         this.displayLoader = false;
       }, 1000);

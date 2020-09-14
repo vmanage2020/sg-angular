@@ -168,7 +168,18 @@ export class PlayermetaEditComponent implements OnInit {
 
     }else {
 
-      setTimeout(() => { this.getSportsAPI() }, 1000);
+      setTimeout(() => { this.getSportsAPI() 
+        
+      let Metaurl = '';
+      if(this.orgId=='' || this.orgId==1) {
+      Metaurl='sports';
+      } else {
+      Metaurl='organizationsports/'+this.orgId;
+      }  
+      this.playerCrudService.getSportsListAPI(Metaurl);
+      this.getAllSportmetaData = this.playerCrudService.sportsdataStore.sports; 
+
+      }, 1000);
       this.loading = false;
       this.displayLoader = false;
     }

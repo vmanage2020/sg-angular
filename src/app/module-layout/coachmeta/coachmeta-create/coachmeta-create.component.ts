@@ -123,7 +123,18 @@ import { NGXLogger } from 'ngx-logger';
 
       }else {
 
-        setTimeout(() => { this.getSportsAPI() }, 1000);
+        setTimeout(() => { this.getSportsAPI() 
+        
+        let Metaurl = '';
+        if(this.orgId=='' || this.orgId==1) {
+        Metaurl='sports';
+        } else {
+        Metaurl='organizationsports/'+this.orgId;
+        }  
+        this.coachCrudService.getSportsListAPI(Metaurl);
+        this.getAllSportmetaData = this.coachCrudService.sportsdataStore.sports;
+        
+        }, 1000);
         this.loading = false;
         this.displayLoader = false;
       }

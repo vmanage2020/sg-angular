@@ -81,6 +81,16 @@ export class SeasonListComponent implements OnInit {
     }else {
 
       setTimeout(() => { this.getSeasonsAPI()
+
+        let Metaurl= '';
+        if(this.orgId=='' || this.orgId==1) {
+          Metaurl='seasons';
+        } else {
+          Metaurl='seasonsbyorg/'+this.orgId;
+        }
+        this.seasonCrudService.seasonsList(Metaurl);
+        this.getAllSeasonsData = this.seasonCrudService.dataStore.seasons; 
+
         this.loading = false;
         this.displayLoader = false;
       }, 1000);

@@ -85,10 +85,20 @@ export class LevelListComponent implements OnInit {
     }else {
 
       setTimeout(() => { this.getLevelAPI()
+
+        let Metaurl= '';
+        if(this.orgId=='' || this.orgId==1) {
+        Metaurl='levels';
+        } else {
+        Metaurl='levelsbyorg/'+this.orgId;
+        }
+        this.levelCrudService.levelsList(Metaurl);
+        this.getAllLevelData = this.levelCrudService.dataStore.levels; 
         this.loading = false;
         this.displayLoader = false;
        }, 1000);
-     
+
+      
     }
 
 

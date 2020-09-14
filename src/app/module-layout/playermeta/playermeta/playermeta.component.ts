@@ -76,6 +76,16 @@ export class PlayermetaComponent implements OnInit {
     }else {
 
       setTimeout(() => { this.getPlayerMetaAPI()
+
+        let Metaurl = '';
+        if(this.orgId=='' || this.orgId==1) {
+        Metaurl='playermetadata';
+        } else {
+        Metaurl='playermetadatabyorg/'+this.orgId;
+        }  
+        this.playerCrudService.playersList(Metaurl);
+        this.getAllPlayermetaData = this.playerCrudService.dataStore.players;  
+
         this.loading = false;
         this.displayLoader = false;
       }, 1000);

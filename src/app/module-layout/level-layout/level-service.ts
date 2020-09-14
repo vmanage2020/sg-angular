@@ -35,7 +35,7 @@ export class LevelService {
         this.orgId = localStorage.getItem('org_id');
         console.log('orgId',this.orgId);
         let Metaurl= '';
-        if(this.orgId=='') {
+        if(this.orgId=='' || this.orgId==1) {
         Metaurl='levels';
         } else {
         Metaurl='levelsbyorg/'+this.orgId;

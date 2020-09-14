@@ -87,16 +87,18 @@ export class PositionListCreateComponent implements OnInit {
       //console.log('---sports length----', this.positionCrudService.dataStore.sports)
       this.logger.debug('Sports Master API End Here====>', new Date().toUTCString());
       this.getSportsArray = this.positionCrudService.sportsdataStore.sports;
-      this.data = this.getSportsArray;
-      setTimeout(() => {
-        this.dtTrigger.next();
-      });
+      
       this.loading = false;
       this.displayLoader = false;  
 
     }else {
 
-      setTimeout(() => { this.getAllSportsAPI() }, 1000);
+      setTimeout(() => { this.getAllSportsAPI() 
+      
+        this.positionCrudService.getSportsListAPI('sports');
+        this.getSportsArray = this.positionCrudService.sportsdataStore.sports;
+
+      }, 1000);
       this.loading = false;
       this.displayLoader = false;
     }

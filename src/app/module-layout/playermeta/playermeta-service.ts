@@ -42,7 +42,7 @@ export class PlayerMetaService {
         this.orgId = localStorage.getItem('org_id');
         console.log('orgId',this.orgId);
         let Metaurl= '';
-        if(this.orgId=='') {
+        if(this.orgId=='' || this.orgId==1) {
         Metaurl='playermetadata';
         } else {
         Metaurl='playermetadatabyorg/'+this.orgId;
@@ -51,7 +51,7 @@ export class PlayerMetaService {
         this.playersList(Metaurl);
         //this.getCountryCodeListAPI('countries');
 
-        if(this.orgId=='') {
+        if(this.orgId=='' || this.orgId==1) {
         Metaurl='sports';
         } else {
         Metaurl='organizationsports/'+this.orgId;
