@@ -16,6 +16,9 @@ import { TitleCasePipe } from '@angular/common';
 
 import { RestApiService } from '../../../shared/rest-api.services';
 
+import { OrganizationsService } from './../organizations.service';
+
+
 @Component({
   selector: 'app-organizations-info',
   templateUrl: './organizations-info.component.html',
@@ -33,6 +36,7 @@ export class OrganizationsInfoComponent implements OnInit {
   getUserData: any = [];
   sportsRef: any = [];
   sportsRefData: any = [];
+  sportList:any;
   
   data: any;
   dtOptions: DataTables.Settings = {};
@@ -48,17 +52,40 @@ export class OrganizationsInfoComponent implements OnInit {
   uid: any;
   orgId: any;
   selectedRoles: any = [];
+  sportsName: any[]  = [];
   
-  
-  constructor(private router: Router, private route: ActivatedRoute,public cookieService: CookieService, private titlecasePipe: TitleCasePipe,private restApiService: RestApiService,) { }
-  
+  constructor(private router: Router, 
+    private route: ActivatedRoute,
+    public cookieService: CookieService,
+    private restApiService: RestApiService, 
+    private organizationsService: OrganizationsService,
+    private titlecasePipe: TitleCasePipe,) { }
 
   ngOnInit() {
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
-    this.getOrganizationInfo();  
+    this.getSports();
+    setTimeout(() => {
+      this.getOrganizationInfo();  
+    }, 3000);
+    
+    
     console.log(this.resourceID);
 
+  }
+
+  async getSports()
+  {
+    if(this.organizationsService.dataStore.sports.length>0)
+    {
+      this.sportList = this.organizationsService.dataStore.sports;
+
+      
+    }else{
+      setTimeout(() => {
+        this.getSports()
+      }, 1000);
+    }
   }
 
 
@@ -99,9 +126,20 @@ export class OrganizationsInfoComponent implements OnInit {
       }
         */
 
-    this.restApiService.lists('organization/'+this.resourceID).subscribe( res => {
-
-      this.getUserData = res;
+       this.restApiService.lists('organization/'+this.resourceID).subscribe( res => {
+        console.log('----res----', res)
+        this.getUserData = res;
+  
+        console.log('---this.sportList----', this.sportList)
+        if( this.sportList.length >0)
+        {
+          this.sportList.forEach( sp => {
+            if(res.sports.indexOf(sp._id) !== -1){
+              this.sportsName.push(sp.name)
+            }
+          })
+        }
+        console.log('----this.sportsName----', this.sportsName)
       /* if (this.getUser.exists) {
    
         this.getUserData = this.getUser.data();
