@@ -211,22 +211,31 @@ export class OrganizationsCreateComponent implements OnInit {
         if(orgs.governing_body_info.length>0)
         {
           console.log('---orgs.governing_body_info----', orgs.governing_body_info)
-         /*  setTimeout(() => {
-            this.createorganizationForm.patchValue({
-              governing_body_info: orgs.governing_body_info
-            })
-          }, 1000); */
+          this.governingBodyArr.push(this.getGoverningInfo());
+          setTimeout(() => {
           
-          /* var i=0;
-          orgs.governing_body_info.forEach( gov => {
-           
-              this.createorganizationForm.patchValue({
-                governing_body_info: orgs.governing_body_info
-              })
-            
-            i++
-            
-         }) */
+                    var i=0;
+                    orgs.governing_body_info.forEach( gov => {
+                      
+                      //this.createorganizationForm.controls.governingBodyArr['controls'][i].patchValue({
+                        this.governingBodyArr.at(i).patchValue({
+                        sport_name          : gov.sport_name,
+                        sport_id            : gov.sport_id,
+                        is_national_true    : ((gov.is_national_governing_organization == true) ? true : false),
+                        is_state_true       : ((gov.is_state_governing_organization == true) ? true : false),
+                        is_national_false   : ((gov.is_national_governing_organization == false) ? false : true),
+                        is_state_false      : ((gov.is_state_governing_organization == false) ? false : true),
+                      })
+                      
+                      i++
+                      
+                  })
+
+          }, 1000);
+          
+         this.getServiceForNational(orgs.country_code, orgs.sport_id);
+          this.getServiceForState(orgs.state_code, orgs.country_code, orgs.sport_id)
+
         }
 
     }, err =>{
@@ -265,11 +274,65 @@ export class OrganizationsCreateComponent implements OnInit {
   randomGenerator(): string {
     return Math.floor(Math.random() * 100) + 2 + "" + new Date().getTime() + Math.floor(Math.random() * 100) + 2 + (Math.random().toString(36).replace(/[^a-zA-Z]+/g, '').substr(0, 5));
   }
-  get governingBodyArr() {
+
+  OnSportChange(event: any, form) {
+    if (event.type === "focus") {
+      if (!form.value.country_code) {
+        console.log('----markas touched----')
+        form.controls.sports.markAsTouched();
+      }
+    }
+    if (event.length !== 0 && event.type !== "focus") {
+      this.showErrorInArr = [];
+      //this.isSaveInWhichPosition();
+      console.log('---event----', event)
+      console.log( '--governing_body_info value ---',this.createorganizationForm.controls['governing_body_info'].value )
+       event.forEach((sportInfo: any) => {
+        let isSportExist = this.createorganizationForm.controls['governing_body_info'].value.filter(item => item.sport_id === sportInfo.sport_id);
+        if (isSportExist.length !== 0) {
+
+        } else {
+          this.governingBodyArr.push(this.getGoverningInfo());
+          this.governingBodyArr.at(this.createorganizationForm.controls['governing_body_info'].value.length - 1).patchValue({
+            sport_name: sportInfo.name,
+            sport_id: sportInfo.sport_id,
+            is_national_true: this.randomGenerator() + true,
+            is_state_true: this.randomGenerator() + true,
+            is_national_false: this.randomGenerator() + false,
+            is_state_false: this.randomGenerator() + false,
+          })
+          this.getServiceForNational(form.value.country_code, sportInfo.sport_id);
+          this.getServiceForState(form.value.state, form.value.country_code, sportInfo.sport_id)
+        }
+      });
+     if (this.createorganizationForm.controls['governing_body_info'].value.length !== event.length) {
+        if (this.createorganizationForm.controls['governing_body_info'].value) {
+          this.createorganizationForm.controls['governing_body_info'].value.forEach((formValue: any, index) => {
+            let removeGoverningBody = event.filter(eachSport => eachSport.sport_id === formValue.sport_id);
+            if (removeGoverningBody.length !== 0) {
+
+            } else {
+              this.governingBodyArr.removeAt(index)
+            }
+          });
+        }
+      }
+    } else if (event.type !== "focus" && event.length === 0) {
+
+      console.log('----else sports----')
+      this.governingBodyArr.removeAt(0);
+      form.patchValue({
+        sports: ''
+      })
+    }
+
+  }
+
+   get governingBodyArr() {
     return this.createorganizationForm.get('governing_body_info') as FormArray;
   }
 
-  OnSportChange(event: any, form) {
+  /*OnSportChange(event: any, form) {
     //return false;
     if (event.type === "focus") {
       if (!form.value.country_code) {
@@ -320,7 +383,7 @@ export class OrganizationsCreateComponent implements OnInit {
         sports: ''
       })
     }
-  }
+  } */
 
   OnSportChangebyCountry(event: any, form)
   {

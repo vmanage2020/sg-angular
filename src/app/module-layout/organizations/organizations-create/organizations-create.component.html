@@ -222,7 +222,7 @@
                             <tr>
                               <th class="border">Sport Name</th>
                               <th class="border">Is National Governing Body</th>
-                              <th class="border">National Governing Body Organization</th>
+                               <th class="border">National Governing Body Organization</th>
                               <th class="border">Is State Governing Body</th>
                               <th class="border">State Governing Body Organization</th>
                             </tr>
@@ -230,6 +230,82 @@
                           <tbody>
                             
                             <tr class="border"
+                            *ngFor="let individualGoverningInfo of governingBodyArr.controls; let i = index" [formGroupName]="i">
+                            <td class="border p-1 pt-2">{{individualGoverningInfo.value.sport_name }}</td>
+
+                            <td class="border p-1 verticalAlign">
+                              <div class="radio  mx-2 form-check-inline">
+                                <input type="radio" value="true" (input)="closeErrors('National')"
+                                  [id]="individualGoverningInfo.get('is_national_true').value"
+                                  formControlName="is_national_governing_organization"
+                                  (click)="getnationalList($event,createorganizationForm,i,individualGoverningInfo)">
+                                <label [for]="individualGoverningInfo.get('is_national_true').value"> Yes </label>
+                              </div>
+                              <div class="radio  mx-2 form-check-inline">
+                                <input type="radio" value="false" (input)="closeErrors('National')"
+                                  [id]="individualGoverningInfo.get('is_national_false').value"
+                                  formControlName="is_national_governing_organization"
+                                  (click)="getnationalList($event,createorganizationForm,i,individualGoverningInfo)">
+                                <label [for]="individualGoverningInfo.get('is_national_false').value"> No </label>
+                              </div>
+    
+                              <div
+                                *ngIf="individualGoverningInfo.controls.is_national_governing_organization.errors?.required && submitted"
+                                class="input-error-msg text-danger">
+                                Need to be choosen.
+                              </div>
+                            </td>
+
+                            <td class="border p-1">
+                              <div *ngIf="individualGoverningInfo.get('is_national_visible').value">
+                                <ng-select [items]="individualGoverningInfo.get('lov_for_national').value" bindLabel="name"
+                                  [loading]="nationalGoverning" appendTo="body"
+                                  *ngIf="individualGoverningInfo.get('is_select_dropdown_for_national').value"
+                                  bindValue="organization_id" [clearable]="false" id="selectSuffix"
+                                  placeholder="Select national governing body organization" name="organization_id"
+                                  (change)="nationalDropdown($event,createorganizationForm,i)"
+                                  formControlName="national_governing_organization_id">
+                                </ng-select>
+                                <p class="text-center" *ngIf="individualGoverningInfo.get('is_hypen_for_national').value">-
+                                </p>
+                              </div>
+                            </td>
+
+                            <td class="border p-1 verticalAlign">
+                              <div class="radio  mx-2 form-check-inline">
+                                <input type="radio" value="true" [id]="individualGoverningInfo.get('is_state_true').value"
+                                  formControlName="is_state_governing_organization" (input)="closeErrors('State')"
+                                  (click)="getstateList($event,createorganizationForm,i)">
+                                <label [for]="individualGoverningInfo.get('is_state_true').value"> Yes </label>
+                              </div>
+                              <div class="radio   mx-2 form-check-inline">
+                                <input type="radio" value="false" [id]="individualGoverningInfo.get('is_state_false').value"
+                                  formControlName="is_state_governing_organization" (input)="closeErrors('State')"
+                                  (click)="getstateList($event,createorganizationForm,i)">
+                                <label [for]="individualGoverningInfo.get('is_state_false').value"> No </label>
+                              </div>
+                              <div
+                                *ngIf="individualGoverningInfo.controls.is_state_governing_organization.errors?.required && submitted"
+                                class="input-error-msg text-danger">
+                                Need to be choosen.
+                              </div>
+                            </td>
+                            <td class="border p-1">
+                              <div *ngIf="individualGoverningInfo.get('is_state_visible').value">
+                                <ng-select [items]="individualGoverningInfo.get('lov_for_state').value" bindLabel="name"
+                                  appendTo="body" *ngIf="individualGoverningInfo.get('is_select_dropdown_for_state').value"
+                                  bindValue="organization_id" id="selectSuffix" [loading]="stateGoverning"
+                                  (change)="stateDropdown($event,createorganizationForm,i)" [clearable]="false"
+                                  [disabled]="!createorganizationForm.value.state && !createorganizationForm.value.country_code"
+                                  placeholder="Select state governing body organization" name="organization_id"
+                                  formControlName="state_governing_organization_id">
+                                </ng-select>
+                                <p class="text-center" *ngIf="individualGoverningInfo.get('is_hypen_for_state').value">-</p>
+                              </div>
+                            </td>
+
+                          </tr>
+                            <!-- <tr class="border"
                               *ngFor="let individualGoverningInfo of createorganizationForm?.get('governing_body_info')?.controls; let governingBodyIndex = index"
                               [formGroupName]="governingBodyIndex">
                               <td class="border p-1 pt-2">{{individualGoverningInfo.value.sport_name}}</td>
@@ -301,7 +377,7 @@
                                   <p class="text-center" *ngIf="individualGoverningInfo.get('is_hypen_for_state').value">-</p>
                                 </div>
                               </td>
-                            </tr>
+                            </tr> -->
                           </tbody>
                         </table>
                       </div>
