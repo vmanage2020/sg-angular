@@ -208,11 +208,13 @@
 
                
                 <div class="col-lg-12 row" *ngIf="createorganizationForm?.value.sports">
+                  <div class="col-lg-12">
                     <div class="col-12 mt-2 heading" style="background-color: #f1f5f7 !important;">
-                      <h4 style="background-color: #f1f5f7 !important;">Governing Body Details</h4>
+                      <h4 style="background-color: #f1f5f7 !important;padding: 10px 0px;">Governing Body Details</h4>
                     </div>
                   </div>
-                  <div class="col-lg-12 row" style="padding-bottom: 20px;" *ngIf="createorganizationForm?.value.sports">
+                </div>
+                  <div class="col-lg-12 row" style="padding-bottom: 20px;padding-left: 25px;" *ngIf="createorganizationForm?.value.sports">
                     <div class="col-12 mt-2 mb-0 pl-0">
                       <div formArrayName="governing_body_info">
                         <table id="basic-datatable" class="table table-responsive datatables dt-responsive nowrap mb-0">
