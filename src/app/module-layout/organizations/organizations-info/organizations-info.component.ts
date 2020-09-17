@@ -129,7 +129,7 @@ export class OrganizationsInfoComponent implements OnInit {
        this.restApiService.lists('organization/'+this.resourceID).subscribe( res => {
         console.log('----res----', res)
         this.getUserData = res;
-  
+        this.sportsRefData = res.governing_body_info;
         console.log('---this.sportList----', this.sportList)
         if( this.sportList.length >0)
         {

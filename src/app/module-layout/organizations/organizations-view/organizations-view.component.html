@@ -149,7 +149,9 @@
                             <label for="product-name" style="width:200px;">Primary Contact </label>
                             
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.primary_first_name}},
+                                <label for="inlineRadio2"
+                                *ngIf="getUserData.primary_first_name !='' && getUserData.primary_last_name != '' && getUserData.primary_admin_email != ''"
+                                > {{getUserData.primary_first_name}},
                                     {{getUserData.primary_last_name}},{{getUserData.primary_middle_initial}},
                                     {{getUserData.primary_suffix}},
                                     {{getUserData.primary_admin_email}}
@@ -161,7 +163,9 @@
                             <label for="product-name" style="width:200px;">Secondary Contact </label>
                             
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.secondary_first_name}},
+                                <label for="inlineRadio2"
+                                *ngIf="getUserData.secondary_first_name !='' && getUserData.secondary_last_name != '' && getUserData.secondary_admin_email != ''"
+                                > {{getUserData.secondary_first_name}},
                                     {{getUserData.secondary_last_name}},{{getUserData.secondary_middle_initial}},
                                     {{getUserData.secondary_suffix}},
                                     {{getUserData.secondary_admin_email}} </label>
@@ -181,8 +185,8 @@
                     </div> <!-- end card-box -->
                 </div> <!-- end col -->
             </div>
-
-            <div class="row" style="display: none;">  
+            
+            <div class="row" >  
                 <div class="col-12">
             
                     <div class="row" *ngIf="sportsRefData">
@@ -203,7 +207,7 @@
                                             <th class="border">Is National Governing Body</th>
                                             <th class="border">National Governing Body Organization</th>
                                             <th class="border">Is State Governing Body</th>
-                                            <th class="border">State Governing Body Organization</th>
+                                            <th class="border">State Governing Body Organization</th> 
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -211,45 +215,46 @@
                                             *ngFor="let sportsInfo of sportsRefData; let sportsRef = index">
                                             <td class="border p-1 pt-2">
                                                 <p class="text-center size">
-                                                    {{sportsInfo.sport}}</p>
+                                                    {{sportsInfo.sport_name}}</p>
                                             </td>
                                             <td class="border p-1 pt-2">
-                                                <p class="text-center size">Yes</p>
+                                                
 
-                                            <!--    <p class="text-center size"
+                                               <p class="text-center size"
                                                     *ngIf="sportsInfo.is_national_governing_organization =='true'">
                                                     Yes</p>
                                                 <p class="text-center size"
                                                     *ngIf="sportsInfo.is_national_governing_organization =='false'">
                                                     No</p>
-                                            -->
+                                           
                                             </td>
+
                                             <td class="border p-1 pt-2">
-                                                <p class="text-center"> - </p>
+                                               
                                              
-                                            <!--    <p class="text-center"
+                                               <p class="text-center"
                                                     *ngIf="sportsInfo.is_national_governing_organization =='true'">
                                                     - </p>
                                                 <p class="text-center size"
                                                     *ngIf="sportsInfo.is_national_governing_organization =='false'">
                                                     {{sportsInfo.national_governing_organization_name|| "-"}}
                                                 </p>
-                                            -->
+                                           
                                             </td>
                                             <td class="border p-1 pt-2">
-                                                <p class="text-center size">Yes</p>
-                                                <!--
+                                                
+                                                
                                                 <p class="text-center size"
                                                     *ngIf="sportsInfo.is_state_governing_organization =='true'">
                                                     Yes</p>
                                                 <p class="text-center size"
                                                     *ngIf="sportsInfo.is_state_governing_organization =='false'">
                                                     No</p>
-                                                -->
+                                               
                                             </td>
                                             <td class="border p-1 pt-2">
-                                                <p class="text-center"> - </p>
-                                                <!--
+                                                
+                                                
                                                 <p class="text-center"
                                                     *ngIf="sportsInfo.is_state_governing_organization =='true'">
                                                     - </p>
@@ -257,10 +262,12 @@
                                                     *ngIf="sportsInfo.is_state_governing_organization =='false'">
                                                     {{sportsInfo.state_governing_organization_name|| "-"}}
                                                 </p>
-                                                -->
+                                               
                                             </td>
-                                        </tr>
+
+                                    </tr>
                                     </tbody>
+                                    
                                 </table>
                             </div>
                         </div>

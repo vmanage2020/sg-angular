@@ -128,6 +128,7 @@ export class OrganizationsViewComponent implements OnInit {
       console.log('----res----', res)
       this.getUserData = res;
 
+      this.sportsRefData =   res.governing_body_info;
       console.log('---this.sportList----', this.sportList)
       if( this.sportList.length >0)
       {
