@@ -258,6 +258,7 @@
                             </td>
 
                             <td class="border p-1">
+                              
                               <div *ngIf="individualGoverningInfo.get('is_national_visible').value">
                                 <ng-select [items]="individualGoverningInfo.get('lov_for_national').value" bindLabel="name"
                                   [loading]="nationalGoverning" appendTo="body"

@@ -221,10 +221,15 @@ export class OrganizationsCreateComponent implements OnInit {
                         this.governingBodyArr.at(i).patchValue({
                         sport_name          : gov.sport_name,
                         sport_id            : gov.sport_id,
+                        is_national_governing_organization : gov.is_national_governing_organization,
+                        is_state_governing_organization : gov.is_state_governing_organization, 
                         is_national_true    : ((gov.is_national_governing_organization == true) ? true : false),
                         is_state_true       : ((gov.is_state_governing_organization == true) ? true : false),
                         is_national_false   : ((gov.is_national_governing_organization == false) ? false : true),
                         is_state_false      : ((gov.is_state_governing_organization == false) ? false : true),
+                        is_select_dropdown_for_national : ((gov.is_national_governing_organization == "true") ? false : true),
+                        is_select_dropdown_for_state : ((gov.is_state_governing_organization == "true") ? false : true),
+
                       })
                       
                       i++
@@ -233,6 +238,8 @@ export class OrganizationsCreateComponent implements OnInit {
 
           }, 1000);
           
+          console.log('governingBodyArr',this.governingBodyArr);
+
          this.getServiceForNational(orgs.country_code, orgs.sport_id);
           this.getServiceForState(orgs.state_code, orgs.country_code, orgs.sport_id)
 
@@ -467,6 +474,7 @@ export class OrganizationsCreateComponent implements OnInit {
   }
 
   async getnationalList(event: any, form, rowIndex: any, individualObject: any) {
+    console.log('getnationalList');
     try {
       if (event.target.value === "false") {
         this.governingBodyArr.at(rowIndex).patchValue({
