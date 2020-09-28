@@ -104,7 +104,8 @@ import { NGXLogger } from 'ngx-logger';
   
     ngOnInit() { 
       this.orgId = localStorage.getItem('org_id');
-      this.getPlayerMetaAPI();  
+      this.getPlayerMetaAPI(); 
+      this.coachCrudService.sportsdataStore.sports = [] 
       this.getSportsAPI();  
       this.getTypesAPI();  
     }

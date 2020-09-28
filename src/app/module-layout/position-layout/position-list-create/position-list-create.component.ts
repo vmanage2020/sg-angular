@@ -75,6 +75,7 @@ export class PositionListCreateComponent implements OnInit {
   
 
   ngOnInit() {
+    this.positionCrudService.sportsdataStore.sports = [];
     this.getAllSportsAPI();
   }
 

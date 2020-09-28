@@ -97,6 +97,7 @@ export class PlayermetaCreateComponent implements OnInit {
 
   ngOnInit() {
     this.orgId = localStorage.getItem('org_id');
+    this.playerCrudService.sportsdataStore.sports = []
     this.getSportsAPI();  
     this.getTypesAPI();  
     this.is_required_value = false;
