@@ -62,6 +62,7 @@ export class OrganizationsCreateComponent implements OnInit {
 
   data: any;
   selectedCountryCode: any;
+  selectedSports: any[]   = [];
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
 
@@ -333,6 +334,21 @@ export class OrganizationsCreateComponent implements OnInit {
       })
     }
 
+  }
+
+
+  sportsofferselectedbyState(event: any)
+  {
+    console.log('---state value----', event.state_code)
+    var country_code = this.createorganizationForm.value.country_code
+    var sports = this.createorganizationForm.value.sports
+    console.log('---sports----', sports,'-----country_code----', country_code)
+    if( sports.length>0 && country_code !='' && event.state_code !='')
+    {
+      sports.forEach( sport => {
+        this.getServiceForState(event.state_code, country_code, sport)
+      })      
+    }
   }
 
    get governingBodyArr() {
@@ -654,7 +670,8 @@ export class OrganizationsCreateComponent implements OnInit {
   {
     if( event != undefined && event.country_code != '')
     {
-      this.selectedCountryCode = event.country_code
+      this.selectedCountryCode = event.country_code;
+      this.selectedSports = [];
       this.getSports(this.selectedCountryCode); 
     }
     

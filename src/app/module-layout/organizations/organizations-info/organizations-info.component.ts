@@ -67,7 +67,7 @@ export class OrganizationsInfoComponent implements OnInit {
     this.getSports();
     setTimeout(() => {
       this.getOrganizationInfo();  
-    }, 3000);
+    }, 300);
     
     
     console.log(this.resourceID);

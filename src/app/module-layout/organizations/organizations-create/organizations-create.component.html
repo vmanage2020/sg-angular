@@ -84,6 +84,7 @@
                     bindValue="state_code"
                     [multiple]="false"
                     placeholder="Select State"
+                    (change)="sportsofferselectedbyState($event)"
                     [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
                       </ng-select>
 
@@ -194,6 +195,7 @@
                     bindValue="_id"
                     [multiple]="true"
                     placeholder="Select Sports Offered"
+                    [(ngModel)]="selectedSports"
                     (change)="OnSportChange($event,createorganizationForm)"
                     [ngClass]="{ 'is-invalid': submitted && f.sports.errors }">
                       </ng-select>
