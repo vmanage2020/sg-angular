@@ -114,11 +114,11 @@ export class OrganizationsCreateComponent implements OnInit {
       city: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       state: [null, [Validators.required]],
       state_name: [''],
-      postal_code: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9 ]*$')]],
+      postal_code: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
       country_code: [null, [Validators.required]],
       country_name: [''],
       phone: ['', Validators.compose([
-        Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(10)
+        Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(10)
       ])],
       fax: ['', [Validators.pattern('^[0-9-()]*$'), Validators.minLength(10)]],
       email: ['', [Validators.required, Validators.pattern(this.regexp)]],

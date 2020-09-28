@@ -27,7 +27,7 @@
 
                           <p class="error text-danger" *ngIf="f.abbrev.errors?.minlength">Abbreviation should contain at least {{f.abbrev.errors?.minlength.requiredLength}} characters</p>
                           <p class="error text-danger" *ngIf="f.abbrev.errors?.maxlength">Abbreviation should contain at least {{f.abbrev.errors?.maxlength.requiredLength}} characters</p>
-                          <p class="error text-danger" *ngIf="f.abbrev.errors?.pattern">No spaces and numbers allowed in between characters</p>
+                          <p class="error text-danger" *ngIf="f.abbrev.errors?.pattern">No special characters,numbers or spaces allowed in between characters</p>
                           
                       </div>
                   
@@ -99,7 +99,10 @@
                         <label for="postal_code">Postal Code<span class="text-danger">*</span></label>
                         <input type="text" id="postal_code" name="postal_code" formControlName="postal_code" class="form-control" placeholder="Enter Postal Code" [ngClass]="{ 'is-invalid': submitted && f.postal_code.errors }"/>
                         <div *ngIf="submitted && f.postal_code.errors" class="invalid-feedback">
-                            <div *ngIf="f.postal_code.errors.required">Postal Code is required.</div>
+                            <div *ngIf="f.postal_code.errors?.required">Postal Code is required.</div>
+                            <p class="error text-danger" *ngIf="f.postal_code.errors?.minlength">The Postal code minimum length {{f.postal_code.errors?.minlength.requiredLength}}</p>
+                            <p class="error text-danger" *ngIf="f.postal_code.errors?.maxlength">The Postal code maximum length {{f.postal_code.errors?.maxlength.requiredLength}}</p>
+                            <p class="error text-danger" *ngIf="f.postal_code.errors?.pattern">Postal code must be numbers only</p>
                         </div>
                     
                     </div>
@@ -137,6 +140,7 @@
                       <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
                           <div *ngIf="f.phone.errors.required">Phone number is required.</div>
                           <p class="error text-danger" *ngIf="f.phone.errors?.minlength">The Phone number minimum length {{f.phone.errors?.minlength.requiredLength}}</p>
+                          <p class="error text-danger" *ngIf="f.phone.errors?.maxlength">The Phone number maximum length {{f.phone.errors?.maxlength.requiredLength}}</p>
                           <p class="error text-danger" *ngIf="f.phone.errors?.pattern">Phone number must be numbers only</p>
                       </div>
                   
