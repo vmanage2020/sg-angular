@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import * as firebase from 'firebase';
+//import * as firebase from 'firebase';
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -25,7 +25,7 @@ import { OrganizationsService } from './../organizations.service';
 })
 export class OrganizationsViewComponent implements OnInit {
 
-  db: any = firebase.firestore();
+  //db: any = firebase.firestore();
   value: any = [];
 
   getAllPlayermeta: any = []; 
@@ -63,7 +63,7 @@ export class OrganizationsViewComponent implements OnInit {
   ngOnInit() {
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
-    this.getSports();
+    //this.getSports();
     setTimeout(() => {
       this.getOrganizationInfo();  
     }, 3000);
@@ -198,7 +198,7 @@ export class OrganizationsViewComponent implements OnInit {
     }
     */
    
-    console.log(this.getUserData);
+    //console.log(this.getUserData);
 
     this.loading = false;
     this.displayLoader = false; 

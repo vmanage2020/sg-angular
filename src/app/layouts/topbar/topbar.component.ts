@@ -242,12 +242,13 @@ export class TopbarComponent implements OnInit {
   addOrganization() {
     // this.sharedService.sendData({action:'addOrganization'});
     this.sharedService.announceMission({ action: 'addOrganization' })
-    this.router.navigate(['/organizations']);
-
+    //this.router.navigate(['/organizations']);
+    this.router.navigate(['/organizations/create']);
   }
   addUser() {
     this.sharedService.announceMission({ action: 'addUsers' })
-    this.router.navigate(['/users']);
+    //this.router.navigate(['/users']);
+    this.router.navigate(['/users/createlist']);
   }
   addTeam() {
     this.sharedService.announceMission({ action: 'addTeams' })
