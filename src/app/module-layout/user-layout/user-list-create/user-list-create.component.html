@@ -50,8 +50,8 @@
                     <label for="middle_initial">Middle Initial</label>
                     <input type="text" id="middle_initial" name="middle_initial" formControlName="middle_initial" class="form-control" placeholder="Enter Middle Initial" [ngClass]="{ 'is-invalid': submitted && f.middle_initial.errors }"/>
                     <div *ngIf="submitted && f.middle_initial.errors" class="invalid-feedback">
-                        <div *ngIf="f.middle_initial.errors">Middle Initial check character lenght, Maximum 3 character.</div>
-                        <p class="error text-danger" *ngIf="f.middle_initial.errors?.pattern">middle initial must be Alphabets only</p>
+                        <div *ngIf="f.middle_initial.errors">Maximum three characters allowed.</div>
+                        <p class="error text-danger" *ngIf="f.middle_initial.errors?.pattern">Middle name must contain alphabets only</p>
                     </div>
                 </div>
 

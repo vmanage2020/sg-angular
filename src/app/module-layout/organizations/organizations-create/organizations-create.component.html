@@ -412,7 +412,8 @@
                                 <label for="primary_middle_initial">Middle Initial</label>
                                 <input type="text" id="primary_middle_initial" name="primary_middle_initial" formControlName="primary_middle_initial" class="form-control" placeholder="Enter Middle Initial" [ngClass]="{ 'is-invalid': submitted && f.primary_middle_initial.errors }"/>
                                 <div *ngIf="submitted && f.primary_middle_initial.errors" class="invalid-feedback">
-                                    <div *ngIf="f.primary_middle_initial.errors">Middle Initial check character lenght, Maximum 3 character.</div>
+                                    <div *ngIf="f.primary_middle_initial.errors">Maximum three characters allowed</div>
+                                    <p class="error text-danger" *ngIf="f.primary_middle_initial.errors?.pattern">Middle name must contain alphabets only</p>
                                     <p class="error text-danger" *ngIf="f.primary_middle_initial.errors?.maxlength">The Middle Initial field maximum length {{f.primary_middle_initial.errors?.maxlength.requiredLength}}</p>
                                 </div>
                             </div>
@@ -467,7 +468,7 @@
                                 <label for="secondary_middle_initial">Middle Initial</label>
                                 <input type="text" id="secondary_middle_initial" name="secondary_middle_initial" formControlName="secondary_middle_initial" class="form-control" placeholder="Enter Middle Initial" />
                                 <div *ngIf="submitted && f.secondary_middle_initial.errors" class="invalid-feedback">
-                                    <div *ngIf="f.secondary_middle_initial.errors">Middle Initial check character lenght, Maximum 3 character.</div>
+                                    <div *ngIf="f.secondary_middle_initial.errors">Maximum three characters allowed</div>
                                 </div>
                             </div>
 
