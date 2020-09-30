@@ -14,6 +14,8 @@ import { DOCUMENT } from '@angular/common';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-import-user-list-user',
   templateUrl: './import-user-list-user.component.html',
@@ -41,7 +43,12 @@ export class ImportUserListUserComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router, private route: ActivatedRoute, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService) { }
+  constructor(private router: Router,
+     private route: ActivatedRoute, 
+     private notification: NgiNotificationService, 
+     @Inject(DOCUMENT) private _document: Document,
+     private restApiService: RestApiService,
+     public cookieService: CookieService) { }
 
   ngOnInit() {
     
@@ -58,7 +65,7 @@ export class ImportUserListUserComponent implements OnInit {
   }
 
   async getUserList(){
-
+    //console.log('---dddddddddddd------'); return false;
     /*
     //this.getAllplayerlist = await this.db.collection('users').orderBy('sport_id').get();
     if(this.orgId=='') {
@@ -105,21 +112,67 @@ if (validateData.searchKey && validateData.searchVal) {
     
     if(this.viewUserListType==1) {
 
-      this.getAllplayerlist = await this.db.collection('/organization').doc(this.orgId).collection('/import_users_log').doc(this.resourceID).collection('/imported_users_data').get();
+      
+        this.restApiService.lists('importuserdata/'+this.resourceID).subscribe( importData => {
+          console.log('---importData----', importData)
+          this.getAllplayerlist = importData;
+        }, err =>{
+          console.log('---error for fetching data----')
+        })
+      
+      
+      //this.getAllplayerlist = await this.db.collection('/organization').doc(this.orgId).collection('/import_users_log').doc(this.resourceID).collection('/imported_users_data').get();
 
     } else if(this.viewUserListType==2) {
 
-      this.getAllplayerlist = await this.db.collection('/organization').doc(this.orgId).collection('/import_users_log').doc(this.resourceID).collection('/imported_users_data').where('processed_flag', 'in', ['y', 'Y']).get();
+      this.restApiService.lists('importuserdata/'+this.resourceID).subscribe( importData => {
+        console.log('---importData----', importData)
+        if( importData.length > 0)
+        {
+          importData.forEach( imp => {
+            if(imp.processed_flag == 'N')
+            {
+              this.getAllplayerlist.push( imp)
+            }
+          })
+        }
+        
+      }, err =>{
+        console.log('---error for fetching data----')
+      })
+
+      //this.getAllplayerlist = await this.db.collection('/organization').doc(this.orgId).collection('/import_users_log').doc(this.resourceID).collection('/imported_users_data').where('processed_flag', 'in', ['y', 'Y']).get();
 
     } else if(this.viewUserListType==3) {
       
-      this.getAllplayerlist = await this.db.collection('/organization').doc(this.orgId).collection('/import_users_log').doc(this.resourceID).collection('/imported_users_data').where('processed_flag', 'in', ['e', 'E']).get();
+      this.restApiService.lists('importuserdata/'+this.resourceID).subscribe( importData => {
+        console.log('---importData----', importData)
+        if( importData.length > 0)
+        {
+          importData.forEach( imp => {
+            if(imp.processed_flag == 'e')
+            {
+              this.getAllplayerlist.push( imp)
+            }
+          })
+        }
+        
+      }, err =>{
+        console.log('---error for fetching data----')
+      })
+      //this.getAllplayerlist = await this.db.collection('/organization').doc(this.orgId).collection('/import_users_log').doc(this.resourceID).collection('/imported_users_data').where('processed_flag', 'in', ['e', 'E']).get();
 
     }
     
 
-    this.getAllPlayerlistData = await this.getAllplayerlist.docs.map((doc: any) => doc.data());
-    console.log(this.getAllPlayerlistData);
+    setTimeout(() => {
+      this.getAllPlayerlistData = this.getAllplayerlist;
+      console.log('---getAllPlayerlistData----',this.getAllPlayerlistData);
+      this.data = this.getAllPlayerlistData;
+    }, 1000);
+     //await this.getAllplayerlist.docs.map((doc: any) => doc.data());
+
+    
     this.data = this.getAllPlayerlistData;
     this.dtTrigger.next();
     this.loading = false;

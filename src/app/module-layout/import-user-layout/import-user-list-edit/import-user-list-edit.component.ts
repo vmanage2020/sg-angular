@@ -19,6 +19,8 @@ import { DropdownService } from 'src/app/core/services/dropdown.service';
 import * as moment from 'moment';
 import { RESOURCE_CACHE_PROVIDER } from '@angular/platform-browser-dynamic';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
   @Component({
     selector: 'app-import-user-list-edit',
     templateUrl: './import-user-list-edit.component.html',
@@ -66,7 +68,14 @@ import { RESOURCE_CACHE_PROVIDER } from '@angular/platform-browser-dynamic';
   getImportData:any=[];
   ImportLogID:any;
 
-  constructor(private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder,public cookieService: CookieService, private notification: NgiNotificationService,public dataService: DataService,private dropDownService: DropdownService) { 
+  constructor(private router: Router, 
+    private route: ActivatedRoute, 
+    private formBuilder: FormBuilder,
+    public cookieService: CookieService, 
+    private notification: NgiNotificationService,
+    public dataService: DataService,
+    private restApiService: RestApiService,
+    private dropDownService: DropdownService) { 
     
   }
 
@@ -160,7 +169,26 @@ import { RESOURCE_CACHE_PROVIDER } from '@angular/platform-browser-dynamic';
   
 
     async getUserList(){
-   
+
+
+      this.restApiService.lists('importuserdatabyid/'+this.resourceID).subscribe( importdata => {
+        console.log('----importdata----', importdata)
+        this.getUserData = importdata;
+
+        if (typeof (this.getUserData.player_dob) !== "string") {
+          this.getUserData.player_dob = moment(this.getUserData.player_dob).format('MM-DD-YYYY').toString();
+        } else {
+          this.getUserData.player_dob = moment(this.getUserData.player_dob).format('MM-DD-YYYY').toString();
+        }
+
+        this.loading = false;
+        this.displayLoader = false; 
+
+      }, err =>{
+        console.log('---error for fetching data----')
+      })
+      console.log('-----testttt----', this.ImportLogID); 
+      console.log(this.resourceID);return false
       
       this.getAllLevel = await this.db.collection('/organization').doc(this.orgId).collection('/import_users_log').where("imported_file_id", '==', this.ImportLogID).get();  
       this.getAllLevelData = await this.getAllLevel.docs.map((doc: any) => doc.data());
@@ -198,6 +226,7 @@ import { RESOURCE_CACHE_PROVIDER } from '@angular/platform-browser-dynamic';
     console.log("this.viewUserListType", this.viewUserListType);
     this.submitted = true;
     console.log(form.value);
+    return false;
 
 
     form.controls.processed_flag.patchValue("N");

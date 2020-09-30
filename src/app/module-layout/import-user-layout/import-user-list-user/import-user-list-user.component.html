@@ -50,7 +50,7 @@
                     <th>Country</th>
                 </tr>
                 </thead>
-
+               
                 <tbody>
                     <tr *ngFor="let Importdata of data let i = index;">
                     
@@ -66,7 +66,7 @@
                                     <a (click)="editUserRecord(data)" class="edit-icon color font-weight-bold">Fix Data</a>
                                     -->
                                     
-                                    <a class="dropdown-item" (click)="editUserRecord(Importdata.id)"><i class="mdi mdi-edit mr-2 text-muted font-18 vertical-middle"></i> Fix </a>
+                                    <a class="dropdown-item" (click)="editUserRecord(Importdata._id)"><i class="mdi mdi-edit mr-2 text-muted font-18 vertical-middle"></i> Fix </a>
                                     
                                 </div>
                             </div>                            
@@ -79,10 +79,10 @@
                                 <span class="ml-2">{{Importdata.error_description}}</span>
                             </a>
                             -->
-
-                            <a href="javascript: void(0);" class="text-body" *ngFor="let ImportdataError of Importdata.error_description;">
+                            <span>{{Importdata.error_description}}</span>
+                            <!-- <a href="javascript: void(0);" class="text-body" *ngFor="let ImportdataError of Importdata.error_description;">
                                 <span class="ml-2">{{ImportdataError.error}}</span><br/>
-                            </a>
+                            </a> -->
                         </td>
 
                         <td>
@@ -97,25 +97,25 @@
  
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.athlete_1_first_name}}</span>
+                                <span class="ml-2">{{Importdata.player_first_name}}</span>
                             </a>
                         </td>
     
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.athlete_1_middle_name}}</span>
+                                <span class="ml-2">{{Importdata.player_middle_name}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.athlete_1_last_name}}</span>
+                                <span class="ml-2">{{Importdata.player_last_name}}</span>
                             </a>
                         </td>
                         
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.athlete_1_gender}}</span>
+                                <span class="ml-2">{{Importdata.player_gender}}</span>
                             </a>
                         </td>
 
@@ -130,49 +130,49 @@
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.athlete_1_level}}</span>
+                                <span class="ml-2">{{Importdata.player_level}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.guardian_1_email_1}}</span>
+                                <span class="ml-2">{{Importdata.guard_1_email}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.guardian_2_email_1}}</span>
+                                <span class="ml-2">{{Importdata.guard_2_email}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.athlete_1_address_1}}</span>
+                                <span class="ml-2">{{Importdata.player_address1}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.athlete_1_city_1}}</span>
+                                <span class="ml-2">{{Importdata.player_city}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.athlete_1_state_1}}</span>
+                                <span class="ml-2">{{Importdata.player_state}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.athlete_1_zip_1}}</span>
+                                <span class="ml-2">{{Importdata.player_postalcode}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Importdata.athlete_1_country_1}}</span>
+                                <span class="ml-2">{{Importdata.player_country}}</span>
                             </a>
                         </td>
 
