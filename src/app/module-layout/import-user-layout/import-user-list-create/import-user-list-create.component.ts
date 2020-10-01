@@ -368,11 +368,14 @@ export class ImportUserListCreateComponent implements OnInit {
 
       this.restApiService.create('importuserlogs',userRegisterationDataObj).subscribe( importusers => {
 
-        this.importLogService.dataStore.userlogs.push(importusers);
+        //setTimeout(() => {
+          this.importLogService.dataStore.userlogs.push(importusers);
         
-        this.router.navigate(['/useruploads/list']);
+          this.router.navigate(['/useruploads/list']);
 
-        this.notification.isNotification(true, "Import User Data", "Import Users has been added successfully.", "check-square");
+          this.notification.isNotification(true, "Import User Data", "Import Users has been added successfully.", "check-square");
+        //}, 10000);
+        
 
       },error =>{
         console.log('-----Create API error response----')

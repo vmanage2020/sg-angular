@@ -50,6 +50,7 @@ import { RestApiService } from '../../../shared/rest-api.services';
       { name: 'Female' }
     ];
     levelList: any = [];
+    levelListsArr: any = [];
     stateList: any; 
     countryCodeList: any = [
       { name: 'United State', country_code:'US' },
@@ -162,11 +163,25 @@ import { RestApiService } from '../../../shared/rest-api.services';
       this.uid = this.cookieService.getCookie('uid');
       this.orgId = localStorage.getItem('org_id');
       this.getAllStateList();
+      this.levelListdata()
       this.getUserList();  
       this.createForm();
       
     }
   
+    async levelListdata()
+    {
+      this.restApiService.lists('levelsbyorg/'+this.orgId).subscribe( leveldata => {
+        this.levelList = leveldata
+        
+        leveldata.forEach( le => {
+          this.levelListsArr.push(le.level_name)
+        })
+        
+      }, err =>{
+        console.log('---error for fetching data----')
+      })
+    }
 
     async getUserList(){
 
@@ -226,15 +241,113 @@ import { RestApiService } from '../../../shared/rest-api.services';
     console.log("this.viewUserListType", this.viewUserListType);
     this.submitted = true;
     console.log(form.value);
+    
+    //this.levelList
+
+    var levelValid = false;
+    if(this.levelListsArr.indexOf(form.value.level_of_play) != -1)
+    { 
+      levelValid = true;
+    }
+
+    let dob = Date.parse(form.value.player_DOB); 
+   
+    if( form.value.player_first_name != '' && form.value.player_last_name !=''
+    && dob !== NaN && levelValid == true && form.value.guardian1_email_address !=''
+    ){
+      console.log('-----valid data----')
+            this.formdata = {
+            
+              player_first_name               : form.value.player_first_name,
+              player_middle_name              : form.value.player_initial,
+              player_last_name                : form.value.player_last_name,
+              player_dob                      : form.value.player_DOB,
+              player_gender                   : form.value.player_gender,
+              player_level                    : form.value.level_of_play,
+              //player_email                    : form.value.,
+              //player_address1                 : form.value.address,
+              //player_address2                 : form.value.,
+              player_city                     : form.value.city,
+              player_state                    : form.value.state,
+              player_postalcode               : form.value.postal_code,
+              player_country                  : form.value.country,
+              guard_1_firstname               : form.value.guardian1_first_name,
+              guard_1_lastname                : form.value.guardian1_last_name,
+              //guard_1_phone                   : form.value.,
+              guard_1_email                   : form.value.guardian1_email_address,
+              guard_2_firstname               : form.value.guardian2_first_name,
+              guard_2_lastname                : form.value.guardian2_last_name,
+              //guard_2_phone                   : form.value.,
+              guard_2_email                   : form.value.guardian2_email_address,
+              error_description               : [],
+              error_for_status                : [],
+              processed_flag                  : 'N',
+              //level_id                        : ''
+          }
+          
+          this.restApiService.update('importuserdata/'+this.resourceID,this.formdata).subscribe( updated => {
+            console.log('---updated----', updated)
+
+                    const userObj = {
+                      user_id: '',
+                      first_name: form.value.player_first_name || "",
+                      middle_initial: form.value.player_initial || '',
+                      last_name: form.value.player_last_name || "",
+                      suffix:  '',
+                      gender: form.value.player_gender,
+                      date_of_birth: form.value.player_DOB || "",
+                      email_address: this.getUserData.player_email || "",
+                      mobile_phone:  "",
+                      parent_user_id: [],
+                      city: form.value.city || "",
+                      country_code: form.value.country || "",
+                      country: "",
+                      postal_code: form.value.postal_code || "",
+                      state:  "",
+                      state_code: form.value.state || "",
+                      street1: this.getUserData.player_address1 || "",
+                      street2: this.getUserData.player_address2 || "",
+                      organization_id: this.orgId || "",
+                      organization_name:  "",
+                      organization_abbrev:  "",
+                      created_datetime: new Date() || "",
+                      created_uid: this.uid || "",
+                      is_invited: false,
+                      is_signup_completed: false,
+                      profile_image: '',
+                      roles: [],
+                      organizations: [this.orgId]
+                  }
+                  this.restApiService.create('users',userObj).subscribe( usercreated => {
+                    this.notification.isNotification(true, "Import Users", 'Successfully updated', "check-square");
+                    this.router.navigate(['/useruploads/userlist/'+this.resourceID]);
+                  }, e => {
+                    this.submitted = false;
+                    this.reInitialise();
+                    this.notification.isNotification(true, "Created Users Error", 'Invalid Data', "check-square");
+                    this.router.navigate(['/useruploads/userlist/'+this.resourceID]);
+                  })
+            
+          })
+          console.log('---formdata----', this.formdata)
+    }else{
+
+      this.submitted = false;
+      this.reInitialise();
+      this.notification.isNotification(true, "Import Users Error", 'Invalid Data', "check-square");
+      this.router.navigate(['/useruploads/userlist/'+this.resourceID]);
+    }
+
+    
     return false;
 
 
     form.controls.processed_flag.patchValue("N");
-    form.controls.player_DOB.patchValue( new Date(form.value.player_DOB));
+    form.controls.player_dob.patchValue( new Date(form.value.player_DOB));
     form.controls.error_description.patchValue([]);
-    form.controls.status.patchValue([]);
+    form.controls.error_for_status.patchValue([]);
     form.controls.level_id.patchValue("nftTeZMmH7ALCX7Nl7yO");
-    form.controls.id.patchValue(this.importID);
+    //form.controls.id.patchValue(this.importID);
     
     console.log(form.value);
     
@@ -260,7 +373,7 @@ import { RestApiService } from '../../../shared/rest-api.services';
     }
     /*
     form.controls.intelimObj['controls'].processed_flag.patchValue("N");
-    form.value.intelimObj.player_DOB = new Date(form.value.intelimObj.player_DOB);
+    form.value.intelimObj.player_DOB = new Date(form.vNalue.intelimObj.player_DOB);
     form.value.intelimObj.error_description = [];
     */
     this.displayLoader = true;

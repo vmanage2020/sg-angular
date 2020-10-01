@@ -43,7 +43,7 @@
                 <div class="form-group mb-3">
                     <label for="level_of_play">Level of play</label>
                     
-                    <ng-select [items]="levelList" [ngModel]="getUserData.player_level" 
+                    <ng-select [items]="levelList"  
                         formControlName="level_of_play" bindLabel="level_name"
                         [clearable]="false"  [ngClass]="{ 'is-invalid': submitted && f.level_of_play.errors }"
                         bindValue="level_name" placeholder="Select level of play">
