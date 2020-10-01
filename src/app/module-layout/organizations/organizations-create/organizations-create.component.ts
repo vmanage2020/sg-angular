@@ -803,7 +803,7 @@ export class OrganizationsCreateComponent implements OnInit {
                 
                         
                 this.logger.debug('Manager Meta Delete API End Here====>', new Date().toUTCString());          
-                //console.log(data);
+                console.log(resorg.organization_id);
 
                 this.organizationsService.orgdataStore.org = [];
                 let Metaurl= '';
@@ -817,8 +817,9 @@ export class OrganizationsCreateComponent implements OnInit {
 
                 //console.log('---resorg-----', resorg)
                 //this.organizationsService.orgdataStore.org.push(resorg)
+                
                 //this.router.navigate(['/organizations']); 
-                this.router.navigate(['/organizations']);
+                this.router.navigate(['/organizations/view/'+resorg.organization_id]);
                 this.notification.isNotification(true, "Organization Data", "Organization has been added successfully.", "check-square");
 
               });
@@ -921,7 +922,8 @@ export class OrganizationsCreateComponent implements OnInit {
                 Metaurl='organization';
                 this.organizationsService.organizationsList(Metaurl);
 
-                this.router.navigate(['/organizations']);
+                //this.router.navigate(['/organizations']);
+                this.router.navigate(['/organizations/view/'+this.selectedOrganizationId]);
                 this.notification.isNotification(true, "Organization Data", "Organization has been updated successfully.", "check-square");
 
               },error => {
