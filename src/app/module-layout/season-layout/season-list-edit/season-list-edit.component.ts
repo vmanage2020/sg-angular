@@ -96,7 +96,9 @@ export class SeasonListEditComponent implements OnInit {
     }
 
     
-    
+    ssdate:any;
+    sedate:any;
+
     async getSeasonInfoAPI(){   
        
       let Metaurl='seasons/'+this.resourceID;
@@ -106,6 +108,19 @@ export class SeasonListEditComponent implements OnInit {
         if (lists) {
           this.getSeasonValueData = lists;
           this.getSeasonValueArray = this.getSeasonValueData; 
+          
+        this.sdate = this.getSeasonValueArray.season_start_date.split("T");
+        this.edate = this.getSeasonValueArray.season_end_date.split("T");
+
+        let start_date =this.datePipe.transform(this.sdate[0], 'MM/dd/yyyy');
+        let end_date =this.datePipe.transform(this.edate[0], 'MM/dd/yyyy');
+
+        console.log('start_date',start_date);
+        console.log('end_date',end_date);
+
+        this.getSeasonValueArray.season_start_date_format = start_date;
+        this.getSeasonValueArray.season_end_date_format = end_date;
+
         } else {
           this.getSeasonValueData = [];
           this.getSeasonValueArray = this.getSeasonValueData; 

@@ -191,14 +191,49 @@ export class ImportUserListCreateComponent implements OnInit {
 
   }
 
-  async getAllSports(){    
+  
+  async getAllSports(){
+    
+    //let Metaurl='sports';
+
+    this.orgId = localStorage.getItem('org_id');
+    console.log('orgId',this.orgId);
+    let Metaurl= '';
+    if(this.orgId=='' || this.orgId==1) {
+    Metaurl='sports';
+    } else {
+    Metaurl='organizationsports/'+this.orgId;
+    }
+  
+    this.restApiService.lists(Metaurl).subscribe( lists => {
+      console.log('---lists----', lists)
+ 
+      try {
+ 
+       this.getSportsData = lists;
+       this.getSportsArray = this.getSportsData;
+       
+      } catch (error) {
+       
+        console.log(error);
+        this.getSportsArray = [];
+        
+      }
+  
+      console.log(this.getSportsArray);
+      
+    });
+ 
+   } 
+
+  async getAllSportsXXX(){    
     
     if(this.importLogService.sportsdataStore.sports.length > 0)
     {
       this.getSportsArray = this.importLogService.sportsdataStore.sports;
     }else{
       setTimeout(() => {
-          this.getAllSports();
+          this.getAllSportsXXX();
       }, 1000);
     }
     //this.getSports = await this.db.collection('sports').orderBy('sport_id').get();

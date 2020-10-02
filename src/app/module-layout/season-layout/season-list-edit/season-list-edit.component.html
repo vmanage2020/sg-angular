@@ -36,8 +36,8 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="season_start_date">Season Start Date<span class="text-danger">*</span></label>{{getSeasonValueArray.season_start_date}}
-                    <input type="date" [ngModel]="getSeasonValueArray.season_start_date" id="season_start_date" name="season_start_date" formControlName="season_start_date" class="form-control" placeholder="Enter Season Start Date" [ngClass]="{ 'is-invalid': submitted && f.season_start_date.errors }"
+                    <label for="season_start_date">Season Start Date<span class="text-danger">*</span></label>
+                    <input type="text" [ngModel]="getSeasonValueArray.season_start_date_format" id="season_start_date" name="season_start_date" formControlName="season_start_date" class="form-control" placeholder="Enter Season Start Date" [ngClass]="{ 'is-invalid': submitted && f.season_start_date.errors }"
                     #dp="bsDatepicker" bsDatepicker autocomplete="off" />
                     <div *ngIf="submitted && f.season_name.errors" class="invalid-feedback">
                         <div *ngIf="f.season_start_date.errors.required">Season Start Date is required.</div>
@@ -45,8 +45,8 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="season_end_date">Season End Date<span class="text-danger">*</span></label>{{getSeasonValueArray.season_end_date}}
-                    <input type="date" [ngModel]="getSeasonValueArray.season_end_date" id="season_end_date" name="season_end_date" formControlName="season_end_date" class="form-control" placeholder="Enter Season End Date" [ngClass]="{ 'is-invalid': submitted && f.season_end_date.errors }"
+                    <label for="season_end_date">Season End Date<span class="text-danger">*</span></label>
+                    <input type="text" [ngModel]="getSeasonValueArray.season_end_date_format" id="season_end_date" name="season_end_date" formControlName="season_end_date" class="form-control" placeholder="Enter Season End Date" [ngClass]="{ 'is-invalid': submitted && f.season_end_date.errors }"
                     #dp="bsDatepicker" bsDatepicker autocomplete="off" />
                     <div *ngIf="submitted && f.season_end_date.errors" class="invalid-feedback">
                         <div *ngIf="f.season_end_date.errors.required">Season End Date is required.</div>
