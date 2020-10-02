@@ -118,6 +118,8 @@ export class OrganizationsCreateComponent implements OnInit {
       postal_code: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
       country_code: [null, [Validators.required]],
       country_name: [''],
+      phonedialcode : [],
+      faxdialcode : [],
       phone: ['', Validators.compose([
         Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(10), Validators.maxLength(10)
       ])],
@@ -195,6 +197,8 @@ export class OrganizationsCreateComponent implements OnInit {
           fax: orgs.fax,
           email: orgs.email_address,
           website: orgs.website,
+          phonedialcode : orgs.dial_code,
+          faxdialcode : orgs.dial_code,
           sports: orgs.sports,
           governing_body_info: orgs.governing_body_info,
           primary_first_name: orgs.primary_first_name,
@@ -212,7 +216,7 @@ export class OrganizationsCreateComponent implements OnInit {
         if(orgs.governing_body_info.length>0)
         {
           console.log('---orgs.governing_body_info----', orgs.governing_body_info)
-          this.governingBodyArr.push(this.getGoverningInfo());
+          //this.governingBodyArr.push(this.getGoverningInfo());
           setTimeout(() => {
           
                     var i=0;
@@ -675,6 +679,10 @@ export class OrganizationsCreateComponent implements OnInit {
       this.selectedSports = [];
       this.getSports(this.selectedCountryCode); 
       this.dialCode = '+1';
+      this.createorganizationForm.patchValue({
+        phonedialcode: '+1',
+        faxdialcode: '+1'
+      })
     }
     
   }
@@ -776,6 +784,7 @@ export class OrganizationsCreateComponent implements OnInit {
                 street2                         : createOrgObj.street2 || "",
                 city                            : createOrgObj.city || "",
                 postal_code                     : createOrgObj.postal_code || "",
+                dial_code                       : createOrgObj.phonedialcode || "",
                 created_datetime                : new Date(),
                 created_uid                     : this.uid,
                 governing_body_info             : createOrgObj.governing_body_info || "",

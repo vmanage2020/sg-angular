@@ -315,7 +315,7 @@ import { RestApiService } from '../../../shared/rest-api.services';
                       is_invited: false,
                       is_signup_completed: false,
                       profile_image: '',
-                      roles: [],
+                      roles: ['player'],
                       organizations: [this.orgId]
                   }
                   this.restApiService.create('users',userObj).subscribe( usercreated => {

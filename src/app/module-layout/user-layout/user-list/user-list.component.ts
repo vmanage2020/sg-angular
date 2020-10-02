@@ -130,6 +130,14 @@ export class UserListComponent implements OnInit {
  
   }
 
+  removeLastChar(value, char){
+      var lastChar = value.slice(-1);
+      if(lastChar == char) {
+        value = value.slice(0, -1);
+      }
+      return value;
+  }
+
   listUser(){
     this.router.navigate(['/users/list']);
   }

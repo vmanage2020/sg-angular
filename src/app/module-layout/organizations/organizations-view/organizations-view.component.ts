@@ -130,7 +130,7 @@ export class OrganizationsViewComponent implements OnInit {
 
       this.sportsRefData =   res.governing_body_info;
       console.log('---this.sportList----', this.sportList)
-      if( this.sportList.length >0)
+      if( this.sportList != undefined && this.sportList.length >0)
       {
         this.sportList.forEach( sp => {
           if(res.sports.indexOf(sp._id) !== -1){

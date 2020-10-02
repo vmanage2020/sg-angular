@@ -50,7 +50,7 @@
                         <td><b>{{i+1}}</b></td>
                         
                         <td>
-                            <div class="btn-group dropdown">
+                            <div class="btn-group dropdown" *ngIf="Importdata.total_records_found !=0">
                                 <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item" (click)="viewUser(Importdata.imported_file_id)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle"></i>View Matrix</a>

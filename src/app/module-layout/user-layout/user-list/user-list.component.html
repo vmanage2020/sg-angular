@@ -44,7 +44,7 @@
                             <a href="javascript: void(0);" class="text-body">
                                 <span class="ml-2" style="text-transform: uppercase;">
                                     <div *ngFor="let rr of Playerdata.roles">
-                                    <span>{{rr.name+","}}</span>
+                                    <span>{{removeLastChar(rr.name+",", ",")}}</span>
                                   </div></span>
                             </a>
                         </td>

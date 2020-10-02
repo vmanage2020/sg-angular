@@ -403,13 +403,13 @@ export class ImportUserListCreateComponent implements OnInit {
 
       this.restApiService.create('importuserlogs',userRegisterationDataObj).subscribe( importusers => {
 
-        //setTimeout(() => {
-          this.importLogService.dataStore.userlogs.push(importusers);
+        setTimeout(() => {
+          //this.importLogService.dataStore.userlogs.push(importusers);
         
           this.router.navigate(['/useruploads/list']);
 
           this.notification.isNotification(true, "Import User Data", "Import Users has been added successfully.", "check-square");
-        //}, 10000);
+        }, 5000);
         
 
       },error =>{
@@ -424,8 +424,6 @@ export class ImportUserListCreateComponent implements OnInit {
     }
   }
 
-
- 
   listUser(){
     this.router.navigate(['/useruploads/list']);
   }

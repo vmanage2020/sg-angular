@@ -13,6 +13,8 @@ import { DOCUMENT } from '@angular/common';
 import { CookieService } from 'src/app/core/services/cookie.service';
 
 import { ImportLogService } from '../importLog-service';
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-import-user-list',
   templateUrl: './import-user-list.component.html',
@@ -24,6 +26,7 @@ export class ImportUserListComponent implements OnInit {
   value: any = [];
   getAllLevel: any = [];
   getAllLevelData: any = [];
+  importedData: any = [];
 
   data: any;
   dtOptions: DataTables.Settings = {};
@@ -39,25 +42,48 @@ export class ImportUserListComponent implements OnInit {
     private notification: NgiNotificationService,
      @Inject(DOCUMENT) private _document: Document,
      private importLogService: ImportLogService,
+     private restApiService: RestApiService,
      public cookieService: CookieService) { }
 
   ngOnInit() { 
 
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
-    this.getLevel();  
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      processing: true
-    }; 
+    
+      this.getLevel();  
+      this.dtOptions = {
+        pagingType: 'full_numbers',
+        pageLength: 10,
+        processing: true
+      }; 
+   
+   
+  }
+
+
+  getUserlogs()
+  {
+      this.restApiService.lists('importuserlogsdbyorg/'+this.orgId).subscribe( importeduserdata => {
+        this.data = importeduserdata
+        this.dtTrigger.next();
+          this.loading = false;
+          this.displayLoader = false;
+      },e=>{
+          console.log('----error load data-----') 
+      });
   }
 
   async getLevel(){
     console.log(this.orgId);
     
     if(this.orgId !='') {
-      if(this.importLogService.dataStore.userlogs.length >0)
+
+      setTimeout(() => {
+      
+        this.getUserlogs();
+      }, 1000);
+      
+     /*  if(this.importLogService.dataStore.userlogs.length >0)
       {
         console.log('---logs----', this.importLogService.dataStore.userlogs)
       
@@ -85,14 +111,7 @@ export class ImportUserListComponent implements OnInit {
           }, 1000);
   
         }
-
-        /*
-        setTimeout(() => {
-          this.getLevel();
-        }, 1000);
-        */
-
-      }
+      } */
 
     }
     
