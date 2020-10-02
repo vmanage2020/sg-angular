@@ -92,7 +92,7 @@ export class OrganizationsCreateComponent implements OnInit {
   websiteValidation = new RegExp(Constant.websiteValidation);
   regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
-
+  dialCode = null;
 
   constructor(private router: Router, 
     private formBuilder: FormBuilder,
@@ -109,7 +109,7 @@ export class OrganizationsCreateComponent implements OnInit {
     this.createorganizationForm = this.formBuilder.group({
       uid: [''],
       name: ['', [Validators.required]],
-      abbrev: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern('^[a-zA-Z]*$')]],
+      abbrev: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(6), Validators.pattern('^[a-zA-Z]*$')]],
       street1: ['', [Validators.required]],
       street2: [''],
       city: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
@@ -668,11 +668,13 @@ export class OrganizationsCreateComponent implements OnInit {
 
   selectedCountry(event: any)
   {
+    this.dialCode = null;
     if( event != undefined && event.country_code != '')
     {
       this.selectedCountryCode = event.country_code;
       this.selectedSports = [];
       this.getSports(this.selectedCountryCode); 
+      this.dialCode = '+1';
     }
     
   }
