@@ -76,7 +76,19 @@ import { NGXLogger } from 'ngx-logger';
 
     }else {
 
-      setTimeout(() => { this.getPlayerMetaAPI() 
+      let Metaurl= '';
+        if(this.orgId=='' || this.orgId==1) {
+        Metaurl='coachcustomfield';
+        } else {
+        Metaurl='coachcustomfieldbyorg/'+this.orgId;
+        }
+      this.restApiService.lists(Metaurl).subscribe( res => {
+        this.data = res;
+        this.dtTrigger.next();
+        this.loading = false;
+        this.displayLoader = false;  
+      })
+      /* setTimeout(() => { this.getPlayerMetaAPI() 
          
       let Metaurl = '';
       if(this.orgId=='' || this.orgId==1) {
@@ -89,7 +101,7 @@ import { NGXLogger } from 'ngx-logger';
 
       this.loading = false;
       this.displayLoader = false;
-      }, 1000);
+      }, 1000); */
       
     }
 

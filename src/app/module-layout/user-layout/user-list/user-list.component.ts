@@ -12,6 +12,8 @@ import { DOCUMENT } from '@angular/common';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
 import { UserService } from '../user-service'
 
 @Component({
@@ -41,6 +43,7 @@ export class UserListComponent implements OnInit {
     private notification: NgiNotificationService, 
     @Inject(DOCUMENT) private _document: Document,
     private userService: UserService,
+    private restApiService: RestApiService, 
     public cookieService: CookieService) { }
 
   ngOnInit() {
@@ -70,7 +73,21 @@ export class UserListComponent implements OnInit {
 
     }else {
 
-      if(this.loading == true ) {
+
+      let Metaurl= '';
+      if(this.orgId=='' || this.orgId==1) {
+      Metaurl='users';
+      } else {
+      Metaurl='usersbyorg/'+this.orgId;
+      }
+    this.restApiService.lists(Metaurl).subscribe( res => {
+      this.data = res;
+      this.dtTrigger.next();
+      this.loading = false;
+      this.displayLoader = false;  
+    })
+
+      /* if(this.loading == true ) {
             
         let Metaurl= '';
         if(this.orgId=='') {
@@ -86,7 +103,7 @@ export class UserListComponent implements OnInit {
           this.displayLoader = false;
         }, 1000);
 
-      }
+      } */
     }
 
     /* onservable code here starts * /

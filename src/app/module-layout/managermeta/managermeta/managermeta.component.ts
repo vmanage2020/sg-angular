@@ -76,7 +76,21 @@ export class ManagermetaComponent implements OnInit {
 
     }else {
 
-      setTimeout(() => { this.getPlayerMetaAPI()
+
+
+      let Metaurl= '';
+        if(this.orgId=='' || this.orgId==1) {
+        Metaurl='managercustomfield';
+        } else {
+        Metaurl='managercustomfieldbyorg/'+this.orgId;
+        }
+      this.restApiService.lists(Metaurl).subscribe( res => {
+        this.data = res;
+        this.dtTrigger.next();
+        this.loading = false;
+        this.displayLoader = false;  
+      })
+      /* setTimeout(() => { this.getPlayerMetaAPI()
 
         let Metaurl = '';
         if(this.orgId=='' || this.orgId==1) {
@@ -91,7 +105,7 @@ export class ManagermetaComponent implements OnInit {
         this.displayLoader = false;
       }, 1000);
       
-    }
+    } */
  
     /*
     console.log('orgId',this.orgId);
@@ -130,8 +144,10 @@ export class ManagermetaComponent implements OnInit {
     });
     */
 
+      }
   }
- 
+
+  
   listManagermeta(){
     this.router.navigate(['/managermeta']);
   }

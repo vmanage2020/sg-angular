@@ -42,7 +42,14 @@ export class TagListComponent implements OnInit {
   uid: any;
   orgId: any;
 
-  constructor(private router: Router, private notification: NgiNotificationService, @Inject(DOCUMENT) private _document: Document,public cookieService: CookieService, private restApiService: RestApiService, private http:HttpClient, private tagCrudService: TagCrudService,private logger: NGXLogger) { }
+  constructor(private router: Router, 
+    private notification: NgiNotificationService,
+     @Inject(DOCUMENT) private _document: Document,
+     public cookieService: CookieService, 
+     private restApiService: RestApiService, 
+     private http:HttpClient,
+      private tagCrudService: TagCrudService,
+      private logger: NGXLogger) { }
 
   ngOnInit() { 
     this.uid = this.cookieService.getCookie('uid');
@@ -71,7 +78,19 @@ export class TagListComponent implements OnInit {
 
     }else {
 
-      setTimeout(() => { this.getTagsAPI()
+      let Metaurl= '';
+      if(this.orgId=='' || this.orgId==1) {
+      Metaurl='tags';
+      } else {
+      Metaurl='tagsbyorg/'+this.orgId;
+      }
+    this.restApiService.lists(Metaurl).subscribe( res => {
+      this.data = res;
+      this.dtTrigger.next();
+      this.loading = false;
+      this.displayLoader = false;  
+    })
+      /* setTimeout(() => { this.getTagsAPI()
         let Metaurl= '';
         if(this.orgId=='' || this.orgId==1) {
           Metaurl='tags';
@@ -82,7 +101,7 @@ export class TagListComponent implements OnInit {
         this.getAllTagsData = this.tagCrudService.dataStore.tags; 
         this.loading = false;
         this.displayLoader = false;
-      }, 1000);
+      }, 1000); */
       
     }
 

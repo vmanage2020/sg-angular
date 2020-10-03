@@ -73,8 +73,21 @@ export class CannedResponseListComponent implements OnInit {
       this.displayLoader = false;  
 
     }else {
- 
-      setTimeout(() => { this.getCannedResponsesAPI();
+      
+      let Metaurl= '';
+      if(this.orgId=='' || this.orgId==1) {
+      Metaurl='cannedresponse';
+      } else {
+      Metaurl='cannedresponsebyorg/'+this.orgId;
+      }
+    this.restApiService.lists(Metaurl).subscribe( res => {
+      this.data = res;
+      this.dtTrigger.next();
+      this.loading = false;
+      this.displayLoader = false;  
+    })
+
+      /* setTimeout(() => { this.getCannedResponsesAPI();
         let Metaurl= '';
         if(this.orgId=='' || this.orgId==1) {
           Metaurl='cannedresponse';
@@ -85,7 +98,7 @@ export class CannedResponseListComponent implements OnInit {
         this.getAllCannedResponseData = this.cannedresponseCrudService.dataStore.cannedresponses; 
         this.loading = false;
         this.displayLoader = false; 
-       }, 1000);
+       }, 1000); */
       
     }
 

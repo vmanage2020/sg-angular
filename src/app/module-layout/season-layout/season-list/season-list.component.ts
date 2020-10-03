@@ -80,7 +80,20 @@ export class SeasonListComponent implements OnInit {
 
     }else {
 
-      setTimeout(() => { this.getSeasonsAPI()
+      let Metaurl= '';
+      if(this.orgId=='' || this.orgId==1) {
+      Metaurl='seasons';
+      } else {
+      Metaurl='seasonsbyorg/'+this.orgId;
+      }
+    this.restApiService.lists(Metaurl).subscribe( res => {
+      this.data = res;
+      this.dtTrigger.next();
+      this.loading = false;
+      this.displayLoader = false;  
+    })
+
+      /* setTimeout(() => { this.getSeasonsAPI()
 
         let Metaurl= '';
         if(this.orgId=='' || this.orgId==1) {
@@ -93,7 +106,7 @@ export class SeasonListComponent implements OnInit {
 
         this.loading = false;
         this.displayLoader = false;
-      }, 1000);
+      }, 1000); */
 
     }
 
