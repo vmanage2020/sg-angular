@@ -950,7 +950,15 @@ export class OrganizationsCreateComponent implements OnInit {
                 this.organizationsService.organizationsList(Metaurl);
 
                 //this.router.navigate(['/organizations']);
-                this.router.navigate(['/organizations/view/'+this.selectedOrganizationId]);
+                //this.router.navigate(['/organizations/view/'+this.selectedOrganizationId]);
+
+                if( this.OrgType == 'info')
+                {
+                  this.router.navigate(['/organizations/info/']);
+                }else{
+                  this.router.navigate(['/organizations/view/'+this.selectedOrganizationId]);
+                }
+
                 this.notification.isNotification(true, "Organization Data", "Organization has been updated successfully.", "check-square");
 
               },error => {
