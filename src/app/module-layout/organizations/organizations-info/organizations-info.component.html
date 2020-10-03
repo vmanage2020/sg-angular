@@ -124,7 +124,7 @@
                             <label for="product-name" style="width:200px;">Phone Number </label>
                             
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.mobile_phone}} </label>
+                                <label for="inlineRadio2" *ngIf="getUserData.mobile_phone"> {{getUserData.dial_code}} - {{getUserData.mobile_phone}} </label>
                             </div>
                         </div>
 
@@ -132,7 +132,7 @@
                             <label for="product-name" style="width:200px;">Fax Number </label>
                             
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.fax}} </label>
+                                <label for="inlineRadio2" *ngIf="getUserData.fax"> {{getUserData.dial_code}} - {{getUserData.fax}} </label>
                             </div>
                         </div>
 
@@ -175,6 +175,9 @@
                             
                             <div class=" form-check-inline"> 
                                 <label for="inlineRadio2" *ngIf="sportsName.length>0"> {{sportsName}} </label>
+                                <!--<div *ngFor="let sportsInfoData of sportsRefData;">
+                                    <p class="text-center size">{{sportsInfoData.sport_name}}</p>
+                                </div>-->
                             </div> 
                         </div>
 

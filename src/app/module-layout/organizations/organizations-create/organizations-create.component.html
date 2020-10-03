@@ -136,12 +136,12 @@
 
                 <div class="col-lg-12 row">
                   <div class="form-group mb-3 col-lg-6">
-                      <label for="phone">Phone<span class="text-danger">*</span></label>
-
-                      <div class="col-2 p-0" id="customHeight">
+                      <label for="phone" style="float: left;">Phone<span class="text-danger">*</span></label>
+                      <br/><br/>  
+                      <div class="col-2 p-0" id="customHeight" style="float: left;">
                         <input type="text" [value]="dialCode" formControlName="phonedialcode" class="form-control" readonly />
                       </div>
-                      <div class="col-9" id="customHeight">
+                      <div class="col-9" id="customHeight" style="float: left;">
                         <input type="text" formControlName="phone" class="form-control" data-toggle="input-mask" (input)="closeErrors('Phone')"
                           mask="(000) 000-0000" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" name="phone"
                           id="phone" placeholder="Enter phone number" />
@@ -164,12 +164,12 @@
 
                   
                   <div class="form-group mb-3 col-lg-6">
-                      <label for="fax">Fax </label>
-
-                      <div class="col-2 p-0" id="customHeight">
+                      <label for="fax" style="float: left;">Fax </label>
+                      <br/><br/>    
+                      <div class="col-2 p-0" id="customHeight" style="float: left;">
                         <input type="text" [value]="dialCode" formControlName="faxdialcode" class="form-control" readonly />
                       </div>
-                      <div class="col-9" id="customHeight">
+                      <div class="col-9" id="customHeight" style="float: left;">
                         <input type="text" formControlName="fax" class="form-control" name="fax" id="fax"
                           data-toggle="input-mask" mask="(000) 000-0000" placeholder="Enter fax number " />
                         <div *ngIf="f.fax.errors?.pattern" class="input-error-msg text-danger">Only numeric characters are
