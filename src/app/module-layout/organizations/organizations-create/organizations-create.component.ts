@@ -43,6 +43,7 @@ export class OrganizationsCreateComponent implements OnInit {
   
   getSelectedSportmeta: any = [];
   getSelectedSportmetaData: any = [];
+  OrgType: any;
 
   getAllTypemetaDataArray: any = [
     { name: 'Drop Down' },
@@ -169,6 +170,15 @@ export class OrganizationsCreateComponent implements OnInit {
     console.log( '---- this.selectedCountryCode----', this.selectedCountryCode)
 
     let Orgval = this.organizationsService.selectedOrgId.getValue()
+    let type = this.organizationsService.selectedOrgType.getValue()
+    console.log('----type----', type)
+    if(type != undefined && type != null)
+    {
+      this.OrgType = type;
+      console.log('----OrgType----', this.OrgType)
+      
+    }
+   
     if (Orgval != '') {
       this.selectedOrgId(Orgval)
       this.organizationsService.selectedOrgId.next('')
@@ -830,7 +840,13 @@ export class OrganizationsCreateComponent implements OnInit {
                 //this.organizationsService.orgdataStore.org.push(resorg)
                 
                 //this.router.navigate(['/organizations']); 
-                this.router.navigate(['/organizations/view/'+resorg.organization_id]);
+                if( this.OrgType == 'info')
+                {
+                  this.router.navigate(['/organizations/info/']);
+                }else{
+                  this.router.navigate(['/organizations/view/'+resorg.organization_id]);
+                }
+                
                 this.notification.isNotification(true, "Organization Data", "Organization has been added successfully.", "check-square");
 
               });
@@ -1000,7 +1016,12 @@ export class OrganizationsCreateComponent implements OnInit {
  
 
   listOrganization(){
-    this.router.navigate(['/organizations']);
+    if( this.OrgType == 'info')
+    {
+      this.router.navigate(['/organizations/info/']);
+    }else{
+      this.router.navigate(['/organizations']);
+    }
   }
 
   addOrganization(){

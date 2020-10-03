@@ -131,7 +131,7 @@ export class OrganizationsInfoComponent implements OnInit {
         this.getUserData = res;
         this.sportsRefData = res.governing_body_info;
         console.log('---this.sportList----', this.sportList)
-        if( this.sportList.length >0)
+        if( this.sportList != undefined && this.sportList.length >0)
         {
           this.sportList.forEach( sp => {
             if(res.sports.indexOf(sp._id) !== -1){
@@ -218,7 +218,11 @@ export class OrganizationsInfoComponent implements OnInit {
   }
   
   editOrganization(resourceId: string){
-    this.router.navigate(['/organizations/edit/'+resourceId]);
+
+    this.router.navigate(['/organizations/create'])
+    this.organizationsService.editOrgData(resourceId,'info')
+
+    //this.router.navigate(['/organizations/edit/'+resourceId]);
   }
 
   refreshPage() {

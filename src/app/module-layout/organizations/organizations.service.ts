@@ -123,10 +123,14 @@ export class OrganizationsService {
   selectedOrgId = new BehaviorSubject<any>('')
   currentEditOrgId = this.selectedOrgId.asObservable();
 
+  selectedOrgType = new BehaviorSubject<any>('')
+  currentEditOrgId1 = this.selectedOrgType.asObservable();
 
-  editOrgData(id)
+
+  editOrgData(id, type)
   {
     this.selectedOrgId.next(id)
+    this.selectedOrgType.next(type)
   }
 
   async getOrganizationById(organizationObj: any) {

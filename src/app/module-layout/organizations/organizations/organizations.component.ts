@@ -117,7 +117,7 @@ export class OrganizationsComponent implements OnInit {
   editOrganization(resourceId: string){
     console.log('---resourceId---', resourceId)
     this.router.navigate(['/organizations/create'])
-    this.organizationsService.editOrgData(resourceId)
+    this.organizationsService.editOrgData(resourceId,null)
     //this.router.navigate(['/organizations/edit/'+resourceId]);
   }
 
