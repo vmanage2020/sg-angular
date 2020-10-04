@@ -13,7 +13,7 @@
                     <ng-select [items]="getSportsArray"
                     bindLabel="name" bindValue="sport_id"
                     id="sport_id" name="sport_id" formControlName="sport_id"
-                    placeholder="Select Sport" (change)="OnSportChange($event)" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                    placeholder="Select sport" (change)="OnSportChange($event)" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
                     </ng-select>
                     <!--
                     <select class="form-control select2" id="sport_id" name="sport_id" formControlName="sport_id" (change)="OnSportChange($event)" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
@@ -31,7 +31,7 @@
                     <ng-select [items]="getPositionsArray"
                     bindLabel="name" bindValue="position_id"
                     id="parent_position_id" name="parent_position_id" formControlName="parent_position_id"
-                    placeholder="Select Parent Position">
+                    placeholder="Select parent position">
                     </ng-select>
                     <!--
                     <select class="form-control select2" id="parent_position_id" name="parent_position_id" formControlName="parent_position_id" >
@@ -48,7 +48,7 @@
   
                 <div class="form-group mb-3">
                     <label for="name">Position Name<span class="text-danger">*</span></label>
-                    <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter Position Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
+                    <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter position name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                         <div *ngIf="f.name.errors.required">Position Name is required.</div>
                     </div>
@@ -58,7 +58,7 @@
                 
                 <div class="form-group mb-3">
                     <label for="abbreviation">Abbreviation<span class="text-danger">*</span></label>
-                    <input type="text" id="abbreviation" name="abbreviation" formControlName="abbreviation" class="form-control" placeholder="Enter Abbreviation" [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }"/>
+                    <input type="text" id="abbreviation" name="abbreviation" formControlName="abbreviation" class="form-control" placeholder="Enter abbreviation" [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }"/>
                     <div *ngIf="submitted && f.abbreviation.errors" class="invalid-feedback">
                         <div *ngIf="f.abbreviation.errors.required">Abbreviation is required.</div>
                     </div>

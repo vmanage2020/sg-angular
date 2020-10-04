@@ -13,7 +13,7 @@
                     <ng-select [items]="getSportsArray"
                     bindLabel="name" bindValue="sport_id"
                     id="sport_id" name="sport_id" formControlName="sport_id"
-                    placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                    placeholder="Select sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
                     </ng-select>
                     <!--
                     <select class="form-control select2" id="sport_id" name="sport_id" formControlName="sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
@@ -28,7 +28,7 @@
   
                 <div class="form-group mb-3">
                     <label for="level_name">Level Name<span class="text-danger">*</span></label>
-                    <input type="text" id="level_name" name="level_name" formControlName="level_name" class="form-control" placeholder="Enter Level Name" [ngClass]="{ 'is-invalid': submitted && f.level_name.errors }"/>
+                    <input type="text" id="level_name" name="level_name" formControlName="level_name" class="form-control" placeholder="Enter level name" [ngClass]="{ 'is-invalid': submitted && f.level_name.errors }"/>
                     <div *ngIf="submitted && f.level_name.errors" class="invalid-feedback">
                         <div *ngIf="f.level_name.errors.required">Level Name is required.</div>
                     </div>                
@@ -36,7 +36,7 @@
                 
                 <div class="form-group mb-3">
                     <label for="abbreviation">Abbreviation<span class="text-danger">*</span></label>
-                    <input type="text" id="abbreviation" name="abbreviation" formControlName="abbreviation" class="form-control" placeholder="Enter Abbreviation" [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }"/>
+                    <input type="text" id="abbreviation" name="abbreviation" formControlName="abbreviation" class="form-control" placeholder="Enter abbreviation" [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }"/>
                     <div *ngIf="submitted && f.abbreviation.errors" class="invalid-feedback">
                         <div *ngIf="f.abbreviation.errors.required">Abbreviation is required.</div>
                     </div>                
@@ -44,7 +44,7 @@
                 
                 <div class="form-group mb-3">
                     <label for="description">Description </label>
-                    <input type="text" id="description" name="description" formControlName="description" class="form-control" placeholder="Enter Description"/>
+                    <input type="text" id="description" name="description" formControlName="description" class="form-control" placeholder="Enter description"/>
                     <!--
                     <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
                         <div *ngIf="f.description.errors.required">Description is required.</div>
