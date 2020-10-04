@@ -70,7 +70,7 @@ export class SportsListEditComponent implements OnInit {
  editForm() {
   this.editsportsForm = this.formBuilder.group({
         auth_uid: [''],
-        name: ['', Validators.required ],
+        name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
         sport: [''],
         country_code: ['', Validators.required ],
         country: [''],

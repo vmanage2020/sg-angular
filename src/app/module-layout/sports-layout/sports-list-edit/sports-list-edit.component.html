@@ -31,6 +31,7 @@
                     <input type="text" [ngModel]="getAllSportmetaData.name" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter sport name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                         <div *ngIf="f.name.errors.required">Sport Name is required.</div>
+                        <p class="error text-danger" *ngIf="f.name.errors?.pattern">Only text characters are allowed</p>
                     </div>
                 
                 </div>

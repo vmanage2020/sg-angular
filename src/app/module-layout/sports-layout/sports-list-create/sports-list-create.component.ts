@@ -64,7 +64,7 @@ export class SportsListCreateComponent implements OnInit {
   createForm() {
     this.createsportsForm = this.formBuilder.group({
         auth_uid: [''],
-        name: ['', Validators.required ],
+        name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
         sport: [''],
         country_code: [null, Validators.required ],
         country: [null],
