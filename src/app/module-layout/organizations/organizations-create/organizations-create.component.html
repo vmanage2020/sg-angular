@@ -2,6 +2,9 @@
 <div class="row">
         <div class="col-lg-12">
             <div class="card-box">
+              <h4 class="header-title mb-4" *ngIf="!selectedOrganizationId" >Add Organization</h4>
+              <h4 class="header-title mb-4" *ngIf="selectedOrganizationId" >Update Organization</h4>
+
                 <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Organization Details</h5>
                 
                 <form focusInvalidInput class="needs-validation" name="createplayermetaForm" [formGroup]="createorganizationForm"
@@ -11,7 +14,7 @@
                 <div class="col-lg-12 row">
                   <div class="form-group mb-3 col-lg-6">
                       <label for="name">Organization Name<span class="text-danger">*</span></label>
-                      <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter Organization Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
+                      <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter organization name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
                       <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                           <div *ngIf="f.name.errors.required">Organization Name is required.</div>
                       </div>
@@ -21,7 +24,7 @@
                   
                   <div class="form-group mb-3 col-lg-6">
                       <label for="abbrev">Abbreviation<span class="text-danger">*</span></label>
-                      <input type="text" id="abbrev" name="abbrev" formControlName="abbrev" class="form-control" placeholder="Enter Abbreviation Name" [ngClass]="{ 'is-invalid': submitted && f.abbrev.errors }"/>
+                      <input type="text" id="abbrev" name="abbrev" formControlName="abbrev" class="form-control" placeholder="Enter abbreviation name" [ngClass]="{ 'is-invalid': submitted && f.abbrev.errors }"/>
                       <div *ngIf="submitted && f.abbrev.errors" class="invalid-feedback">
                           <div *ngIf="f.abbrev.errors.required">Abbreviation is required.</div>
 
@@ -38,7 +41,7 @@
                 <div class="col-lg-12 row">
                   <div class="form-group mb-3 col-lg-6">
                       <label for="street1">Street 1<span class="text-danger">*</span></label>
-                      <input type="text" id="street1" name="street1" formControlName="street1" class="form-control" placeholder="Enter Street 1" [ngClass]="{ 'is-invalid': submitted && f.street1.errors }"/>
+                      <input type="text" id="street1" name="street1" formControlName="street1" class="form-control" placeholder="Enter street 1" [ngClass]="{ 'is-invalid': submitted && f.street1.errors }"/>
                       <div *ngIf="submitted && f.street1.errors" class="invalid-feedback">
                           <div *ngIf="f.street1.errors.required">Street 1 is required.</div>
                       </div>
@@ -48,7 +51,7 @@
 
                   <div class="form-group mb-3 col-lg-6">
                       <label for="street2">Street 2</label>
-                      <input type="text" id="street2" name="street2" formControlName="street2" class="form-control" placeholder="Enter Street 2" [ngClass]="{ 'is-invalid': submitted && f.street2.errors }"/>
+                      <input type="text" id="street2" name="street2" formControlName="street2" class="form-control" placeholder="Enter street 2" [ngClass]="{ 'is-invalid': submitted && f.street2.errors }"/>
                       <div *ngIf="submitted && f.street2.errors" class="invalid-feedback">
                           <div *ngIf="f.street2.errors.required">Street 2 is required.</div>
                       </div>
@@ -62,7 +65,7 @@
 
                   <div class="form-group mb-3 col-lg-6">
                       <label for="city">City <span class="text-danger">*</span></label>
-                      <input type="text" id="city" name="city" formControlName="city" class="form-control" placeholder="Enter Field Name" [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
+                      <input type="text" id="city" name="city" formControlName="city" class="form-control" placeholder="Enter city name" [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
                       <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
                           <div *ngIf="f.city.errors.required">City is required.</div>
                           <p  class="error text-danger" *ngIf="f.city.errors?.pattern">Enter city name alphabet text only</p>
@@ -83,7 +86,7 @@
                     bindLabel="name"
                     bindValue="state_code"
                     [multiple]="false"
-                    placeholder="Select State"
+                    placeholder="Select state"
                     (change)="sportsofferselectedbyState($event)"
                     [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
                       </ng-select>
@@ -98,7 +101,7 @@
                 <div class="col-lg-12 row">
                   <div class="form-group mb-3 col-lg-6">
                         <label for="postal_code">Postal Code<span class="text-danger">*</span></label>
-                        <input type="text" id="postal_code" name="postal_code" formControlName="postal_code" class="form-control" placeholder="Enter Postal Code" [ngClass]="{ 'is-invalid': submitted && f.postal_code.errors }"/>
+                        <input type="text" id="postal_code" name="postal_code" formControlName="postal_code" class="form-control" placeholder="Enter postal code" [ngClass]="{ 'is-invalid': submitted && f.postal_code.errors }"/>
                         <div *ngIf="submitted && f.postal_code.errors" class="invalid-feedback">
                             <div *ngIf="f.postal_code.errors?.required">Postal Code is required.</div>
                             <p class="error text-danger" *ngIf="f.postal_code.errors?.minlength">The Postal code minimum length {{f.postal_code.errors?.minlength.requiredLength}}</p>
@@ -120,7 +123,7 @@
                       bindLabel="name"
                       bindValue="country_code"
                       [multiple]="false"
-                      placeholder="Select Country"
+                      placeholder="Select country"
                       (change)="selectedCountry($event)"
                       [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
                         </ng-select>
@@ -141,7 +144,7 @@
                       <div class="col-2 p-0" id="customHeight" style="float: left;">
                         <input type="text" [value]="dialCode" formControlName="phonedialcode" class="form-control" readonly />
                       </div>
-                      <div class="col-9" id="customHeight" style="float: left;">
+                      <div class="col-10 p-0" id="customHeight" style="float: left;">
                         <input type="text" formControlName="phone" class="form-control" data-toggle="input-mask" (input)="closeErrors('Phone')"
                           mask="(000) 000-0000" [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" name="phone"
                           id="phone" placeholder="Enter phone number" />
@@ -169,7 +172,7 @@
                       <div class="col-2 p-0" id="customHeight" style="float: left;">
                         <input type="text" [value]="dialCode" formControlName="faxdialcode" class="form-control" readonly />
                       </div>
-                      <div class="col-9" id="customHeight" style="float: left;">
+                      <div class="col-10 p-0" id="customHeight" style="float: left;">
                         <input type="text" formControlName="fax" class="form-control" name="fax" id="fax"
                           data-toggle="input-mask" mask="(000) 000-0000" placeholder="Enter fax number " />
                         <div *ngIf="f.fax.errors?.pattern" class="input-error-msg text-danger">Only numeric characters are
@@ -192,7 +195,7 @@
 
                   <div class="form-group mb-3 col-lg-6">
                       <label for="email">Email<span class="text-danger">*</span></label>
-                      <input type="text" id="email" name="email" formControlName="email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                      <input type="text" id="email" name="email" formControlName="email" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
                       <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                           <div *ngIf="f.email.errors.required">Email is required.</div>
                           <p  class="error text-danger" *ngIf="f.email.errors?.pattern">Invaid Email pattern</p>
@@ -202,7 +205,7 @@
 
                   <div class="form-group mb-3 col-lg-6">
                       <label for="website">Website </label>
-                      <input type="text" id="website" name="website" formControlName="website" class="form-control" placeholder="Enter Website" [ngClass]="{ 'is-invalid': submitted && f.website.errors }"/>
+                      <input type="text" id="website" name="website" formControlName="website" class="form-control" placeholder="Enter website" [ngClass]="{ 'is-invalid': submitted && f.website.errors }"/>
                       <div *ngIf="submitted && f.website.errors" class="invalid-feedback">
                           <div *ngIf="f.website.errors.required">Website is required.</div>
                           <p  class="error text-danger" *ngIf="f.website.errors?.pattern">Invaid Website pattern</p>
@@ -222,7 +225,7 @@
                     bindLabel="name"
                     bindValue="_id"
                     [multiple]="true"
-                    placeholder="Select Sports Offered"
+                    placeholder="Select sports offered"
                     [(ngModel)]="selectedSports"
                     (change)="OnSportChange($event,createorganizationForm)"
                     [ngClass]="{ 'is-invalid': submitted && f.sports.errors }">
@@ -429,7 +432,7 @@
 
                             <div class="form-group mb-3">
                                 <label for="primary_first_name">First Name<span class="text-danger">*</span></label>
-                                <input type="text" id="primary_first_name" name="primary_first_name" formControlName="primary_first_name" class="form-control" placeholder="Enter First Name" [ngClass]="{ 'is-invalid': submitted && f.primary_first_name.errors }"/>
+                                <input type="text" id="primary_first_name" name="primary_first_name" formControlName="primary_first_name" class="form-control" placeholder="Enter first name" [ngClass]="{ 'is-invalid': submitted && f.primary_first_name.errors }"/>
                                 <div *ngIf="submitted && f.primary_first_name.errors" class="invalid-feedback">
                                     <div *ngIf="f.primary_first_name.errors.required">First Name is required.</div>
                                     <p  class="error text-danger" *ngIf="f.primary_first_name.errors?.pattern">Enter Alphabet only</p>
@@ -438,7 +441,7 @@
 
                             <div class="form-group mb-3">
                                 <label for="primary_middle_initial">Middle Initial</label>
-                                <input type="text" id="primary_middle_initial" name="primary_middle_initial" formControlName="primary_middle_initial" class="form-control" placeholder="Enter Middle Initial" [ngClass]="{ 'is-invalid': submitted && f.primary_middle_initial.errors }"/>
+                                <input type="text" id="primary_middle_initial" name="primary_middle_initial" formControlName="primary_middle_initial" class="form-control" placeholder="Enter middle initial" [ngClass]="{ 'is-invalid': submitted && f.primary_middle_initial.errors }"/>
                                 <div *ngIf="submitted && f.primary_middle_initial.errors" class="invalid-feedback">
                                     <div *ngIf="f.primary_middle_initial.errors">Maximum three characters allowed</div>
                                     <p class="error text-danger" *ngIf="f.primary_middle_initial.errors?.pattern">Middle name must contain alphabets only</p>
@@ -449,7 +452,7 @@
                             
                             <div class="form-group mb-3">
                                 <label for="last_name">Last Name<span class="text-danger">*</span></label>
-                                <input type="text" id="primary_last_name" name="primary_last_name" formControlName="primary_last_name" class="form-control" placeholder="Enter Last Name" [ngClass]="{ 'is-invalid': submitted && f.primary_last_name.errors }"/>
+                                <input type="text" id="primary_last_name" name="primary_last_name" formControlName="primary_last_name" class="form-control" placeholder="Enter last name" [ngClass]="{ 'is-invalid': submitted && f.primary_last_name.errors }"/>
                                 <div *ngIf="submitted && f.primary_last_name.errors" class="invalid-feedback">
                                     <div *ngIf="f.primary_last_name.errors.required">Last Name is required.</div>
                                     <p  class="error text-danger" *ngIf="f.primary_last_name.errors?.pattern">Enter Alphabet only</p>
@@ -468,7 +471,7 @@
                               bindLabel="name"
                               bindValue="id"
                               [multiple]="false"
-                              placeholder="Select Suffix"
+                              placeholder="Select suffix"
                               [ngClass]="{ 'is-invalid': submitted && f.primary_suffix.errors }">
                                 </ng-select>
 
@@ -476,7 +479,7 @@
                         
                             <div class="form-group mb-3">
                                 <label for="primary_admin_email">Email Address<span class="text-danger">*</span></label>
-                                <input type="text" id="primary_admin_email" name="primary_admin_email" formControlName="primary_admin_email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.primary_admin_email.errors }"/>
+                                <input type="text" id="primary_admin_email" name="primary_admin_email" formControlName="primary_admin_email" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.primary_admin_email.errors }"/>
                                 <div *ngIf="submitted && f.primary_admin_email.errors" class="invalid-feedback">
                                     <div *ngIf="f.primary_admin_email.errors.required">Email is required.</div>
                                     <div *ngIf="f.primary_admin_email.errors?.pattern">Enter a valid email address.</div>
@@ -489,12 +492,12 @@
 
                             <div class="form-group mb-3">
                                 <label for="secondary_first_name">First Name</label>
-                                <input type="text" id="secondary_first_name" name="secondary_first_name" formControlName="secondary_first_name" class="form-control" placeholder="Enter First Name" />
+                                <input type="text" id="secondary_first_name" name="secondary_first_name" formControlName="secondary_first_name" class="form-control" placeholder="Enter first name" />
                             </div>
 
                             <div class="form-group mb-3">
                                 <label for="secondary_middle_initial">Middle Initial</label>
-                                <input type="text" id="secondary_middle_initial" name="secondary_middle_initial" formControlName="secondary_middle_initial" class="form-control" placeholder="Enter Middle Initial" />
+                                <input type="text" id="secondary_middle_initial" name="secondary_middle_initial" formControlName="secondary_middle_initial" class="form-control" placeholder="Enter middle initial" />
                                 <div *ngIf="submitted && f.secondary_middle_initial.errors" class="invalid-feedback">
                                     <div *ngIf="f.secondary_middle_initial.errors">Maximum three characters allowed</div>
                                 </div>
@@ -503,7 +506,7 @@
                             
                             <div class="form-group mb-3">
                                 <label for="secondary_last_name">Last Name</label>
-                                <input type="text" id="secondary_last_name" name="secondary_last_name" formControlName="secondary_last_name" class="form-control" placeholder="Enter Last Name" />
+                                <input type="text" id="secondary_last_name" name="secondary_last_name" formControlName="secondary_last_name" class="form-control" placeholder="Enter last name" />
                             </div>
             
                             <div class="form-group mb-3">
@@ -518,7 +521,7 @@
                               bindLabel="name"
                               bindValue="id"
                               [multiple]="false"
-                              placeholder="Select Suffix"
+                              placeholder="Select suffix"
                               [ngClass]="{ 'is-invalid': submitted && f.secondary_suffix.errors }">
                                 </ng-select>
 
@@ -526,7 +529,7 @@
                         
                             <div class="form-group mb-3">
                                 <label for="email">Email Address</label>
-                                <input type="text" id="secondary_admin_email" name="secondary_admin_email" formControlName="secondary_admin_email" class="form-control" placeholder="Enter Email Address"/>
+                                <input type="text" id="secondary_admin_email" name="secondary_admin_email" formControlName="secondary_admin_email" class="form-control" placeholder="Enter email address"/>
                                 <div *ngIf="submitted && f.secondary_admin_email.errors" class="invalid-feedback">
                                     <div *ngIf="f.secondary_admin_email.errors?.pattern">Enter a valid email address.</div>
                                 </div>                

@@ -2,7 +2,8 @@
 <div class="row">
         <div class="col-lg-6">
             <div class="card-box">
-                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Create Sport Details</h5>
+                <h4 class="header-title mb-4">Add Sport</h4>
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Sport Details</h5>
                 
                 <form class="needs-validation" name="createsportsForm" [formGroup]="createsportsForm"
                 (ngSubmit)="onSubmit(createsportsForm)" novalidate>
@@ -12,7 +13,7 @@
                     <ng-select [items]="countryCodeSelect"
                     bindLabel="name" bindValue="country_code"
                     id="country_code" name="country_code" formControlName="country_code"
-                    placeholder="Select Country"  [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
+                    placeholder="Select country"  [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
                     </ng-select>
                 <!--    
                     <select class="form-control select2" id="country_code" name="country_code" formControlName="country_code" [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
@@ -27,7 +28,7 @@
   
                 <div class="form-group mb-3">
                     <label for="name">Sport Name<span class="text-danger">*</span></label>
-                    <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter Sport Name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
+                    <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Enter sport name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                         <div *ngIf="f.name.errors.required">Sport Name is required.</div>
                     </div>

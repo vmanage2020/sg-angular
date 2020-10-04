@@ -7,7 +7,7 @@
             <button (click)="addLevel()" type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
                 <i class="mdi mdi-plus-circle"></i> Add Level
             </button>
-            <h4 class="header-title mb-4">Level</h4>
+            <h4 class="header-title mb-4">Levels</h4>
         
             <table class="table table-hover m-0 table-centered dt-responsive nowrap w-100" id="tickets-table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                 <thead>
@@ -56,8 +56,7 @@
                                 <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item" (click)="viewLevel(Leveldata.level_id)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle"></i>View</a>
-                                    
-                                    <a *ngIf="Leveldata.is_active === false" class="dropdown-item" (click)="editLevel(Leveldata.level_id)"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
+                                    <a class="dropdown-item" (click)="editLevel(Leveldata.level_id)"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
                                     <a *ngIf="Leveldata.is_active === false" class="dropdown-item" (click)="deleteLevel(Leveldata.level_id,Leveldata.level_name)"><i class="mdi mdi-delete mr-2 text-muted font-18 vertical-middle"></i>Remove</a>
 
                                 </div>
