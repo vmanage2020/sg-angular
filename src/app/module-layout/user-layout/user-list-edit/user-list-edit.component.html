@@ -2,7 +2,8 @@
 <div class="row">
         <div class="col-lg-6">
             <div class="card-box">
-                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Edit User Details</h5>
+                <h4 class="header-title mb-4" >Update User</h4>
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">User Details</h5>
                 
                 <form class="needs-validation" name="createuserForm" [formGroup]="createuserForm" (ngSubmit)="onSubmit(createuserForm)" novalidate>
 
@@ -45,7 +46,7 @@
 
                 <div class="form-group mb-3">
                     <label for="first_name">First Name<span class="text-danger">*</span></label>
-                    <input type="text"  id="first_name" name="first_name" formControlName="first_name" class="form-control" placeholder="Enter First Name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }"/>
+                    <input type="text"  id="first_name" name="first_name" formControlName="first_name" class="form-control" placeholder="Enter first name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }"/>
                     <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
                         <div *ngIf="f.first_name.errors.required">First Name is required.</div>
                     </div>                
@@ -53,13 +54,13 @@
 
                 <div class="form-group mb-3">
                     <label for="middle_initial">Middle Initial</label>
-                    <input type="text"  id="middle_initial" name="middle_initial" formControlName="middle_initial" class="form-control" placeholder="Enter Middle Initial" />
+                    <input type="text"  id="middle_initial" name="middle_initial" formControlName="middle_initial" class="form-control" placeholder="Enter middle initial" />
                 </div>
 
                 
                 <div class="form-group mb-3">
                     <label for="last_name">Last Name<span class="text-danger">*</span></label>
-                    <input type="text"  id="last_name" name="last_name" formControlName="last_name" class="form-control" placeholder="Enter Last Name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }"/>
+                    <input type="text"  id="last_name" name="last_name" formControlName="last_name" class="form-control" placeholder="Enter last name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }"/>
                     <div *ngIf="submitted && f.last_name.errors" class="invalid-feedback">
                         <div *ngIf="f.last_name.errors.required">Last Name is required.</div>
                     </div>                
@@ -68,14 +69,14 @@
                 <div class="form-group mb-3">
                     <label for="suffix">Suffix</label>
                     <select class="form-control select2" id="suffix" name="suffix" formControlName="suffix"  >
-                        <option value="" disabled selected>Select Suffix</option>
+                        <option value="" disabled selected>Select suffix</option>
                         <option *ngFor="let Typedata of getUserSuffixDataArray let i = index;" [ngValue]="Typedata.name">{{Typedata.name}}</option>
                     </select>
                 </div> 
              
                 <div class="form-group mb-3">
                     <label for="email">Email Address<span class="text-danger">*</span></label>
-                    <input type="text"  id="email" name="email" formControlName="email" class="form-control" placeholder="Enter Email Address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                    <input type="text"  id="email" name="email" formControlName="email" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                         <div *ngIf="f.email.errors.required">Email is required.</div>
                         <div *ngIf="f.email.errors?.pattern">Enter a valid email address.</div>

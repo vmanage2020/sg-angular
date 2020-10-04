@@ -2,6 +2,7 @@
 <div class="row">
         <div class="col-lg-6">
             <div class="card-box">
+                <h4 class="header-title mb-4" >Add Users</h4>
                 <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Import User Details</h5>
                 
                 <form class="needs-validation" name="createcannedresponseForm" [formGroup]="createcannedresponseForm"
@@ -12,7 +13,7 @@
 
                     <ng-select [items]="getSportsArray" bindLabel="name" bindValue="sport_id"
                         id="sports_id" name="sports_id" formControlName="sports_id" 
-                        placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sports_id.errors }" 
+                        placeholder="Select sport" [ngClass]="{ 'is-invalid': submitted && f.sports_id.errors }" 
                         (change)="selectedSport($event,createcannedresponseForm)">
                     </ng-select>
                     <!--
@@ -32,7 +33,7 @@
                     <ng-select [items]="getSeasonsArray" bindLabel="season" bindValue="season_id"
                         id="season_id" name="season_id" formControlName="season_id" 
                         (change)="selectedSeason($event,createcannedresponseForm)"
-                        placeholder="Select Season" [ngClass]="{ 'is-invalid': submitted && f.season_id.errors }" >
+                        placeholder="Select season" [ngClass]="{ 'is-invalid': submitted && f.season_id.errors }" >
                     </ng-select>
                     
                     <!--
@@ -51,7 +52,7 @@
                     
                     <ng-select [items]="getTemplateArray" bindLabel="name" bindValue="name"
                         id="imported_file_template" name="imported_file_template" formControlName="imported_file_template" 
-                        placeholder="Select Template" [ngClass]="{ 'is-invalid': submitted && f.imported_file_template.errors }" >
+                        placeholder="Select template" [ngClass]="{ 'is-invalid': submitted && f.imported_file_template.errors }" >
                     </ng-select>
                     <!--
                     <select class="form-control select2" id="imported_file_template" name="imported_file_template" formControlName="imported_file_template" [ngClass]="{ 'is-invalid': submitted && f.imported_file_template.errors }">

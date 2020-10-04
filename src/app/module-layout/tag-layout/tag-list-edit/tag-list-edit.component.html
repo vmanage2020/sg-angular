@@ -2,7 +2,8 @@
 <div class="row">
         <div class="col-lg-6">
             <div class="card-box">
-                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Edit Tag Details</h5>
+                <h4 class="header-title mb-4" >Update Tag</h4>
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Tag Details</h5>
                 
                 <form class="needs-validation" name="createtagForm" [formGroup]="createtagForm"
                 (ngSubmit)="onSubmit(createtagForm)" novalidate>
@@ -12,7 +13,7 @@
                     <ng-select [items]="getSportsArray"
                     bindLabel="name" bindValue="sport_id" [ngModel]="getTagValueArray.sport_id"
                     id="sport_id" name="sport_id" formControlName="sport_id"
-                    placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                    placeholder="Select sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
                     </ng-select>
                     <!--
                     <select class="form-control select2" [ngModel]="getTagValueArray.sport_id" id="sport_id" name="sport_id" formControlName="sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
@@ -27,7 +28,7 @@
   
                 <div class="form-group mb-3">
                     <label for="tag_name">Tag Name<span class="text-danger">*</span></label>
-                    <input type="text" [ngModel]="getTagValueArray.tag_name" id="tag_name" name="tag_name" formControlName="tag_name" class="form-control" placeholder="Enter Tag Name" [ngClass]="{ 'is-invalid': submitted && f.tag_name.errors }"/>
+                    <input type="text" [ngModel]="getTagValueArray.tag_name" id="tag_name" name="tag_name" formControlName="tag_name" class="form-control" placeholder="Enter tag name" [ngClass]="{ 'is-invalid': submitted && f.tag_name.errors }"/>
                     <div *ngIf="submitted && f.tag_name.errors" class="invalid-feedback">
                         <div *ngIf="f.tag_name.errors.required">Tag Name is required.</div>
                     </div>

@@ -3,7 +3,8 @@
 <div class="row">
         <div class="col-lg-6">
             <div class="card-box">
-                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Create Season Details</h5>
+                <h4 class="header-title mb-4" >Add Season</h4>
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Season Details</h5>
                 
                 <form class="needs-validation" name="createseasonForm" [formGroup]="createseasonForm"
                 (ngSubmit)="onSubmit(createseasonForm)" novalidate>
@@ -13,7 +14,7 @@
                     <ng-select [items]="getSportsArray"
                     bindLabel="name" bindValue="sport_id"
                     id="sport_id" name="sport_id" formControlName="sport_id"
-                    placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                    placeholder="Select sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
                     </ng-select>
                    
                     <div *ngIf="submitted && f.sport_id.errors" class="invalid-feedback">
@@ -23,7 +24,7 @@
   
                 <div class="form-group mb-3">
                     <label for="season_name">Season Name<span class="text-danger">*</span></label>
-                    <input type="text" id="season_name" name="season_name" formControlName="season_name" class="form-control" placeholder="Enter Season Name" [ngClass]="{ 'is-invalid': submitted && f.season_name.errors }"/>
+                    <input type="text" id="season_name" name="season_name" formControlName="season_name" class="form-control" placeholder="Enter season name" [ngClass]="{ 'is-invalid': submitted && f.season_name.errors }"/>
                     <div *ngIf="submitted && f.season_name.errors" class="invalid-feedback">
                         <div *ngIf="f.season_name.errors.required">Season Name is required.</div>
                     </div>                
@@ -31,7 +32,7 @@
 
                 <div class="form-group mb-3">
                     <label for="season_start_date">Season Start Date<span class="text-danger">*</span></label>
-                    <input type="text" id="season_start_date" name="season_start_date" formControlName="season_start_date" class="form-control" placeholder="Enter Season Start Date" [ngClass]="{ 'is-invalid': submitted && f.season_start_date.errors }" 
+                    <input type="text" id="season_start_date" name="season_start_date" formControlName="season_start_date" class="form-control" placeholder="Enter season start date" [ngClass]="{ 'is-invalid': submitted && f.season_start_date.errors }" 
                     #dp="bsDatepicker" bsDatepicker autocomplete="off" />
                     <div *ngIf="submitted && f.season_name.errors" class="invalid-feedback">
                         <div *ngIf="f.season_start_date.errors.required">Season Start Date is required.</div>
@@ -40,7 +41,7 @@
 
                 <div class="form-group mb-3">
                     <label for="season_end_date">Season End Date<span class="text-danger">*</span></label>
-                    <input type="text" id="season_end_date" name="season_end_date" formControlName="season_end_date" class="form-control" placeholder="Enter Season End Date" [ngClass]="{ 'is-invalid': submitted && f.season_end_date.errors }" 
+                    <input type="text" id="season_end_date" name="season_end_date" formControlName="season_end_date" class="form-control" placeholder="Enter season end date" [ngClass]="{ 'is-invalid': submitted && f.season_end_date.errors }" 
                     #dp="bsDatepicker" bsDatepicker autocomplete="off" />
                     <div *ngIf="submitted && f.season_end_date.errors" class="invalid-feedback">
                         <div *ngIf="f.season_end_date.errors.required">Season End Date is required.</div>
