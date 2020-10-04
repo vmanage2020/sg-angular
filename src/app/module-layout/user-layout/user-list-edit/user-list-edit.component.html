@@ -49,12 +49,17 @@
                     <input type="text"  id="first_name" name="first_name" formControlName="first_name" class="form-control" placeholder="Enter first name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }"/>
                     <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
                         <div *ngIf="f.first_name.errors.required">First Name is required.</div>
-                    </div>                
+                        <p class="error text-danger" *ngIf="f.first_name.errors?.pattern">Firstname must be Alphabets only</p>
+                    </div>               
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="middle_initial">Middle Initial</label>
-                    <input type="text"  id="middle_initial" name="middle_initial" formControlName="middle_initial" class="form-control" placeholder="Enter middle initial" />
+                    <input type="text"  id="middle_initial" name="middle_initial" formControlName="middle_initial" class="form-control" placeholder="Enter middle initial" [ngClass]="{ 'is-invalid': submitted && f.middle_initial.errors }" />
+                    <div *ngIf="submitted && f.middle_initial.errors" class="invalid-feedback">
+                        <div *ngIf="f.middle_initial.errors">Maximum three characters allowed.</div>
+                        <p class="error text-danger" *ngIf="f.middle_initial.errors?.pattern">Middle name must contain alphabets only</p>
+                    </div>
                 </div>
 
                 
@@ -63,6 +68,7 @@
                     <input type="text"  id="last_name" name="last_name" formControlName="last_name" class="form-control" placeholder="Enter last name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }"/>
                     <div *ngIf="submitted && f.last_name.errors" class="invalid-feedback">
                         <div *ngIf="f.last_name.errors.required">Last Name is required.</div>
+                        <p class="error text-danger" *ngIf="f.last_name.errors?.pattern">Lastname must be Alphabets only</p>
                     </div>                
                 </div>
  
