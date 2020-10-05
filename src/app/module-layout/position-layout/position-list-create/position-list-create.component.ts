@@ -65,7 +65,7 @@ export class PositionListCreateComponent implements OnInit {
   createForm() {
     this.createpositionForm = this.formBuilder.group({
         name: ['', Validators.required ],
-        abbreviation: ['', Validators.required ],
+        abbreviation: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(6), Validators.pattern('^[a-zA-Z]*$')]],
         sport_id: [null, Validators.required ],
         sport_name: [null],
         parent_position_id: [null],
