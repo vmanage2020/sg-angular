@@ -32,6 +32,7 @@ export class UserListViewComponent implements OnInit {
 
   getUser: any = [];
   getUserData: any = [];
+  countryList: any;
 
   data: any;
   dtOptions: DataTables.Settings = {};
@@ -60,11 +61,14 @@ export class UserListViewComponent implements OnInit {
   ngOnInit() { 
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
+    
     this.getUserInfo();  
     console.log(this.resourceID);
 
     
   }
+
+
 
   async getUserRoles(){
     

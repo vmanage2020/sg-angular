@@ -16,7 +16,7 @@ import { NgiNotificationService } from 'ngi-notification';
 
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-
+declare var $: any;
 import { UserService } from '../user-service'
 import { RestApiService } from '../../../shared/rest-api.services';
 
@@ -63,6 +63,7 @@ export class UserListEditComponent implements OnInit {
   organization_id: any;
   organization_name: any;
   organization_abbrev: any;
+  countryList: any;
 
 
   role: any;
@@ -104,14 +105,14 @@ createForm() {
   });
 }
 
-
   ngOnInit() {
     
     this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
     this.getUserRoles();
     this.getUserSuffix();
-    this.getUserInfo();  
+    this.getUserInfo(); 
+    this.getCountry(); 
     console.log(this.resourceID);
     
     this.loading = false;
@@ -120,6 +121,14 @@ createForm() {
 
   getUser: any;
   getUserData: any;
+
+
+  getCountry()
+  {
+    this.restApiService.lists('countries').subscribe( country => {
+      this.countryList = country;
+    })
+  }
 
   async getUserInfo(){
 
@@ -152,6 +161,14 @@ createForm() {
         middle_initial: users.middle_initial,
         last_name: users.last_name,
         suffix: users.suffix,
+        date_of_birth: users.date_of_birth,
+        street1: users.street1,
+        street2: users.street2,
+        city: users.city,
+        state: users.state,
+        postal_code: users.postal_code,
+        country_code: users.country_code,
+        mobile_phone: users.mobile_phone,
         email: users.email_address
       })
     }, error => {
@@ -366,11 +383,11 @@ createForm() {
       email_address: form.value.email || "",
       mobile_phone: form.value.mobile_phone || "",
       parent_user_id: [],
-      city: form.city || "",
+      city: form.value.city || "",
       country_code: form.value.country_code || "",
       country: form.value.country_name || "",
       postal_code: form.value.postal_code || "",
-      state: form.value.state_name || "",
+      state: form.value.state || "",
       state_code: form.value.state || "",
       street1: form.value.street1 || "",
       street2: form.value.street2 || "",
