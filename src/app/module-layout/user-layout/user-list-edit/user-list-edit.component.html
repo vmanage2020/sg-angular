@@ -71,7 +71,98 @@
                         <p class="error text-danger" *ngIf="f.last_name.errors?.pattern">Lastname must be Alphabets only</p>
                     </div>                
                 </div>
- 
+
+                <div class="row">
+                    <!-- <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                        <label class="for-label-req" for="date_of_birth">Date Of Birth</label>
+                    </div> -->
+                    <label for="suffix">Date Of Birth</label>
+                    <div class="col-3 mt-2" id="customHeight">
+                        <div class="input-group add-on date datepicker">
+                            <input type="date" class="form-control date-picker" id="datetime-datepicker"
+                                class="form-control" placeholder="Choose date of birth "
+                                formControlName="date_of_birth" (change)=ageValidation($event.target.value)
+                                [ngClass]="{ 'is-invalid': submitted && f.date_of_birth.errors }"
+                                name="date_of_birth">
+                           
+                            <div *ngIf="submitted && f.date_of_birth.errors" class="invalid-feedback">
+                                <div *ngIf="f.date_of_birth.errors.required">Date Of Birth is required.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>                   
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="email">Street Address1<span class="text-danger"></span></label>
+                    <input type="text"  id="street1" name="street1" formControlName="street1" 
+                    class="form-control" placeholder="Enter street1" 
+                    [ngClass]="{ 'is-invalid': submitted && f.street1.errors }"/>
+                    <div *ngIf="submitted && f.street1.errors" class="invalid-feedback">
+                        <div *ngIf="f.street1.errors.required">Address1 is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="email">Street Address2<span class="text-danger"></span></label>
+                    <input type="text"  id="street2" name="street2" formControlName="street2" 
+                    class="form-control" placeholder="Enter street2" 
+                    [ngClass]="{ 'is-invalid': submitted && f.street2.errors }"/>
+                    <div *ngIf="submitted && f.street2.errors" class="invalid-feedback">
+                        <div *ngIf="f.street2.errors.required">Address2 is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="email">City<span class="text-danger"></span></label>
+                    <input type="text"  id="city" name="city" formControlName="city" 
+                    class="form-control" placeholder="Enter City " 
+                    [ngClass]="{ 'is-invalid': submitted && f.city.errors }"/>
+                    <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                        <div *ngIf="f.city.errors.required">city is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="email">State<span class="text-danger"></span></label>
+                    <input type="text"  id="state" name="state" 
+                    formControlName="state" class="form-control" 
+                    placeholder="Enter state" [ngClass]="{ 'is-invalid': submitted && f.state.errors }"/>
+                    <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
+                        <div *ngIf="f.state.errors.required">state is required.</div>
+                    </div>                
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="suffix">Country</label>
+                    <ng-select [items]="countryList"
+                    bindLabel="name" bindValue="country_code"
+                    id="country_code" name="country_code" formControlName="country_code"
+                    placeholder="Select Country" [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
+                    </ng-select> 
+                </div> 
+
+
+                <div class="form-group mb-3">
+                    <label for="email">Postal code<span class="text-danger"></span></label>
+                    <input type="text"  id="postal_code" name="postal_code" 
+                    formControlName="postal_code" class="form-control" 
+                    placeholder="Enter postal code" [ngClass]="{ 'is-invalid': submitted && f.postal_code.errors }"/>
+                    <div *ngIf="submitted && f.postal_code.errors" class="invalid-feedback">
+                        <div *ngIf="f.postal_code.errors.required">postal code is required.</div>
+                    </div>                
+                </div>
+
+
+                <div class="form-group mb-3">
+                    <label for="email">Phone<span class="text-danger"></span></label>
+                    <input type="text"  id="mobile_phone" name="mobile_phone" formControlName="mobile_phone" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                    <div *ngIf="submitted && f.mobile_phone.errors" class="invalid-feedback">
+                        <div *ngIf="f.mobile_phone.errors.required">mobile phone is required.</div>
+                    </div>                
+                </div>
+                
                 <div class="form-group mb-3">
                     <label for="suffix">Suffix</label>
                     <select class="form-control select2" id="suffix" name="suffix" formControlName="suffix"  >
