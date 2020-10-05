@@ -174,6 +174,13 @@ import { NGXLogger } from 'ngx-logger';
         var field_type_value = event.name;
         console.log(field_type_value);
         if(field_type_value!='Text Field') { 
+
+          if( this.fieldvalueBodyArr.length>0)
+          {
+            this.removeAllfield(this.fieldvalueBodyArr.length)
+          }else{
+            this.removefield(0)
+          }   
           this.addnewfield(); 
         }
       }
@@ -309,6 +316,13 @@ import { NGXLogger } from 'ngx-logger';
       {
         
         this.fieldvalueBodyArr.removeAt(i);
+      }
+
+      removeAllfield(k)
+      {
+        while (this.fieldvalueBodyArr.length !== 0) {
+          this.fieldvalueBodyArr.removeAt(0)
+        }
       }
     
       getFieldvalueInfo() {

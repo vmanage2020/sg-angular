@@ -240,6 +240,12 @@ export class PlayermetaEditComponent implements OnInit {
     var field_type_value = event.name;
     console.log(field_type_value);
     if(field_type_value!='Text Field') { 
+      if( this.fieldvalueBodyArr.length>0)
+      {
+        this.removeAllfield(this.fieldvalueBodyArr.length)
+      }else{
+        this.removefield(0)
+      }   
       this.addnewfield(); 
     }
 
@@ -360,6 +366,13 @@ export class PlayermetaEditComponent implements OnInit {
   {
     
     this.fieldvalueBodyArr.removeAt(i);
+  }
+
+  removeAllfield(k)
+  {
+    while (this.fieldvalueBodyArr.length !== 0) {
+      this.fieldvalueBodyArr.removeAt(0)
+    }
   }
 
   getFieldvalueInfo() {
