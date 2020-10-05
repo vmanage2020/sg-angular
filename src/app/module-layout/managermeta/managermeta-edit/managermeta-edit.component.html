@@ -12,7 +12,7 @@
                     <ng-select [items]="getAllSportmetaData" [(ngModel)]="getAllPlayermetaData.sport_id"
                     bindLabel="name" bindValue="sport_id"
                     id="sport_id" name="sport_id" formControlName="sport_id"
-                    placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                    placeholder="Select sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
                     </ng-select>
                     <!--
                     <select class="form-control select2" id="sport_id" name="sport_id" formControlName="sport_id"  [(ngModel)]="getAllPlayermetaData.sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
@@ -26,7 +26,7 @@
 
                 <div class="form-group mb-3">
                     <label for="field_name">Field Name<span class="text-danger">*</span></label>
-                    <input type="text" id="field_name" name="field_name" formControlName="field_name" [ngModel]="getAllPlayermetaData.field_name" class="form-control" placeholder="Enter Field Name" [ngClass]="{ 'is-invalid': submitted && f.field_name.errors }"/>
+                    <input type="text" id="field_name" name="field_name" formControlName="field_name" [ngModel]="getAllPlayermetaData.field_name" class="form-control" placeholder="Enter field name" [ngClass]="{ 'is-invalid': submitted && f.field_name.errors }"/>
                     <div *ngIf="submitted && f.field_name.errors" class="invalid-feedback">
                         <div *ngIf="f.field_name.errors.required">Field Name is required.</div>
                     </div>
@@ -38,7 +38,7 @@
                     <ng-select [items]="getAllTypemetaData" [(ngModel)]="getAllPlayermetaData.field_type"
                     bindLabel="name" bindValue="name"
                     id="field_type" name="field_type" formControlName="field_type"
-                    placeholder="Select Field Type" (change)="OnFieldTypeChange($event)" [ngClass]="{ 'is-invalid': submitted && f.field_type.errors }">
+                    placeholder="Select field type" (change)="OnFieldTypeChange($event)" [ngClass]="{ 'is-invalid': submitted && f.field_type.errors }">
                     </ng-select> 
                     <!--
                     <select class="form-control select2" id="field_type" name="field_type" formControlName="field_type" [(ngModel)]="getAllPlayermetaData.field_type" [ngClass]="{ 'is-invalid': submitted && f.field_type.errors }">
@@ -123,6 +123,7 @@
                         <input type="text" formControlName="optionvalue" class="form-control" id="optionvalue_{{valueIndex}}" placeholder="Enter value" style="width: 80%; margin: 0px 10px;" />
                         <button type="button" class="btn btn-danger waves-effect waves-light" (click)="removefield(i)"><i class="mdi mdi-close"></i></button><br/>
                         
+                        <div *ngIf="individualvalue.controls.optionvalue.errors?.required && submitted" class="input-error-msg text-danger" style="padding: 5px 10px;">Option Value is required.</div>
                     </div>
                     
 

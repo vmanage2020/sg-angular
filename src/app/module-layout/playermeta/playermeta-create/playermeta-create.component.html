@@ -2,7 +2,8 @@
 <div class="row">
         <div class="col-lg-6">
             <div class="card-box">
-                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Player Custom Meta Field Details                </h5>
+                <h4 class="header-title mb-4" *ngIf="!selectedOrganizationId" >Add Player Custom Field</h4>
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Player Custom Field Details</h5>
                 
                 <form class="needs-validation" name="createplayermetaForm" [formGroup]="createplayermetaForm"
                 (ngSubmit)="onSubmit(createplayermetaForm)" novalidate>
@@ -12,7 +13,7 @@
                     <ng-select [items]="getAllSportmetaData"
                     bindLabel="name" bindValue="sport_id"
                     id="sport_id" name="sport_id" formControlName="sport_id"
-                    placeholder="Select Sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
+                    placeholder="Select sport" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
                     </ng-select>
                     <!--
                     <select class="form-control select2" id="sport_id" name="sport_id" formControlName="sport_id" [ngClass]="{ 'is-invalid': submitted && f.sport_id.errors }">
@@ -27,7 +28,7 @@
 
                 <div class="form-group mb-3">
                     <label for="field_name">Field Name<span class="text-danger">*</span></label>
-                    <input type="text" id="field_name" name="field_name" formControlName="field_name" class="form-control" placeholder="Enter Field Name" [ngClass]="{ 'is-invalid': submitted && f.field_name.errors }"/>
+                    <input type="text" id="field_name" name="field_name" formControlName="field_name" class="form-control" placeholder="Enter field name" [ngClass]="{ 'is-invalid': submitted && f.field_name.errors }"/>
                     <div *ngIf="submitted && f.field_name.errors" class="invalid-feedback">
                         <div *ngIf="f.field_name.errors.required">Field Name is required.</div>
                     </div>
@@ -39,7 +40,7 @@
                     <ng-select [items]="getAllTypemetaData"
                     bindLabel="name" bindValue="name"
                     id="field_type" name="field_type" formControlName="field_type"
-                    placeholder="Select Field Type" (change)="OnFieldTypeChange($event)" [ngClass]="{ 'is-invalid': submitted && f.field_type.errors }">
+                    placeholder="Select field type" (change)="OnFieldTypeChange($event)" [ngClass]="{ 'is-invalid': submitted && f.field_type.errors }">
                     </ng-select> 
                     <!--
                     <select class="form-control select2" id="field_type" name="field_type" formControlName="field_type"  (change)="OnFieldTypeChange($event)" [ngClass]="{ 'is-invalid': submitted && f.field_type.errors }">
@@ -106,7 +107,7 @@
 
                 <div class="form-group mb-3" id="customHeight" *ngIf="createplayermetaForm?.value.field_type === 'Text Field'">
                     <label for="field_value">Value</label>
-                    <input type="text" id="field_value" name="field_value" formControlName="field_value" class="form-control" placeholder="Enter Field Value" />
+                    <input type="text" id="field_value" name="field_value" formControlName="field_value" class="form-control" placeholder="Enter field value" />
                 </div>
 
                 <div formArrayName="value" class="form-group mb-3" id="customHeight" *ngIf="createplayermetaForm?.value.field_type !== 'Text Field' && createplayermetaForm?.value.field_type !== ''">
@@ -119,6 +120,7 @@
                         <input type="text" formControlName="optionvalue" class="form-control" id="optionvalue_{{valueIndex}}" placeholder="Enter value" style="width: 80%; margin: 0px 10px;" />
                         <button type="button" class="btn btn-danger waves-effect waves-light" (click)="removefield(i)"><i class="mdi mdi-close"></i></button><br/>
                         
+                        <div *ngIf="individualvalue.controls.optionvalue.errors?.required && submitted" class="input-error-msg text-danger" style="padding: 5px 10px;">Option Value is required.</div>
                     </div>
                     
 
