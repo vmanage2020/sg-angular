@@ -61,7 +61,7 @@ export class LevelListCreateComponent implements OnInit {
   createForm() {
     this.createlevelForm = this.formBuilder.group({
         level_name: ['', Validators.required ],
-        abbreviation: ['', Validators.required ],
+        abbreviation: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(6), Validators.pattern('^[a-zA-Z]*$')]],
         sport_id: [null, Validators.required ],
         sport_name: [null],
         description: [''],

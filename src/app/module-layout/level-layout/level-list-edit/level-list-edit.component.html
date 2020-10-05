@@ -41,6 +41,11 @@
                     <input type="text" [ngModel]="getLevelValueArray.abbreviation" id="abbreviation" name="abbreviation" formControlName="abbreviation" class="form-control" placeholder="Enter abbreviation" [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }"/>
                     <div *ngIf="submitted && f.abbreviation.errors" class="invalid-feedback">
                         <div *ngIf="f.abbreviation.errors.required">Abbreviation is required.</div>
+                        
+                        <p class="error text-danger" *ngIf="f.abbreviation.errors?.minlength">Abbreviation should contain at least {{f.abbreviation.errors?.minlength.requiredLength}} characters</p>
+                        <p class="error text-danger" *ngIf="f.abbreviation.errors?.maxlength">Abbreviation should contain at least {{f.abbreviation.errors?.maxlength.requiredLength}} characters</p>
+                        <p class="error text-danger" *ngIf="f.abbreviation.errors?.pattern">No special characters,numbers or spaces allowed in between characters</p>
+
                     </div>                
                 </div>
 
