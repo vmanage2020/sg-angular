@@ -46,7 +46,7 @@
 
                 <div class="form-group mb-3">
                     <label for="first_name">First Name<span class="text-danger">*</span></label>
-                    <input type="text"  id="first_name" name="first_name" formControlName="first_name" class="form-control" placeholder="Enter first name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }"/>
+                    <input type="text" readonly id="first_name" name="first_name" formControlName="first_name" class="form-control" placeholder="Enter first name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }"/>
                     <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
                         <div *ngIf="f.first_name.errors.required">First Name is required.</div>
                         <p class="error text-danger" *ngIf="f.first_name.errors?.pattern">Firstname must be Alphabets only</p>
@@ -55,7 +55,7 @@
 
                 <div class="form-group mb-3">
                     <label for="middle_initial">Middle Initial</label>
-                    <input type="text"  id="middle_initial" name="middle_initial" formControlName="middle_initial" class="form-control" placeholder="Enter middle initial" [ngClass]="{ 'is-invalid': submitted && f.middle_initial.errors }" />
+                    <input type="text" readonly id="middle_initial" name="middle_initial" formControlName="middle_initial" class="form-control" placeholder="Enter middle initial" [ngClass]="{ 'is-invalid': submitted && f.middle_initial.errors }" />
                     <div *ngIf="submitted && f.middle_initial.errors" class="invalid-feedback">
                         <div *ngIf="f.middle_initial.errors">Maximum three characters allowed.</div>
                         <p class="error text-danger" *ngIf="f.middle_initial.errors?.pattern">Only text characters are allowed.</p>
@@ -65,13 +65,14 @@
                 
                 <div class="form-group mb-3">
                     <label for="last_name">Last Name<span class="text-danger">*</span></label>
-                    <input type="text"  id="last_name" name="last_name" formControlName="last_name" class="form-control" placeholder="Enter last name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }"/>
+                    <input type="text" readonly id="last_name" name="last_name" formControlName="last_name" class="form-control" placeholder="Enter last name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }"/>
                     <div *ngIf="submitted && f.last_name.errors" class="invalid-feedback">
                         <div *ngIf="f.last_name.errors.required">Last Name is required.</div>
                         <p class="error text-danger" *ngIf="f.last_name.errors?.pattern">Lastname must be Alphabets only</p>
                     </div>                
                 </div>
 
+                
                 <div class="row">
                     <!-- <div class="col-3 mt-2 label-border-height allColMaxWidth">
                         <label class="for-label-req" for="date_of_birth">Date Of Birth</label>
@@ -79,16 +80,25 @@
                     <label for="suffix">Date Of Birth</label>
                     <div class="col-3 mt-2" id="customHeight">
                         <div class="input-group add-on date datepicker">
-                            <input type="date" class="form-control date-picker" id="datetime-datepicker"
+                           <!--  <input type="text" class="form-control date-picker" ngbDatepicker #d="ngbDatepicker"
                                 class="form-control" placeholder="Choose date of birth "
                                 formControlName="date_of_birth" (change)=ageValidation($event.target.value)
                                 [ngClass]="{ 'is-invalid': submitted && f.date_of_birth.errors }"
-                                name="date_of_birth">
+                                name="date_of_birth"> -->
+
+                                <input class="form-control" placeholder="Choose date of birthd"
+                                    name="date_of_birth"  
+                                    formControlName="date_of_birth" 
+                                   
+                                    ngbDatepicker #d="ngbDatepicker">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+                                </div>
                            
-                            <div *ngIf="submitted && f.date_of_birth.errors" class="invalid-feedback">
+                            <!-- <div *ngIf="submitted && f.date_of_birth.errors" class="invalid-feedback">
                                 <div *ngIf="f.date_of_birth.errors.required">Date Of Birth is required.
                                 </div>
-                            </div>
+                            </div> -->
 
                         </div>
                     </div>                   
@@ -123,12 +133,16 @@
                         <div *ngIf="f.city.errors.required">city is required.</div>
                     </div>                
                 </div>
-
+                
                 <div class="form-group mb-3">
                     <label for="email">State<span class="text-danger"></span></label>
-                    <input type="text"  id="state" name="state" 
-                    formControlName="state" class="form-control" 
-                    placeholder="Enter state" [ngClass]="{ 'is-invalid': submitted && f.state.errors }"/>
+
+                    <ng-select [items]="stateList"
+                        bindLabel="name" bindValue="state_code"
+                        id="state" name="state" formControlName="state"
+                        placeholder="Select State" [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
+                        </ng-select> 
+                    
                     <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
                         <div *ngIf="f.state.errors.required">state is required.</div>
                     </div>                
@@ -138,7 +152,7 @@
                     <label for="suffix">Country</label>
                     <ng-select [items]="countryList"
                     bindLabel="name" bindValue="country_code"
-                    id="country_code" name="country_code" formControlName="country_code"
+                    id="country_code" (change)="selectedCountry($event)" name="country_code" formControlName="country_code"
                     placeholder="Select Country" [ngClass]="{ 'is-invalid': submitted && f.country_code.errors }">
                     </ng-select> 
                 </div> 
@@ -157,6 +171,11 @@
 
                 <div class="form-group mb-3">
                     <label for="email">Phone<span class="text-danger"></span></label>
+
+                    <div class="col-2 p-0" id="customHeight" style="float: left;">
+                        <input type="text" [value]="dialCode" formControlName="dialcode" class="form-control" readonly />
+                      </div>
+
                     <input type="text"  id="mobile_phone" name="mobile_phone" formControlName="mobile_phone" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
                     <div *ngIf="submitted && f.mobile_phone.errors" class="invalid-feedback">
                         <div *ngIf="f.mobile_phone.errors.required">mobile phone is required.</div>
@@ -173,7 +192,7 @@
              
                 <div class="form-group mb-3">
                     <label for="email">Email Address<span class="text-danger">*</span></label>
-                    <input type="text"  id="email" name="email" formControlName="email" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                    <input type="text"  readonly id="email" name="email" formControlName="email" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                         <div *ngIf="f.email.errors.required">Email is required.</div>
                         <div *ngIf="f.email.errors?.pattern">Enter a valid email address.</div>
