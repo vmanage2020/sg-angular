@@ -73,12 +73,12 @@
                 </div>
 
                 
-                <div class="row">
+                <div class="form-group mb-3">
                     <!-- <div class="col-3 mt-2 label-border-height allColMaxWidth">
                         <label class="for-label-req" for="date_of_birth">Date Of Birth</label>
                     </div> -->
                     <label for="suffix">Date Of Birth</label>
-                    <div class="col-3 mt-2" id="customHeight">
+                    <div class="col-12 mt-2" id="customHeight">
                         <div class="input-group add-on date datepicker">
                            <!--  <input type="text" class="form-control date-picker" ngbDatepicker #d="ngbDatepicker"
                                 class="form-control" placeholder="Choose date of birth "
@@ -160,7 +160,7 @@
 
                 <div class="form-group mb-3">
                     <label for="email">Postal code<span class="text-danger"></span></label>
-                    <input type="text"  id="postal_code" name="postal_code" 
+                    <input type="text" id="postal_code" name="postal_code" 
                     formControlName="postal_code" class="form-control" 
                     placeholder="Enter postal code" [ngClass]="{ 'is-invalid': submitted && f.postal_code.errors }"/>
                     <div *ngIf="submitted && f.postal_code.errors" class="invalid-feedback">
@@ -170,13 +170,19 @@
 
 
                 <div class="form-group mb-3">
-                    <label for="email">Phone<span class="text-danger"></span></label>
+                    <label for="email">Phone<span class="text-danger"></span></label><br/>
 
                     <div class="col-2 p-0" id="customHeight" style="float: left;">
                         <input type="text" [value]="dialCode" formControlName="dialcode" class="form-control" readonly />
-                      </div>
-
-                    <input type="text"  id="mobile_phone" name="mobile_phone" formControlName="mobile_phone" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                    </div>
+                    <div class="col-10 p-0" id="customHeight" style="float: left;">
+                        <input type="text" formControlName="mobile_phone" class="form-control" data-toggle="input-mask" (input)="closeErrors('Phone')"
+                          mask="(000) 000-0000" [ngClass]="{ 'is-invalid': submitted && f.mobile_phone.errors }" name="mobile_phone"
+                          id="mobile_phone" placeholder="Enter phone number" />
+                    <!--
+                            <input type="text"  id="mobile_phone" name="mobile_phone" formControlName="mobile_phone" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                    -->
+                    </div>
                     <div *ngIf="submitted && f.mobile_phone.errors" class="invalid-feedback">
                         <div *ngIf="f.mobile_phone.errors.required">mobile phone is required.</div>
                     </div>                
