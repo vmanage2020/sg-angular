@@ -20,6 +20,8 @@ declare var $: any;
 import { UserService } from '../user-service'
 import { RestApiService } from '../../../shared/rest-api.services';
 
+import {NgbDateStruct, NgbDate} from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-user-list-edit',
   templateUrl: './user-list-edit.component.html',
@@ -28,7 +30,8 @@ import { RestApiService } from '../../../shared/rest-api.services';
 export class UserListEditComponent implements OnInit {
 
   resourceID = this.route.snapshot.paramMap.get('resourceId'); 
-
+  model: NgbDateStruct;
+  public selectedDate: NgbDate;
   db: any = firebase.firestore();
   value: any = [];
 
@@ -37,7 +40,7 @@ export class UserListEditComponent implements OnInit {
   getUserRoleData: any = [];
   getUserRoleDataArray: any = [];
   roleList: any = [];
-
+  dialCode = null;
   rolesArrayList: any = [];
 
   getUserSuffixDataArray: any = [
@@ -64,6 +67,7 @@ export class UserListEditComponent implements OnInit {
   organization_name: any;
   organization_abbrev: any;
   countryList: any;
+  stateList: any;
 
 
   role: any;
@@ -92,6 +96,7 @@ createForm() {
    date_of_birth: [''],
    suffix: [null],
    roles: [''],
+   dialcode: [''],
    organization_id: [''],
    organization_name: [''],
    organization_abbrev: [''],
@@ -105,6 +110,22 @@ createForm() {
   });
 }
 
+selectedCountry(event: any)
+  {
+    this.dialCode = null;
+    if( event != undefined && event.country_code != '')
+    {
+     /*  this.selectedCountryCode = event.country_code;
+      this.selectedSports = [];
+      this.getSports(this.selectedCountryCode);  */
+      this.dialCode = '+1';
+      this.createuserForm.patchValue({
+        dialcode: '+1'
+      })
+    }
+    
+  }
+
   ngOnInit() {
     
     this.uid = this.cookieService.getCookie('uid');
@@ -113,6 +134,7 @@ createForm() {
     this.getUserSuffix();
     this.getUserInfo(); 
     this.getCountry(); 
+    this.getStates()
     console.log(this.resourceID);
     
     this.loading = false;
@@ -127,6 +149,13 @@ createForm() {
   {
     this.restApiService.lists('countries').subscribe( country => {
       this.countryList = country;
+    })
+  }
+
+  getStates()
+  {
+    this.restApiService.lists('states').subscribe( state => {
+      this.stateList = state;
     })
   }
 
@@ -156,6 +185,8 @@ createForm() {
       //this.rolesArrayList = users.roles;
 
       this.getUserData =  users;
+      
+      var dob = {date: {year: '2000', month:'01', day:'12'}}//users.date_of_birth
       this.createuserForm.patchValue({
         first_name: users.first_name,
         middle_initial: users.middle_initial,
@@ -165,12 +196,16 @@ createForm() {
         street1: users.street1,
         street2: users.street2,
         city: users.city,
+        dialcode : users.dial_code,
         state: users.state,
         postal_code: users.postal_code,
         country_code: users.country_code,
         mobile_phone: users.mobile_phone,
         email: users.email_address
       })
+
+
+
     }, error => {
       console.log('---error API response----')
     })
@@ -342,12 +377,12 @@ createForm() {
   async onSubmit(form) {
     
     console.log("SUBMITEED");
-
+    console.log('---form----', form)
     try {
       this.submitted = true;
-      if (form.invalid) {
+     /*  if (form.invalid) {
         return;
-      }
+      } */
       
     this.displayLoader = true;
     this.loading = true;
@@ -372,6 +407,12 @@ createForm() {
     this.organization_name = localStorage.getItem('org_name');
     this.organization_abbrev = localStorage.getItem('org_abbrev');
 
+    if( form.value.date_of_birth.year != '' && form.value.date_of_birth.month !='' ){
+      var dob = form.value.date_of_birth.year+'-'+form.value.date_of_birth.month+'-'+form.value.date_of_birth.day;
+    }else{
+      dob = this.createuserForm.value.date_of_birth;
+    }
+    console.log('---dob----', dob)
     const userObj = {
       user_id: '',
       first_name: form.value.first_name || "",
@@ -379,7 +420,7 @@ createForm() {
       last_name: form.value.last_name || "",
       suffix: form.value.suffix || '',
       gender: '',
-      date_of_birth: form.value.date_of_birth || "",
+      date_of_birth: dob || "",
       email_address: form.value.email || "",
       mobile_phone: form.value.mobile_phone || "",
       parent_user_id: [],
@@ -391,6 +432,7 @@ createForm() {
       state_code: form.value.state || "",
       street1: form.value.street1 || "",
       street2: form.value.street2 || "",
+      dial_code: form.value.dialcode || "",
       organization_id: this.organization_id || "",
       organization_name: this.organization_name || "",
       organization_abbrev: this.organization_abbrev || "",
@@ -405,7 +447,7 @@ createForm() {
 
   
   //let saveUserData = await this.db.collection('/users').add(userObj);
-    //console.log('-----userObj-----', userObj)
+    console.log('-----userObj-----', userObj)
     //return false;
 
     this.restApiService.update('users/'+this.resourceID,userObj).subscribe( users => {
