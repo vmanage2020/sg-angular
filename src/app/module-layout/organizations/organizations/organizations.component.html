@@ -63,7 +63,9 @@
     
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Playerdata.phone}}</span>
+                                <span class="ml-2">
+                                    {{Playerdata.dial_code}} - {{Playerdata.mobile_phone | mask: '(000) 000-0000' || "-"}}
+                                </span>
                             </a>
                         </td>
     
