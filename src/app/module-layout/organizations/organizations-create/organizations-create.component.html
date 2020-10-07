@@ -26,11 +26,10 @@
                       <label for="abbrev">Abbreviation<span class="text-danger">*</span></label>
                       <input type="text" id="abbrev" name="abbrev" formControlName="abbrev" class="form-control" placeholder="Enter abbreviation name" [ngClass]="{ 'is-invalid': submitted && f.abbrev.errors }"/>
                       <div *ngIf="submitted && f.abbrev.errors" class="invalid-feedback">
-                          <div *ngIf="f.abbrev.errors.required">Abbreviation is required.</div>
-
-                          <p class="error text-danger" *ngIf="f.abbrev.errors?.minlength">Abbreviation should contain at least {{f.abbrev.errors?.minlength.requiredLength}} characters</p>
-                          <p class="error text-danger" *ngIf="f.abbrev.errors?.maxlength">Abbreviation should contain at least {{f.abbrev.errors?.maxlength.requiredLength}} characters</p>
-                          <p class="error text-danger" *ngIf="f.abbrev.errors?.pattern">No special characters,numbers or spaces allowed in between characters</p>
+                          
+                          <div *ngIf="submitted &&f.abbrev.errors?.required" class="input-error-msg text-danger">Abbreviation is required.</div>
+                          <div *ngIf="submitted &&f.abbrev.errors?.maxlength" class="input-error-msg text-danger">Abbreviation allows maximum of 6 characters.</div>
+                          <div *ngIf="submitted &&f.abbrev.errors?.pattern" class="input-error-msg text-danger">Only text characters are allowed.</div>
                           
                       </div>
                   
@@ -433,19 +432,20 @@
                             <div class="form-group mb-3">
                                 <label for="primary_first_name">First Name<span class="text-danger">*</span></label>
                                 <input type="text" id="primary_first_name" name="primary_first_name" formControlName="primary_first_name" class="form-control" placeholder="Enter first name" [ngClass]="{ 'is-invalid': submitted && f.primary_first_name.errors }"/>
+                
                                 <div *ngIf="submitted && f.primary_first_name.errors" class="invalid-feedback">
-                                    <div *ngIf="f.primary_first_name.errors.required">First Name is required.</div>
-                                    <p  class="error text-danger" *ngIf="f.primary_first_name.errors?.pattern">Enter Alphabet only</p>
-                                </div>                
+                                  <div *ngIf="f.primary_first_name.errors.required">First Name is required.</div>
+                                  <div *ngIf="f.primary_first_name.errors?.pattern">Only text characters are allowed.</div>
+                                </div>
+
                             </div>
 
                             <div class="form-group mb-3">
                                 <label for="primary_middle_initial">Middle Initial</label>
                                 <input type="text" id="primary_middle_initial" name="primary_middle_initial" formControlName="primary_middle_initial" class="form-control" placeholder="Enter middle initial" [ngClass]="{ 'is-invalid': submitted && f.primary_middle_initial.errors }"/>
                                 <div *ngIf="submitted && f.primary_middle_initial.errors" class="invalid-feedback">
-                                    <div *ngIf="f.primary_middle_initial.errors">Maximum of three characters allowed</div>
-                                    <p class="error text-danger" *ngIf="f.primary_middle_initial.errors?.pattern">Only text characters are allowed</p>
-                                    <!--<p class="error text-danger" *ngIf="f.primary_middle_initial.errors?.maxlength">The Middle Initial field maximum length {{f.primary_middle_initial.errors?.maxlength.requiredLength}}</p>-->
+                                  <div *ngIf="f.primary_middle_initial.errors?.pattern" class="input-error-msg text-danger">Only text characters are allowed.</div>
+                                  <div *ngIf="f.primary_middle_initial.errors?.maxlength" class="input-error-msg text-danger">Maximum of 3 characters are allowed.</div>
                                 </div>
                             </div>
 
@@ -454,9 +454,9 @@
                                 <label for="last_name">Last Name<span class="text-danger">*</span></label>
                                 <input type="text" id="primary_last_name" name="primary_last_name" formControlName="primary_last_name" class="form-control" placeholder="Enter last name" [ngClass]="{ 'is-invalid': submitted && f.primary_last_name.errors }"/>
                                 <div *ngIf="submitted && f.primary_last_name.errors" class="invalid-feedback">
-                                    <div *ngIf="f.primary_last_name.errors.required">Last Name is required.</div>
-                                    <p  class="error text-danger" *ngIf="f.primary_last_name.errors?.pattern">Enter Alphabet only</p>
-                                </div>                
+                                  <div *ngIf="f.primary_last_name.errors.required">Last Name is required.</div>
+                                  <div *ngIf="f.primary_last_name.errors?.pattern">Only text characters are allowed.</div>
+                                </div>              
                             </div>
             
                             <div class="form-group mb-3">
@@ -492,22 +492,30 @@
 
                             <div class="form-group mb-3">
                                 <label for="secondary_first_name">First Name</label>
-                                <input type="text" id="secondary_first_name" name="secondary_first_name" formControlName="secondary_first_name" class="form-control" placeholder="Enter first name" />
+                                <input type="text" id="secondary_first_name" name="secondary_first_name" formControlName="secondary_first_name" class="form-control" placeholder="Enter first name" [ngClass]="{ 'is-invalid': submitted && f.secondary_first_name.errors }"/>
+                                <div *ngIf="submitted && f.secondary_first_name.errors" class="invalid-feedback">
+                                  <div *ngIf="f.secondary_first_name.errors?.pattern">Only text characters are allowed.</div>
+                                </div>
+
                             </div>
 
                             <div class="form-group mb-3">
                                 <label for="secondary_middle_initial">Middle Initial</label>
-                                <input type="text" id="secondary_middle_initial" name="secondary_middle_initial" formControlName="secondary_middle_initial" class="form-control" placeholder="Enter middle initial" />
+                                <input type="text" id="secondary_middle_initial" name="secondary_middle_initial" formControlName="secondary_middle_initial" class="form-control" placeholder="Enter middle initial" [ngClass]="{ 'is-invalid': submitted && f.secondary_middle_initial.errors }"/>
+                                
                                 <div *ngIf="submitted && f.secondary_middle_initial.errors" class="invalid-feedback">
-                                    <div *ngIf="f.secondary_middle_initial.errors">Maximum of three characters allowed</div>
-                                    <p class="error text-danger" *ngIf="f.primary_middle_initial.errors?.pattern">Only text characters are allowed</p>
-                                </div>
+                                  <div *ngIf="f.secondary_middle_initial.errors?.pattern" class="input-error-msg text-danger">Only text characters are allowed.</div>
+                                  <div *ngIf="f.secondary_middle_initial.errors?.maxlength" class="input-error-msg text-danger">Maximum of 3 characters are allowed.</div>
+                                </div> 
                             </div>
 
                             
                             <div class="form-group mb-3">
                                 <label for="secondary_last_name">Last Name</label>
-                                <input type="text" id="secondary_last_name" name="secondary_last_name" formControlName="secondary_last_name" class="form-control" placeholder="Enter last name" />
+                                <input type="text" id="secondary_last_name" name="secondary_last_name" formControlName="secondary_last_name" class="form-control" placeholder="Enter last name" [ngClass]="{ 'is-invalid': submitted && f.secondary_last_name.errors }"/>
+                                <div *ngIf="submitted && f.secondary_last_name.errors" class="invalid-feedback">
+                                  <div *ngIf="f.secondary_last_name.errors?.pattern">Only text characters are allowed.</div>
+                                </div>
                             </div>
             
                             <div class="form-group mb-3">
@@ -530,7 +538,7 @@
                         
                             <div class="form-group mb-3">
                                 <label for="email">Email Address</label>
-                                <input type="text" id="secondary_admin_email" name="secondary_admin_email" formControlName="secondary_admin_email" class="form-control" placeholder="Enter email address"/>
+                                <input type="text" id="secondary_admin_email" name="secondary_admin_email" formControlName="secondary_admin_email" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.secondary_admin_email.errors }"/>
                                 <div *ngIf="submitted && f.secondary_admin_email.errors" class="invalid-feedback">
                                     <div *ngIf="f.secondary_admin_email.errors?.pattern">Enter a valid email address.</div>
                                 </div>                

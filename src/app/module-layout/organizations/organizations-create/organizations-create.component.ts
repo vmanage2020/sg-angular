@@ -137,19 +137,19 @@ export class OrganizationsCreateComponent implements OnInit {
       primary_last_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       primary_admin_email: ['', [Validators.required, Validators.pattern(this.regexp)]],
       primary_suffix: [null],
-      /*
+      
       secondary_first_name: ['', [Validators.pattern('^[a-zA-Z ]*$')]],
       secondary_middle_initial: ['', [Validators.pattern('^[a-zA-Z ]*$'), Validators.maxLength(3)]],
       secondary_last_name: ['', [Validators.pattern('^[a-zA-Z ]*$')]],
       secondary_admin_email: ['', [Validators.pattern(this.regexp)]],
       secondary_suffix: [null],
-      */
+      /*
       secondary_first_name: [''],
       secondary_middle_initial: [''],
       secondary_last_name: [''],
       secondary_admin_email: [''],
       secondary_suffix: [null],
-      
+      */
     });
 
     //this.governingBodyInfo = this.createorganizationForm.get('governing_body_info') as FormArray;
