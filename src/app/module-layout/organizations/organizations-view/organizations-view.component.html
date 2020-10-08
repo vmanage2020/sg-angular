@@ -23,7 +23,7 @@
                                 </label>
                                 <div id="container" class="hoverable" *ngIf='getUserData.avatar === "null" || getUserData.avatar === "" '>
                                     <div class="profile-image">
-                                        <div id="abbreviation">{{getUserData.abbrev}}</div>
+                                        <div id="abbreviation">{{getUserData.abbrev | uppercase}}</div>
                                     </div>
                                 </div>
                             </div>
