@@ -40,6 +40,7 @@ import { NGXLogger } from 'ngx-logger';
   
     getSelectedSportmeta: any = [];
     getSelectedSportmetaData: any = [];
+    public duplicateColumns: FormArray;
     
     getAllTypemetaDataArray: any = [
       { name: 'Drop Down' },
@@ -99,6 +100,7 @@ import { NGXLogger } from 'ngx-logger';
         value: this.formBuilder.array([]),
         field_value: [''],
     });
+    this.duplicateColumns = this.editplayermetaForm.get('value') as FormArray;
   }
   
   
@@ -142,7 +144,8 @@ import { NGXLogger } from 'ngx-logger';
       {
         this.getAllPlayermetaData.field_value = this.getAllPlayermetaData.value[0];
       } else {
-        this.getAllPlayermetaData.field_value = [this.getAllPlayermetaData.value];
+        //this.getAllPlayermetaData.field_value = [this.getAllPlayermetaData.value];
+        this.resetColumn( this.getAllPlayermetaData.value );
       }
   
         console.log(this.getAllPlayermetaData);
@@ -153,6 +156,30 @@ import { NGXLogger } from 'ngx-logger';
       });
 
     }
+
+    resetColumn(columns)
+  {
+    console.log('---columns----', columns )
+             var customCols = columns;
+                    if( customCols.length > 0)
+                    {
+                      var i=0
+                      customCols.forEach( cols => {
+                        console.log('----i-----',i)
+                        this.addnewfield()
+                        i++;
+                      });
+
+                      var j=0
+                      customCols.forEach( cols => {
+
+                        this.editplayermetaForm.controls.value['controls'][j].patchValue({
+                          optionvalue     : cols
+                        })
+                        j++;
+                      })
+                    }
+  }
    
     async getSportsAPI(){
      
@@ -211,6 +238,8 @@ import { NGXLogger } from 'ngx-logger';
 
     } 
    
+    
+
     async getTypesAPI(){
       this.getAllTypemetaData = this.getAllTypemetaDataArray; 
     }
@@ -239,9 +268,9 @@ import { NGXLogger } from 'ngx-logger';
        var field_type_value = event.name;
       console.log(field_type_value);
       if(field_type_value!='Text Field') { 
-        if( this.fieldvalueBodyArr.length>0)
+        if( this.duplicateColumns.length>0)
           {
-            this.removeAllfield(this.fieldvalueBodyArr.length)
+            this.removeAllfield(this.duplicateColumns.length)
           }else{
             this.removefield(0)
           }   
@@ -349,26 +378,26 @@ import { NGXLogger } from 'ngx-logger';
     }
   
     
-    get fieldvalueBodyArr() {
+    /* get fieldvalueBodyArr() {
       return this.editplayermetaForm.get('value') as FormArray;
-    }
+    } */
   
     addnewfield()
     {
       console.log("Add");
-      this.fieldvalueBodyArr.push(this.getFieldvalueInfo());
+      this.duplicateColumns.push(this.getFieldvalueInfo());
     }
   
     removefield(i: number)
     {
       
-      this.fieldvalueBodyArr.removeAt(i);
+      this.duplicateColumns.removeAt(i);
     }
 
     removeAllfield(k)
     {
-      while (this.fieldvalueBodyArr.length !== 0) {
-        this.fieldvalueBodyArr.removeAt(0)
+      while (this.duplicateColumns.length !== 0) {
+        this.duplicateColumns.removeAt(0)
       }
     }
   
