@@ -132,7 +132,7 @@
                 <div formArrayName="value" class="form-group mb-3" id="customHeight" *ngIf="editplayermetaForm?.value.field_type !== 'Text Field' && editplayermetaForm?.value.field_type !== ''">
                     <label for="field_value" style="width: 100%;">Value(s) 
                     <a style="float:right;" class="color font-weight-bold edit-icon" (click)="addnewfield()" ><i class="fa fa-plus" aria-hidden="true"></i></a></label>  
-                    <div *ngFor="let contact of duplicateColumns.controls; let valueIndex = index;">
+                    <div *ngFor="let contact of duplicateColumns.controls; let valueIndex = index;" style="padding: 10px 0px;">
                         <div [formGroupName]="valueIndex" class="row">
                             <input type="text" formControlName="optionvalue" class="form-control" id="optionvalue_{{valueIndex}}" placeholder="Enter value" style="width: 80%; margin: 0px 10px;" />
                             <button type="button" class="btn btn-danger waves-effect waves-light test{{valueIndex}}" (click)="removefield(valueIndex)"><i class="mdi mdi-close"></i></button><br/>
