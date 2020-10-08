@@ -72,7 +72,7 @@ export class LevelListEditComponent implements OnInit {
         abbreviation: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(6), Validators.pattern('^[a-zA-Z]*$')]],
         sport_id: ['', Validators.required ],
         sport_name: [''],
-        description: [''],
+        description: ['',[Validators.maxLength(300)]],
         organization_id: [''],
       });
     }

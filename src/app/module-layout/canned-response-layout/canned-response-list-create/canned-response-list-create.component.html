@@ -37,10 +37,20 @@
                 
                 <div class="form-group mb-3">
                     <label for="canned_response_description">Canned Response Description<span class="text-danger">*</span></label>
+                  
+                    <textarea formControlName="canned_response_description" class="form-control" row="16" cols="64" name="canned_response_description"
+                    id="canned_response_description" placeholder="Enter description" [ngClass]="{ 'is-invalid': submitted && f.canned_response_description.errors }"></textarea>
+                    <div *ngIf="submitted && f.canned_response_description.errors" class="invalid-feedback">
+                      <div *ngIf="f.canned_response_description.errors.required">Canned Response Description is required.</div>
+                      <div *ngIf="f.canned_response_description.errors?.maxlength">Description allows maximum of 300 characters.</div>
+                  </div>
+
+                <!--
                     <input type="text" id="canned_response_description" name="canned_response_description" formControlName="canned_response_description" class="form-control" placeholder="Enter canned response description" [ngClass]="{ 'is-invalid': submitted && f.canned_response_description.errors }"/>
                     <div *ngIf="submitted && f.canned_response_description.errors" class="invalid-feedback">
                         <div *ngIf="f.canned_response_description.errors.required">Canned Response Description is required.</div>
-                    </div>                
+                    </div>
+                -->                
                 </div>
                  
   

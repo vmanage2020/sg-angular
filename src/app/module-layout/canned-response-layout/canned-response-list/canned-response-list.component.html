@@ -35,7 +35,7 @@
                         </td>
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{CannedResponsesData.cannedResponseDesc}}</span>
+                                <span class="ml-2">{{ (CannedResponsesData.cannedResponseDesc.length>30)? (CannedResponsesData.cannedResponseDesc | slice:0:30)+'..':(CannedResponsesData.cannedResponseDesc) }} </span>
                             </a>
                         </td>    
                         <td>

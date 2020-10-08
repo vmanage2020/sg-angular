@@ -71,7 +71,7 @@ export class CannedResponseListEditComponent implements OnInit {
     createForm() {
       this.createcannedresponseForm = this.formBuilder.group({
           canned_response_title: ['', Validators.required ],
-          canned_response_description: ['', Validators.required ],
+          canned_response_description: ['',[Validators.required, Validators.maxLength(300)]],
           sport_id: [null, Validators.required ],
           sport_name: [''],
           organization_id: [''],

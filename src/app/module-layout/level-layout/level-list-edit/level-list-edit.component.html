@@ -40,20 +40,24 @@
                     <label for="abbreviation">Abbreviation<span class="text-danger">*</span></label>
                     <input type="text" [ngModel]="getLevelValueArray.abbreviation" id="abbreviation" name="abbreviation" formControlName="abbreviation" class="form-control" placeholder="Enter abbreviation" [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }"/>
                     <div *ngIf="submitted && f.abbreviation.errors" class="invalid-feedback">
-                        <div *ngIf="f.abbreviation.errors.required">Abbreviation is required.</div>
-                        
-                        <p class="error text-danger" *ngIf="f.abbreviation.errors?.minlength">Abbreviation should contain at least {{f.abbreviation.errors?.minlength.requiredLength}} characters</p>
-                        <p class="error text-danger" *ngIf="f.abbreviation.errors?.maxlength">Abbreviation should contain at least {{f.abbreviation.errors?.maxlength.requiredLength}} characters</p>
-                        <p class="error text-danger" *ngIf="f.abbreviation.errors?.pattern">No special characters,numbers or spaces allowed in between characters</p>
-
-                    </div>                
+                        <div *ngIf="submitted &&f.abbreviation.errors?.required" class="input-error-msg text-danger">Abbreviation is required.</div>
+                        <div *ngIf="submitted &&f.abbreviation.errors?.maxlength" class="input-error-msg text-danger">Abbreviation allows maximum of 6 characters.</div>
+                        <div *ngIf="submitted &&f.abbreviation.errors?.pattern" class="input-error-msg text-danger">Only text characters are allowed.</div>
+                    </div>              
                 </div>
 
                 
                 <div class="form-group mb-3">
                     <label for="description">Description</label>
-                    <input type="text" [ngModel]="getLevelValueArray.description" id="description" name="description" formControlName="description" class="form-control" placeholder="Enter description" />
+
+                    <textarea  [ngModel]="getLevelValueArray.description" formControlName="description" class="form-control" row="16" cols="64" name="description"
+                  id="description" placeholder="Enter description" [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
+                  <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                    <div *ngIf="f.description.errors?.maxlength">Description allows maximum of 300 characters.</div>
+                </div>
+
                     <!--
+                    <input type="text" [ngModel]="getLevelValueArray.description" id="description" name="description" formControlName="description" class="form-control" placeholder="Enter description" />
                     <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
                         <div *ngIf="f.description.errors.required">Description is required.</div>
                     </div>                
