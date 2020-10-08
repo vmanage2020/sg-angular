@@ -118,7 +118,7 @@
                     [formGroupName]="valueIndex">
                         
                         <input type="text" formControlName="optionvalue" class="form-control" id="optionvalue_{{valueIndex}}" placeholder="Enter value" style="width: 80%; margin: 0px 10px;" />
-                        <button type="button" class="btn btn-danger waves-effect waves-light" (click)="removefield(i)"><i class="mdi mdi-close"></i></button><br/>
+                        <button type="button" class="btn btn-danger waves-effect waves-light" (click)="removefield(valueIndex)"><i class="mdi mdi-close"></i></button><br/>
                         
                         <div *ngIf="individualvalue.controls.optionvalue.errors?.required && submitted" class="input-error-msg text-danger" style="padding: 5px 10px;">Option Value is required.</div>
                     </div>

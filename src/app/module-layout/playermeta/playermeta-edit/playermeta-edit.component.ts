@@ -364,7 +364,7 @@ export class PlayermetaEditComponent implements OnInit {
 
   removefield(i: number)
   {
-    
+    console.log("removefield",i);
     this.fieldvalueBodyArr.removeAt(i);
   }
 
