@@ -105,6 +105,10 @@ export class OrganizationsCreateComponent implements OnInit {
     private logger: NGXLogger) { 
      this.createForm(); 
   }
+
+  /*
+  website: ['', [Validators.pattern("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")]],
+  */
   
   createForm() {
     this.createorganizationForm = this.formBuilder.group({
@@ -126,7 +130,7 @@ export class OrganizationsCreateComponent implements OnInit {
       ])],
       fax: ['', [Validators.pattern('^[0-9-()]*$'), Validators.minLength(10)]],
       email: ['', [Validators.required, Validators.pattern(this.regexp)]],
-      website: ['', [Validators.pattern("^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$")]],
+      website: ['', [Validators.pattern(this.websiteValidation)]],
       sports: ['', [Validators.required]],
       avatar: [null],
       

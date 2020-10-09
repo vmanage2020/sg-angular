@@ -31,7 +31,7 @@
                                 <div class="image-upload pl-1" *ngIf="getUserData.organization_id == '1'"> 
                                     <div id="container" class="hoverable">
                                         <div class="profile-image">
-                                            <div id="abbreviation">{{getUserData.abbrev}}</div>
+                                            <div id="abbreviation">{{getUserData.abbrev | uppercase}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -54,7 +54,7 @@
                             <label for="product-name" style="width:200px;">Abbreviation </label>
                             
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.abbrev}} </label>
+                                <label for="inlineRadio2"> {{getUserData.abbrev | uppercase}} </label>
                             </div>
                         </div>
                         
@@ -117,7 +117,7 @@
                             <label for="product-name" style="width:200px;">Email </label>
                             
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.email_address}} </label>
+                                <label for="inlineRadio2"> {{getUserData.email_address | lowercase}} </label>
                             </div>
                         </div>
                         
@@ -145,7 +145,7 @@
                             <label for="product-name" style="width:200px;">Website </label>
                             
                             <div class=" form-check-inline">
-                                <label for="inlineRadio2"> {{getUserData.website}} </label>
+                                <label for="inlineRadio2"> {{getUserData.website | lowercase}} </label>
                             </div>
                         </div>
 
@@ -158,7 +158,7 @@
                                 > {{getUserData.primary_first_name}},
                                     {{getUserData.primary_last_name}},{{getUserData.primary_middle_initial}},
                                     {{getUserData.primary_suffix}},
-                                    {{getUserData.primary_admin_email}} </label>
+                                    {{getUserData.primary_admin_email | lowercase}} </label>
                             </div>
                         </div>
                        
@@ -171,7 +171,7 @@
                                 > {{getUserData.secondary_first_name}},
                                     {{getUserData.secondary_last_name}},{{getUserData.secondary_middle_initial}},
                                     {{getUserData.secondary_suffix}},
-                                    {{getUserData.secondary_admin_email}} </label>
+                                    {{getUserData.secondary_admin_email | lowercase}} </label>
                             </div>
                         </div>
                         

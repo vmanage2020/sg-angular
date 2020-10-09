@@ -1,6 +1,6 @@
 
 import { Component, OnInit, Inject } from '@angular/core';
-import * as firebase from 'firebase';
+
 import { Subject } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -10,6 +10,10 @@ import { Router } from '@angular/router';
 import { NgiNotificationService } from 'ngi-notification';
 
 import { DOCUMENT } from '@angular/common';
+
+import { RestApiService } from '../../../shared/rest-api.services';
+
+import { HttpClient } from '@angular/common/http';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
@@ -23,7 +27,7 @@ import { OrganizationsService } from './../organizations.service';
  
 export class OrganizationsComponent implements OnInit {
 
-  db: any = firebase.firestore();
+  //db: any = firebase.firestore();
   value: any = [];
   getAllplayerlist: any = [];
   getAllPlayerlistData: any = [];
