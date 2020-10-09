@@ -6,7 +6,7 @@
 // api: "http://localhost:3000/",
   
 export const environment = { 
-  api: "http://13.250.46.60:3000/",
+  api: "http://13.229.116.53:3000/",
   ENVNAME: "dev",
   HOST:"https://us-central1-sports-gravy-app.cloudfunctions.net",
   production: false,

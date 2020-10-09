@@ -37,6 +37,8 @@ export class OrganizationsCreateComponent implements OnInit {
   getAllTypemeta: any = [];
   getAllStates: any = [];
   getAllTypemetaData: any = [];
+  roles: any = [];
+  userEmailList: any = [];
 
   public governingBodyInfo: FormArray;
   
@@ -162,6 +164,8 @@ export class OrganizationsCreateComponent implements OnInit {
 
   ngOnInit() {
     this.getState(); 
+    this.rolesbyname('admin')
+    this.getUsers();
     
     this.getCountries();  
     this.getTypes();  
@@ -190,6 +194,7 @@ export class OrganizationsCreateComponent implements OnInit {
 
   }
 
+ 
   selectedOrgId( id )
   {
     console.log('----edit org id----', id)
@@ -701,6 +706,31 @@ export class OrganizationsCreateComponent implements OnInit {
     
   }
 
+  rolesbyname(name:any)
+  {
+    this.restApiService.lists('rolesbyname/'+name).subscribe( roles => {
+      this.roles = roles
+    })
+  }
+
+  getUsers()
+  {
+    this.restApiService.lists('users').subscribe( users => {
+      if( users.length > 0)
+      {
+        users.forEach( user => {
+          if( user.email_address != '')
+          {
+            this.userEmailList.push(user.email_address)
+          }
+          
+        })
+      }
+    
+    });
+  }
+  
+
   async getSports( country ){
 
     this.restApiService.lists('sportsbycountry/'+country).subscribe( sports => {
@@ -740,10 +770,23 @@ export class OrganizationsCreateComponent implements OnInit {
     console.log("form submit");
     console.log('----form----', form)
     console.log('---this.selectedOrganizationId----', this.selectedOrganizationId)
-    //return false;
+
+    console.log('---userEmailList----', this.userEmailList)
+
+    
     
     if( this.selectedOrganizationId == '')
     {
+
+      if( form.value.primary_admin_email != '' && this.userEmailList.indexOf(form.value.primary_admin_email) !== -1){
+        this.notification.isNotification(true, "Organization Data", "Primary Email already exist", "check-square");
+        return false
+      }
+      if( form.value.secondary_admin_email != '' && this.userEmailList.indexOf(form.value.secondary_admin_email) !== -1){
+        this.notification.isNotification(true, "Organization Data", "Secondary Email already exist", "check-square");
+        return false
+      }
+     
               try {
                 this.submitted = true;
                 if (form.invalid) {
@@ -837,6 +880,87 @@ export class OrganizationsCreateComponent implements OnInit {
                         
                 this.logger.debug('Manager Meta Delete API End Here====>', new Date().toUTCString());          
                 console.log(resorg.organization_id);
+
+
+                if( createOrgObj.primary_first_name != '' && createOrgObj.primary_last_name != '' && createOrgObj.primary_admin_email != '')
+                {
+                      const primaryuserObj = {
+                        user_id: '',
+                        first_name: createOrgObj.primary_first_name,
+                        middle_initial: createOrgObj.primary_middle_initial,
+                        last_name: createOrgObj.primary_last_name,
+                        suffix: createOrgObj.primary_suffix,
+                        gender: '',
+                        date_of_birth:  "",
+                        email_address: createOrgObj.primary_admin_email,
+                        mobile_phone: "",
+                        parent_user_id: [],
+                        city: "",
+                        country_code: "",
+                        country: "",
+                        postal_code: "",
+                        state: "",
+                        state_code: "",
+                        street1: "",
+                        street2: "",
+                        organization_id: resorg.organization_id || "",
+                        organization_name: resorg.organization_name || "",
+                        organization_abbrev: resorg.organization_abbrev || "",
+                        created_datetime: new Date() || "",
+                        created_uid: this.uid || "",
+                        is_invited: false,
+                        is_signup_completed: false,
+                        profile_image: '',
+                        roles: this.roles,
+                        organizations: [resorg.organization_id]
+                    }
+
+                    this.restApiService.create('users',primaryuserObj).subscribe(primaryusers => {
+
+                    })
+                }
+                if( createOrgObj.secondary_first_name != '' && createOrgObj.secondary_last_name != '' && createOrgObj.secondary_admin_email != '')
+                {
+                      const secondaryuserObj = {
+                        user_id: '',
+                        first_name: createOrgObj.secondary_first_name,
+                        middle_initial: createOrgObj.secondary_middle_initial,
+                        last_name: createOrgObj.secondary_last_name,
+                        suffix: createOrgObj.secondary_suffix,
+                        gender: '',
+                        date_of_birth:  "",
+                        email_address: createOrgObj.secondary_admin_email,
+                        mobile_phone: "",
+                        parent_user_id: [],
+                        city: "",
+                        country_code: "",
+                        country: "",
+                        postal_code: "",
+                        state: "",
+                        state_code: "",
+                        street1: "",
+                        street2: "",
+                        organization_id: resorg.organization_id || "",
+                        organization_name: resorg.organization_name || "",
+                        organization_abbrev: resorg.organization_abbrev || "",
+                        created_datetime: new Date() || "",
+                        created_uid: this.uid || "",
+                        is_invited: false,
+                        is_signup_completed: false,
+                        profile_image: '',
+                        roles: this.roles,
+                        organizations: [resorg.organization_id]
+                    }
+
+                    this.restApiService.create('users',secondaryuserObj).subscribe(secondaryusers => {
+
+                    })
+                }
+                
+
+              
+
+              
 
                 this.organizationsService.orgdataStore.org = [];
                 let Metaurl= '';
