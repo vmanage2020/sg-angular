@@ -196,6 +196,10 @@ export class PositionListEditComponent implements OnInit {
    });
   
     }
+
+    onUppercase( event: any){
+      event.target.value = event.target.value.toUpperCase() 
+    }
   
     
     get f() { return this.createpositionForm.controls; }

@@ -36,7 +36,7 @@
                 
                 <div class="form-group mb-3">
                     <label for="abbreviation">Abbreviation<span class="text-danger">*</span></label>
-                    <input type="text" id="abbreviation" name="abbreviation" formControlName="abbreviation" class="form-control" placeholder="Enter abbreviation" [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }"/>
+                    <input type="text" id="abbreviation" name="abbreviation" formControlName="abbreviation" class="form-control" placeholder="Enter abbreviation" (keyup)="onUppercase( $event )" [ngClass]="{ 'is-invalid': submitted && f.abbreviation.errors }"/>
                     <div *ngIf="submitted && f.abbreviation.errors" class="invalid-feedback">
                         <div *ngIf="submitted &&f.abbreviation.errors?.required" class="input-error-msg text-danger">Abbreviation is required.</div>
                         <div *ngIf="submitted &&f.abbreviation.errors?.maxlength" class="input-error-msg text-danger">Abbreviation allows maximum of 6 characters.</div>

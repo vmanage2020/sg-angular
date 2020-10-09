@@ -112,6 +112,11 @@ export class LevelListCreateComponent implements OnInit {
  
    } 
 
+
+  onUppercase( event: any){
+    event.target.value = event.target.value.toUpperCase() 
+  }
+
    
   get f() { return this.createlevelForm.controls; }
 

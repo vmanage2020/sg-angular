@@ -148,6 +148,18 @@ createForm() {
     this.getUserSuffixData = this.getUserSuffixDataArray;
   }
 
+  
+  onLowercase( event: any){
+    event.target.value = event.target.value.toLowerCase() 
+  }
+
+  
+  onUppercase( event: any){
+    event.target.value = event.target.value.toUpperCase() 
+  }
+
+
+
   get f() { return this.createuserForm.controls; }
 
   userAlreadyError = false;

@@ -77,7 +77,7 @@
              
                 <div class="form-group mb-3">
                     <label for="email">Email Address<span class="text-danger">*</span></label>
-                    <input type="text" id="email" name="email" formControlName="email" class="form-control" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+                    <input type="text" id="email" name="email" formControlName="email" class="form-control" placeholder="Enter email address" (keyup)="onLowercase( $event )" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                         <div *ngIf="f.email.errors.required">Email is required.</div>
                         <div *ngIf="f.email.errors?.pattern">Enter a valid email address.</div>

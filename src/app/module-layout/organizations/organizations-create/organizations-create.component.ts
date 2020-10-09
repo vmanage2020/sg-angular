@@ -725,6 +725,14 @@ export class OrganizationsCreateComponent implements OnInit {
     this.getAllTypemetaData = this.getAllTypemetaDataArray;
   }
 
+  onLowercase( event: any){
+    event.target.value = event.target.value.toLowerCase() 
+  }
+
+  
+  onUppercase( event: any){
+    event.target.value = event.target.value.toUpperCase() 
+  }
 
   get f() { return this.createorganizationForm.controls; }
 
