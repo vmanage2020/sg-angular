@@ -2,13 +2,73 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 import { TitleCasePipe } from '@angular/common';
 import * as _ from "lodash";
+
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse, HttpHeaderResponse } from '@angular/common/http';
+import { Observable, of, Subject, throwError, BehaviorSubject } from "rxjs";
+import { retry, catchError, tap, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
+import { RestApiService } from '../../shared/rest-api.services';
+import { get } from 'lodash';
+
 @Injectable({
     providedIn: 'root'
 })
 export class TeamService {
     adminref: any = firebase.firestore();
+    orgId: any;
 
-    constructor(private titlecasePipe: TitleCasePipe, ) { }
+    public _sports = new BehaviorSubject<any[]>([]);
+  public sportsdataStore:{ sports: any } = { sports: [] };
+  readonly sportsconnections = this._sports.asObservable();
+
+  public _users = new BehaviorSubject<any[]>([]);
+  public userssdataStore:{ users: any } = { users: [] };
+  readonly sportsconnections1 = this._users.asObservable();
+
+
+    constructor(private titlecasePipe: TitleCasePipe, private restApiService: RestApiService) { 
+
+        this.orgId = localStorage.getItem('org_id');
+        console.log('orgId',this.orgId);
+        let Metaurl= '';
+        if(this.orgId=='' || this.orgId==1) {
+        Metaurl='sports';
+        } else {
+        Metaurl='organizationsports/'+this.orgId;
+        }
+        this.getSportsListAPI(Metaurl);
+        this.getUsers()
+
+    }
+
+    private handleError(error: HttpErrorResponse) {
+    const message = get(error, 'message') || 'Something bad happened; please try again later.';
+    return throwError(message);
+    }
+
+    getSportsListAPI(url)
+    {
+        this.restApiService.lists(url).subscribe((data: any) => {
+        //console.log('---data----', data)
+        this.sportsdataStore.sports = data;
+        this._sports.next(Object.assign({}, this.sportsdataStore).sports);
+        // console.log(this.dataStore);
+
+        },
+        catchError(this.handleError)
+        );
+    }
+
+    getUsers()
+    {
+        this.restApiService.lists('users').subscribe((data: any) => {
+            this.userssdataStore.users = data;
+            this._users.next(Object.assign({}, this.userssdataStore).users);
+        }, e=>{
+
+        })
+    }
 
 
     /*Create Sport*/

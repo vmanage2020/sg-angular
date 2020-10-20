@@ -15,6 +15,8 @@ import { TeamService } from '../team-service';
 import { BehaviorSubject } from 'rxjs';
 import { Logoinfo } from '../../logoinfo.interface';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-team-create',
   templateUrl: './team-create.component.html',
@@ -69,7 +71,19 @@ export class TeamCreateComponent implements OnInit {
   columnWidth: any = '100';
   roleId: any;
 
-  constructor(private dropDownService: DropdownService, private db: DbService, private notification: NgiNotificationService, public changeRef: ChangeDetectorRef, public cookieService: CookieService, private sharedService: SharedService, private parserFormatter: NgbDateParserFormatter, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, public dataService: DataService, public teamService: TeamService) {
+  constructor(private dropDownService: DropdownService, 
+    private db: DbService, 
+    private notification: NgiNotificationService, 
+    public changeRef: ChangeDetectorRef, 
+    public cookieService: CookieService, 
+    private sharedService: SharedService, 
+    private parserFormatter: NgbDateParserFormatter, 
+    private formBuilder: FormBuilder, 
+    private route: ActivatedRoute, 
+    private router: Router, 
+    public dataService: DataService, 
+    private restApiService: RestApiService,
+    public teamService: TeamService) {
     this.uid = this.cookieService.getCookie('uid');
     if ((this.cookieService.getCookie('admin'))) {
       this.roleId = Constant.admin;
@@ -114,10 +128,35 @@ export class TeamCreateComponent implements OnInit {
     this.getAlignedColumnSize("6");
     this.orgId = localStorage.getItem('org_id')
     if (this.orgId) {
-      this.getSportsByOrg(this.orgId)
+      //this.getSportsByOrg(this.orgId)
     }
     // this.getSportsByOrg(this.orgId)
+    this.getSportsList();   
+   
   }
+
+  getSportsList()
+  {
+    if(this.teamService.sportsdataStore.sports.length > 0)
+    {
+      console.log('---sports list---', this.teamService.sportsdataStore.sports)
+      this.SportsList = this.teamService.sportsdataStore.sports;
+    }else{
+      this.orgId = localStorage.getItem('org_id');
+      console.log('orgId',this.orgId);
+      let Metaurl= '';
+      if(this.orgId=='' || this.orgId==1) {
+      Metaurl='sports';
+      } else {
+      Metaurl='organizationsports/'+this.orgId;
+      }
+      this.restApiService.lists(Metaurl).subscribe( lists => {
+        console.log('---sports list---', lists)
+        this.SportsList = lists
+      })
+    }
+  }
+
   get f() { return this.createTeamForm.controls; }
 
   get playerArr() {
@@ -238,12 +277,234 @@ export class TeamCreateComponent implements OnInit {
       this.columnWidth = Math.floor(100 / columnlength);
     }
   }
+
+  search(nameKey, myArray){
+    
+      for (var i=0; i < myArray.length; i++) {
+          if (myArray[i]['role_id'] === nameKey) {
+              return myArray[i];
+          }
+      }
+  }
+
   async getMembersByOrg(orgId: any, sportId: any, seasonId: any, levelId: any) {
     try {
       if (sportId && seasonId && levelId)
       {
+        
 
-        let queryObj = { 'auth_uid': this.uid, 'organization_id': orgId, 'sport_id': sportId, 'season_id': seasonId, 'level_id': levelId, 'team_id': '' }
+        await this.restApiService.lists('usersbyorg/'+orgId).subscribe( members => {
+          console.log('---member list---', members)
+          if( members.length > 0)
+          {
+
+            members.forEach( mem => {
+              console.log('---test---', mem.roles[0]['role_id'])                
+                if( this.search('player', mem.roles) )
+                {                 
+                  this.playerList.push(mem);
+                }
+                if( this.search('manager', mem.roles) )
+                {
+                  this.managerList.push(mem);
+                }
+                if( this.search('coach', mem.roles) )
+                {
+                  this.coachList.push(mem);
+                }
+            })
+
+            setTimeout(() => {
+              console.log('---this.playerList---', this.playerList)
+              console.log('---this.coachList---', this.coachList)
+              console.log('---this.managerList---', this.managerList)
+
+              if( this.playerList.length !=0 || this.coachList.length != 0 || this.managerList.length != 0)
+              {
+                  if( this.playerList.length >0)
+                  {
+                    this.noPlayer = false;
+                    this.playerList.forEach(element => {
+                      if (element.suffix) {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                        }
+                      }
+                      else {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name
+                        }
+                      }
+                    });
+    
+                    //$('#player_select').empty().multiSelect('refresh');
+                    this.playerList.forEach(element => {
+                      $('#player_select').append($('<option></option>').attr('value', element.id).text(element.name));
+                    });
+                    //$('#player_select').multiSelect('refresh');
+    
+                    console.log('---this.playerList---', this.playerList)
+                  }
+                  else if( this.playerList.length == 0)
+                  {
+                    this.createTeamForm.patchValue({
+                      players_count: 0
+                    })
+                    $('#player_select').empty().multiSelect('refresh');
+                    $('#player_select').multiSelect('addOption', { value: 'No data available', text: 'No data available', index: 0 });
+                    $('#player_select option[value="No data available"]').prop('disabled', true);
+                    $('#player_select').multiSelect('refresh');
+                  }
+
+
+                  if(this.teamService.userssdataStore.users.length > 0)
+                  {
+                    this.allPlayerList = this.teamService.userssdataStore.users;
+                    console.log('---this.allPlayerList swamy---', this.allPlayerList)
+                    if(this.allPlayerList) {
+                    
+                      if (this.allPlayerList.length != 0) {
+                        this.allPlayerList.forEach(element => {
+                          if (element.suffix) {
+                            if (element.middle_initial) {
+                              element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                            } else {
+                              element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                            }
+                          }
+                          else {
+                            if (element.middle_initial) {
+                              element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name
+                            } else {
+                              element['name'] = element.first_name + ' ' + element.last_name
+                            }
+                          }
+            
+                        });
+            
+                      }
+                    }
+                    
+                    
+                    if (this.allPlayerList && this.playerList) {
+
+                      this.allPlayerList = this.allPlayerList.filter(item => !this.playerList.find(o2 => item.id === o2.id))
+                      this.allPlayerListCompare = this.allPlayerList;
+                      console.log('---this.allPlayerList aaaa---', this.allPlayerList)
+                    } else {
+                      this.allPlayerList = this.allPlayerList
+                      this.allPlayerListCompare = this.allPlayerList;
+                      console.log('---this.allPlayerList bbbb---', this.allPlayerList)
+                    }
+
+                  }
+
+                  
+    
+    
+                  if (this.coachList.length != 0) {
+                    this.coachList.forEach(element => {
+                      if (element.suffix) {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                        }
+                      }
+                      else {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name
+                        }
+                      }
+                    });
+                    //$('#coach_select').empty().multiSelect('refresh');
+                    this.coachList.forEach(element => {
+                      $('#coach_select').append($('<option></option>').attr('value', element.id).text(element.name));
+                    });
+                    //$('#coach_select').multiSelect('refresh');
+                    // this.createTeamForm.patchValue({
+                    //   coaches_count: 0
+                    // })
+                  }
+                  else if (this.coachList.length == 0){
+                    this.createTeamForm.patchValue({
+                      coaches_count: 0
+                    })
+                    $('#coach_select').empty().multiSelect('refresh');
+                    $('#coach_select').multiSelect('addOption', { value: 'No data available', text: 'No data available', index: 0 });
+                    $('#coach_select option[value="No data available"]').prop('disabled', true);
+                    $('#coach_select').multiSelect('refresh');
+                  }
+    
+                  if(this.managerList.length != 0) {
+      
+                    this.managerList.forEach(element => {
+                      if (element.suffix) {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                        }
+                      }
+                      else {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name
+                        }
+                      }
+                    });
+                    //$('#manager_select').empty().multiSelect('refresh');
+                    this.managerList.forEach(element => {
+                      $('#manager_select').append($('<option></option>').attr('value', element.id).text(element.name));
+                    });
+                    //$('#manager_select').multiSelect('refresh');
+                  }
+                  else if(this.managerList.length == 0) {
+                    this.createTeamForm.patchValue({
+                      managers_count: 0
+                    })
+                    $('#manager_select').empty().multiSelect('refresh');
+                    $('#manager_select').multiSelect('addOption', { value: 'No data available', text: 'No data available', index: 0 });
+                    $('#manager_select option[value="No data available"]').prop('disabled', true);
+                    $('#manager_select').multiSelect('refresh');
+                  }
+              }else{
+
+                  $('#player_select').empty().multiSelect('refresh');
+                  $('#player_select').multiSelect('addOption', { value: 'No data available', text: 'No data available', index: 0 });
+                  $('#player_select option[value="No data available"]').prop('disabled', true);
+                  $('#player_select').multiSelect('refresh');
+                  $('#coach_select').empty().multiSelect('refresh');
+                  $('#coach_select').multiSelect('addOption', { value: 'No data available', text: 'No data available', index: 0 });
+                  $('#coach_select option[value="No data available"]').prop('disabled', true);
+                  $('#coach_select').multiSelect('refresh');
+                  $('#manager_select').empty().multiSelect('refresh');
+                  $('#manager_select').multiSelect('addOption', { value: 'No data available', text: 'No data available', index: 0 });
+                  $('#manager_select option[value="No data available"]').prop('disabled', true);
+                  $('#manager_select').multiSelect('refresh');
+                  this.playerList = [];
+                  this.coachList = [];
+                  this.managerList = [];
+                  this.allPlayerListCompare = [];
+
+              }
+              
+            }, 1000);
+            
+
+          }
+          
+        })
+
+
+        /*let queryObj = { 'auth_uid': this.uid, 'organization_id': orgId, 'sport_id': sportId, 'season_id': seasonId, 'level_id': levelId, 'team_id': '' }
         let getMembersRes = await this.teamService.getMembersByOrganization(queryObj);
         if (getMembersRes.status) {
           console.log(getMembersRes.data);
@@ -404,7 +665,7 @@ export class TeamCreateComponent implements OnInit {
           this.coachList = [];
           this.managerList = [];
           this.allPlayerListCompare = [];
-        }
+        }*/
       }
 
     } catch (error) {
@@ -592,11 +853,12 @@ export class TeamCreateComponent implements OnInit {
   }
 
 
-  ngAfterViewInit() {
+    ngAfterViewInit() {
     {
       "use strict";
       var FormAdvanced = function () { };
       FormAdvanced.prototype.initMultiSelect = function () {
+       
         if ($('[data-plugin="multiselect"]').length > 0)
           $('[data-plugin="multiselect"]').multiSelect($(this).data());
       }, //initilizing
@@ -628,7 +890,9 @@ export class TeamCreateComponent implements OnInit {
       self.getManagerList(this.choosenManagers);
     });
 
-  }
+  } 
+   
+
   ngAfterContentInit() {
     this.playerArr.removeAt(0);
     this.coachArr.removeAt(0);
@@ -939,7 +1203,22 @@ export class TeamCreateComponent implements OnInit {
       this.getOptionForSport(event.sport_id, form);
     }
   }
+
   getOptionForSport(sport_id, form) {
+    this.removeControls();
+    this.getSeasonBySport(sport_id);
+    this.getPositionBySport(sport_id);
+    
+    this.getLevel(this.uid, this.orgId, this.roleId, sport_id);
+    
+    if (form.value.season_id && form.value.sport_id && form.value.level_id)
+    {
+      //this.Loadingpagetext();
+      this.getMembersByOrg(this.orgId, form.value.sport_id, form.value.season_id, form.value.level_id)
+    }
+  }
+
+  /* getOptionForSport(sport_id, form) {
     this.removeControls();
     this.getSeasonBySport(sport_id);
     this.getPositionBySport(sport_id);
@@ -954,7 +1233,7 @@ export class TeamCreateComponent implements OnInit {
       this.Loadingpagetext();
       this.getMembersByOrg(this.orgId, form.value.sport_id, form.value.season_id, form.value.level_id)
     }
-  }
+  } */
   removeControls() {
     const playerControl = <FormArray>this.createTeamForm.controls['player'];
     for (let i = playerControl.length - 1; i >= 0; i--) {
@@ -968,9 +1247,9 @@ export class TeamCreateComponent implements OnInit {
     for (let i = managerControl.length - 1; i >= 0; i--) {
       managerControl.removeAt(i)
     }
-    $('#player_select').empty().multiSelect('refresh');
-    $('#coach_select').empty().multiSelect('refresh');
-    $('#manager_select').empty().multiSelect('refresh');
+    //$('#player_select').empty().multiSelect('refresh');
+    //$('#coach_select').empty().multiSelect('refresh');
+    //$('#manager_select').empty().multiSelect('refresh');
   }
 
   Loadingpagetext(){
@@ -986,7 +1265,17 @@ export class TeamCreateComponent implements OnInit {
   }
 
   async getSeasonBySport(sportId) {
+
     this.seasonSelect = true;
+    this.seasonList = [];
+    this.restApiService.lists('seasonsbysports/'+sportId).subscribe( res => {
+      this.seasonList = res;
+      this.seasonSelect = false;
+    }, e => {
+      console.log('---seassion API error----', e)
+    })
+
+    /* this.seasonSelect = true;
     this.seasonList = [];
     let seasonDropdownRequest: any = {
       'auth_uid': this.uid, 'organization_id': this.orgId, 'sport_id': sportId
@@ -1005,11 +1294,20 @@ export class TeamCreateComponent implements OnInit {
       console.log(error);
       this.seasonList = [];
       this.seasonSelect = false;
-    }
+    } */
   }
   async getLevel(uid, orgId, roleId, sportId) {
 
+
     this.levelSelect = true;
+    this.levelList = [];
+    this.restApiService.lists('levelsbysports/'+sportId).subscribe( res => {
+      this.levelList = res;
+      this.levelSelect = false;
+    }, e => {
+      console.log('---Level API error----', e)
+    })
+    /* this.levelSelect = true;
     this.levelList = [];
     let getLevelDropdownRequest: any = {
       'auth_uid': uid, 'role_id': roleId, 'sport_id': sportId, 'organization_id': orgId
@@ -1044,10 +1342,20 @@ export class TeamCreateComponent implements OnInit {
       console.log(error);
       this.levelList = [];
       this.levelSelect = false;
-    }
+    } */
   }
+
   async getPositionBySport(sportId) {
+
     this.positionList = [];
+    this.restApiService.lists('positionsbysports/'+sportId).subscribe( res => {
+      this.positionList = res;
+      
+    }, e => {
+      console.log('---Level API error----', e)
+    })
+
+    /* this.positionList = [];
     let positionDropdownRequest: any = {
       'auth_uid': this.uid, 'organization_id': this.orgId, 'sport_id': sportId
     }
@@ -1063,7 +1371,7 @@ export class TeamCreateComponent implements OnInit {
     } catch (error) {
       console.log(error);
       this.positionList = [];
-    }
+    } */
 
   }
 
@@ -1087,7 +1395,7 @@ export class TeamCreateComponent implements OnInit {
       this.seasonValid = false
       if (form.value.season_id && form.value.sport_id && form.value.level_id)
       {
-        this.Loadingpagetext();
+        //this.Loadingpagetext();
         this.getMembersByOrg(this.orgId, form.value.sport_id, form.value.season_id, form.value.level_id)
       }
       // this.Loadingpagetext();
@@ -1126,7 +1434,7 @@ export class TeamCreateComponent implements OnInit {
       this.levelValid = false;
       if (form.value.season_id && form.value.sport_id && event.level_id)
       {
-        this.Loadingpagetext();
+        //this.Loadingpagetext();
         this.getMembersByOrg(this.orgId, form.value.sport_id, form.value.season_id, event.level_id)
       }
     }
