@@ -341,11 +341,11 @@ export class TeamCreateComponent implements OnInit {
                       }
                     });
     
-                    //$('#player_select').empty().multiSelect('refresh');
+                    $('#player_select').empty().multiSelect('refresh');
                     this.playerList.forEach(element => {
                       $('#player_select').append($('<option></option>').attr('value', element.id).text(element.name));
                     });
-                    //$('#player_select').multiSelect('refresh');
+                    $('#player_select').multiSelect('refresh');
     
                     console.log('---this.playerList---', this.playerList)
                   }
@@ -914,7 +914,7 @@ export class TeamCreateComponent implements OnInit {
         this.noPlayer = false;
       }
     })
-    $("select option[value= '" + line.value.user_id + "']").prop("selected", false);
+    $("select option[value= '" + line.value.id + "']").prop("selected", false);
     $('#player_select').multiSelect('refresh');
     this.playerArr.removeAt(playerIndex);
     if (this.playerArr.length !== 0) {
