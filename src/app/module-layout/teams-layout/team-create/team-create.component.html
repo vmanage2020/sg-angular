@@ -83,14 +83,79 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+
+                            
+                            <div class="row" *ngIf="teamplayerList.length>0">
+                                
+                                    <div class="col-3 mt-2 label-border-height-player1 allColMaxWidth1">
+                                        <label class="for-label-req-player1" for="first_name">Player Selection</label>
+                                    </div>
+                                    <div class="col-4 mt-2" id="">
+                                        <ng-select [items]="teamplayerList"
+                                            id="player_select" name="player_select" formControlName="player_select"
+                                        bindLabel="name"
+                                        bindValue="id"
+                                        [multiple]="true"
+                                        placeholder="Select Player Selection"                                        
+                                        [ngClass]="{ 'is-invalid': submitted && f.player_select.errors }">
+                                            </ng-select>
+
+                                            <div *ngIf="submitted && f.player_select.errors" class="invalid-feedback">
+                                                <div *ngIf="f.player_select.errors.required">Player is required.</div>
+                                            </div>
+                                    </div>                                
+                              </div>
+
+                              <div class="row" *ngIf="teamcoachList.length>0">
+                                
+                                <div class="col-3 mt-2 label-border-height-player1 allColMaxWidth1">
+                                    <label class="for-label-req-player1" for="first_name">Coach Selection</label>
+                                </div>
+                                <div class="col-4 mt-2" id="">
+                                    <ng-select [items]="teamcoachList"
+                                        id="coach_select" name="coach_select" formControlName="coach_select"
+                                    bindLabel="name"
+                                    bindValue="id"
+                                    [multiple]="true"
+                                    placeholder="Select Coach Selection"                                        
+                                    [ngClass]="{ 'is-invalid': submitted && f.coach_select.errors }">
+                                        </ng-select>
+
+                                        <div *ngIf="submitted && f.coach_select.errors" class="invalid-feedback">
+                                            <div *ngIf="f.coach_select.errors.required">Coach is required.</div>
+                                        </div>
+                                </div>                                
+                          </div>
+
+                          <div class="row" *ngIf="teammanagerList.length>0">
+                                
+                            <div class="col-3 mt-2 label-border-height-player1 allColMaxWidth1">
+                                <label class="for-label-req-player1" for="first_name">Manager Selection</label>
+                            </div>
+                            <div class="col-4 mt-2" id="">
+                                <ng-select [items]="teammanagerList"
+                                    id="manager_select" name="manager_select" formControlName="manager_select"
+                                bindLabel="name"
+                                bindValue="id"
+                                [multiple]="true"
+                                placeholder="Select Manager Selection"                                        
+                                [ngClass]="{ 'is-invalid': submitted && f.manager_select.errors }">
+                                    </ng-select>
+
+                                    <div *ngIf="submitted && f.manager_select.errors" class="invalid-feedback">
+                                        <div *ngIf="f.manager_select.errors.required">Manager is required.</div>
+                                    </div>
+                            </div>                                
+                      </div>
+
+                            <!--<div class="row">
                                 <div class="col-3 mt-2 label-border-height-player allColMaxWidth">
                                     <label class="for-label-req-player" for="first_name">Player Selection</label>
                                 </div>
                                 <div class="col-4 mt-2" id="playerHeight">
                                     <select multiple="multiple" class="multi-select" id="player_select"
                                         name="player_select" data-plugin="multiselect">
-                                        <!-- <option [value]="player.user_id" *ngFor="let player of playerList;let i = index">{{player.name}}</option> -->
+                                        
                                     </select>
                                     <div *ngIf="selectPlayers" class="input-error-msg text-danger">
                                         Select Player.
@@ -121,10 +186,7 @@
                                                     *ngFor="let line of createTeamForm.get('player')?.controls; let lineIndex = index"
                                                     [formGroupName]="lineIndex">
                                                     <td class="border p-1 pt-2">{{lineIndex+1}}</td>
-                                                    <!-- <td class="border p-1">
-                                                        <input type="text" disabled='true' formControlName="first_name"
-                                                            class="form-control" name="first_name" id="first_name" />
-                                                    </td> -->
+                                                    
 
                                                     <td class="border p-1" id="disabledSelect">
                                                         <ng-select appendTo="body" [items]="playerList" bindLabel="name" *ngIf="createTeamForm?.value.player[lineIndex]?.selectChange === true" 
@@ -270,7 +332,7 @@
                                     </div>
                                    
                                     <a  class="color font-weight-bold edit-icon"  (click)="addPlayer()" *ngIf="allPlayerList?.length !== 0">Add Player</a>
-                                    <!-- <label class="text-danger pl-2" *ngIf="allPlayerList?.length === 0">No Players to add.</label> -->
+                                    
                                 </div>
                             </div>
                             <div class="row">
@@ -280,7 +342,7 @@
                                 <div class="col-4 mt-2" id="coachHeight">
                                     <select multiple="multiple" class="multi-select" id="coach_select"
                                         name="coach_select" data-plugin="multiselect">
-                                        <!-- <option [value]="coach.user_id" *ngFor="let coach of coachList">{{coach.first_name}}</option> -->
+                                       
                                     </select>
                                     <div *ngIf="selectCoaches" class="input-error-msg text-danger">
                                         Select Coach.
@@ -391,7 +453,8 @@
                                               </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
+
                             <ngb-alert type="danger" *ngIf="error && !isSaveUp" class="margin sdkErrorInDownTag mt-2" [dismissible]="true" (click)=closeError()>{{error}}</ngb-alert>
                             <div class="row mt-3">
                                 <button type="submit" class="btn btn-dark waves-effect waves-light"

@@ -71,6 +71,10 @@ export class TeamCreateComponent implements OnInit {
   columnWidth: any = '100';
   roleId: any;
 
+  teamplayerList: any[] = [];
+  teammanagerList: any[] = [];
+  teamcoachList: any[] = [];
+
   constructor(private dropDownService: DropdownService, 
     private db: DbService, 
     private notification: NgiNotificationService, 
@@ -117,6 +121,10 @@ export class TeamCreateComponent implements OnInit {
       players_count: ['', [Validators.required]],
       coaches_count: ['', [Validators.required]],
       managers_count: ['', [Validators.required]],
+      player_select: [null],
+      coach_select: [null],
+      manager_select: [null],
+
       player: this.formBuilder.array([this.player()]),
       coach: this.formBuilder.array([this.coach()]),
       manager: this.formBuilder.array([this.manager()])
@@ -315,9 +323,28 @@ export class TeamCreateComponent implements OnInit {
             })
 
             setTimeout(() => {
-              console.log('---this.playerList---', this.playerList)
-              console.log('---this.coachList---', this.coachList)
-              console.log('---this.managerList---', this.managerList)
+
+                  if( this.playerList.length >0)
+                  {
+                    this.playerList.forEach(element => {
+                      this.teamplayerList.push({name: element.first_name+''+element.last_name, id: element._id});
+                    })
+                  }
+
+                  if (this.coachList.length != 0) {
+                    this.coachList.forEach(element => {
+                      this.teamcoachList.push({name: element.first_name+''+element.last_name, id: element._id});
+                    })
+                  }
+
+                  if(this.managerList.length != 0) {      
+                    this.managerList.forEach(element => {
+                      this.teammanagerList.push({name: element.first_name+''+element.last_name, id: element._id});
+                    })
+                  }
+              
+            }, 1000);
+            /* setTimeout(() => {
 
               if( this.playerList.length !=0 || this.coachList.length != 0 || this.managerList.length != 0)
               {
@@ -496,7 +523,7 @@ export class TeamCreateComponent implements OnInit {
 
               }
               
-            }, 1000);
+            }, 1000); */
             
 
           }
@@ -853,7 +880,7 @@ export class TeamCreateComponent implements OnInit {
   }
 
 
-    ngAfterViewInit() {
+    /* ngAfterViewInit() {
     {
       "use strict";
       var FormAdvanced = function () { };
@@ -897,7 +924,7 @@ export class TeamCreateComponent implements OnInit {
     this.playerArr.removeAt(0);
     this.coachArr.removeAt(0);
     this.managerArr.removeAt(0);
-  }
+  } */
   removePlayer(playerIndex, line) {
     console.log(this.allPlayerList);
     if (this.allPlayerList) {
@@ -1268,7 +1295,7 @@ export class TeamCreateComponent implements OnInit {
 
     this.seasonSelect = true;
     this.seasonList = [];
-    this.restApiService.lists('seasonsbysports/'+sportId).subscribe( res => {
+    this.restApiService.lists('seasonsbysportsandorg/'+sportId+'/'+this.orgId).subscribe( res => {
       this.seasonList = res;
       this.seasonSelect = false;
     }, e => {
@@ -1301,7 +1328,7 @@ export class TeamCreateComponent implements OnInit {
 
     this.levelSelect = true;
     this.levelList = [];
-    this.restApiService.lists('levelsbysports/'+sportId).subscribe( res => {
+    this.restApiService.lists('levelsbysportsandorg/'+sportId+'/'+this.orgId).subscribe( res => {
       this.levelList = res;
       this.levelSelect = false;
     }, e => {

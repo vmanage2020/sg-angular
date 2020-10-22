@@ -25,6 +25,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger'; 
 
+
 @NgModule({
   declarations: [
     AppComponent, AccessDeniedComponent
@@ -42,7 +43,8 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
     // }),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR})  
+    LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR}),
+     
   ],
   providers: [
     // {provide: LocationStrategy, useClass: HashLocationStrategy},
