@@ -266,7 +266,7 @@ export class ImportUserListCreateComponent implements OnInit {
     
     //this.getSports = await this.db.collection('sports').orderBy('sport_id').get();
     //this.getSeasons = await this.db.collection('/organization').doc(this.orgId).collection('/seasons').orderBy('season_id').get();
-    this.restApiService.lists('seasonsbysports/'+ sid).subscribe( seasons => {
+    this.restApiService.lists('seasonsbysportsandorg/'+ sid+'/'+this.orgId).subscribe( seasons => {
       this.getSeasonsArray = seasons
     }, error => {
       console.log('---error API response----')

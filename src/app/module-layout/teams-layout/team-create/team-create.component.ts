@@ -65,6 +65,11 @@ export class TeamCreateComponent implements OnInit {
   coachList: any[] = [];
   positionList: any[] = [];
   levelList: any = [];
+
+  playerMetaList: any[] = [];
+  coachMetaList: any[] = [];
+  managerMetaList: any[] = [];
+
   allPlayerList: any = [];
   noPlayer: boolean = false;
   allPlayerListCompare: any = [];
@@ -74,6 +79,7 @@ export class TeamCreateComponent implements OnInit {
   teamplayerList: any[] = [];
   teammanagerList: any[] = [];
   teamcoachList: any[] = [];
+  showErrorInArr: any = [];
 
   constructor(private dropDownService: DropdownService, 
     private db: DbService, 
@@ -141,6 +147,62 @@ export class TeamCreateComponent implements OnInit {
     // this.getSportsByOrg(this.orgId)
     this.getSportsList();   
    
+  }
+
+
+  onPlayerChange(event: any, form) {
+    if (event.type === "focus") {
+      if (!form.value.country_code) {
+        console.log('----markas touched----')
+        form.controls.sports.markAsTouched();
+      }
+    }
+    if (event.length !== 0 && event.type !== "focus") {
+      this.showErrorInArr = [];
+      //this.isSaveInWhichPosition();
+      console.log('---event----', event)
+      console.log( '--player value ---',this.createTeamForm.controls['player'].value )
+       event.forEach((playerinfo: any) => {
+        let isplayerExist = this.createTeamForm.controls['player'].value.filter(item => item.sport_id === playerinfo.id);
+        console.log('---isplayerExist----', isplayerExist)
+        if (isplayerExist.length !== 0) {
+
+        } else {
+          this.playerArr.push(this.player());
+          /* this.playerArr.at(this.createTeamForm.controls['player'].value.length - 1).patchValue({
+            sport_name: playerinfo.name,
+            sport_id: playerinfo.id,
+            is_national_true: this.randomGenerator() + true,
+            is_state_true: this.randomGenerator() + true,
+            is_national_false: this.randomGenerator() + false,
+            is_state_false: this.randomGenerator() + false,
+          })
+          this.getServiceForNational(form.value.country_code, playerinfo.id);
+          this.getServiceForState(form.value.state, form.value.country_code, playerinfo.id) */
+        }
+      });
+     if (this.createTeamForm.controls['player'].value.length !== event.length) {
+        if (this.createTeamForm.controls['player'].value) {
+          this.createTeamForm.controls['player'].value.forEach((formValue: any, index) => {
+            console.log('---formValue---', formValue)
+            let removeGoverningBody = event.filter(eachSport => eachSport.id === formValue.id);
+            if (removeGoverningBody.length !== 0) {
+
+            } else {
+              this.playerArr.removeAt(index)
+            }
+          });
+        }
+      }
+    } else if (event.type !== "focus" && event.length === 0) {
+
+      console.log('----else sports----')
+      this.playerArr.removeAt(0);
+      form.patchValue({
+        player_select: null
+      })
+    }
+
   }
 
   getSportsList()
@@ -295,23 +357,30 @@ export class TeamCreateComponent implements OnInit {
       }
   }
 
-  async getMembersByOrg(orgId: any, sportId: any, seasonId: any, levelId: any) {
+  getMembersByOrg(orgId: any, sportId: any, seasonId: any, levelId: any) {
     try {
       if (sportId && seasonId && levelId)
       {
         
+        this.restApiService.lists('playersList/'+seasonId+'/'+levelId+'/'+orgId).subscribe( players => {
+          console.log('----players----', players)
+          players.forEach( element => {
+            this.teamplayerList.push({name: element.first_name+''+element.last_name, id: element._id});
+          })
+          
+        });
 
-        await this.restApiService.lists('usersbyorg/'+orgId).subscribe( members => {
+        this.restApiService.lists('usersbyorg/'+orgId).subscribe( members => {
           console.log('---member list---', members)
           if( members.length > 0)
           {
 
             members.forEach( mem => {
               console.log('---test---', mem.roles[0]['role_id'])                
-                if( this.search('player', mem.roles) )
+                /* if( this.search('player', mem.roles) )
                 {                 
                   this.playerList.push(mem);
-                }
+                } */
                 if( this.search('manager', mem.roles) )
                 {
                   this.managerList.push(mem);
@@ -324,12 +393,12 @@ export class TeamCreateComponent implements OnInit {
 
             setTimeout(() => {
 
-                  if( this.playerList.length >0)
+                  /* if( this.playerList.length >0)
                   {
                     this.playerList.forEach(element => {
                       this.teamplayerList.push({name: element.first_name+''+element.last_name, id: element._id});
                     })
-                  }
+                  } */
 
                   if (this.coachList.length != 0) {
                     this.coachList.forEach(element => {
@@ -384,7 +453,7 @@ export class TeamCreateComponent implements OnInit {
                     $('#player_select').empty().multiSelect('refresh');
                     $('#player_select').multiSelect('addOption', { value: 'No data available', text: 'No data available', index: 0 });
                     $('#player_select option[value="No data available"]').prop('disabled', true);
-                    $('#player_select').multiSelect('refresh');
+                    $('#plgetCoachListayer_select').multiSelect('refresh');
                   }
 
 
@@ -513,7 +582,7 @@ export class TeamCreateComponent implements OnInit {
                   $('#coach_select option[value="No data available"]').prop('disabled', true);
                   $('#coach_select').multiSelect('refresh');
                   $('#manager_select').empty().multiSelect('refresh');
-                  $('#manager_select').multiSelect('addOption', { value: 'No data available', text: 'No data available', index: 0 });
+                  $('#managetCoachListger_select').multiSelect('addOption', { value: 'No data available', text: 'No data available', index: 0 });
                   $('#manager_select option[value="No data available"]').prop('disabled', true);
                   $('#manager_select').multiSelect('refresh');
                   this.playerList = [];
@@ -589,8 +658,7 @@ export class TeamCreateComponent implements OnInit {
                   }
                 }
   
-              });
-  
+              });getCoachList
             }
           }
           if (this.allPlayerList && this.playerList) {
@@ -884,7 +952,7 @@ export class TeamCreateComponent implements OnInit {
     {
       "use strict";
       var FormAdvanced = function () { };
-      FormAdvanced.prototype.initMultiSelect = function () {
+      FormAdvanced.prototypgetCoachListe.initMultiSelect = function () {
        
         if ($('[data-plugin="multiselect"]').length > 0)
           $('[data-plugin="multiselect"]').multiSelect($(this).data());
@@ -1235,6 +1303,10 @@ export class TeamCreateComponent implements OnInit {
     this.removeControls();
     this.getSeasonBySport(sport_id);
     this.getPositionBySport(sport_id);
+
+    this.getMetaData('player',sport_id,this.orgId);
+    this.getMetaData('coach',sport_id,this.orgId)
+    this.getMetaData('manager',sport_id,this.orgId)
     
     this.getLevel(this.uid, this.orgId, this.roleId, sport_id);
     
@@ -1243,6 +1315,44 @@ export class TeamCreateComponent implements OnInit {
       //this.Loadingpagetext();
       this.getMembersByOrg(this.orgId, form.value.sport_id, form.value.season_id, form.value.level_id)
     }
+  }
+
+  getMetaData( type, sports, orgid)
+  {
+
+    this.playerMetaList = [];
+    this.coachMetaList = [];
+    this.managerMetaList = [];
+
+    if( type == 'player')
+    {
+      var url = 'playermetadatabysportsorg/'+orgid+'/'+sports
+    }
+    else if( type == 'coach')
+    {
+      var url = 'coachmetadatabysportsorg/'+orgid+'/'+sports
+    }
+    else if( type == 'manager')
+    {
+      var url = 'managermetadatabysportsorg/'+orgid+'/'+sports
+    }
+    this.restApiService.lists(url).subscribe( res => {
+      if( type == 'player')
+      {
+        this.playerMetaList = res;
+      }
+      else if( type == 'coach')
+      {
+        this.coachMetaList = res;
+      }
+      else if( type == 'manager')
+      {
+        this.managerMetaList = res;
+      }
+      
+    }, e => {
+      console.log('---Level API error----', e)
+    })
   }
 
   /* getOptionForSport(sport_id, form) {

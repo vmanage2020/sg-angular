@@ -43,6 +43,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
     // }),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    
     LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR}),
      
   ],

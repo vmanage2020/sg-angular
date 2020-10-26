@@ -29,10 +29,16 @@
                                     <label class="for-label-req" for="first_name">Sport</label>
                                 </div>
                                 <div class="col-4 mt-2" id="customHeight">
-                                    <ng-select [items]="SportsList" formControlName="sport_id" bindLabel="name"
-                                        [loading]="sportSelect" (focus)="selectedSport($event,createTeamForm)"
-                                        [clearable]="false" (change)="selectedSport($event,createTeamForm)"
-                                        bindValue="sport_id" placeholder="Select sport">
+                                    <ng-select 
+                                    [items]="SportsList" 
+                                    formControlName="sport_id" 
+                                    bindLabel="name"
+                                    bindValue="sport_id"
+                                    [loading]="sportSelect"
+                                    (focus)="selectedSport($event,createTeamForm)"
+                                    [clearable]="false" 
+                                    (change)="selectedSport($event,createTeamForm)"
+                                     placeholder="Select sport">
                                     </ng-select>
                                     <div class="input-error-msg text-danger" *ngIf="sportValid">
                                         Select Sport.
@@ -44,10 +50,16 @@
                                     <label class="for-label-req" for="first_name">Season</label>
                                 </div>
                                 <div class="col-4 mt-2" id="customHeight">
-                                    <ng-select [items]="seasonList" formControlName="season_id" bindLabel="season_name" [loading]="seasonSelect"
-                                        (focus)="selectedSeason($event,createTeamForm)" [clearable]="false"
-                                        (change)="selectedSeason($event,createTeamForm)" bindValue="season_id"
-                                        placeholder="Select season">
+                                    <ng-select 
+                                    [items]="seasonList" 
+                                    formControlName="season_id" 
+                                    bindLabel="season_name" 
+                                    bindValue="season_id"
+                                    [loading]="seasonSelect"
+                                    (focus)="selectedSeason($event,createTeamForm)" 
+                                    [clearable]="false"
+                                    (change)="selectedSeason($event,createTeamForm)"
+                                    placeholder="Select season">
                                     </ng-select>
                                     <div class="input-error-msg text-danger" *ngIf="seasonValid">
                                         Select Season.
@@ -60,9 +72,15 @@
                                     <label class="for-label-req" for="first_name">Level</label>
                                 </div>
                                 <div class="col-4 mt-2" id="customHeight">
-                                    <ng-select [items]="levelList" formControlName="level_id" bindLabel="level_name" [loading]="levelSelect"
-                                        [clearable]="false" (change)="selectedLevel($event,createTeamForm)"
-                                        bindValue="level_id" placeholder="Select level">
+                                    <ng-select 
+                                    [items]="levelList" 
+                                    formControlName="level_id" 
+                                    bindLabel="level_name" 
+                                    bindValue="level_id" 
+                                    [loading]="levelSelect"
+                                    [clearable]="false" 
+                                    (change)="selectedLevel($event,createTeamForm)"                                    
+                                    placeholder="Select level">
                                     </ng-select>
                                     <div *ngIf="f.level_id.errors?.required && submitted" class="input-error-msg text-danger">
                                         Select Level.
@@ -74,9 +92,12 @@
                                     <label class="for-label-req" for="first_name">Team Name</label>
                                 </div>
                                 <div class="col-4 mt-2" id="customHeight">
-                                    <input type="text" formControlName="team_name" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.team_name.errors }" name="team_name"
-                                        id="team_name" placeholder="Enter team name" />
+                                    <input type="text" 
+                                    formControlName="team_name" 
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.team_name.errors }" name="team_name"
+                                    id="team_name" 
+                                    placeholder="Enter team name" />
                                     <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
                                         <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
                                         <div *ngIf="f.team_name.errors?.pattern">Only text characters are allowed.</div>
@@ -91,11 +112,15 @@
                                         <label class="for-label-req-player1" for="first_name">Player Selection</label>
                                     </div>
                                     <div class="col-4 mt-2" id="">
-                                        <ng-select [items]="teamplayerList"
-                                            id="player_select" name="player_select" formControlName="player_select"
+                                        <ng-select 
+                                        [items]="teamplayerList"
+                                        id="player_select" 
+                                        name="player_select" 
+                                        formControlName="player_select"
                                         bindLabel="name"
                                         bindValue="id"
                                         [multiple]="true"
+                                        (change)="onPlayerChange($event,createTeamForm)"
                                         placeholder="Select Player Selection"                                        
                                         [ngClass]="{ 'is-invalid': submitted && f.player_select.errors }">
                                             </ng-select>
@@ -104,6 +129,45 @@
                                                 <div *ngIf="f.player_select.errors.required">Player is required.</div>
                                             </div>
                                     </div>                                
+                              </div>
+
+                              
+                              <div class="col-lg-12 row" *ngIf="createTeamForm?.value.player_select != null">
+                                <div class="col-lg-12">
+                                  <div class="col-12 mt-2 heading" style="background-color: #f1f5f7 !important;margin: -5px 0px 0px 0px !important;">
+                                    <h4 style="background-color: #f1f5f7 !important;padding: 10px 0px;margin: 0px;">Player Details</h4>
+                                  </div>
+                                </div>
+                                <div class="col-lg-12 row" style="padding-bottom: 20px;padding-left: 25px;" *ngIf="createTeamForm?.value.player_select != null">
+                                        <div class="col-12 mt-2 mb-0 pl-0">
+                                        <div formArrayName="player">
+                                            <table id="basic-datatable" style="display: table;"
+                                            class="table table-responsive datatables dt-responsive nowrap mb-0">
+                                            <thead class="border">
+                                                <tr>
+                                                <th class="border">S.No</th>
+                                                <th class="border">Name</th>
+                                                <th class="border">Position(s)</th>
+                                                <th class="border">Shoots</th>
+                                                <th class="border">Height</th>
+                                                <th class="border">Weight</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody >
+                                                <tr class="border"
+                                                    *ngFor="let line of createTeamForm.get('player')?.controls; let i = index"
+                                                    [formGroupName]="i">
+                                                    {{i}}
+                                                    <td class="border p-1 pt-2">{{i+1}}</td>
+                                                </tr>
+                                            </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
                               </div>
 
                               <div class="row" *ngIf="teamcoachList.length>0">
@@ -147,6 +211,14 @@
                                     </div>
                             </div>                                
                       </div>
+
+                      
+
+                      <!-- <b>playerMetaList</b> - {{ playerMetaList | json }}
+                      <br>
+                      <b>coachMetaList</b> - {{ coachMetaList | json}}
+                      <br>
+                      <b>managerMetaList</b> - {{ managerMetaList | json}} -->
 
                             <!--<div class="row">
                                 <div class="col-3 mt-2 label-border-height-player allColMaxWidth">
