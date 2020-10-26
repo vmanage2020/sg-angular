@@ -205,6 +205,118 @@ export class TeamCreateComponent implements OnInit {
 
   }
 
+  
+  onCoachChange(event: any, form) {
+    if (event.type === "focus") {
+      if (!form.value.country_code) {
+        console.log('----markas touched----')
+        form.controls.sports.markAsTouched();
+      }
+    }
+    if (event.length !== 0 && event.type !== "focus") {
+      this.showErrorInArr = [];
+      //this.isSaveInWhichPosition();
+      console.log('---event----', event)
+      console.log( '--coach value ---',this.createTeamForm.controls['coach'].value )
+       event.forEach((coachinfo: any) => {
+        let isCoachExist = this.createTeamForm.controls['coach'].value.filter(item => item.sport_id === coachinfo.id);
+        console.log('---isCoachExist----', isCoachExist)
+        if (isCoachExist.length !== 0) {
+
+        } else {
+          this.coachArr.push(this.coach());
+          /* this.playerArr.at(this.createTeamForm.controls['player'].value.length - 1).patchValue({
+            sport_name: playerinfo.name,
+            sport_id: playerinfo.id,
+            is_national_true: this.randomGenerator() + true,
+            is_state_true: this.randomGenerator() + true,
+            is_national_false: this.randomGenerator() + false,
+            is_state_false: this.randomGenerator() + false,
+          })
+          this.getServiceForNational(form.value.country_code, playerinfo.id);
+          this.getServiceForState(form.value.state, form.value.country_code, playerinfo.id) */
+        }
+      });
+     if (this.createTeamForm.controls['coach'].value.length !== event.length) {
+        if (this.createTeamForm.controls['coach'].value) {
+          this.createTeamForm.controls['coach'].value.forEach((formValue: any, index) => {
+            console.log('---formValue---', formValue)
+            let removeGoverningBody = event.filter(eachSport => eachSport.id === formValue.id);
+            if (removeGoverningBody.length !== 0) {
+
+            } else {
+              this.coachArr.removeAt(index)
+            }
+          });
+        }
+      }
+    } else if (event.type !== "focus" && event.length === 0) {
+
+      console.log('----else sports----')
+      this.coachArr.removeAt(0);
+      form.patchValue({
+        coach_select: null
+      })
+    }
+
+  }
+
+  
+  onManagerChange(event: any, form) {
+    if (event.type === "focus") {
+      if (!form.value.country_code) {
+        console.log('----markas touched----')
+        form.controls.sports.markAsTouched();
+      }
+    }
+    if (event.length !== 0 && event.type !== "focus") {
+      this.showErrorInArr = [];
+      //this.isSaveInWhichPosition();
+      console.log('---event----', event)
+      console.log( '--manager value ---',this.createTeamForm.controls['manager'].value )
+       event.forEach((managerinfo: any) => {
+        let ismanagerExist = this.createTeamForm.controls['manager'].value.filter(item => item.sport_id === managerinfo.id);
+        console.log('---ismanagerExist----', ismanagerExist)
+        if (ismanagerExist.length !== 0) {
+
+        } else {
+          this.managerArr.push(this.manager());
+          /* this.playerArr.at(this.createTeamForm.controls['player'].value.length - 1).patchValue({
+            sport_name: playerinfo.name,
+            sport_id: playerinfo.id,
+            is_national_true: this.randomGenerator() + true,
+            is_state_true: this.randomGenerator() + true,
+            is_national_false: this.randomGenerator() + false,
+            is_state_false: this.randomGenerator() + false,
+          })
+          this.getServiceForNational(form.value.country_code, playerinfo.id);
+          this.getServiceForState(form.value.state, form.value.country_code, playerinfo.id) */
+        }
+      });
+     if (this.createTeamForm.controls['manager'].value.length !== event.length) {
+        if (this.createTeamForm.controls['manager'].value) {
+          this.createTeamForm.controls['manager'].value.forEach((formValue: any, index) => {
+            console.log('---formValue---', formValue)
+            let removeGoverningBody = event.filter(eachSport => eachSport.id === formValue.id);
+            if (removeGoverningBody.length !== 0) {
+
+            } else {
+              this.managerArr.removeAt(index)
+            }
+          });
+        }
+      }
+    } else if (event.type !== "focus" && event.length === 0) {
+
+      console.log('----else sports----')
+      this.managerArr.removeAt(0);
+      form.patchValue({
+        manager_select: null
+      })
+    }
+
+  }
+
   getSportsList()
   {
     if(this.teamService.sportsdataStore.sports.length > 0)
