@@ -85,6 +85,11 @@ export class TeamCreateComponent implements OnInit {
   teamcoachList: any[] = [];
   showErrorInArr: any = [];
 
+
+  playerMetaData: any[] = [];
+  coachMetaData: any[] = [];
+  managerMetaData: any[] = [];
+
   constructor(private dropDownService: DropdownService, 
     private db: DbService, 
     private notification: NgiNotificationService, 
@@ -151,6 +156,93 @@ export class TeamCreateComponent implements OnInit {
     // this.getSportsByOrg(this.orgId)
     this.getSportsList();   
    
+    this.playerMetaData = [{
+    "ID": "10001",
+    "Key": "playing",
+    "Name": "Playing",
+    "Type": "Drop Down",
+    "Value": ["1+ Years","3+ Years","5+ Years"]
+    },
+    {
+    "ID": "10002",
+    "Key": "alsostudent",
+    "Name": "Also Student",
+    "Type": "Radio button",
+    "Value": ["Yes","No"] 
+    },
+    {
+    "ID": "10003",
+    "Key": "foodtype",
+    "Name": "Food Type",
+    "Type": "Check box",
+    "Value": ["Veg","Non Veg","Egg Only"] 
+    },
+    {
+    "ID": "10004",
+    "Key": "hoppy",
+    "Name": "Hoppy",
+    "Type": "Text Field",
+    "Value": [""] 
+    }]
+
+    this.coachMetaData = [{
+    "ID": "10001",
+    "Key": "played",
+    "Name": "Played",
+    "Type": "Drop Down",
+    "Value": ["5+ Years","10+ Years","25+ Years"]
+    },
+    {
+    "ID": "10002",
+    "Key": "married",
+    "Name": "Married",
+    "Type": "Radio button",
+    "Value": ["Yes","No"] 
+    },
+    {
+    "ID": "10003",
+    "Key": "foodtype",
+    "Name": "Food Type",
+    "Type": "Check box",
+    "Value": ["Veg","Non Veg","Egg Only"] 
+    },
+    {
+    "ID": "10004",
+    "Key": "hoppy",
+    "Name": "Hoppy",
+    "Type": "Text Field",
+    "Value": [""] 
+    }]
+
+    this.managerMetaData = [{
+    "ID": "10001",
+    "Key": "experience",
+    "Name": "Experience",
+    "Type": "Drop Down",
+    "Value": ["5+ Years","10+ Years","25+ Years"]
+    },
+    {
+    "ID": "10002",
+    "Key": "alsoplayer",
+    "Name": "Also Player",
+    "Type": "Radio button",
+    "Value": ["Yes","No"] 
+    },
+    {
+    "ID": "10003",
+    "Key": "foodtype",
+    "Name": "Food Type",
+    "Type": "Check box",
+    "Value": ["Veg","Non Veg","Egg Only"] 
+    },
+    {
+    "ID": "10004",
+    "Key": "hoppy",
+    "Name": "Hoppy",
+    "Type": "Text Field",
+    "Value": [""] 
+    }]
+
   }
 
   onPlayerChange(event: any, form) {
