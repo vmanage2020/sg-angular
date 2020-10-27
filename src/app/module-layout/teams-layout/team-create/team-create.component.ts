@@ -51,6 +51,10 @@ export class TeamCreateComponent implements OnInit {
     { value: "ft", name: 'in', weight: 'lbs' },
     { value: "m", name: 'cm', weight: 'kg' },
   ]
+  choosenPlayersArr: any = [];
+  choosenCoachesArr: any = [];
+  choosenManagersArr: any = [];
+
   choosenPlayers: any;
   selectPlayers: boolean = false;
   choosenCoaches: any;
@@ -149,8 +153,79 @@ export class TeamCreateComponent implements OnInit {
    
   }
 
-
   onPlayerChange(event: any, form) {
+    this.choosenPlayersArr = [];
+    if (event.type === "focus") {
+      console.log("FOCUS");
+    }
+    if (event.length !== 0 && event.type !== "focus") {
+      event.forEach((playerinfo: any) => {
+        this.choosenPlayersArr.push(playerinfo.id);
+      });
+      console.log("choosenPlayers", this.choosenPlayersArr);
+      this.choosenPlayers = this.choosenPlayersArr;
+      this.getPlayerList(this.choosenPlayers);
+    } else if (event.type !== "focus" && event.length === 0) {
+      console.log('----empty player----')
+      /*this.playerArr.removeAt(0);
+      form.patchValue({
+        player_select: null
+      })*/      
+      this.choosenPlayers = [];
+      this.getPlayerList(this.choosenPlayers);
+    }
+  }
+
+
+  onCoachChange(event: any, form) {
+    this.choosenCoachesArr = [];
+    if (event.type === "focus") {
+      console.log("FOCUS");
+    }
+    if (event.length !== 0 && event.type !== "focus") {
+      event.forEach((coachinfo: any) => {
+        this.choosenCoachesArr.push(coachinfo.id);
+      });
+      console.log("choosenCoaches", this.choosenCoachesArr);
+      this.choosenCoaches = this.choosenCoachesArr;
+      this.getCoachList(this.choosenCoaches);
+    } else if (event.type !== "focus" && event.length === 0) {
+      console.log('----empty coach----')
+      /*this.coachArr.removeAt(0);
+      form.patchValue({
+        coach_select: null
+      })*/
+      this.choosenCoaches = [];
+      this.getCoachList(this.choosenCoaches);
+    }  
+  }
+
+
+  onManagerChange(event: any, form) {
+    this.choosenManagersArr = [];
+    if (event.type === "focus") {
+      console.log("FOCUS");
+    }
+    if (event.length !== 0 && event.type !== "focus") {
+      event.forEach((managerinfo: any) => {
+        this.choosenManagersArr.push(managerinfo.id);
+      });
+      console.log("choosenManagers", this.choosenManagersArr);
+      this.choosenManagers = this.choosenManagersArr;
+      this.getManagerList(this.choosenManagers);
+    } else if (event.type !== "focus" && event.length === 0) {
+      console.log('----empty manager----')
+      /*this.managerArr.removeAt(0);
+      form.patchValue({
+        manager_select: null
+      })*/
+      this.choosenManagers = [];
+      this.getManagerList(this.choosenManagers);
+    }  
+  }
+
+
+  onPlayerChangeXX(event: any, form) {
     if (event.type === "focus") {
       if (!form.value.country_code) {
         console.log('----markas touched----')
@@ -204,9 +279,8 @@ export class TeamCreateComponent implements OnInit {
     }
 
   }
-
-  
-  onCoachChange(event: any, form) {
+    
+  onCoachChangeXX(event: any, form) {
     if (event.type === "focus") {
       if (!form.value.country_code) {
         console.log('----markas touched----')
@@ -225,6 +299,8 @@ export class TeamCreateComponent implements OnInit {
 
         } else {
           this.coachArr.push(this.coach());
+          this.coachArr.at(this.createTeamForm.controls['coach'].value.length - 1).patchValue({})
+          
           /* this.playerArr.at(this.createTeamForm.controls['player'].value.length - 1).patchValue({
             sport_name: playerinfo.name,
             sport_id: playerinfo.id,
@@ -237,6 +313,7 @@ export class TeamCreateComponent implements OnInit {
           this.getServiceForState(form.value.state, form.value.country_code, playerinfo.id) */
         }
       });
+
      if (this.createTeamForm.controls['coach'].value.length !== event.length) {
         if (this.createTeamForm.controls['coach'].value) {
           this.createTeamForm.controls['coach'].value.forEach((formValue: any, index) => {
@@ -261,8 +338,7 @@ export class TeamCreateComponent implements OnInit {
 
   }
 
-  
-  onManagerChange(event: any, form) {
+  onManagerChangeXX(event: any, form) {
     if (event.type === "focus") {
       if (!form.value.country_code) {
         console.log('----markas touched----')
@@ -316,6 +392,61 @@ export class TeamCreateComponent implements OnInit {
     }
 
   }
+
+  /*
+  OnSportChange(event: any, form) {
+    if (event.type === "focus") {
+      if (!form.value.country_code) {
+        console.log('----markas touched----')
+        form.controls.sports.markAsTouched();
+      }
+    }
+    if (event.length !== 0 && event.type !== "focus") {
+      this.showErrorInArr = [];
+      //this.isSaveInWhichPosition();
+      console.log('---event----', event)
+      console.log( '--governing_body_info value ---',this.createorganizationForm.controls['governing_body_info'].value )
+       event.forEach((sportInfo: any) => {
+        let isSportExist = this.createorganizationForm.controls['governing_body_info'].value.filter(item => item.sport_id === sportInfo.sport_id);
+        if (isSportExist.length !== 0) {
+
+        } else {
+          this.governingBodyArr.push(this.getGoverningInfo());
+          this.governingBodyArr.at(this.createorganizationForm.controls['governing_body_info'].value.length - 1).patchValue({
+            sport_name: sportInfo.name,
+            sport_id: sportInfo.sport_id,
+            is_national_true: this.randomGenerator() + true,
+            is_state_true: this.randomGenerator() + true,
+            is_national_false: this.randomGenerator() + false,
+            is_state_false: this.randomGenerator() + false,
+          })
+          this.getServiceForNational(form.value.country_code, sportInfo.sport_id);
+          this.getServiceForState(form.value.state, form.value.country_code, sportInfo.sport_id)
+        }
+      });
+     if (this.createorganizationForm.controls['governing_body_info'].value.length !== event.length) {
+        if (this.createorganizationForm.controls['governing_body_info'].value) {
+          this.createorganizationForm.controls['governing_body_info'].value.forEach((formValue: any, index) => {
+            let removeGoverningBody = event.filter(eachSport => eachSport.sport_id === formValue.sport_id);
+            if (removeGoverningBody.length !== 0) {
+
+            } else {
+              this.governingBodyArr.removeAt(index)
+            }
+          });
+        }
+      }
+    } else if (event.type !== "focus" && event.length === 0) {
+
+      console.log('----else sports----')
+      this.governingBodyArr.removeAt(0);
+      form.patchValue({
+        sports: ''
+      })
+    }
+
+  }
+  */
 
   getSportsList()
   {
@@ -477,8 +608,53 @@ export class TeamCreateComponent implements OnInit {
         this.restApiService.lists('playersList/'+seasonId+'/'+levelId+'/'+orgId).subscribe( players => {
           console.log('----players----', players)
           players.forEach( element => {
-            this.teamplayerList.push({name: element.first_name+''+element.last_name, id: element._id});
+            this.teamplayerList.push({name: element.first_name+' '+element.last_name, id: element._id});
           })
+
+          this.playerList = players;
+          this.playerList.forEach(element => {
+            if (element.suffix) {
+              if (element.middle_initial) {
+                element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                element['user_id'] = element._id;
+              } else {
+                element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                element['user_id'] = element._id;
+              }
+            }
+            else {
+              if (element.middle_initial) {
+                element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name;
+                element['user_id'] = element._id;
+              } else {
+                element['name'] = element.first_name + ' ' + element.last_name;
+                element['user_id'] = element._id;
+              }
+            }
+          });
+
+          this.allPlayerList = players;
+          this.allPlayerList.forEach(element => {
+            if (element.suffix) {
+              if (element.middle_initial) {
+                element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                element['user_id'] = element._id;
+              } else {
+                element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                element['user_id'] = element._id;
+              }
+            }
+            else {
+              if (element.middle_initial) {
+                element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name;
+                element['user_id'] = element._id;
+              } else {
+                element['name'] = element.first_name + ' ' + element.last_name;
+                element['user_id'] = element._id;
+              }
+            }
+
+          });
           
         });
 
@@ -514,14 +690,50 @@ export class TeamCreateComponent implements OnInit {
 
                   if (this.coachList.length != 0) {
                     this.coachList.forEach(element => {
-                      this.teamcoachList.push({name: element.first_name+''+element.last_name, id: element._id});
+                      this.teamcoachList.push({name: element.first_name+' '+element.last_name, id: element._id});
                     })
+
+                    this.coachList.forEach(element => {
+                      if (element.suffix) {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                        }
+                      }
+                      else {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name
+                        }
+                      }
+                    });
+
                   }
 
                   if(this.managerList.length != 0) {      
                     this.managerList.forEach(element => {
-                      this.teammanagerList.push({name: element.first_name+''+element.last_name, id: element._id});
+                      this.teammanagerList.push({name: element.first_name+' '+element.last_name, id: element._id});
                     })
+
+                    this.managerList.forEach(element => {
+                      if (element.suffix) {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                        }
+                      }
+                      else {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name
+                        }
+                      }
+                    });
+
                   }
               
             }, 1000);
@@ -1060,11 +1272,11 @@ export class TeamCreateComponent implements OnInit {
   }
 
 
-    /* ngAfterViewInit() {
+     ngAfterViewInit() {
     {
       "use strict";
       var FormAdvanced = function () { };
-      FormAdvanced.prototypgetCoachListe.initMultiSelect = function () {
+      FormAdvanced.prototype.initMultiSelect = function () {
        
         if ($('[data-plugin="multiselect"]').length > 0)
           $('[data-plugin="multiselect"]').multiSelect($(this).data());
@@ -1082,6 +1294,7 @@ export class TeamCreateComponent implements OnInit {
     }
     let self = this; // store here
     $('#player_select').on('change', function () {
+      console.log("player_select");
       this.choosenPlayers = $(this).val();
       // this.changePlayerSelect=true;
       self.getPlayerList(this.choosenPlayers);
@@ -1089,10 +1302,12 @@ export class TeamCreateComponent implements OnInit {
 
 
     $('#coach_select').on('change', function () {
+      console.log("coach_select");
       this.choosenCoaches = $(this).val();
       self.getCoachList(this.choosenCoaches);
     });
     $('#manager_select').on('change', function () {
+      console.log("manager_select");
       this.choosenManagers = $(this).val();
       self.getManagerList(this.choosenManagers);
     });
@@ -1104,7 +1319,8 @@ export class TeamCreateComponent implements OnInit {
     this.playerArr.removeAt(0);
     this.coachArr.removeAt(0);
     this.managerArr.removeAt(0);
-  } */
+  } 
+
   removePlayer(playerIndex, line) {
     console.log(this.allPlayerList);
     if (this.allPlayerList) {
@@ -1180,11 +1396,16 @@ export class TeamCreateComponent implements OnInit {
         if (this.createTeamForm.controls['player'].value.length === 0) {
           console.log(this.createTeamForm.controls['player'].value.length, "length0")
           this.playerArr.push(this.player())
+          console.log("this.playerList",this.playerList);
+          console.log("selected_player",selected_player);
+          
           let filteredValue = this.playerList.filter(
             item => item.user_id === selected_player);
+            console.log(filteredValue);
+
           this.playerArr.patchValue(filteredValue);
-          this.disableCol(this.playerArr, 0, 'first_name')
-          this.increaseHeight("Player", "label-player");
+          //this.disableCol(this.playerArr, 0, 'first_name')
+          //this.increaseHeight("Player", "label-player");
           this.playerArr.at(0).patchValue({
             selectChange: true,
           })
@@ -1215,8 +1436,8 @@ export class TeamCreateComponent implements OnInit {
             this.createTeamForm.patchValue({
               players_count: this.createTeamForm.controls['player'].value.length
             })
-            this.disableCol(this.playerArr, length, 'first_name')
-            this.increaseHeight("Player", "label-player");
+            //this.disableCol(this.playerArr, length, 'first_name')
+            //this.increaseHeight("Player", "label-player");
           }
           console.log(this.createTeamForm)
         }
@@ -1277,7 +1498,7 @@ export class TeamCreateComponent implements OnInit {
   getCoachList(coachArr) {
 
     this.selectCoaches = false
-    // console.log(playerArr);
+     console.log(coachArr);
     this.createTeamForm.patchValue({
       coaches_count: coachArr.length
     })
@@ -1290,7 +1511,7 @@ export class TeamCreateComponent implements OnInit {
           this.coachArr.push(this.coach())
           let filteredValue = this.coachList.filter(
             item => item.user_id === selected_player);
-          // console.log(filteredValue)
+          //console.log(filteredValue)
 
           this.coachArr.patchValue(filteredValue);
           this.disableCol(this.coachArr, 0, 'first_name')
@@ -1299,7 +1520,7 @@ export class TeamCreateComponent implements OnInit {
         else {
           // console.log(this.createTeamForm.controls['player'].value)
           let filteredItem = this.createTeamForm.controls['coach'].value.filter(item => item.user_id === selected_player);
-          // console.log(filteredItem)
+          //console.log(filteredItem)
 
           if (filteredItem.length != 0) {
 
@@ -1348,7 +1569,7 @@ export class TeamCreateComponent implements OnInit {
           this.managerArr.push(this.manager())
           let filteredValue = this.managerList.filter(
             item => item.user_id === selected_player);
-          // console.log(filteredValue)
+          //console.log(filteredValue)
 
           this.managerArr.patchValue(filteredValue);
           this.disableCol(this.managerArr, 0, 'first_name')
@@ -1357,7 +1578,7 @@ export class TeamCreateComponent implements OnInit {
         else {
           // console.log(this.createTeamForm.controls['player'].value)
           let filteredItem = this.createTeamForm.controls['manager'].value.filter(item => item.user_id === selected_player);
-          // console.log(filteredItem)
+          //console.log(filteredItem)
 
           if (filteredItem.length != 0) {
 

@@ -327,7 +327,7 @@
                                                  </div>
                                                     </td>
                                                     <td class="noBorder">
-                                                        <a  class="color font-weight-bold edit-icon" (click)="removePlayer(lineIndex,line)">Remove</a>
+                                                        <!--<a  class="color font-weight-bold edit-icon" (click)="removePlayer(lineIndex,line)">Remove</a>-->
                                                     </td>
                                                  </tr>
                                              </tbody>
@@ -336,7 +336,7 @@
                                         </div>
                                     </div>
                                    
-                                    <a  class="color font-weight-bold edit-icon"  (click)="addPlayer()" *ngIf="allPlayerList?.length !== 0">Add Player</a>
+                                    <!--<a  class="color font-weight-bold edit-icon"  (click)="addPlayer()" *ngIf="allPlayerList?.length !== 0">Add Player</a>-->
                                     
                                 </div>
                             </div>
@@ -379,7 +379,7 @@
                                                 <tr class="border" *ngFor="let coachInfo of createTeamForm.get('coach')?.controls; let lineIndex = index" [formGroupName]="lineIndex"  >
                                                     
                                                     <td class="border p-1">
-                                                        <ng-select [items]="teamcoachList" bindLabel="name"
+                                                        <ng-select [items]="coachList" bindLabel="name"
                                                         [clearable]="false" 
                                                         formControlName="first_name"
                                                         [clearSearchOnAdd]="true"
@@ -403,7 +403,7 @@
                                                           
                                                         </td>
                                                         <td class="noBorder">
-                                                                <a  class="color font-weight-bold edit-icon" (click)="removeCoach(lineIndex,coachInfo)">Remove</a>
+                                                                <!--<a  class="color font-weight-bold edit-icon" (click)="removeCoach(lineIndex,coachInfo)">Remove</a>-->
                                                             </td>
                                                   
                                                 </tr>
@@ -455,7 +455,7 @@
                                                 <td class="border p-1">
 
                                                     
-                                                    <ng-select [items]="teammanagerList" bindLabel="name"
+                                                    <ng-select [items]="managerList" bindLabel="name"
                                                     [clearable]="false" 
                                                     formControlName="first_name"
                                                     [clearSearchOnAdd]="true"
@@ -468,7 +468,7 @@
                                                     </td>
                                                 
                                                     <td class="noBorder">
-                                                            <a  class="color font-weight-bold edit-icon" (click)="removeManager(lineIndex,managerInfo)">Remove</a>
+                                                            <!--<a  class="color font-weight-bold edit-icon" (click)="removeManager(lineIndex,managerInfo)">Remove</a>-->
                                                         </td>
                                             </tr>
                                         </tbody>
