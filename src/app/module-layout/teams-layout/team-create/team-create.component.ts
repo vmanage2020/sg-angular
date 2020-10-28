@@ -120,6 +120,8 @@ export class TeamCreateComponent implements OnInit {
         }
       }
     })
+
+    
   }
 
   ngOnInit() {
@@ -242,6 +244,35 @@ export class TeamCreateComponent implements OnInit {
     "Type": "Text Field",
     "Value": [""] 
     }]
+
+  $('#player_select').multiSelect();
+  $('#coach_select').multiSelect();
+  $('#manager_select').multiSelect();
+
+
+  }
+
+  ngAfterViewInit() {
+    {
+
+    let self = this; // store here  
+    $('#player_select').on('change', function () {
+      console.log("player_select");
+      this.choosenPlayers = $(this).val();
+      self.getPlayerList(this.choosenPlayers);
+    });
+    $('#coach_select').on('change', function () {
+      console.log("coach_select");
+      this.choosenCoaches = $(this).val();
+      self.getCoachList(this.choosenCoaches);
+    });
+    $('#manager_select').on('change', function () {
+      console.log("manager_select");
+      this.choosenManagers = $(this).val();
+      self.getManagerList(this.choosenManagers);
+    });
+
+    }
 
   }
 
@@ -694,6 +725,7 @@ export class TeamCreateComponent implements OnInit {
 
   getMembersByOrg(orgId: any, sportId: any, seasonId: any, levelId: any) {
     try {
+
       if (sportId && seasonId && levelId)
       {
         
@@ -828,6 +860,15 @@ export class TeamCreateComponent implements OnInit {
 
                   }
               
+            }, 1000);
+
+            setTimeout(() => {
+    
+            $('#player_select').multiSelect('refresh');
+            $('#coach_select').multiSelect('refresh');
+            $('#manager_select').multiSelect('refresh');
+            
+
             }, 1000);
             /* setTimeout(() => {
 
@@ -1363,7 +1404,8 @@ export class TeamCreateComponent implements OnInit {
 
   }
 
-
+  
+/*
      ngAfterViewInit() {
     {
       "use strict";
@@ -1412,6 +1454,7 @@ export class TeamCreateComponent implements OnInit {
     this.coachArr.removeAt(0);
     this.managerArr.removeAt(0);
   } 
+*/
 
   removePlayer(playerIndex, line) {
     console.log(this.allPlayerList);
@@ -2000,6 +2043,8 @@ export class TeamCreateComponent implements OnInit {
         this.getMembersByOrg(this.orgId, form.value.sport_id, form.value.season_id, event.level_id)
       }
     }
+
+
   }
   saveNew(value: any) {
     if (value === "up") {
