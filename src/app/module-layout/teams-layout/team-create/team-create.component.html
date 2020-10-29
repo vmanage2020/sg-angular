@@ -166,7 +166,7 @@
                                                         <th class="border" [ngStyle]="{'width': this.columnWidth - 3 +'%' }">Shoots</th>
                                                         <th class="border" [ngStyle]="{'width': this.columnWidth+ 17 +'%' }">Height</th>
                                                         <th class="border" [ngStyle]="{'width': this.columnWidth+'%' }">Weight</th>
-                                                        <th class="border" [ngStyle]="{'width': this.columnWidth+'%' }" *ngFor="let playerMetaDataItem of playerMetaData; index as i;">
+                                                        <th class="border" [ngStyle]="{'width': this.columnWidth+'%' }" *ngFor="let playerMetaDataItem of playerMetaList; index as i;">
                                                             {{playerMetaDataItem.Name}}
                                                          </th>
                                                 </tr>
@@ -311,53 +311,57 @@
                                                    </div>
                                                  </div>
                                                     </td>
-                                                    <td class="border p-1" *ngFor="let playerMetaDataItem of playerMetaData; index as i;">
-  
-                                                        <div *ngIf="playerMetaDataItem.Type === 'Drop Down'">
-
-                                                                    <ng-select [items]="playerMetaDataItem.Value"
-                                                                    formControlName="playerMetaDataItem.Key"
+                                                    
+                                                    <ng-container *ngIf="playerMetaList.length>0">
+                                                        <td class="border p-1" *ngFor="let playerMetaDataItem of playerMetaList; index as i;">
+                                                            
+                                                            <div *ngIf="playerMetaDataItem.Type === 'Drop Down'">
+    
+                                                                        <ng-select [items]="playerMetaDataItem.Value"
+                                                                        
+                                                                        id="playerMetaDataItem.Key"
+                                                                        name="playerMetaDataItem.Key"
+                                                                        placeholder="Select Item">
+                                                                        </ng-select>
+    
+                                                            </div>
+                                                            <div *ngIf="playerMetaDataItem.Type === 'Radio button'">
+    
+                                                                <label style="width: 150px;"  *ngFor="let itemvalue of playerMetaDataItem.Value; let i = index">
+                                                                    <input type="radio" 
+                                                                    
                                                                     id="playerMetaDataItem.Key"
                                                                     name="playerMetaDataItem.Key"
-                                                                    placeholder="Select Item">
-                                                                    </ng-select>
-
-                                                        </div>
-                                                        <div *ngIf="playerMetaDataItem.Type === 'Radio button'">
-
-                                                            <label style="width: 150px;" formArrayName="orders" *ngFor="let itemvalue of playerMetaDataItem.Value; let i = index">
-                                                                <input type="radio" 
-                                                                formControlName="playerMetaDataItem.Key"
-                                                                id="playerMetaDataItem.Key"
-                                                                name="playerMetaDataItem.Key"
-                                                                value="itemvalue" [formControlName]="i">
-                                                                {{itemvalue}}
-                                                            </label> 
-
-                                                        </div>
-                                                        <div *ngIf="playerMetaDataItem.Type === 'Check box'">
-
-                                                                <label style="width: 150px;" formArrayName="orders" *ngFor="let itemvalue of playerMetaDataItem.Value; let i = index">
-                                                                    <input type="checkbox" 
-                                                                    formControlName="playerMetaDataItem.Key"
-                                                                    id="playerMetaDataItem.Key"
-                                                                    name="playerMetaDataItem.Key"
-                                                                    value="itemvalue" [formControlName]="i">
+                                                                    value="itemvalue" >
                                                                     {{itemvalue}}
-                                                                </label>
- 
-                                                        </div>
-                                                        <div *ngIf="playerMetaDataItem.Type === 'Text Field'">
-
-                                                                    <input type="text"
-                                                                    formControlName="playerMetaDataItem.Key"
-                                                                    id="playerMetaDataItem.Key"
-                                                                    name="playerMetaDataItem.Key"
-                                                                    placeholder="Enter Value" />
-
-                                                        </div>
-
-                                                     </td>
+                                                                </label> 
+    
+                                                            </div>
+                                                            <div *ngIf="playerMetaDataItem.Type === 'Check box'">
+    
+                                                                    <label style="width: 150px;"  *ngFor="let itemvalue of playerMetaDataItem.Value; let i = index">
+                                                                        <input type="checkbox" 
+                                                                        
+                                                                        id="playerMetaDataItem.Key"
+                                                                        name="playerMetaDataItem.Key"
+                                                                        value="itemvalue" >
+                                                                        {{itemvalue}}
+                                                                    </label>
+     
+                                                            </div>
+                                                            <div *ngIf="playerMetaDataItem.Type === 'Text Field'">
+    
+                                                                        <input type="text"
+                                                                        
+                                                                        id="playerMetaDataItem.Key"
+                                                                        name="playerMetaDataItem.Key"
+                                                                        placeholder="Enter Value" />
+    
+                                                            </div>
+    
+                                                         </td>
+                                                    </ng-container>
+                                                    
                                                     <td class="noBorder">
                                                         <!--<a  class="color font-weight-bold edit-icon" (click)="removePlayer(lineIndex,line)">Remove</a>-->
                                                     </td>
@@ -414,7 +418,7 @@
                                             <tr>
                                                 <th class="border">Name</th>
                                                 <th class="border">Title</th>
-                                                <th style="width: 150px;" *ngFor="let coachMetaDataItem of coachMetaData; index as i;">
+                                                <th style="width: 150px;" *ngFor="let coachMetaDataItem of coachMetaList; index as i;">
                                                     {{coachMetaDataItem.Name}}
                                                  </th>
                                             </tr>
@@ -447,53 +451,56 @@
                                                           
                                                         </td>
                                                          
-                                                    <td class="border p-1" *ngFor="let coachMetaDataItem of coachMetaData; index as i;">
+                                                        <ng-container *ngIf="coachMetaList.length>0">
+                                                            <td class="border p-1" *ngFor="let coachMetaDataItem of coachMetaList; index as i;">
   
-                                                        <div *ngIf="coachMetaDataItem.Type === 'Drop Down'">
-
-                                                                    <ng-select [items]="coachMetaDataItem.Value"
-                                                                    formControlName="coachMetaDataItem.Key"
-                                                                    id="coachMetaDataItem.Key"
-                                                                    name="coachMetaDataItem.Key"
-                                                                    placeholder="Select Item">
-                                                                    </ng-select>
-
-                                                        </div>
-                                                        <div *ngIf="coachMetaDataItem.Type === 'Radio button'">
-
-                                                            <label style="width: 150px;" formArrayName="orders" *ngFor="let itemvalue of coachMetaDataItem.Value; let i = index">
-                                                                <input type="radio" 
-                                                                formControlName="coachMetaDataItem.Key"
-                                                                id="coachMetaDataItem.Key"
-                                                                name="coachMetaDataItem.Key"
-                                                                value="itemvalue" [formControlName]="i">
-                                                                {{itemvalue}}
-                                                            </label> 
-
-                                                        </div>
-                                                        <div *ngIf="coachMetaDataItem.Type === 'Check box'">
-
-                                                                <label style="width: 150px;" formArrayName="orders" *ngFor="let itemvalue of coachMetaDataItem.Value; let i = index">
-                                                                    <input type="checkbox" 
-                                                                    formControlName="coachMetaDataItem.Key"
-                                                                    id="coachMetaDataItem.Key"
-                                                                    name="coachMetaDataItem.Key"
-                                                                    value="itemvalue" [formControlName]="i">
-                                                                    {{itemvalue}}
-                                                                </label>
- 
-                                                        </div>
-                                                        <div *ngIf="coachMetaDataItem.Type === 'Text Field'">
-
-                                                                    <input type="text"
-                                                                    formControlName="coachMetaDataItem.Key"
-                                                                    id="coachMetaDataItem.Key"
-                                                                    name="coachMetaDataItem.Key"
-                                                                    placeholder="Enter Value" />
-
-                                                        </div>
-
-                                                     </td>
+                                                                <div *ngIf="coachMetaDataItem.Type === 'Drop Down'">
+        
+                                                                            <ng-select [items]="coachMetaDataItem.Value"
+                                                                            
+                                                                            id="coachMetaDataItem.Key"
+                                                                            name="coachMetaDataItem.Key"
+                                                                            placeholder="Select Item">
+                                                                            </ng-select>
+        
+                                                                </div>
+                                                                <div *ngIf="coachMetaDataItem.Type === 'Radio button'">
+        
+                                                                    <label style="width: 150px;" formArrayName="orders" *ngFor="let itemvalue of coachMetaDataItem.Value; let i = index">
+                                                                        <input type="radio" 
+                                                                        
+                                                                        id="coachMetaDataItem.Key"
+                                                                        name="coachMetaDataItem.Key"
+                                                                        value="itemvalue" >
+                                                                        {{itemvalue}}
+                                                                    </label> 
+        
+                                                                </div>
+                                                                <div *ngIf="coachMetaDataItem.Type === 'Check box'">
+        
+                                                                        <label style="width: 150px;" formArrayName="orders" *ngFor="let itemvalue of coachMetaDataItem.Value; let i = index">
+                                                                            <input type="checkbox" 
+                                                                           
+                                                                            id="coachMetaDataItem.Key"
+                                                                            name="coachMetaDataItem.Key"
+                                                                            value="itemvalue" >
+                                                                            {{itemvalue}}
+                                                                        </label>
+         
+                                                                </div>
+                                                                <div *ngIf="coachMetaDataItem.Type === 'Text Field'">
+        
+                                                                            <input type="text"
+                                                                            
+                                                                            id="coachMetaDataItem.Key"
+                                                                            name="coachMetaDataItem.Key"
+                                                                            placeholder="Enter Value" />
+        
+                                                                </div>
+        
+                                                             </td>
+                                                        </ng-container>
+                                                    
                                                         <td class="noBorder">
                                                                 <!--<a  class="color font-weight-bold edit-icon" (click)="removeCoach(lineIndex,coachInfo)">Remove</a>-->
                                                             </td>
@@ -545,7 +552,7 @@
                                         <tr>
                                             <th class="border" style="width: 50px;">S.No</th>
                                              <th class="border">Name</th>
-                                             <th class="border" style="width: 150px;" *ngFor="let managerMetaDataItem of managerMetaData; index as i;">
+                                             <th class="border" style="width: 150px;" *ngFor="let managerMetaDataItem of managerMetaList; index as i;">
                                                 {{managerMetaDataItem.Name}}
                                              </th>
                                         </tr>
@@ -568,13 +575,13 @@
                                                     <div *ngIf="managerInfo.controls.first_name.errors.required">Select Name.</div>
                                                  </div>
                                                     </td>
-                                                
-                                                    <td class="border p-1" *ngFor="let managerMetaDataItem of managerMetaData; index as i;">
+                                                <ng-container *ngIf="managerMetaList.length>0">
+                                                    <td class="border p-1" *ngFor="let managerMetaDataItem of managerMetaList; index as i;">
   
                                                         <div *ngIf="managerMetaDataItem.Type === 'Drop Down'">
 
                                                                     <ng-select [items]="managerMetaDataItem.Value"
-                                                                    formControlName="managerMetaDataItem.Key"
+                                                                    
                                                                     id="managerMetaDataItem.Key"
                                                                     name="managerMetaDataItem.Key"
                                                                     placeholder="Select Item">
@@ -585,10 +592,10 @@
 
                                                             <label style="width: 150px;" formArrayName="orders" *ngFor="let itemvalue of managerMetaDataItem.Value; let i = index">
                                                                 <input type="radio" 
-                                                                formControlName="managerMetaDataItem.Key"
+                                                                
                                                                 id="managerMetaDataItem.Key"
                                                                 name="managerMetaDataItem.Key"
-                                                                value="itemvalue" [formControlName]="i">
+                                                                value="itemvalue" >
                                                                 {{itemvalue}}
                                                             </label> 
 
@@ -597,10 +604,10 @@
 
                                                                 <label style="width: 150px;" formArrayName="orders" *ngFor="let itemvalue of managerMetaDataItem.Value; let i = index">
                                                                     <input type="checkbox" 
-                                                                    formControlName="managerMetaDataItem.Key"
+                                                                   
                                                                     id="managerMetaDataItem.Key"
                                                                     name="managerMetaDataItem.Key"
-                                                                    value="itemvalue" [formControlName]="i">
+                                                                    value="itemvalue" >
                                                                     {{itemvalue}}
                                                                 </label>
  
@@ -608,7 +615,7 @@
                                                         <div *ngIf="managerMetaDataItem.Type === 'Text Field'">
 
                                                                     <input type="text"
-                                                                    formControlName="managerMetaDataItem.Key"
+                                                                    
                                                                     id="managerMetaDataItem.Key"
                                                                     name="managerMetaDataItem.Key"
                                                                     placeholder="Enter Value" />
@@ -616,6 +623,8 @@
                                                         </div>
 
                                                      </td>
+                                                </ng-container>
+                                                    
                                                     <td class="noBorder">
                                                             <!--<a  class="color font-weight-bold edit-icon" (click)="removeManager(lineIndex,managerInfo)">Remove</a>-->
                                                         </td>

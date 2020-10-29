@@ -144,7 +144,11 @@ export class TeamCreateComponent implements OnInit {
 
       player: this.formBuilder.array([this.player()]),
       coach: this.formBuilder.array([this.coach()]),
-      manager: this.formBuilder.array([this.manager()])
+      manager: this.formBuilder.array([this.manager()]),
+
+      //playerMeta: new FormArray([]),
+      //coachMeta: new FormArray([]),
+      //managerMeta: new FormArray([])
     });
     this.uid = this.cookieService.getCookie('uid');
     this.createTeamForm.patchValue({
@@ -158,92 +162,7 @@ export class TeamCreateComponent implements OnInit {
     // this.getSportsByOrg(this.orgId)
     this.getSportsList();   
    
-    this.playerMetaData = [{
-    "ID": "10001",
-    "Key": "playing",
-    "Name": "Playing",
-    "Type": "Drop Down",
-    "Value": ["1+ Years","3+ Years","5+ Years"]
-    },
-    {
-    "ID": "10002",
-    "Key": "alsostudent",
-    "Name": "Also Student",
-    "Type": "Radio button",
-    "Value": ["Yes","No"] 
-    },
-    {
-    "ID": "10003",
-    "Key": "foodtype",
-    "Name": "Food Type",
-    "Type": "Check box",
-    "Value": ["Veg","Non Veg","Egg Only"] 
-    },
-    {
-    "ID": "10004",
-    "Key": "hoppy",
-    "Name": "Hoppy",
-    "Type": "Text Field",
-    "Value": [""] 
-    }]
-
-    this.coachMetaData = [{
-    "ID": "10001",
-    "Key": "played",
-    "Name": "Played",
-    "Type": "Drop Down",
-    "Value": ["5+ Years","10+ Years","25+ Years"]
-    },
-    {
-    "ID": "10002",
-    "Key": "married",
-    "Name": "Married",
-    "Type": "Radio button",
-    "Value": ["Yes","No"] 
-    },
-    {
-    "ID": "10003",
-    "Key": "foodtype",
-    "Name": "Food Type",
-    "Type": "Check box",
-    "Value": ["Veg","Non Veg","Egg Only"] 
-    },
-    {
-    "ID": "10004",
-    "Key": "hoppy",
-    "Name": "Hoppy",
-    "Type": "Text Field",
-    "Value": [""] 
-    }]
-
-    this.managerMetaData = [{
-    "ID": "10001",
-    "Key": "experience",
-    "Name": "Experience",
-    "Type": "Drop Down",
-    "Value": ["5+ Years","10+ Years","25+ Years"]
-    },
-    {
-    "ID": "10002",
-    "Key": "alsoplayer",
-    "Name": "Also Player",
-    "Type": "Radio button",
-    "Value": ["Yes","No"] 
-    },
-    {
-    "ID": "10003",
-    "Key": "foodtype",
-    "Name": "Food Type",
-    "Type": "Check box",
-    "Value": ["Veg","Non Veg","Egg Only"] 
-    },
-    {
-    "ID": "10004",
-    "Key": "hoppy",
-    "Name": "Hoppy",
-    "Type": "Text Field",
-    "Value": [""] 
-    }]
+    
 
   $('#player_select').multiSelect();
   $('#coach_select').multiSelect();
@@ -251,6 +170,10 @@ export class TeamCreateComponent implements OnInit {
 
 
   }
+
+ /*  get pmeta() { return this.f.playerMeta as FormArray; }
+  get cmeta() { return this.f.coachMeta as FormArray; }
+  get mmeta() { return this.f.managerMeta as FormArray; } */
 
   ngAfterViewInit() {
     {
@@ -640,6 +563,9 @@ export class TeamCreateComponent implements OnInit {
         weight_main_uom: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]*$')]],
         weight_main_unit: ['lbs', [Validators.required]],
       }),
+      playerMeta: new FormArray([]),
+      coachMeta: new FormArray([]),
+      managerMeta: new FormArray([])
     })
   }
   manager() {
@@ -725,10 +651,16 @@ export class TeamCreateComponent implements OnInit {
 
   getMembersByOrg(orgId: any, sportId: any, seasonId: any, levelId: any) {
     try {
-
+      
       if (sportId && seasonId && levelId)
       {
-        
+        setTimeout(() => {
+          this.getMetaData('player',this.sportId,this.orgId);
+          this.getMetaData('coach',this.sportId,this.orgId)
+          this.getMetaData('manager',this.sportId,this.orgId)
+          console.log('----this.playerMetaList----', this.playerMetaList)
+        }, 1000);
+
         this.restApiService.lists('playersList/'+seasonId+'/'+levelId+'/'+orgId).subscribe( players => {
           console.log('----players----', players)
           players.forEach( element => {
@@ -1770,11 +1702,8 @@ export class TeamCreateComponent implements OnInit {
   getOptionForSport(sport_id, form) {
     this.removeControls();
     this.getSeasonBySport(sport_id);
-    this.getPositionBySport(sport_id);
-
-    this.getMetaData('player',sport_id,this.orgId);
-    this.getMetaData('coach',sport_id,this.orgId)
-    this.getMetaData('manager',sport_id,this.orgId)
+    this.getPositionBySport(sport_id);  
+    
     
     this.getLevel(this.uid, this.orgId, this.roleId, sport_id);
     
@@ -1787,10 +1716,6 @@ export class TeamCreateComponent implements OnInit {
 
   getMetaData( type, sports, orgid)
   {
-
-    this.playerMetaList = [];
-    this.coachMetaList = [];
-    this.managerMetaList = [];
 
     if( type == 'player')
     {
@@ -1807,16 +1732,45 @@ export class TeamCreateComponent implements OnInit {
     this.restApiService.lists(url).subscribe( res => {
       if( type == 'player')
       {
-        this.playerMetaList = res;
+        //this.playerMetaList = res;
+        res.forEach( play => {
+          this.playerMetaList.push({
+            "ID": play._id,
+            "Key": play.field_name.replace(/ +/g, "").toLowerCase(),
+            "Name": play.field_name,
+            "Type": play.field_type,
+            "Value": play.value
+            })
+        })
+        
       }
       else if( type == 'coach')
       {
-        this.coachMetaList = res;
+        //this.coachMetaList = res;
+        res.forEach( play => {
+          this.coachMetaList.push({
+            "ID": play._id,
+            "Key": play.field_name.replace(/ +/g, "").toLowerCase(),
+            "Name": play.field_name,
+            "Type": play.field_type,
+            "Value": play.value
+            })
+        })
       }
       else if( type == 'manager')
       {
-        this.managerMetaList = res;
+        //this.managerMetaList = res;
+        res.forEach( play => {
+          this.managerMetaList.push({
+            "ID": play._id,
+            "Key": play.field_name.replace(/ +/g, "").toLowerCase(),
+            "Name": play.field_name,
+            "Type": play.field_type,
+            "Value": play.value
+            })
+        })
       }
+      
       
     }, e => {
       console.log('---Level API error----', e)
