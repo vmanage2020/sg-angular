@@ -19,6 +19,8 @@ import { DropdownService } from 'src/app/core/services/dropdown.service';
 import { NgiDatatableService } from 'src/app/components/ngi-datatable/src/public_api';
 import { Logoinfo } from '../../logoinfo.interface';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-team-grid',
   templateUrl: './team-grid.component.html',
@@ -42,6 +44,8 @@ export class TeamGridComponent implements OnInit {
   showColumns: any;
   lastVisibleRecord: any = {}
   selectedPageSize: number = 10;
+
+  teamList: any[] = [];
   noOfCol: any = [
     { name: Constant.searchFilterKey, allCol: "All Columns", value: 'All Columns' },
     { name: 'team_name', allCol: "All Columns", value: 'Team Name' },
@@ -107,7 +111,17 @@ export class TeamGridComponent implements OnInit {
   injectedData: any;
   @ViewChildren(AdvancedSortableDirective) headers: QueryList<AdvancedSortableDirective>;
 
-  constructor(private dropDownService: DropdownService, private datatableservice: NgiDatatableService, private db: DbService, public injector: Injector, private sharedService: SharedService, public service: AdvancedService, private eref: ElementRef, public dataService: DataService, public router: Router, public cookieService: CookieService) {
+  constructor(private dropDownService: DropdownService, 
+    private datatableservice: NgiDatatableService, 
+    private db: DbService, 
+    public injector: Injector, 
+    private sharedService: SharedService, 
+    public service: AdvancedService, 
+    private restApiService: RestApiService,
+    private eref: ElementRef, 
+    public dataService: DataService, 
+    public router: Router, 
+    public cookieService: CookieService) {
     this.uid = this.cookieService.getCookie('uid');
     sharedService.missionAnnounced$.subscribe((data: any) => {
       if (data) {
@@ -133,6 +147,9 @@ export class TeamGridComponent implements OnInit {
   }
 
   ngOnInit() {
+
+
+    this.getTeam();
     this.injectedData = this.injector.get('injectData')
     this.sharedService.announceMission('team');
     this.getSeasonDropDown();
@@ -173,6 +190,15 @@ export class TeamGridComponent implements OnInit {
       this.getTeamList(this.uid, this.org_id, this.page, this.pageSize, this.seasonType,
         this.nextEnabled, this.prevEnabled, null, this.firstInResponse, this.lastInResponse)
     }
+  }
+
+  getTeam()
+  {
+    this.restApiService.lists('teams').subscribe( res =>{
+      this.teamList = res;
+    }, e=>{
+      console.log('----API error for team list----', e)
+    })
   }
 
   async getSeasonDropDown() {

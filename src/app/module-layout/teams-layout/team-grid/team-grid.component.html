@@ -79,8 +79,22 @@
                   </th>
                 </tr>
               </thead>
-              <tbody>                
-                <tr *ngFor="let team of teamInfo ;let i = index;">
+              <tbody>     
+                <tr *ngFor="let team of teamList;">
+                  <td>
+                    <a  title="View Record" class="action-icon edit-icon"> <i class="mdi mdi-eye"></i></a>
+                    <a  title="Update Record" class="action-icon edit-icon"> <i
+                      class="mdi mdi-square-edit-outline"></i></a>
+                  </td>
+                  <td>{{team.team_name}}</td>
+                  <td>{{team.level}}</td>
+                  <td>{{team.players_count}}</td>
+                  <td>{{team.coaches_count}}</td>
+                  <td>{{team.managers_count}}</td>
+                  <td>{{team.season_lable}}</td>
+                  <td>{{team.sport_name}}</td>
+                </tr>           
+                <!-- <tr *ngFor="let team of teamInfo ;let i = index;">
                   <td *ngIf="showColumns?.length !== 0">
                    
                     <a (click)="userView(team)" title="View Record" class="action-icon edit-icon"> <i class="mdi mdi-eye"></i></a>
@@ -91,12 +105,13 @@
                     <td class="paddingTop" *ngIf="team[items]"><span [textContent]="team[items]"></span></td>
                     <td *ngIf="!team[items]"><span>-</span></td>
                   </ng-container>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
-            <p class="text-center" *ngIf="showColumns?.length === 0 && teamInfo?.length !== 0">No data available.</p>
+            <p class="text-center" *ngIf="teamList?.length === 0">No data available.</p>
+            <!-- <p class="text-center" *ngIf="showColumns?.length === 0 && teamInfo?.length !== 0">No data available.</p>
             <p class="text-center" *ngIf="showColumns?.length !== 0 && teamInfo?.length === 0">No data available.</p>
-            <p class="text-center" *ngIf="showColumns?.length === 0 && teamInfo?.length === 0">No data available.</p>
+            <p class="text-center" *ngIf="showColumns?.length === 0 && teamInfo?.length === 0">No data available.</p> -->
 
 
           </div>

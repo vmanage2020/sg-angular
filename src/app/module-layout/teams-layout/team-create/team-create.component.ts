@@ -46,6 +46,7 @@ export class TeamCreateComponent implements OnInit {
     { name: 'Right' },
   ];
   orgId: any;
+  orgName: any;
   sportId: any;
   height: any = [
     { value: "ft", name: 'in', weight: 'lbs' },
@@ -156,6 +157,8 @@ export class TeamCreateComponent implements OnInit {
     })
     this.getAlignedColumnSize("6");
     this.orgId = localStorage.getItem('org_id')
+
+    this.orgName = localStorage.getItem('org_name');
     if (this.orgId) {
       //this.getSportsByOrg(this.orgId)
     }
@@ -1581,7 +1584,7 @@ export class TeamCreateComponent implements OnInit {
           //console.log(filteredValue)
 
           this.coachArr.patchValue(filteredValue);
-          this.disableCol(this.coachArr, 0, 'first_name')
+          //this.disableCol(this.coachArr, 0, 'first_name')
           this.increaseHeight("Coach", "label-coach");
         }
         else {
@@ -1598,7 +1601,7 @@ export class TeamCreateComponent implements OnInit {
             let filterValue = this.coachList.filter(
               item => item.user_id === selected_player);
             this.coachArr.at(length).patchValue(filterValue[0]);
-            this.disableCol(this.coachArr, length, 'first_name')
+            //this.disableCol(this.coachArr, length, 'first_name')
             this.increaseHeight("Coach", "label-coach");
           }
         }
@@ -1639,7 +1642,7 @@ export class TeamCreateComponent implements OnInit {
           //console.log(filteredValue)
 
           this.managerArr.patchValue(filteredValue);
-          this.disableCol(this.managerArr, 0, 'first_name')
+          //this.disableCol(this.managerArr, 0, 'first_name')
           this.increaseHeight("Manager", "label-manager");
         }
         else {
@@ -1656,7 +1659,7 @@ export class TeamCreateComponent implements OnInit {
             let filterValue = this.managerList.filter(
               item => item.user_id === selected_player);
             this.managerArr.at(length).patchValue(filterValue[0]);
-            this.disableCol(this.managerArr, length, 'first_name')
+            //this.disableCol(this.managerArr, length, 'first_name')
             this.increaseHeight("Manager", "label-manager");
           }
         }
@@ -2016,7 +2019,10 @@ export class TeamCreateComponent implements OnInit {
     }
     this.saves = true;
   }
-  async onSubmit(form) {
+
+
+   onSubmit(form) {
+   
     this.submitted = true;
     if (form.invalid) {
       if (!form.value.sport_id) {
@@ -2098,7 +2104,73 @@ export class TeamCreateComponent implements OnInit {
     this.displayLoader = true;
     this.loading = true;
     let intervalForCreating = setInterval(this.timerFunction, 300, this.loaderInfo);
-    let submit: any = await this.db.postData(form.value);
+    
+
+    console.log('----form submit---', this.createTeamForm.value)
+    var sportsName = '';
+        if( this.SportsList != undefined && this.SportsList.length >0)
+        {
+          this.SportsList.forEach( sp => {
+            console.log('---sp---', sp)
+             if(sp._id.indexOf(form.value.sport_id) !== -1){
+              sportsName = sp.name
+            }
+          })
+        }
+
+        var seasonName = '';
+        var startDate = '';
+        var enddate = '';
+        if( this.seasonList != undefined && this.seasonList.length >0)
+        {
+          this.seasonList.forEach( seas => {
+            
+             if(seas._id.indexOf(form.value.season_id) !== -1){
+              seasonName = seas.season_name;
+              startDate = seas.season_start_date;
+              enddate = seas.season_end_date;
+            }
+          })
+        }
+
+        console.log('----seasons---', this.seasonList)
+
+    var jsonObj = {
+      is_completed: true,
+      season_id                         : form.value.season_id,
+      managers_count                    : form.value.manager.length,
+      level_name                        : form.value.level_name,
+      players_count                     : form.value.player.length,
+      sport_name                        : ((sportsName != '') ? sportsName : ''),
+      season_start_date                 : ((startDate != '') ? startDate : ''),
+      organization_id                   : this.orgId,        
+      season_end_date                   : ((enddate != '') ? enddate : ''),
+      isMaster                          : true,
+      season_lable                      : ((seasonName != '') ? seasonName : ''),
+      coaches_count                     : form.value.coach.length,
+      sport_id                          : form.value.sport_id,
+      level                             : form.value.level_name,
+      team_name                         : form.value.team_name,
+      team_id                           : '',
+      level_id                          : form.value.level_id,
+      isActive                          : false,
+      organization_name                 : this.orgName
+
+    }
+    console.log('----jsonObj---', jsonObj);
+    this.restApiService.create('teams',jsonObj).subscribe( res => {
+      console.log('---res----', res)
+      this.change.emit({ action: "teamgrid" });
+      this.reLoadPageAfterCreating(intervalForCreating);
+      this.notification.isNotification(true, "Teams", res, "check-square");
+      this.router.navigate(['/teams']);
+    }, e => {
+      console.log('---create Team API error----', e)
+      return false;
+    })
+    
+    //this.restApiService.lists
+    /* let submit: any = await this.db.postData(form.value);
     try {
       if (submit.status) {
         if (this.saves) {
@@ -2132,8 +2204,10 @@ export class TeamCreateComponent implements OnInit {
       this.error = error;
       this.reInitialise(intervalForCreating);
 
-    }
+    } */
   }
+
+
   reLoadPageAfterCreating(intervalForCreating?: any) {
     this.loaderInfo.next({ progressBarLoading: 100, statusOfProgress: "Loading completed" });
     clearInterval(intervalForCreating);
