@@ -120,7 +120,7 @@
 
                             
                             <div class="row" > <!-- *ngIf="teamplayerList.length>0" -->
-                                    <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                    <div class="col-3 mt-2 label-border-height allColMaxWidth" style="height: 150px !important;">
                                         <label class="for-label-req" for="first_name">Player Selection</label>
                                     </div>
                                     <div class="col-4 mt-2" id="">
@@ -152,7 +152,7 @@
                               </div>
  
                               <div class="row mb-3 pt-1" *ngIf="teamplayerList.length>0">
-                                <div class="col-3 mt-2 label-border-player allColMaxWidth" id="label-player">
+                                <div class="col-3 mt-2 label-border-player allColMaxWidth" id="label-player" style="height: 150px !important;">
                                     <label class="text-player-req" for="first_name">Player Details</label>
                                 </div>
                                 <div class="col-9 mt-2 mb-0 pr-0" id="playerHeight">
@@ -166,7 +166,7 @@
                                                         <th class="border" [ngStyle]="{'width': this.columnWidth - 3 +'%' }">Shoots</th>
                                                         <th class="border" [ngStyle]="{'width': this.columnWidth+ 17 +'%' }">Height</th>
                                                         <th class="border" [ngStyle]="{'width': this.columnWidth+'%' }">Weight</th>
-                                                        <th class="border" [ngStyle]="{'width': this.columnWidth+'%' }" *ngFor="let playerMetaDataItem of playerMetaList; index as i;">
+                                                        <th class="border" [ngStyle]="{'width': this.columnWidth+ 17 +'%' }" *ngFor="let playerMetaDataItem of playerMetaList; index as i;">
                                                             {{playerMetaDataItem.Name}}
                                                          </th>
                                                 </tr>
@@ -378,7 +378,7 @@
                             </div>
 
                               <div class="row" > <!-- *ngIf="teamcoachList.length>0" -->
-                                <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                                <div class="col-3 mt-2 label-border-height allColMaxWidth" style="height: 150px !important;">
                                     <label class="for-label-req" for="first_name">Coach Selection</label>
                                 </div>
                                 <div class="col-4 mt-2" id="">
@@ -408,7 +408,7 @@
                           </div>
 
                           <div class="row" *ngIf="teamcoachList.length>0">
-                            <div class="col-3 mt-2 label-border-player allColMaxWidth " id="label-coach">
+                            <div class="col-3 mt-2 label-border-player allColMaxWidth " id="label-coach" style="height: 150px !important;">
                                 <label class="text-player-req" for="first_name">Coach Details</label>
                             </div>
                             <div class="col-7 mt-2 mb-0" id="playerHeight">
@@ -514,7 +514,7 @@
                         </div>
 
                           <div class="row" > <!-- *ngIf="teammanagerList.length>0" -->
-                            <div class="col-3 mt-2 label-border-height allColMaxWidth">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth" style="height: 150px !important;">
                                 <label class="for-label-req" for="first_name">Manager Selection</label>
                             </div>
                             <div class="col-4 mt-2" id="">
@@ -542,7 +542,7 @@
                       </div>
 
                       <div class="row" *ngIf="teammanagerList.length>0">
-                        <div class="col-3 mt-2 label-border-player allColMaxWidth" id="label-manager">
+                        <div class="col-3 mt-2 label-border-player allColMaxWidth" id="label-manager" style="height: 150px !important;">
                             <label class="text-player-req" for="first_name">Manager Details</label>
                         </div>
                         <div class="col-5 mt-2 mb-0" id="playerHeight">
