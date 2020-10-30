@@ -120,11 +120,17 @@
 
                             
                             <div class="row" > <!-- *ngIf="teamplayerList.length>0" -->
-                                    <div class="col-3 mt-2 label-border-height allColMaxWidth" style="height: 150px !important;">
+                                    <div class="col-3 mt-2 label-border-height allColMaxWidth" style="height: 170px !important;">
                                         <label class="for-label-req" for="first_name">Player Selection</label>
                                     </div>
                                     <div class="col-4 mt-2" id="">
-                                       
+                                          <div class="multi-select-label" style="width: 465px;height: 22px;">
+                                            <div style="float: left;">Available</div>  
+                                            <div style="float:right;">Selected</div>
+                                          </div>
+
+                                            
+
                                           <select multiple="multiple" class="multi-select" id="player_select"
                                             name="player_select" data-plugin="multiselect"
                                             (change)="onPlayerChange($event,createTeamForm)" [ngClass]="{ 'is-invalid': submitted && f.player_select.errors }">
@@ -378,11 +384,14 @@
                             </div>
 
                               <div class="row" > <!-- *ngIf="teamcoachList.length>0" -->
-                                <div class="col-3 mt-2 label-border-height allColMaxWidth" style="height: 150px !important;">
+                                <div class="col-3 mt-2 label-border-height allColMaxWidth" style="height: 170px !important;">
                                     <label class="for-label-req" for="first_name">Coach Selection</label>
                                 </div>
                                 <div class="col-4 mt-2" id="">
-
+                                    <div class="multi-select-label" style="width: 465px;height: 22px;">
+                                        <div style="float: left;">Available</div>  
+                                        <div style="float:right;">Selected</div>
+                                      </div>
 
                                     <select multiple="multiple" class="multi-select" id="coach_select"
                                     name="coach_select" data-plugin="multiselect" 
@@ -514,10 +523,14 @@
                         </div>
 
                           <div class="row" > <!-- *ngIf="teammanagerList.length>0" -->
-                            <div class="col-3 mt-2 label-border-height allColMaxWidth" style="height: 150px !important;">
+                            <div class="col-3 mt-2 label-border-height allColMaxWidth" style="height: 170px !important;">
                                 <label class="for-label-req" for="first_name">Manager Selection</label>
                             </div>
                             <div class="col-4 mt-2" id="">
+                                <div class="multi-select-label" style="width: 465px;height: 22px;">
+                                    <div style="float: left;">Available</div>  
+                                    <div style="float:right;">Selected</div>
+                                  </div>
 
                                 <select multiple="multiple" class="multi-select" id="manager_select"
                                 name="manager_select" data-plugin="multiselect" (change)="onManagerChange($event,createTeamForm)">
