@@ -2105,8 +2105,11 @@ export class TeamCreateComponent implements OnInit {
     this.loading = true;
     let intervalForCreating = setInterval(this.timerFunction, 300, this.loaderInfo);
     
+    
 
-    console.log('----form submit---', this.createTeamForm.value)
+    console.log('----form submit---', this.createTeamForm)    
+    //return false;
+
     var sportsName = '';
         if( this.SportsList != undefined && this.SportsList.length >0)
         {
@@ -2160,9 +2163,58 @@ export class TeamCreateComponent implements OnInit {
     console.log('----jsonObj---', jsonObj);
     this.restApiService.create('teams',jsonObj).subscribe( res => {
       console.log('---res----', res)
+      if( res._id )
+      {
+
+        var playerJson = {
+          players_count: form.value.player.length,
+          display_name : 'Players',
+          user_list :form.value.player,
+          season_id: form.value.season_id,
+          sport_id: form.value.sport_id,
+          people_id : 'player',
+          organization_id: this.orgId,
+          team_id: res._id
+        }
+    
+        var coachJson = {
+          players_count: form.value.coach.length,
+          display_name : 'Coaches',
+          user_list : form.value.coach,
+          season_id: form.value.season_id,
+          sport_id: form.value.sport_id,
+          people_id : 'coach',
+          organization_id: this.orgId,
+          team_id: res._id
+        }
+    
+        var managerJson = {
+          players_count: form.value.manager.length,
+          display_name : 'Managers',
+          user_list : form.value.manager,
+          season_id: form.value.season_id,
+          sport_id: form.value.sport_id,
+          people_id : 'manager',
+          organization_id: this.orgId,
+          team_id: res._id
+        }
+
+        var teammembers = {
+          team_id             : res._id,
+          player              : playerJson, 
+          coach               : coachJson,
+          manager             : managerJson, 
+        }
+
+        this.restApiService.create('teammembers',teammembers).subscribe( memres => {
+          console.log('----memres----', memres)
+        }, error =>{
+          console.log('---error team member API----', error)
+        })
+      }
       this.change.emit({ action: "teamgrid" });
       this.reLoadPageAfterCreating(intervalForCreating);
-      this.notification.isNotification(true, "Teams", res, "check-square");
+      this.notification.isNotification(true, "Teams", res.team_name, "check-square");
       this.router.navigate(['/teams']);
     }, e => {
       console.log('---create Team API error----', e)
