@@ -8,6 +8,8 @@ import { DbService } from 'src/app/core/services/db.service';
 import { BehaviorSubject } from 'rxjs';
 import { Logoinfo } from '../../logoinfo.interface';
 
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-team-view',
   templateUrl: './team-view.component.html',
@@ -26,27 +28,51 @@ export class TeamViewComponent implements OnInit {
   data: any;
   teamInfoById: any;
   teamInfo: any = {};
+  memberInfo: any[] = []
+
+  coachInfo: any[] = []
+  managerInfo: any[] = []
+  teamList: any[] = [];
+
   posByIndividual: any;
-  constructor(private db: DbService, private injector: Injector, private sharedService: SharedService, private dataServices: DataService, public router: Router, private activatedRoute: ActivatedRoute, public cookieService: CookieService) {
+  constructor(private injector: Injector, 
+    private restApiService: RestApiService,
+    private sharedService: SharedService,
+    private dataServices: DataService,
+    public router: Router, 
+    private activatedRoute: ActivatedRoute, 
+    public cookieService: CookieService) {
     this.uid = this.cookieService.getCookie('uid');
     sharedService.missionAnnounced$.subscribe((data: any) => {
       if (data) {
-        if (data.action === "organizationFilter") {
+        console.log('---data---', data)
+        /* if (data.action === "organizationFilter") {
           this.sharedService.announceMission('welcome');
           this.router.navigate(['/welcome']);
         } else if (data == "teamRouter") {
           this.change.emit({ action: "teamgrid", data: null })
-        }
+        } */
       }
     })
   }
 
   ngOnInit() {
     this.injectedData = this.injector.get('injectData')
+    console.log('---injectedData---', this.injectedData)
+    this.getTeam();
     this.orgId = localStorage.getItem('org_id')
     if (this.injectedData.data) {
       console.log(this.injectedData.data)
-      this.teamInfo = {
+      this.teamInfo = this.injectedData.data.team;
+      if( this.injectedData.data.member.length>0)
+      {
+        this.memberInfo.push({Player: this.injectedData.data.member[0].player});
+        this.coachInfo.push({Coach: this.injectedData.data.member[0].coach})
+        this.managerInfo.push({Manager: this.injectedData.data.member[0].manager})
+          
+      }
+      
+      /* this.teamInfo = {
         "auth_uid": this.uid,
         "organization_id": this.orgId,
         "sport_id": this.injectedData.data.sport_id,
@@ -57,10 +83,10 @@ export class TeamViewComponent implements OnInit {
         "teamName": this.injectedData.data.team_name,
         "sportName": this.injectedData.data.sport_name,
         "seasonTitle": this.injectedData.data.season_lable,
-      }
-      console.log(typeof (this.teamInfo));
+      } */
+     // console.log(typeof (this.teamInfo));
 
-      this.getTeamInfoById(this.teamInfo)
+      //this.getTeamInfoById(this.teamInfo)
     }
   }
 
@@ -72,7 +98,7 @@ export class TeamViewComponent implements OnInit {
       loaderInfo.next({ progressBarLoading: getObjectValue, statusOfProgress: Constant.msgForUpdating });
     }
   }
-  async getTeamInfoById(teamInfo: any) {
+ /*  async getTeamInfoById(teamInfo: any) {
     this.loading = true;
     let loaderToGetInfo = setInterval(this.timerFunction, 100, this.loaderInfo, "initial");
     let getTeamInfoIndividual: any = await this.db.getTeamByUid(teamInfo);    
@@ -120,7 +146,7 @@ export class TeamViewComponent implements OnInit {
       this.afterLoadingIndividualTeamInfo(loaderToGetInfo)
 
     } 
-  }
+  } */
   afterLoadingIndividualTeamInfo(loaderToGetInfo?: any) {
     this.loaderInfo.next({ progressBarLoading: 100, statusOfProgress: "Loading completed" });
     clearInterval(loaderToGetInfo);
@@ -141,7 +167,17 @@ export class TeamViewComponent implements OnInit {
     console.log(this.injectedData.data)
     this.change.emit({ action: "editteam", data: this.injectedData.data })
   }
+
+  getTeam()
+  {
+    this.restApiService.lists('teams').subscribe( res =>{
+      this.teamList = res;
+    }, e=>{
+      console.log('----API error for team list----', e)
+    })
+  }
+
   goBack() {
-    this.change.emit({ action: "teamgrid", data: this.injectedData.data })
+    this.change.emit({ action: "teamgrid", data: this.teamList })
   }
 }

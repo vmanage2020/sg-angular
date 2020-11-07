@@ -85,6 +85,7 @@ export class TeamGridComponent implements OnInit {
   sortingInfo: any = {};
   totalRecords: any = 0;
   data: any;
+  teamData: any;
   isdescending: boolean = false;
   //Save first document in snapshot of items received
   firstInResponse: any = [];
@@ -161,6 +162,7 @@ export class TeamGridComponent implements OnInit {
     });
     this.SelectedColumns = this.eachCol;
     this.showColumns = this.SelectedColumns;   
+    console.log('---list inject dsta---', this.injectedData)
     if (this.injectedData) {
       if (this.injectedData.action) {
         if (this.injectedData.data) {
@@ -457,8 +459,25 @@ export class TeamGridComponent implements OnInit {
     this.change.emit({ action: "editteam", data: data })
   }
 
-  userView(data) {
-    data.pageNo = this.page;
+  userView(id) {
+
+    this.restApiService.lists('teams/'+id).subscribe( teamdata =>{
+      this.restApiService.lists('teammembers/'+id).subscribe( memberdata =>{
+        this.teamData = {'team': teamdata, 'member': memberdata}
+
+        this.change.emit({ action: "viewteam", data: this.teamData })
+        
+      })
+      
+      
+    }, e=>{
+      console.log('----API error for team list----', e)
+    })
+    console.log('---id---', id)
+
+    return false;
+
+    /* data.pageNo = this.page;
     data.pageSize = this.pageSize;
     data.seasonId = this.seasonType;
     data.seaonName = this.selectedSeason;
@@ -473,7 +492,7 @@ export class TeamGridComponent implements OnInit {
     data.sortingInfo = this.sortingInfo;
     data.searchKey = this.searchKey;
     data.searchFilter = this.searchFilter;
-    this.change.emit({ action: "viewteam", data: data })
+    this.change.emit({ action: "viewteam", data: data }) */
   }
 
   //Show previous set 
