@@ -1,9 +1,9 @@
  <div class="container-fluid">
        <div class="row">
             <div class="col-xl-12 p-0">
-                <div class="card mb-0 px-3 minHeightForCard">
+                <div class="card mb-0 px-3 minHeightForCard"> <!--[ngStyle]="{'display': !displayLoader ? 'block' : 'none' }"-->
                     <app-ui-preloader [display]="loading" [ngStyle]="{'display': displayLoader ? 'block' : 'none' }" [loaderInfo]="loaderInfo.asObservable()"></app-ui-preloader>
-                    <div class="card-body paddingCard" [ngStyle]="{'display': !displayLoader ? 'block' : 'none' }">
+                    <div class="card-body paddingCard" >
      <form class="needs-validation" name="updateTeamForm" [formGroup]="updateTeamForm"
                             (ngSubmit)="onSubmit(updateTeamForm)" novalidate>                            
                            
@@ -30,7 +30,7 @@
                                 <div class="col-4 mt-2" id="customHeight">
                                     <!-- <label>{{teamInfoById?.sport | titlecase }}</label> -->
                                     <input type="text" class="form-control" disabled="true"
-                        [value]="teamInfoById?.sport | titlecase"/>
+                        [value]="teamInfoById?.sport_name | titlecase"/>
                                 </div>
                             </div>
                             <div class="row">
@@ -40,7 +40,7 @@
                                 <div class="col-4 mt-2" id="customHeight">
                                     <!-- <label>{{teamInfoById?.season || "--"}}</label> -->
                                     <input type="text"  class="form-control" disabled="true"
-                                    [value]="teamInfoById?.season | titlecase"/>
+                                    [value]="teamInfoById?.season_lable | titlecase"/>
                                 </div>
                             </div>
 
@@ -61,9 +61,10 @@
                                 <div class="col-4 mt-2" id="customHeight">
                                     <!-- <label>{{teamInfoById?.teamName || "--"}}</label> -->
                                     <input type="text" class="form-control" disabled="true"
-                                    [value]="teamInfoById?.teamName"/>
+                                    [value]="teamInfoById?.team_name"/>
                                 </div>
                             </div>
+
 
                             <div class="row">
                                 <div class="col-3 mt-2 label-border-player allColMaxWidth" id="label-player">
@@ -88,8 +89,7 @@
                                                     [formGroupName]="lineIndex">
                                                     <td class="border p-1 pt-2">{{lineIndex+1}}</td>
                                                     <td class="border p-1">
-                                                        <!-- <input type="text" disabled='true' formControlName="first_name"
-                                                            class="form-control" name="first_name" id="first_name" /> -->
+                                                        
 
                                                             <ng-select appendTo="body" [items]="allPlayerList" bindLabel="name"
                                                                 
@@ -249,139 +249,8 @@
                                 
                             </div>
 
-                            <div class="row">
-                                <div class="col-3 mt-2 label-border-player allColMaxWidth" id="label-coach" >
-                                    <label class="text-player-req" for="first_name">Coaches</label>
-                                </div>
-                                <div class="col-6 mt-2 mb-0" id="playerHeight">
-                                    <div id="Coach">
-                                        <table id="basic-datatable" class="table datatables dt-responsive nowrap mb-1">
-                                            <thead class="border">
-                                                <tr>
-                                                    <th class="border">Name</th>
-                                                    <th class="border">Title</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody formArrayName="coach">
-                                                <tr class="border"
-                                                    *ngFor="let coachInfo of updateTeamForm?.get('coach')?.controls; let lineIndex = index"
-                                                    [formGroupName]="lineIndex">
+                            <!-- code hide here-->
 
-                                                    <td class="border p-1">
-                                                        <ng-select [items]="coachList" bindLabel="name"
-                                                        
-                                                        formControlName="first_name"
-                                                        [clearSearchOnAdd]="true"
-                                                        (change)="selectedCoach($event,updateTeamForm,lineIndex)"
-                                                        bindValue="first_name" placeholder="Select name">
-                                                    </ng-select>
-                                                    <div *ngIf="coachInfo.controls.first_name.errors?.required && submitted"
-                                                            class="input-error-msg text-danger">
-                                                            Select Name.
-                                                        </div>
-                                                        <div *ngIf="updateTeamForm.value.coach[lineIndex]?.duplicateRecord === true" 
-                                                        class="input-error-msg text-danger">
-                                                       Duplicate records are not allowed.
-                                                    </div>
-                                                    </td>
-                                                    <td class="border p-1">
-                                                        <input type="text" formControlName="title" class="form-control"
-                                                            [ngClass]="{ 'is-invalid': submitted && coachInfo.controls.title.errors }"
-                                                            name="team_name" id="team_name"
-                                                            placeholder="Enter title" />
-                                                        <div *ngIf="submitted && coachInfo.controls.title.errors"
-                                                            class="invalid-feedback">
-                                                            <div *ngIf="coachInfo.controls.title.errors.required">Title
-                                                                is required.</div>
-                                                            <div *ngIf="coachInfo.controls.title.errors?.pattern">Only
-                                                                text characters are allowed.</div>
-                                                        </div>
-
-                                                    </td> 
-                                                    <td class="noBorder" *ngIf="coachInfo.get('is_terminated').value">  
-                                                        <a class="color font-weight-bold">Terminated</a>
-                                                    </td>                                                    
-                                                    <td class="noBorder" *ngIf="!coachInfo.get('is_terminated').value && coachInfo.get('is_existing').value">
-                                                        <a  class="color font-weight-bold" *ngIf="!coachInfo.get('is_suspended').value" (click)="suspendCoach(lineIndex,coachInfo, content)">Suspend</a>
-                                                        <a  class="color font-weight-bold" *ngIf="coachInfo.get('is_suspended').value" (click)="userInfo(lineIndex, coachInfo, content)"><i class="fa fa-info-circle"></i></a>
-                                                        <a  class="color font-weight-bold pl-1" *ngIf="coachInfo.get('is_suspended').value && !coachInfo.get('is_alreadyExist').value" (click)="undoCoach(lineIndex, coachInfo)">Undo</a>
-                                                    </td>
-                                                    <td class="noBorder" *ngIf="!coachInfo.get('is_existing').value">
-                                                        <a  class="color font-weight-bold" (click)="removeCoach(lineIndex)">Remove</a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-
-                                        </table>
-                                    </div>
-                                    <a  class="color font-weight-bold pt-2" (click)="addCoach()">Add Coach</a>
-                                    <div *ngIf="selectCoaches" class="input-error-msg text-danger">
-                                        Add Coach.
-                                    </div>
-                                    <label class="text-danger pl-2" *ngIf="noCoach">No more coach to add.</label>
-                                </div>
-                               
-                            </div>
-
-                            <div class="row">
-                                <div class="col-3 mt-2 label-border-player allColMaxWidth" id="label-manager">
-                                    <label class="text-player-req" for="first_name">Managers</label>
-                                </div>
-                                <div class="col-6 mt-2 mb-0" id="playerHeight">
-                                    <div id="Manager">
-                                        <table id="basic-datatable" class="table datatables dt-responsive nowrap mb-1">
-                                            <thead class="border">
-                                                <tr>
-                                                    <th class="border" style="width: 50px;">S.No</th>
-                                                    <th class="border">Name</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody formArrayName="manager">
-                                                <tr class="border"
-                                                    *ngFor="let managerInfo of updateTeamForm?.get('manager')?.controls; let lineIndex = index"
-                                                    [formGroupName]="lineIndex">
-
-                                                    <td class="border p-1 pt-2">{{lineIndex+1}}</td>
-                                                    <td class="border p-1">
-                                                        <ng-select [items]="managerList" bindLabel="name"
-                                                        
-                                                        formControlName="first_name"
-                                                        [clearSearchOnAdd]="true"
-                                                        (change)="selectedManager($event,updateTeamForm,lineIndex)"
-                                                        bindValue="first_name" placeholder="Select name">
-                                                    </ng-select>
-                                                    <div *ngIf="managerInfo.controls.first_name.errors?.required && submitted"
-                                                    class="input-error-msg text-danger">
-                                                    Select Name.
-                                                </div>
-                                                <div *ngIf="updateTeamForm.value.manager[lineIndex]?.duplicateRecord === true" 
-                                                        class="input-error-msg text-danger">
-                                                       Duplicate records are not allowed.
-                                                    </div>
-
-                                                    </td>
-                                                    <td class="noBorder" *ngIf="managerInfo.get('is_terminated').value">  
-                                                        <a class="color font-weight-bold">Terminated</a>
-                                                    </td>   
-                                                    <td class="noBorder" *ngIf="!managerInfo.get('is_terminated').value && managerInfo.get('is_existing').value">
-                                                        <a  class="color font-weight-bold" *ngIf="!managerInfo.get('is_suspended').value" (click)="suspendManager(lineIndex,managerInfo, content)">Suspend</a>
-                                                        <a  class="color font-weight-bold" *ngIf="managerInfo.get('is_suspended').value" (click)="userInfo(lineIndex, managerInfo, content)"><i class="fa fa-info-circle"></i></a>
-                                                        <a  class="color font-weight-bold pl-1" *ngIf="managerInfo.get('is_suspended').value && !managerInfo.get('is_alreadyExist').value" (click)="undoManager(lineIndex, managerInfo)">Undo</a>
-                                                    </td>
-                                                    <td class="noBorder" *ngIf="!managerInfo.get('is_existing').value">
-                                                        <a  class="color font-weight-bold" (click)="removeManager(lineIndex)">Remove</a>
-                                                    </td>                                                    
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <a  class="color font-weight-bold pt-2" (click)="addManager()">Add Manager</a>
-                                    <div *ngIf="selectManagers" class="input-error-msg text-danger">
-                                        Add Manager.
-                                    </div>
-                                    <label class="text-danger pl-2" *ngIf="noManager">No more manager to add.</label>
-                                </div>
-                            </div>
                             <ngb-alert type="danger" *ngIf="error && !isSaveUp" class="margin sdkErrorInDownTag mt-2" [dismissible]="true" (click)=closeError()>{{error}}
                             </ngb-alert>
                             <div class="row mt-3 mb-2">

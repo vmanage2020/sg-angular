@@ -83,7 +83,7 @@
                 <tr *ngFor="let team of teamList;">
                   <td>
                     <a  (click)="userView(team.team_id)" title="View Record" class="action-icon edit-icon"> <i class="mdi mdi-eye"></i></a>
-                    <a  title="Update Record" class="action-icon edit-icon"> <i
+                    <a (click)="userEdit(team.team_id)" title="Update Record" class="action-icon edit-icon"> <i
                       class="mdi mdi-square-edit-outline"></i></a>
                   </td>
                   <td>{{team.team_name}}</td>

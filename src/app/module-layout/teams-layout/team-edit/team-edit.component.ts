@@ -16,6 +16,9 @@ import { DropdownService } from 'src/app/core/services/dropdown.service';
 import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
 import { Logoinfo } from '../../logoinfo.interface';
+
+import { RestApiService } from '../../../shared/rest-api.services';
+
 @Component({
   selector: 'app-team-edit',
   templateUrl: './team-edit.component.html',
@@ -79,7 +82,34 @@ export class TeamEditComponent implements OnInit {
   ];
   todayDate: any = new Date();
   seasonEndDate: any;
-  constructor(private dropDownService: DropdownService, private db: DbService, private modalConfig: NgbModalConfig, private modalService: NgbModal, private notification: NgiNotificationService, private injector: Injector, public changeRef: ChangeDetectorRef, public cookieService: CookieService, private sharedService: SharedService, private parserFormatter: NgbDateParserFormatter, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, public dataService: DataService, public teamService: TeamService) {
+
+
+
+  playerMetaList: any[] = [];
+  coachMetaList: any[] = [];
+  managerMetaList: any[] = [];
+
+  teamplayerList: any[] = [];
+  teammanagerList: any[] = [];
+  teamcoachList: any[] = [];
+  showErrorInArr: any = [];
+
+  constructor(private dropDownService: DropdownService, 
+    private restApiService: RestApiService,
+    private db: DbService, 
+    private modalConfig: NgbModalConfig, 
+    private modalService: NgbModal, 
+    private notification: NgiNotificationService, 
+    private injector: Injector, 
+    public changeRef: ChangeDetectorRef, 
+    public cookieService: CookieService, 
+    private sharedService: SharedService, 
+    private parserFormatter: NgbDateParserFormatter, 
+    private formBuilder: FormBuilder, 
+    private route: ActivatedRoute, 
+    private router: Router, 
+    public dataService: DataService, 
+    public teamService: TeamService) {
     this.modalConfig.backdrop = 'static';
     this.modalConfig.keyboard = false;
     this.uid = this.cookieService.getCookie('uid');
@@ -122,28 +152,39 @@ export class TeamEditComponent implements OnInit {
       uid: this.uid
     })
     this.getAlignedColumnSize("6");
+    console.log('---edit data---',this.injectedData.data);
+
+    //return false;
+    
     if (this.injectedData.data) {
-      this.seasonEndDate = this.injectedData.data.season_end_date.toDate();
+      this.seasonEndDate = this.injectedData.data.season_end_date;
       this.teamInfo = {
         "auth_uid": this.uid,
         "organization_id": this.orgId,
-        "sport_id": this.injectedData.data.sport_id,
-        "season_id": this.injectedData.data.season_id,
-        "level_id": this.injectedData.data.level_id,
-        "level_name": this.injectedData.data.level,
-        "team_id": this.injectedData.data.team_id,
-        "teamName": this.injectedData.data.team_name,
-        "sportName": this.injectedData.data.sport_name,
-        "seasonTitle": this.injectedData.data.season_lable
+        "sport_id": this.injectedData.data.team.sport_id,
+        "season_id": this.injectedData.data.team.season_id,
+        "level_id": this.injectedData.data.team.level_id,
+        "level_name": this.injectedData.data.team.level,
+        "team_id": this.injectedData.data.team.team_id,
+        "teamName": this.injectedData.data.team.team_name,
+        "sportName": this.injectedData.data.team.sport_name,
+        "seasonTitle": this.injectedData.data.team.season_lable
       }
       if (this.teamInfo) {
-        this.getMembersByOrg(this.orgId, this.injectedData.data.sport_id, this.injectedData.data.season_id);
-        this.getTeamInfoById(this.teamInfo)
-        this.getPositionBySport(this.injectedData.data.sport_id)
 
+        this.teamInfoById = this.injectedData.data.team;
+        //this.getMembersByOrg(this.orgId, this.injectedData.data.sport_id, this.injectedData.data.season_id);
+        //this.getTeamInfoById(this.teamInfo)
+        //this.getPositionBySport(this.injectedData.data.sport_id)
+        //this.getSeasonBySport(this.injectedData.data.sport_id);
+        this.getMembersByOrg(this.orgId, this.injectedData.data.sport_id, this.injectedData.data.season_id, this.injectedData.data.level_id);
+        this.getPositionBySport(this.injectedData.data.sport_id); 
       }
     }
   }
+
+
+
   get f() { return this.updateTeamForm.controls; }
 
   get playerArr() {
@@ -392,7 +433,250 @@ export class TeamEditComponent implements OnInit {
     }
 
   }
-  async getMembersByOrg(orgId, sportId, seasonId) {
+
+  getMetaData( type, sports, orgid)
+  {
+
+    if( type == 'player')
+    {
+      var url = 'playermetadatabysportsorg/'+orgid+'/'+sports
+    }
+    else if( type == 'coach')
+    {
+      var url = 'coachmetadatabysportsorg/'+orgid+'/'+sports
+    }
+    else if( type == 'manager')
+    {
+      var url = 'managermetadatabysportsorg/'+orgid+'/'+sports
+    }
+    this.restApiService.lists(url).subscribe( res => {
+      if( type == 'player')
+      {
+        //this.playerMetaList = res;
+        res.forEach( play => {
+          this.playerMetaList.push({
+            "ID": play._id,
+            "Key": play.field_name.replace(/ +/g, "").toLowerCase(),
+            "Name": play.field_name,
+            "Type": play.field_type,
+            "Value": play.value
+            })
+        })
+        
+      }
+      else if( type == 'coach')
+      {
+        //this.coachMetaList = res;
+        res.forEach( play => {
+          this.coachMetaList.push({
+            "ID": play._id,
+            "Key": play.field_name.replace(/ +/g, "").toLowerCase(),
+            "Name": play.field_name,
+            "Type": play.field_type,
+            "Value": play.value
+            })
+        })
+      }
+      else if( type == 'manager')
+      {
+        //this.managerMetaList = res;
+        res.forEach( play => {
+          this.managerMetaList.push({
+            "ID": play._id,
+            "Key": play.field_name.replace(/ +/g, "").toLowerCase(),
+            "Name": play.field_name,
+            "Type": play.field_type,
+            "Value": play.value
+            })
+        })
+      }
+      
+      
+    }, e => {
+      console.log('---Level API error----', e)
+    })
+  }
+
+  search(nameKey, myArray){
+    
+      for (var i=0; i < myArray.length; i++) {
+          if (myArray[i]['role_id'] === nameKey) {
+              return myArray[i];
+          }
+      }
+  }
+
+  async getMembersByOrg(orgId, sportId, seasonId, levelId) {
+
+    try {
+
+      if (sportId && seasonId && levelId)
+      {
+
+        setTimeout(() => {
+          this.getMetaData('player',this.sportId,this.orgId);
+          this.getMetaData('coach',this.sportId,this.orgId)
+          this.getMetaData('manager',this.sportId,this.orgId)
+          console.log('----this.playerMetaList----', this.playerMetaList)
+        }, 1000);
+
+        this.restApiService.lists('playersList/'+seasonId+'/'+levelId+'/'+orgId).subscribe( players => {
+          console.log('----players----', players)
+          players.forEach( element => {
+            this.teamplayerList.push({name: element.first_name+' '+element.last_name, id: element._id});
+          })
+
+          this.playerList = players;
+          this.playerList.forEach(element => {
+            if (element.suffix) {
+              if (element.middle_initial) {
+                element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                element['user_id'] = element._id;
+              } else {
+                element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                element['user_id'] = element._id;
+              }
+            }
+            else {
+              if (element.middle_initial) {
+                element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name;
+                element['user_id'] = element._id;
+              } else {
+                element['name'] = element.first_name + ' ' + element.last_name;
+                element['user_id'] = element._id;
+              }
+            }
+          });
+
+          this.allPlayerList = players;
+          this.allPlayerList.forEach(element => {
+            if (element.suffix) {
+              if (element.middle_initial) {
+                element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                element['user_id'] = element._id;
+              } else {
+                element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                element['user_id'] = element._id;
+              }
+            }
+            else {
+              if (element.middle_initial) {
+                element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name;
+                element['user_id'] = element._id;
+              } else {
+                element['name'] = element.first_name + ' ' + element.last_name;
+                element['user_id'] = element._id;
+              }
+            }
+
+          });
+          
+        });
+
+
+        this.restApiService.lists('usersbyorg/'+orgId).subscribe( members => {
+          console.log('---member list---', members)
+          if( members.length > 0)
+          {
+
+            members.forEach( mem => {
+              console.log('---test---', mem.roles[0]['role_id'])                
+                /* if( this.search('player', mem.roles) )
+                {                 
+                  this.playerList.push(mem);
+                } */
+                if( this.search('manager', mem.roles) )
+                {
+                  this.managerList.push(mem);
+                }
+                if( this.search('coach', mem.roles) )
+                {
+                  this.coachList.push(mem);
+                }
+            })
+
+            setTimeout(() => {
+
+                  /* if( this.playerList.length >0)
+                  {
+                    this.playerList.forEach(element => {
+                      this.teamplayerList.push({name: element.first_name+''+element.last_name, id: element._id});
+                    })
+                  } */
+
+                  if (this.coachList.length != 0) {
+                    this.coachList.forEach(element => {
+                      this.teamcoachList.push({name: element.first_name+' '+element.last_name, id: element._id});
+                    })
+
+                    this.coachList.forEach(element => {
+                      if (element.suffix) {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                        }
+                      }
+                      else {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name
+                        }
+                      }
+                    });
+
+                  }
+
+                  if(this.managerList.length != 0) {      
+                    this.managerList.forEach(element => {
+                      this.teammanagerList.push({name: element.first_name+' '+element.last_name, id: element._id});
+                    })
+
+                    this.managerList.forEach(element => {
+                      if (element.suffix) {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name + ' ' + element.suffix;
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name + ' ' + element.suffix;
+                        }
+                      }
+                      else {
+                        if (element.middle_initial) {
+                          element['name'] = element.first_name + ' ' + element.middle_initial + ' ' + element.last_name
+                        } else {
+                          element['name'] = element.first_name + ' ' + element.last_name
+                        }
+                      }
+                    });
+
+                  }
+              
+            }, 1000);
+
+            setTimeout(() => {
+    
+            $('#player_select').multiSelect('refresh');
+            $('#coach_select').multiSelect('refresh');
+            $('#manager_select').multiSelect('refresh');
+            
+
+            }, 1000);
+
+          }
+
+          })
+        
+
+      }
+
+    }catch (error) {
+      console.log(error);
+
+    }
+
+    return false;
+
     try {
       let queryObj = {
         'auth_uid': this.uid,
@@ -982,7 +1266,7 @@ export class TeamEditComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.datePickerInitiate();
+      //this.datePickerInitiate();
     }, 2000);
   }
   ngAfterContentInit() {
@@ -992,7 +1276,16 @@ export class TeamEditComponent implements OnInit {
   }
 
   async getPositionBySport(sportId) {
+
     this.positionList = [];
+    this.restApiService.lists('positionsbysports/'+sportId).subscribe( res => {
+      this.positionList = res;
+      
+    }, e => {
+      console.log('---Level API error----', e)
+    })
+
+   /*  this.positionList = [];
     let positionDropdownRequest: any = {
       'auth_uid': this.uid, 'organization_id': this.orgId, 'sport_id': sportId
     }
@@ -1008,7 +1301,7 @@ export class TeamEditComponent implements OnInit {
     } catch (error) {
       console.log(error);
       this.positionList = [];
-    }
+    } */
   }
   heightValidation(event, form, index) {
     if (form.value.player[index].height.height_main_unit === "ft") {

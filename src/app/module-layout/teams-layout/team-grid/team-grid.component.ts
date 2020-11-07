@@ -438,8 +438,25 @@ export class TeamGridComponent implements OnInit {
 
   }
 
-  userEdit(data) {
-    data.pageNo = this.page;
+  userEdit(id) {
+
+    this.restApiService.lists('teams/'+id).subscribe( teamdata =>{
+      this.restApiService.lists('teammembers/'+id).subscribe( memberdata =>{
+        this.teamData = {'team': teamdata, 'member': memberdata}
+       
+        this.change.emit({ action: "editteam", data: this.teamData })
+      })
+       
+      
+    }, e=>{
+      console.log('----API error for team list----', e)
+    })
+    console.log('---id---', id)
+
+    return false;
+
+
+    /* data.pageNo = this.page;
     data.pageSize = this.pageSize;
     data.seasonId = this.seasonType;
     data.seaonName = this.selectedSeason;
@@ -456,7 +473,7 @@ export class TeamGridComponent implements OnInit {
     data.searchKey = this.searchKey;
     data.searchFilter = this.searchFilter;
 
-    this.change.emit({ action: "editteam", data: data })
+    this.change.emit({ action: "editteam", data: data }) */
   }
 
   userView(id) {
