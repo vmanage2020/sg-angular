@@ -18,6 +18,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Logoinfo } from '../../logoinfo.interface';
 
 import { RestApiService } from '../../../shared/rest-api.services';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 @Component({
   selector: 'app-team-edit',
@@ -177,13 +178,71 @@ export class TeamEditComponent implements OnInit {
         //this.getTeamInfoById(this.teamInfo)
         //this.getPositionBySport(this.injectedData.data.sport_id)
         //this.getSeasonBySport(this.injectedData.data.sport_id);
-        this.getMembersByOrg(this.orgId, this.injectedData.data.sport_id, this.injectedData.data.season_id, this.injectedData.data.level_id);
-        this.getPositionBySport(this.injectedData.data.sport_id); 
+        
+        this.getMembersByOrg(this.orgId, this.injectedData.data.team.sport_id, this.injectedData.data.team.season_id, this.injectedData.data.team.level_id);
+        this.getPositionBySport(this.injectedData.data.team.sport_id); 
+        this.getTeamInfo(this.injectedData.data)
       }
     }
   }
 
+  getTeamInfo(data)
+  {
+    console.log('----getTeamInfo data---', data)
+    console.log( data.member );
+    if(data.member.length>0)
+    {
+      data.member.forEach( mem => {
+        if(mem.player)
+        {
+          console.log('---player---', mem.player)
+          if( mem.player.user_list.length>0)
+          {
+             
+            mem.player.user_list.forEach( memplayer => {
+              this.playerArr.push(this.player());              
+            })
+            this.playerArr.patchValue( mem.player.user_list );
+            mem.player.user_list.forEach((player, index) => {
+              console.log('---player---', player, '--index---', index)
+              this.playerArr.at(index).patchValue({
+                position_list: player.positions[0].position_id,
+              })
+            })
 
+          }
+        }
+        /** Endof Player Information Binding */
+        if(mem.coach)
+        {
+          console.log('---coach---', mem.coach)
+          if( mem.coach.user_list.length>0)
+          {
+            mem.coach.user_list.forEach( memcoach => {
+              this.coachArr.push(this.coach()); //Coach row Initiation
+            })
+
+            this.coachArr.patchValue(mem.coach.user_list);
+          }
+        }
+         /** Endof Coach Information Binding */
+
+         if(mem.manager)
+         {
+           console.log('---manager---', mem.manager)
+           if( mem.manager.user_list.length>0)
+           {
+             mem.manager.user_list.forEach( memmanager => {
+              this.managerArr.push(this.coach()); //Coach row Initiation               
+             })
+ 
+             this.managerArr.patchValue(mem.manager.user_list);
+             console.log('---sss---', this.managerArr)
+           }
+         }
+      })
+    }
+  }
 
   get f() { return this.updateTeamForm.controls; }
 
@@ -581,10 +640,10 @@ export class TeamEditComponent implements OnInit {
 
             members.forEach( mem => {
               console.log('---test---', mem.roles[0]['role_id'])                
-                /* if( this.search('player', mem.roles) )
+                if( this.search('player', mem.roles) )
                 {                 
                   this.playerList.push(mem);
-                } */
+                } 
                 if( this.search('manager', mem.roles) )
                 {
                   this.managerList.push(mem);
@@ -1276,9 +1335,10 @@ export class TeamEditComponent implements OnInit {
   }
 
   async getPositionBySport(sportId) {
-
+    console.log('---sportId--', sportId)
     this.positionList = [];
-    this.restApiService.lists('positionsbysports/'+sportId).subscribe( res => {
+    await this.restApiService.lists('positionsbysports/'+sportId).subscribe( res => {
+      console.log('---positions res----', res)
       this.positionList = res;
       
     }, e => {
@@ -1323,6 +1383,8 @@ export class TeamEditComponent implements OnInit {
 
   async onSubmit(form) {
 
+    console.log('----form submit----', form.value)
+    return false;
     this.submitted = true;
     if (form.value.player.length != 0 && this.allPlayerList.length !== 0) {
       this.updateTeamForm.patchValue({
