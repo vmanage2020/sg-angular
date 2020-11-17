@@ -5,11 +5,11 @@
             <!--  <h4 class="header-title mb-4">Teams</h4>
            <p>Work in process</p>    -->                 
            
-            <button (click)="addTag()" type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
-                <i class="mdi mdi-plus-circle"></i> Add Tag
+            <button (click)="addTeam()" type="button" class="btn btn-sm btn-blue waves-effect waves-light float-right">
+                <i class="mdi mdi-plus-circle"></i> Add Team
             </button>
-            <h4 class="header-title mb-4">Tags</h4>
-            
+            <h4 class="header-title mb-4">Teams</h4>
+{{data.lenght}}            
             <table class="table table-hover m-0 table-centered dt-responsive nowrap w-100" id="tickets-table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                 <thead>
                <tr>
@@ -28,49 +28,49 @@
                 </thead>
 
                 <tbody>
-                    <tr *ngFor="let Tagdata of data let i = index;">
+                    <tr *ngFor="let Teamdata of data let i = index;">
                     
                         <td><b>{{i+1}}</b></td>
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Tagdata.team_name}}</span>
+                                <span class="ml-2">{{Teamdata.team_name}}</span>
                             </a>
                         </td>
     
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Tagdata.level}}</span>
+                                <span class="ml-2">{{Teamdata.level}}</span>
                             </a>
                         </td>
                         
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Tagdata.players}}</span>
+                                <span class="ml-2">{{Teamdata.players_count}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Tagdata.coaches}}</span>
+                                <span class="ml-2">{{Teamdata.coaches_count}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Tagdata.managers}}</span>
+                                <span class="ml-2">{{Teamdata.managers_count}}</span>
                             </a>
                         </td>
 
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Tagdata.season}}</span>
+                                <span class="ml-2">{{Teamdata.season_lable}}</span>
                             </a>
                         </td>
 
                         
                         <td>
                             <a href="javascript: void(0);" class="text-body">
-                                <span class="ml-2">{{Tagdata.sport}}</span>
+                                <span class="ml-2">{{Teamdata.sport_name}}</span>
                             </a>
                         </td>
      
@@ -78,9 +78,9 @@
                             <div class="btn-group dropdown">
                                 <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-sm" data-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" (click)="viewTag(Tagdata.tag_id)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle"></i>View</a>                                    
-                                    <a class="dropdown-item" (click)="editTag(Tagdata.tag_id)"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
-                                    <a class="dropdown-item" (click)="deleteTag(Tagdata.tag_id,Tagdata.team_name)"><i class="mdi mdi-delete mr-2 text-muted font-18 vertical-middle"></i>Remove</a>
+                                    <a class="dropdown-item" (click)="viewTeam(Teamdata.team_id)"><i class="mdi mdi-eye mr-2 text-muted font-18 vertical-middle"></i>View</a>                                    
+                                    <a class="dropdown-item" (click)="editTeam(Teamdata.team_id)"><i class="mdi mdi-pencil mr-2 text-muted font-18 vertical-middle"></i>Edit</a>
+                                    <a class="dropdown-item" (click)="deleteTeam(Teamdata.team_id,Teamdata.team_name)"><i class="mdi mdi-delete mr-2 text-muted font-18 vertical-middle"></i>Remove</a>
 
                                 </div>
                             </div>
