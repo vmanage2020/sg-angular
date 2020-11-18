@@ -1,2 +1,170 @@
-<p>team-list-view works!</p>
-{{ teamData | json }}
+<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<div class="row">
+        <div class="col-lg-12">
+            <div class="card-box">
+                <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Team Details</h5>
+                 
+                <div class="col-lg-6" style="float: left;">
+                <div class="form-group mb-3">
+                    <label for="sport_id"> Sport </label>
+                    <div class="data_val"> {{teamData.team.sport_name}} </div> 
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="sport_id"> Season </label>
+                    <div class="data_val"> {{teamData.team.season_lable}} </div> 
+                </div>
+                </div>
+
+                <div class="col-lg-6" style="float: left;">
+                <div class="form-group mb-3">
+                    <label for="sport_id"> Level </label>
+                    <div class="data_val"> {{teamData.team.level}} </div> 
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="team_name"> Team Name </label>
+                    <div class="data_val"> {{teamData.team.team_name}} </div> 
+                </div>
+                </div>
+
+                <div class="col-lg-12" style="float: left;">
+                
+                    <div class="form-group mb-3" style="height: auto;">
+                        <label for="player_name" style="float: none;">Players Details</label>
+                        
+                        <div  id="Player">
+                        <table id="basic-datatablePlayer" class="table table-responsive datatables dt-responsive nowrap mb-1">
+                            <thead class="border">
+                                <tr >
+                                    <th class="border">S.No</th>
+                                    <th class="border" [ngStyle]="{'width': this.columnWidth - 4 +'%' }">Name</th>
+                                    <th class="border" [ngStyle]="{'width': this.columnWidth + 10 +'%' }">Position(s)</th>
+                                    <th class="border" [ngStyle]="{'width': this.columnWidth - 3 +'%' }">Shoots</th>
+                                    <th class="border" [ngStyle]="{'width': this.columnWidth + 17 +'%' }">Height</th>
+                                    <th class="border" [ngStyle]="{'width': this.columnWidth +'%' }">Weight</th>
+                                    <th class="border" [ngStyle]="{'width': this.columnWidth + 17 +'%' }" *ngFor="let playerMetaDataItem of playerMetaList; index as i;">
+                                        {{playerMetaDataItem.Name}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border" *ngFor="let player of memberData[0].player.user_list; let i = index" >
+                                    
+                                    <td class="border p-1">{{i+1}}</td>
+                                    
+                                    <td class="border p-1">{{player.first_name || "-"}}&nbsp;{{player.middle_initial}}&nbsp;{{player.last_name}}</td>
+                                    
+                                    <td class="border p-1" *ngIf="player?.positions.length>0"> {{player?.positions[0].position_name}}&nbsp;</td>
+                                    
+                                    <td class="border p-1"> {{player?.shoot}}&nbsp; </td>
+                                    
+                                    <td class="border p-1">
+                                    {{ player?.height.height_main_uom}} &nbsp;{{ player?.height.height_main_unit}}&nbsp;
+                                    {{ player?.height.height_sub_uom}} &nbsp;{{ player?.height.height_sub_unit}}
+                                    </td>
+                                    
+                                    <td class="border p-1">{{ player?.weight.weight_main_uom}} &nbsp;{{ player?.weight.weight_main_unit}}</td>
+
+                                    <td class="border p-1 " *ngFor="let playerMetaDataItem of playerMetaList; index as i;">
+                                        -
+                                    </td>   
+
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+ 
+                    </div>
+
+                </div>
+                
+                <div class="col-lg-12" style="float: left;">
+  
+                    <div class="form-group mb-3" style="height: auto;">
+                        <label for="coach_name" style="float: none;">Coach Details</label>
+ 
+                        <div id="Coach">
+                            <table id="basic-datatable" class="table datatables dt-responsive nowrap">
+                                <thead class="border">
+                                    <tr>
+                                        <th class="border" >S.No</th>
+                                        <th class="border" [ngStyle]="{'width': this.columnWidth + 17 +'%' }">Name</th>
+                                        <th class="border" [ngStyle]="{'width': this.columnWidth + 10 +'%' }">Title</th>
+                                        <th class="border" [ngStyle]="{'width': this.columnWidth + 17 +'%' }" *ngFor="let coachMetaDataItem of coachMetaList; index as i;">
+                                            {{coachMetaDataItem.Name}}
+                                         </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border" *ngFor="let coach of memberData[0].coach.user_list; let i = index" >
+                                        
+                                        <td class="border p-1">{{i+1}}</td>
+                                        
+                                        <td class="border p-1">{{coach.first_name || "-"}}&nbsp;{{coach.middle_initial}}&nbsp;{{coach.last_name}}</td>
+                                         
+                                        <td class="border p-1"> {{coach.title || "-"}}&nbsp; </td>
+                                         
+                                        <td class="border p-1 " *ngFor="let coachMetaDataItem of coachMetaList; index as i;">
+                                            -
+                                        </td>   
+    
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-12" style="float: left;">
+
+                    <div class="form-group mb-3" style="height: auto;">
+                        <label for="season_name" style="float: none;">Manager Details</label>
+                                         
+                        <div id="Manager">
+                            <table id="basic-datatable" class="table datatables dt-responsive nowrap">
+                                <thead class="border">
+                                    <tr>
+                                        <th class="border" >S.No</th>
+                                        <th class="border" [ngStyle]="{'width': this.columnWidth + 17 +'%' }">Name</th>
+                                        <th class="border" [ngStyle]="{'width': this.columnWidth + 17 +'%' }" *ngFor="let managerMetaDataItem of managerMetaList; index as i;">
+                                            {{managerMetaDataItem.Name}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border" *ngFor="let manager of memberData[0].manager.user_list; let i = index" >
+                                        
+                                        <td class="border p-1">{{i+1}}</td>
+                                        
+                                        <td class="border p-1">{{manager.first_name || "-"}}&nbsp;{{manager.middle_initial}}&nbsp;{{manager.last_name}}</td>
+                                         
+                                        <td class="border p-1 " *ngFor="let managerMetaDataItem of managerMetaList; index as i;">
+                                            -
+                                        </td>   
+    
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                
+                </div>    
+  
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <button (click)="listTeam()" type="button" class="btn w-sm btn-light waves-effect" style="float: left;">Cancel</button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button (click)="editTeam( teamData.team.team_id )" type="button" class="btn w-sm btn-success ml-1" style="float: right;">Edit</button>
+                    </div>
+                </div> <!-- end col -->
+    
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+ 
+    </div>
+    <!-- end row -->

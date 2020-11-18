@@ -50,6 +50,10 @@ export class TeamListViewComponent implements OnInit {
   orgId: any;
 
 
+  playerMetaList: any[] = [];
+  coachMetaList: any[] = [];
+  managerMetaList: any[] = [];
+
   constructor(private router: Router, 
     private route: ActivatedRoute,
     private notification: NgiNotificationService,
@@ -70,18 +74,95 @@ export class TeamListViewComponent implements OnInit {
     };     
   }
 
+  memberData:any=[];
+
   async getTeams(){
     console.log(this.orgId);
  
       await this.restApiService.lists('teams/'+this.resourceID).subscribe( teamdata =>{
+
+          this.getMetaData('player',teamdata.sport_id,this.orgId);
+          this.getMetaData('coach',teamdata.sport_id,this.orgId);
+          this.getMetaData('manager',teamdata.sport_id,this.orgId);
+
         this.restApiService.lists('teammembers/'+this.resourceID).subscribe( memberdata =>{
-          this.teamData = {'team': teamdata, 'member': memberdata}
+
+          this.teamData = {'team': teamdata, 'member': memberdata};
+          this.memberData = memberdata;
+          
+          this.loading = false;
+          this.displayLoader = false;
+
         });        
       }, e=>{
         console.log('----API error for team list----', e)
       });
       console.log('---id---', this.resourceID);  
     
+  }
+
+  
+  getMetaData( type, sports, orgid)
+  {
+
+    if( type == 'player')
+    {
+      var url = 'playermetadatabysportsorg/'+orgid+'/'+sports
+    }
+    else if( type == 'coach')
+    {
+      var url = 'coachmetadatabysportsorg/'+orgid+'/'+sports
+    }
+    else if( type == 'manager')
+    {
+      var url = 'managermetadatabysportsorg/'+orgid+'/'+sports
+    }
+    this.restApiService.lists(url).subscribe( res => {
+      if( type == 'player')
+      {
+        //this.playerMetaList = res;
+        res.forEach( play => {
+          this.playerMetaList.push({
+            "ID": play._id,
+            "Key": play.field_name.replace(/ +/g, "").toLowerCase(),
+            "Name": play.field_name,
+            "Type": play.field_type,
+            "Value": play.value
+            })
+        })
+        
+      }
+      else if( type == 'coach')
+      {
+        //this.coachMetaList = res;
+        res.forEach( play => {
+          this.coachMetaList.push({
+            "ID": play._id,
+            "Key": play.field_name.replace(/ +/g, "").toLowerCase(),
+            "Name": play.field_name,
+            "Type": play.field_type,
+            "Value": play.value
+            })
+        })
+      }
+      else if( type == 'manager')
+      {
+        //this.managerMetaList = res;
+        res.forEach( play => {
+          this.managerMetaList.push({
+            "ID": play._id,
+            "Key": play.field_name.replace(/ +/g, "").toLowerCase(),
+            "Name": play.field_name,
+            "Type": play.field_type,
+            "Value": play.value
+            })
+        })
+      }
+      
+      
+    }, e => {
+      console.log('---Level API error----', e)
+    })
   }
  
   listTeam(){

@@ -121,10 +121,14 @@
                 <ul class="nav-second-level collapse" aria-expanded="false" [routerLinkActive]="['in']">
                     <li [routerLinkActive]="['active']">
                         <a (click)="createTeam()" [routerLink]="[teamRouter]" class="waves-effect" [ngClass]="{'is-active': team}">Teams</a>
-                    </li>                    
+                    </li> 
+                    <li [routerLinkActive]="['active']">
+                        <a (click)="createTeamList()" class="waves-effect" [ngClass]="{'is-active': team}">Teams *</a>
+                    </li>                      
                 </ul>
+
                 
-                <ul class="nav-second-level collapse" aria-expanded="false" >
+                <ul class="nav-second-level collapse" aria-expanded="false" [routerLinkActive]="['in']" >
                     <li [routerLinkActive]="['active']">
                         <a (click)="createTeamList()" class="waves-effect" [ngClass]="{'is-active': team}">Teams *</a>
                     </li>                    
