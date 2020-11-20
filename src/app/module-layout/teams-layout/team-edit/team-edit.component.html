@@ -65,10 +65,12 @@
                                 </div>
                             </div>
 
+                           
+
                             
-                            <div class="row">
+                             <div class="row">
                                 <div class="col-3 mt-2 label-border-player allColMaxWidth" id="label-player">
-                                    <label class="text-player-req" for="first_name">Players</label>
+                                    <label class="text-player-req" for="label-player">Players</label>
                                 </div>
                                 <div class="col-9 mt-2 mb-0" id="playerHeight">
                                     <div formArrayName="player" id="Player" >
@@ -87,7 +89,8 @@
                                                 <tr class="border"
                                                     *ngFor="let line of updateTeamForm?.get('player')?.controls; let lineIndex = index"
                                                     [formGroupName]="lineIndex">
-                                                    <td class="border p-1 pt-2">{{lineIndex+1}}</td>
+                                                    
+                                                    <td class="border p-1 pt-2">1</td>
                                                     <td class="border p-1">
                                                         
 
@@ -222,7 +225,7 @@
                                                             </div>
                                                         </div>
                                                     </td>             
-                                                    <!-- is_terminated  -->                                     
+                                                                                
                                                     <td class="noBorder" *ngIf="line.get('is_terminated').value">  
                                                         <a class="color font-weight-bold">Terminated</a>
                                                     </td>  

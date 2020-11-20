@@ -24,6 +24,7 @@ import { TeamListCreateComponent } from './team-list-create/team-list-create.com
 import { TeamListViewComponent } from './team-list-view/team-list-view.component';
 import { TeamListEditComponent } from './team-list-edit/team-list-edit.component';
 
+
 @NgModule({
   declarations: [TeamCreateComponent, TeamGridComponent, TeamEditComponent, TeamViewComponent, TeamLayoutComponent, TeamListComponent, TeamListCreateComponent, TeamListViewComponent, TeamListEditComponent],
   imports: [

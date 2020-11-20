@@ -200,16 +200,11 @@ export class TeamEditComponent implements OnInit {
           {
              
             mem.player.user_list.forEach( memplayer => {
-              this.playerArr.push(this.player());              
+              this.playerArr.push(this.player());   
+              this.playerArr.patchValue( mem.player.user_list );               
             })
-            this.playerArr.patchValue( mem.player.user_list );
-            mem.player.user_list.forEach((player, index) => {
-              console.log('---player---', player, '--index---', index)
-              this.playerArr.at(index).patchValue({
-                position_list: player.positions[0].position_id,
-              })
-            })
-
+                    
+            console.log('----this.playerArr----', this.playerArr)
           }
         }
         /** Endof Player Information Binding */

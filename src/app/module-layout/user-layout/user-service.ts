@@ -312,8 +312,10 @@ export class UserService {
     // get userDetails By Id for login and fetch filtered data(only active user)
     async getUserById(queryObj: any) {
         try {
-
+            console.log('----queryObj----', queryObj)
             let userinformation: any = await this.adminref.collection('/users').doc(queryObj.uid).get();
+            
+            console.log('----userinformation---', userinformation)
             if (userinformation.exists) {
                 let userInfo: any = userinformation.data()
                 userInfo.roles_by_seasons = [];

@@ -25,6 +25,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger'; 
 
+import { IntegralUIModule } from '@lidorsystems/integralui-web/bin/integralui/integralui.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
     // }),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    
+    IntegralUIModule,
     LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR}),
      
   ],

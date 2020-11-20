@@ -9,6 +9,8 @@ import { TeamListComponent } from './team-list/team-list.component';
 import { TeamListCreateComponent } from './team-list-create/team-list-create.component';
 import { TeamListViewComponent } from './team-list-view/team-list-view.component';
 import { TeamListEditComponent } from './team-list-edit/team-list-edit.component';
+
+
 const routes: Routes = [
   {
     path: '',

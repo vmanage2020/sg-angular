@@ -1,10 +1,379 @@
-<app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader>
+<!-- <app-ui-preloader [display]="loading" *ngIf="displayLoader"></app-ui-preloader> -->
 <div class="row">
         <div class="col-lg-6">
             <div class="card-box">
                 <h5 class="text-uppercase bg-light p-2 mt-0 mb-3">Team Details</h5>
                 
-                <form class="needs-validation" name="createteamForm" [formGroup]="createteamForm"
+                <form [formGroup]="createteamForm" (ngSubmit)="submitForm()" class="col-12 p-0">
+
+
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height ">
+                            <label class="for-label-req" for="first_name">Sport</label>
+                        </div>
+                        <div class="col-4 mt-2" id="customHeight">
+                            <ng-select 
+                            [items]="SportsList" 
+                            formControlName="sport_id" 
+                            bindLabel="name"
+                            bindValue="sport_id"
+                            [loading]="sportSelect"
+                            (focus)="selectedSport($event,createteamForm)"
+                            [clearable]="false" 
+                            (change)="selectedSport($event,createteamForm)"
+                             placeholder="Select sport">
+                            </ng-select>
+                            <div class="input-error-msg text-danger" *ngIf="sportValid">
+                                Select Sport.
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height ">
+                            <label class="for-label-req" for="first_name">Season</label>
+                        </div>
+                        <div class="col-4 mt-2" id="customHeight">
+                            <ng-select 
+                            [items]="seasonList" 
+                            formControlName="season_id" 
+                            bindLabel="season_name" 
+                            bindValue="season_id"
+                            [loading]="seasonSelect"
+                            (focus)="selectedSeason($event,createteamForm)" 
+                            [clearable]="false"
+                            (change)="selectedSeason($event,createteamForm)"
+                            placeholder="Select season">
+                            </ng-select>
+                            <div class="input-error-msg text-danger" *ngIf="seasonValid">
+                                Select Season.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height ">
+                            <label class="for-label-req" for="first_name">Level</label>
+                        </div>
+                        <div class="col-4 mt-2" id="customHeight">
+                            <ng-select 
+                            [items]="levelList" 
+                            formControlName="level_id" 
+                            bindLabel="level_name" 
+                            bindValue="level_id" 
+                            [loading]="levelSelect"
+                            [clearable]="false" 
+                            (change)="selectedLevel($event,createteamForm)"                                    
+                            placeholder="Select level">
+                            </ng-select>
+                            <div *ngIf="f.level_id.errors?.required && submitted" class="input-error-msg text-danger">
+                                Select Level.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3 mt-2 label-border-height ">
+                            <label class="for-label-req" for="first_name">Team Name</label>
+                        </div>
+                        <div class="col-4 mt-2" id="customHeight">
+                            <input type="text" 
+                            formControlName="team_name" 
+                            class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.team_name.errors }" name="team_name"
+                            id="team_name" 
+                            placeholder="Enter team name" />
+                            <div *ngIf="submitted && f.team_name.errors" class="invalid-feedback">
+                                <div *ngIf="f.team_name.errors.required">Team Name is required.</div>
+                                <div *ngIf="f.team_name.errors?.pattern">Only text characters are allowed.</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-12 row" *ngIf="teamplayerList.length>0">
+                        <div class="form-group mb-3 col-lg-6">
+                            <label for="sports">Players <span class="text-danger">*</span></label>
+        
+                            <ng-select [items]="teamplayerList"
+                            id="player_select" name="player_select" formControlName="player_select"
+                            bindLabel="name"
+                            bindValue="id"
+                            [multiple]="true"
+                            placeholder="Select Players"
+                            (change)="OnPlayerChange($event,createteamForm)"
+                            [ngClass]="{ 'is-invalid': submitted && f.player_select.errors }">
+                            </ng-select>
+                        </div>
+                    </div>
+
+                   
+                    <div class="col-lg-12 row" *ngIf="createteamForm?.value.player_select != null ">
+                        <div class="col-lg-12">
+                          <div class="col-12 mt-2 heading" style="background-color: #f1f5f7 !important;margin: -5px 0px 0px 0px !important;">
+                            <h4 style="background-color: #f1f5f7 !important;padding: 10px 0px;margin: 0px;">Select Players</h4>
+                          </div>
+                        </div>
+                      </div>
+                        <div class="col-lg-12 row" style="padding-bottom: 20px;padding-left: 25px;" *ngIf="createteamForm?.value.player_select != null">
+                          <div class="col-12 mt-2 mb-0 pl-0">
+                            <div formArrayName="player">
+                              <table id="basic-datatable" style="display: table;"
+                              class="table table-responsive datatables dt-responsive nowrap mb-0">
+                                <thead class="border">
+                                  <tr>
+                                    <th class="border">Name</th>
+                                    <th class="border">Position(s)</th>
+                                     <th class="border">Shoots</th>
+                                    <th class="border">Height</th>
+                                    <th class="border">Weight</th>
+                                  </tr>
+                                </thead>
+                                    <tbody>
+                                    
+                                    <tr class="border"
+                                    *ngFor="let player of playerArr.controls; let i = index" [formGroupName]="i">
+                                        <td>
+                                            <ng-select appendTo="body" 
+                                            [items]="playerList" 
+                                            bindLabel="name"                                          
+                                            [clearable]="false" 
+                                            formControlName="first_name"
+                                            [clearSearchOnAdd]="true"
+                                            (change)="selectedPlayer($event,createteamForm,i)"
+                                            bindValue="first_name" placeholder="Select name">
+                                        </ng-select>
+                                        </td>
+                                        <td>
+                                            <ng-select appendTo="body" 
+                                            [items]="positionList" 
+                                            bindLabel="name"
+                                            [clearable]="false" 
+                                            [multiple]="true"
+                                            [clearSearchOnAdd]="true" 
+                                            (change)="selectedPosition($event,createteamForm,i)"
+                                            bindValue="position_id" placeholder="Select position">
+                                            </ng-select>
+                                        </td>
+                                        <td>
+                                            <ng-select 
+                                            [items]="shootList" 
+                                            bindLabel="name"
+                                            formControlName="shoot" 
+                                            [clearable]="false" 
+                                            bindValue="name"
+                                            placeholder="Select shoots">
+                                        </ng-select>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex p-0" formGroupName="height">
+                                                <div >
+                                                    <input type="text" class="form-control"
+                                                    formControlName="height_main_uom" />                                            
+                                                </div>
+                                                <div>
+                                                    <ng-select 
+                                                        [items]="height" 
+                                                        bindLabel="value" 
+                                                        class="px-1" 
+                                                        (change)=heightValidation($event,createteamForm,i)
+                                                        formControlName="height_main_unit" 
+                                                        [clearable]="false"
+                                                        bindValue="value">
+                                                    </ng-select>
+                                                
+                                                </div>
+
+                                                <div >
+                                                    <input type="text" class="form-control"
+                                                    formControlName="height_sub_uom" />
+                                                </div>
+
+                                                <ng-select 
+                                                [items]="height" 
+                                                bindLabel="name"
+                                                class="px-1" 
+                                                (change)=heightValidation($event,createteamForm,i)
+                                                formControlName="height_sub_unit" [clearable]="false"
+                                                bindValue="name">
+                                                </ng-select>
+                                                    
+                                            </div>       
+
+                                        </td>
+                                        <td formGroupName="weight">
+
+                                            <div class="d-flex p-0">
+                                                <div id="form">
+                                                     <input type="text" class="form-control"
+                                                     formControlName="weight_main_uom" />
+                                                    
+
+                                                </div>
+                                                <div>
+                                                     <ng-select appendTo="body" 
+                                                     [items]="height" 
+                                                     bindLabel="weight" 
+                                                     class="px-1"
+                                                     formControlName="weight_main_unit" [clearable]="false"
+                                                     bindValue="weight">
+                                                 </ng-select>
+                                                 
+                                                </div>
+                                              </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12 row" *ngIf="teamcoachList.length>0">
+                            <div class="form-group mb-3 col-lg-6">
+                                <label for="sports">Coach <span class="text-danger">*</span></label>
+            
+                                <ng-select [items]="teamcoachList"
+                                id="coach_select" name="coach_select" formControlName="coach_select"
+                                bindLabel="name"
+                                bindValue="id"
+                                [multiple]="true"
+                                placeholder="Select Coach"
+                                (change)="OnCoachChange($event,createteamForm)"
+                                [ngClass]="{ 'is-invalid': submitted && f.coach_select.errors }">
+                                </ng-select>
+                            </div>
+                        </div>
+
+                       <div class="col-lg-12 row" *ngIf="createteamForm?.value.coach_select != null ">
+                        <div class="col-lg-12">
+                          <div class="col-12 mt-2 heading" style="background-color: #f1f5f7 !important;margin: -5px 0px 0px 0px !important;">
+                            <h4 style="background-color: #f1f5f7 !important;padding: 10px 0px;margin: 0px;">Select Coach</h4>
+                          </div>
+                        </div>
+                      </div>
+                        <div class="col-lg-12 row" style="padding-bottom: 20px;padding-left: 25px;" *ngIf="createteamForm?.value.coach_select != null">
+                          <div class="col-12 mt-2 mb-0 pl-0">
+                            <div formArrayName="coach">
+                              <table id="basic-datatable" style="display: table;"
+                              class="table table-responsive datatables dt-responsive nowrap mb-0">
+                                <thead class="coach">
+                                  <tr>
+                                    <th class="border">Name</th>
+                                    <th class="border">Title</th>
+                                  </tr>
+                                </thead>
+                                    <tbody>
+                                    
+                                    <tr class="border"
+                                    *ngFor="let coach of coachArr.controls; let j = index" [formGroupName]="j">
+                                        <td>
+                                            <ng-select 
+                                                [items]="coachList" bindLabel="name"
+                                                [clearable]="false" 
+                                                formControlName="first_name"
+                                                [clearSearchOnAdd]="true"
+                                                bindValue="first_name" placeholder="Select Name">
+                                            </ng-select>
+                                        </td>
+                                        <td>
+                                            <input type="text" formControlName="title"
+                                            class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && coachInfo.controls.title.errors }"
+                                            name="team_name" id="team_name"
+                                            placeholder="Enter title " />
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                          </div>
+                        </div>
+
+
+
+                        <div class="col-lg-12 row" *ngIf="teammanagerList.length>0">
+                            <div class="form-group mb-3 col-lg-6">
+                                <label for="sports">Manager <span class="text-danger">*</span></label>
+            
+                                <ng-select [items]="teammanagerList"
+                                id="manager_select" name="manager_select" formControlName="manager_select"
+                                bindLabel="name"
+                                bindValue="id"
+                                [multiple]="true"
+                                placeholder="Select Manager"
+                                (change)="OnManagerChange($event,createteamForm)"
+                                [ngClass]="{ 'is-invalid': submitted && f.manager_select.errors }">
+                                </ng-select>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-12 row" *ngIf="createteamForm?.value.manager_select != null ">
+                            <div class="col-lg-12">
+                              <div class="col-12 mt-2 heading" style="background-color: #f1f5f7 !important;margin: -5px 0px 0px 0px !important;">
+                                <h4 style="background-color: #f1f5f7 !important;padding: 10px 0px;margin: 0px;">Select Manager</h4>
+                              </div>
+                            </div>
+                          </div>
+                            <div class="col-lg-12 row" style="padding-bottom: 20px;padding-left: 25px;" *ngIf="createteamForm?.value.manager_select != null">
+                              <div class="col-12 mt-2 mb-0 pl-0">
+                                <div formArrayName="manager">
+                                  <table id="basic-datatable" style="display: table;"
+                                  class="table table-responsive datatables dt-responsive nowrap mb-0">
+                                    <thead class="manager">
+                                      <tr>
+                                        <th class="border">Name</th>
+                                      </tr>
+                                    </thead>
+                                        <tbody>
+                                        
+                                        <tr class="border"
+                                        *ngFor="let manager of managerArr.controls; let k = index" [formGroupName]="k">
+                                            <td>
+                                                <ng-select 
+                                                [items]="managerList" bindLabel="name"
+                                                    [clearable]="false" 
+                                                    formControlName="first_name"
+                                                    [clearSearchOnAdd]="true"
+                                                   bindValue="first_name" placeholder="Select Name">
+                                                </ng-select>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                              </div>
+                            </div>
+
+
+                    <!--teamplayerListss - {{ teamplayerList | json}}
+
+                    teamcoachListss - {{ teamcoachList | json}}
+
+                    teammanagerListss - {{ teammanagerList | json}}-->
+
+                    <!-- <div style="float:left">
+ 
+                        <iui-listbox #listbox [items]="items" [selectionMode]="selMode" (selectionChanged)="onSelectionChanged($event)">
+                            <iui-listitem *ngFor="let item of items" [allowAnimation]="true">  
+                                <div class="item-label">{{item.text}}</div>
+                            </iui-listitem>
+                        </iui-listbox>
+                      </div>
+                      <div style="float:left;margin-left:30px;">
+                        <div style="margin-top:35px;padding:10px 0 5px 0;">Selected Items:</div>
+                        <iui-listbox [items]="selItems">
+                            <iui-listitem *ngFor="let item of selItems">  
+                                <div class="item-label">{{item.text}}</div>
+                            </iui-listitem>
+                        </iui-listbox>
+                      </div> -->
+                    
+
+                </form>
+                <!-- <form class="needs-validation" name="createteamForm" [formGroup]="createteamForm"
                 (ngSubmit)="onSubmit(createteamForm)" novalidate>
  
                 <div class="form-group mb-3">
@@ -92,9 +461,9 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <button type="submit" class="btn w-sm btn-success ml-1" style="float: right;">Save</button>
                     </div>
-                </div> <!-- end col -->
+                </div> 
     
-            </form>    
+            </form>  -->   
             </div> <!-- end card-box -->
         </div> <!-- end col -->
  
