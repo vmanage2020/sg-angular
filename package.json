@@ -29,7 +29,7 @@
     "@fullcalendar/timegrid": "^4.2.0",
     "@iplab/ngx-file-upload": "^1.4.0",
     "@kolkov/angular-editor": "1.0.2",
-    "@lidorsystems/integralui-web": "^19.3.0",
+    "@lidorsystems/integralui-web": "^19.4.368",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "@ng-select/ng-select": "^3.0.3",
     "@types/lodash": "^4.14.144",
