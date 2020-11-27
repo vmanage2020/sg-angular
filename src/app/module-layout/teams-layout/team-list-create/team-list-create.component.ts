@@ -10,8 +10,8 @@ import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
 import { CookieService } from 'src/app/core/services/cookie.service';
 
-import { IntegralUISelectionMode } from '@lidorsystems/integralui-web/bin/integralui/components/integralui.core';
-import { IntegralUIListBox } from '@lidorsystems/integralui-web/bin/integralui/components/integralui.listbox';
+//import { IntegralUISelectionMode } from '@lidorsystems/integralui-web/bin/integralui/components/integralui.core';
+//import { IntegralUIListBox } from '@lidorsystems/integralui-web/bin/integralui/components/integralui.listbox';
 
 import { NgiNotificationService } from 'ngi-notification';
 
@@ -26,7 +26,7 @@ import { TeamService } from '../team-service';
 })
 export class TeamListCreateComponent implements OnInit {
 
-  @ViewChild('listbox',{static:false}) listbox: IntegralUIListBox;
+  //@ViewChild('listbox',{static:false}) listbox: IntegralUIListBox;
 
     comboItems: any = [];
     // An array that holds a list of items in the ListBox on the left
@@ -34,7 +34,7 @@ export class TeamListCreateComponent implements OnInit {
     // An array that holds a list of all selected items
     selItems: any = [];
     // Current selection mode is set to single selection
-    private selMode: IntegralUISelectionMode = IntegralUISelectionMode.MultiSimple;
+    //private selMode: IntegralUISelectionMode = IntegralUISelectionMode.MultiSimple;
 
 
   db: any = firebase.firestore();
@@ -57,6 +57,7 @@ export class TeamListCreateComponent implements OnInit {
   managerList: any = [];
   teammanagerList: any = [];
 
+  orgName: any;
   country: any = [];
   countryCodeSelect: any = [];
   
@@ -109,6 +110,7 @@ export class TeamListCreateComponent implements OnInit {
       sport_id: [null, Validators.required],
       season_id: [null, Validators.required],
       level_id: [null, Validators.required],
+      level_name: [''],
       team_name: [null, Validators.required],
 
       player_select: [null],
@@ -123,12 +125,6 @@ export class TeamListCreateComponent implements OnInit {
       coach: this.formBuilder.array([this.coach()]),
       manager: this.formBuilder.array([this.manager()]),
 
-      level_name: ['', Validators.required ],
-      player_name: ['', Validators.required ],
-      coach_name: ['', Validators.required ],
-      managers_name: ['', Validators.required ],
-      season_name: ['', Validators.required ],
-      sport_name: ['', Validators.required ],
     });
   }
   
@@ -157,14 +153,14 @@ export class TeamListCreateComponent implements OnInit {
       positions: this.formBuilder.array([this.positions()]),
       shoot: [null, [Validators.required]],
       height: this.formBuilder.group({
-        height_main_uom: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]*$')]],
-        height_main_unit: ['ft', [Validators.required]],
-        height_sub_uom: [null, [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]*$')]],
-        height_sub_unit: ['in', [Validators.required]]
+        height_main_uom: [''],
+        height_main_unit: ['ft'],
+        height_sub_uom: [null],
+        height_sub_unit: ['in']
       }),
       weight: this.formBuilder.group({
-        weight_main_uom: ['', [Validators.required, Validators.maxLength(3), Validators.pattern('^[0-9]*$')]],
-        weight_main_unit: ['lbs', [Validators.required]],
+        weight_main_uom: [''],
+        weight_main_unit: ['lbs'],
       }),
       playerMeta: new FormArray([]),
       coachMeta: new FormArray([]),
@@ -174,7 +170,7 @@ export class TeamListCreateComponent implements OnInit {
   manager() {
     return this.formBuilder.group({
       user_id: "",
-      first_name: [null, [Validators.required]],
+      first_name: [null],
       middle_initial: "",
       last_name: "",
       suffix: "",
@@ -185,7 +181,7 @@ export class TeamListCreateComponent implements OnInit {
   positions() {
     return this.formBuilder.group({
       position_id: [""],
-      position_name: ['', [Validators.required]],
+      position_name: [''],
       abbreviation: ""
     })
   }
@@ -219,9 +215,30 @@ export class TeamListCreateComponent implements OnInit {
 
         } else {
           this.playerArr.push(this.player());
-          this.playerArr.at(this.createteamForm.controls['player'].value.length - 1).patchValue({
+
+          let length = this.createteamForm.controls['player'].value.length-1;
+          let filterValue = this.playerList.filter(
+            item => item.user_id === playerInfo.id);
+          this.playerArr.at(length).patchValue({
+            selectChange: true,
+          })
+          this.playerArr.at(length).patchValue(filterValue[0]);
+
+          this.createteamForm.patchValue({
+            players_count: this.createteamForm.controls['player'].value.length
+          })
+         /*  this.playerArr.at(this.createteamForm.controls['player'].value.length - 1).patchValue({
             user_id: playerInfo.id
           })
+
+          
+            let filteredValue = this.playerList.filter(
+              item => item.user_id === playerInfo.id);
+              console.log('----filteredValue---',filteredValue);
+  
+            this.playerArr.patchValue(filteredValue); */
+         
+
         }
       })
      
@@ -268,9 +285,22 @@ export class TeamListCreateComponent implements OnInit {
 
         } else {
           this.coachArr.push(this.coach());
-          this.coachArr.at(this.createteamForm.controls['coach'].value.length - 1).patchValue({
-            user_id: coachInfo.id
+
+          let length = this.createteamForm.controls['coach'].value.length-1;
+          let filterValue = this.coachList.filter(
+            item => item.user_id === coachInfo.id);
+          this.coachArr.at(length).patchValue({
+            selectChange: true,
           })
+          this.coachArr.at(length).patchValue(filterValue[0]);
+
+          this.createteamForm.patchValue({
+            coaches_count: this.createteamForm.controls['coach'].value.length
+          })
+
+          /* this.coachArr.at(this.createteamForm.controls['coach'].value.length - 1).patchValue({
+            user_id: coachInfo.id
+          }) */
         }
       })
      
@@ -316,9 +346,22 @@ export class TeamListCreateComponent implements OnInit {
 
         } else {
           this.managerArr.push(this.manager());
-          this.managerArr.at(this.createteamForm.controls['manager'].value.length - 1).patchValue({
-            user_id: managerInfo.id
+
+          let length = this.createteamForm.controls['manager'].value.length-1;
+          let filterValue = this.managerList.filter(
+            item => item.user_id === managerInfo.id);
+          this.managerArr.at(length).patchValue({
+            selectChange: true,
           })
+          this.managerArr.at(length).patchValue(filterValue[0]);
+
+          this.createteamForm.patchValue({
+            managers_count: this.createteamForm.controls['manager'].value.length
+          })
+
+          /* this.managerArr.at(this.createteamForm.controls['manager'].value.length - 1).patchValue({
+            user_id: managerInfo.id
+          }) */
         }
       })
      
@@ -350,9 +393,7 @@ export class TeamListCreateComponent implements OnInit {
 
   }
 
-  selectedPosition(event, form, row) {
-
-  }
+  
   heightValidation(event, form, index) {
 
   }
@@ -400,7 +441,7 @@ export class TeamListCreateComponent implements OnInit {
 
     // At first there are no selected items
     this.selItems = [];
-
+    this.orgName = localStorage.getItem('org_name');
     /* this.uid = this.cookieService.getCookie('uid');
     this.orgId = localStorage.getItem('org_id');
     this.getAllSports();
@@ -579,6 +620,97 @@ export class TeamListCreateComponent implements OnInit {
     }
 }
 
+selectedPosition(event, form, row) {
+  console.log(event)
+
+  if (event.type === "focus") {
+    if (this.orgId) {
+      if (this.sportId) {
+        this.sportValid = false
+      }
+      else {
+        this.sportValid = true
+      }
+    }
+    else {
+      
+    }
+  }
+
+  event.forEach(element => {
+    element['position_name'] = element.name
+  });
+
+  if (event.length != 0) {
+
+    event.forEach((element, index) => {
+      if (this.playerArr.at(row).get('positions').value.length === 1) {
+        console.log(this.playerArr.at(row).get('positions').value[0].position_id)
+        if (!this.playerArr.at(row).get('positions').value[0].position_id) {
+          let filterValue = event.filter(
+            item => item.position_id === element.position_id);
+          (this.playerArr.at(row).get('positions') as FormArray).patchValue(filterValue)
+        }
+        else {
+          console.log(element.name, "name")
+          let isExistPosition = this.playerArr.at(row).get('positions').value.filter(item => item.position_id === element.position_id)
+          if (isExistPosition.length !== 0) {
+
+          }
+          else {
+            console.log(element.name, "name")
+            let filteredValue = event.filter(
+              item => item.position_id === element.position_id);
+            (this.playerArr.at(row).get('positions') as FormArray).push(this.positions());
+            console.log(filteredValue, "value", this.playerArr.at(row).get('positions').value)
+            let lh = this.playerArr.at(row).get('positions').value.length;
+            // console.log((this.playerArr.at(row).get('positions') as FormArray).at(lh));
+            (this.playerArr.at(row).get('positions') as FormArray).at(lh - 1).patchValue(filteredValue[0])
+          }
+
+        }
+      }
+      else {
+
+        let isExistPositions = this.playerArr.at(row).get('positions').value.filter(item => item.position_id === element.position_id)
+        console.log(isExistPositions)
+        if (isExistPositions.length != 0) {
+
+        } else {
+          let filteredValue = event.filter(
+            item => item.position_id === element.position_id);
+          (this.playerArr.at(row).get('positions') as FormArray).push(this.positions());
+          console.log(filteredValue, "value", this.playerArr.at(row).get('positions').value)
+          let lh = this.playerArr.at(row).get('positions').value.length;
+          console.log((this.playerArr.at(row).get('positions') as FormArray).at(lh));
+          (this.playerArr.at(row).get('positions') as FormArray).at(lh - 1).patchValue(filteredValue[0])
+        }
+      }
+    });
+  }
+
+  if (event.length < this.playerArr.at(row).get('positions').value.length) {
+
+    if (event.length >= 0) {
+      let userId = this.playerArr.at(row).get('positions').value.map(item => item.position_name)
+      console.log(userId);
+      let posArr = event.map(item => item.name)
+      let diff: any[] = userId.concat(posArr).filter((val) => {
+        return !(userId.includes(val) && posArr.includes(val));
+      });
+      // console.log(diff,"diff");
+      diff.forEach(element => {
+        (this.playerArr.at(row).get('positions') as FormArray).removeAt(this.playerArr.at(row).get('positions').value.findIndex(item => item.position_name === element))
+      });
+    }
+    else {
+
+    }
+
+  }
+  
+}
+
   getMembersByOrg(orgId: any, sportId: any, seasonId: any, levelId: any) {
     if (sportId && seasonId && levelId)
     {
@@ -723,14 +855,143 @@ export class TeamListCreateComponent implements OnInit {
    
   get f() { return this.createteamForm.controls; }
 
-  async onSubmit(form) {
-    try {
+  goBack()
+  {
+    this.router.navigate(['/teams/list']);
+  }
+
+   submitForm() {
+   
       this.submitted = true;
-      if (form.invalid) {
+      console.log('----form submit----', this.createteamForm)
+      console.log('----form submit value----', this.createteamForm.value);
+      if (this.createteamForm.invalid) {
+        console.log('---invalid---')
         return;
       }
-      console.log('----form submit value----', form); return false;
-    this.displayLoader = true;
+
+
+      var sportsName = '';
+        if( this.SportsList != undefined && this.SportsList.length >0)
+        {
+          this.SportsList.forEach( sp => {
+            console.log('---sp---', sp)
+             if(sp._id.indexOf(this.createteamForm.value.sport_id) !== -1){
+              sportsName = sp.name
+            }
+          })
+        }
+
+        var seasonName = '';
+        var startDate = '';
+        var enddate = '';
+        if( this.seasonList != undefined && this.seasonList.length >0)
+        {
+          this.seasonList.forEach( seas => {
+            
+             if(seas._id.indexOf(this.createteamForm.value.season_id) !== -1){
+              seasonName = seas.season_name;
+              startDate = seas.season_start_date;
+              enddate = seas.season_end_date;
+            }
+          })
+        }
+
+      var jsonObj = {
+        is_completed: true,
+        season_id                         : this.createteamForm.value.season_id,
+        managers_count                    : this.createteamForm.value.manager.length,
+        level_name                        : this.createteamForm.value.level_name,
+        players_count                     : this.createteamForm.value.player.length,
+        sport_name                        : ((sportsName != '') ? sportsName : ''),
+        season_start_date                 : ((startDate != '') ? startDate : ''),
+        organization_id                   : this.orgId,        
+        season_end_date                   : ((enddate != '') ? enddate : ''),
+        isMaster                          : true,
+        season_lable                      : ((seasonName != '') ? seasonName : ''),
+        coaches_count                     : this.createteamForm.value.coach.length,
+        sport_id                          : this.createteamForm.value.sport_id,
+        level                             : this.createteamForm.value.level_name,
+        team_name                         : this.createteamForm.value.team_name,
+        team_id                           : '',
+        level_id                          : this.createteamForm.value.level_id,
+        isActive                          : false,
+        organization_name                 : this.orgName
+  
+      }
+      /* var playerJson = {
+        players_count: this.createteamForm.value.player.length,
+        display_name : 'Players',
+        user_list :this.createteamForm.value.player,
+        season_id: this.createteamForm.value.season_id,
+        sport_id: this.createteamForm.value.sport_id,
+        people_id : 'player',
+        organization_id: this.orgId,
+      } 
+      console.log('----playerJson----', playerJson)*/
+      console.log('----jsonObj----', jsonObj)
+
+      this.restApiService.create('teams',jsonObj).subscribe( res => {
+
+        if( res._id )
+        {
+          var playerJson = {
+            players_count: this.createteamForm.value.player.length,
+            display_name : 'Players',
+            user_list :this.createteamForm.value.player,
+            season_id: this.createteamForm.value.season_id,
+            sport_id: this.createteamForm.value.sport_id,
+            people_id : 'player',
+            organization_id: this.orgId,
+            team_id: res._id
+          }
+  
+          var coachJson = {
+            players_count: this.createteamForm.value.coach.length,
+            display_name : 'Coaches',
+            user_list : this.createteamForm.value.coach,
+            season_id: this.createteamForm.value.season_id,
+            sport_id: this.createteamForm.value.sport_id,
+            people_id : 'coach',
+            organization_id: this.orgId,
+            team_id: res._id
+          }
+      
+          var managerJson = {
+            players_count: this.createteamForm.value.manager.length,
+            display_name : 'Managers',
+            user_list : this.createteamForm.value.manager,
+            season_id: this.createteamForm.value.season_id,
+            sport_id: this.createteamForm.value.sport_id,
+            people_id : 'manager',
+            organization_id: this.orgId,
+            team_id: res._id
+          }
+
+          var teammembers = {
+            team_id             : res._id,
+            player              : playerJson, 
+            coach               : coachJson,
+            manager             : managerJson, 
+          }
+  
+          this.restApiService.create('teammembers',teammembers).subscribe( memres => {
+            console.log('----memres----', memres)
+
+            this.router.navigate(['/teams/list']);
+
+          }, error =>{
+            console.log('---error team member API----', error)
+          })
+
+        }
+        
+
+      }, e =>{
+        console.log('----API error---')
+      })
+       return false;
+    /* this.displayLoader = true;
     this.loading = true;
       
 
@@ -773,7 +1034,7 @@ export class TeamListCreateComponent implements OnInit {
       
       console.log(error);
        
-    }
+    } */
   }
 
   /* listTag(){
