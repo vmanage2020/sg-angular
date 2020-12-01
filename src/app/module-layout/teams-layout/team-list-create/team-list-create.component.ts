@@ -103,7 +103,7 @@ export class TeamListCreateComponent implements OnInit {
   managerMetaList: any[] = [];
 
   constructor(private router: Router, 
-    private formBuilder: FormBuilder,
+    public formBuilder: FormBuilder,
     public cookieService: CookieService, 
     private teamService: TeamService,
     private restApiService: RestApiService,
@@ -202,29 +202,72 @@ export class TeamListCreateComponent implements OnInit {
   get managerArr() {
     return this.createteamForm.get('manager') as FormArray;
   }
+ 
+  playerBox: any = false;
 
+  
+  eventPlayerArray: any[] =[];
+  eventCoachArray: any[] =[];
+  eventManagerArray: any[] =[];
   
   ngAfterViewInit() {
     {
 
     let self = this; // store here  
+
     $('#player_select').on('change', function (event) {
       console.log("player_select");
-      console.log(event);
       this.choosenPlayers = $(this).val();
-      console.log("multiselect choosen players::",this.choosenPlayers);
       //self.getPlayerList(this.choosenPlayers);
-      //self.OnPlayerChange( event, this.createteamForm);
+      console.log("choosenPlayers",this.choosenPlayers);
+      console.log("managerList",self.playerList);
+      self.eventPlayerArray = [];
+      this.choosenPlayers.forEach((memberinfo: any) => {
+        console.log(memberinfo);
+        let filterValue = self.playerList.filter(item => item.user_id === memberinfo);
+        let filterValueObject = { id: filterValue[0].user_id, name: filterValue[0].name };
+        console.log(filterValueObject);
+        self.eventPlayerArray.push(filterValueObject);
+      });
+      console.log("eventPlayerArray",self.eventPlayerArray);
+      self.OnPlayerChange( self.eventPlayerArray, self.createteamForm);
     });
+
+
     $('#coach_select').on('change', function () {
       console.log("coach_select");
       this.choosenCoaches = $(this).val();
       //self.getCoachList(this.choosenCoaches);
+      console.log("choosenCoaches",this.choosenCoaches);
+      console.log("coachList",self.coachList);
+      self.eventCoachArray = [];
+      this.choosenCoaches.forEach((memberinfo: any) => {
+        console.log(memberinfo);
+        let filterValue = self.coachList.filter(item => item.user_id === memberinfo);
+        let filterValueObject = { id: filterValue[0].user_id, name: filterValue[0].name };
+        console.log(filterValueObject);
+        self.eventCoachArray.push(filterValueObject);
+      });
+      console.log("eventCoachArray",self.eventCoachArray);
+      self.OnCoachChange( self.eventCoachArray, self.createteamForm);
     });
+    
     $('#manager_select').on('change', function () {
       console.log("manager_select");
       this.choosenManagers = $(this).val();
-     //self.getManagerList(this.choosenManagers);
+      //self.getManagerList(this.choosenManagers);
+      console.log("choosenManagers",this.choosenManagers);
+      console.log("managerList",self.managerList);
+      self.eventManagerArray = [];
+      this.choosenManagers.forEach((memberinfo: any) => {
+        console.log(memberinfo);
+        let filterValue = self.managerList.filter(item => item.user_id === memberinfo);
+        let filterValueObject = { id: filterValue[0].user_id, name: filterValue[0].name };
+        console.log(filterValueObject);
+        self.eventManagerArray.push(filterValueObject);
+      });
+      console.log("eventManagerArray",self.eventManagerArray);
+      self.OnManagerChange( self.eventManagerArray, self.createteamForm);  
     });
 
     }
@@ -303,11 +346,16 @@ export class TeamListCreateComponent implements OnInit {
         player_select: null
       })
     }
+
+    console.log("this.playerArr.length", this.playerArr.length)
+    this.playerBox=true;
+    console.log("this.playerBox", this.playerBox);
+    
   }
 
 
   OnCoachChange( event, form )
-  {
+  { 
     if (event.type === "focus") {
       if (!form.value.sport_id) {
         console.log('----markas touched----')
@@ -324,8 +372,9 @@ export class TeamListCreateComponent implements OnInit {
         if (iscoachExist.length !== 0) {
 
         } else {
+          
           this.coachArr.push(this.coach());
-
+          console.log("this.coachArr",this.coachArr);
           let length = this.createteamForm.controls['coach'].value.length-1;
           let filterValue = this.coachList.filter(
             item => item.user_id === coachInfo.id);
@@ -338,6 +387,7 @@ export class TeamListCreateComponent implements OnInit {
             coaches_count: this.createteamForm.controls['coach'].value.length
           })
 
+          console.log("this.createteamForm.controls['coach'].value.length",this.createteamForm.controls['coach'].value.length);
           /* this.coachArr.at(this.createteamForm.controls['coach'].value.length - 1).patchValue({
             user_id: coachInfo.id
           }) */
@@ -1313,11 +1363,33 @@ removeManager(lineIndex, managerInfo) {
   this.increaseHeight("Manager", "label-manager");
 }
 
-getPlayerList(playerArr) {
+getPlayerList(playerArrValue) {
   this.selectPlayers = false
 
-  if (playerArr.length != 0) {
-    playerArr.forEach((selected_player, index) => {
+  /*
+   event.forEach((playerInfo: any) => {
+        console.log('---playerInfo---', playerInfo)
+        console.log('---fff---', this.createteamForm.controls['player'].value )
+        let isPlayerExist = this.createteamForm.controls['player'].value.filter(item => item.user_id === playerInfo.id);
+        console.log('---isPlayerExist---', isPlayerExist)
+        if (isPlayerExist.length !== 0) {
+        } else {
+          this.playerArr.push(this.player());
+          let length = this.createteamForm.controls['player'].value.length-1;
+          let filterValue = this.playerList.filter(
+            item => item.user_id === playerInfo.id);
+          this.playerArr.at(length).patchValue({
+            selectChange: true,
+          })
+          this.playerArr.at(length).patchValue(filterValue[0]);
+          this.createteamForm.patchValue({
+            players_count: this.createteamForm.controls['player'].value.length
+          })
+          }
+        })
+  */
+  if (playerArrValue.length != 0) {
+    playerArrValue.forEach((selected_player, index) => {
       if (this.createteamForm.controls['player'].value.length === 0) {
         console.log(this.createteamForm.controls['player'].value.length, "length0")
         this.playerArr.push(this.player())
@@ -1370,11 +1442,11 @@ getPlayerList(playerArr) {
     });
   }
 
-  if (playerArr.length < this.createteamForm.controls['player'].value.length) {
+  if (playerArrValue.length < this.createteamForm.controls['player'].value.length) {
     let userId = this.createteamForm.controls['player'].value.map(item => item.user_id)
     console.log(userId);
-    let diff: any[] = userId.concat(playerArr).filter((val) => {
-      return !(userId.includes(val) && playerArr.includes(val));
+    let diff: any[] = userId.concat(playerArrValue).filter((val) => {
+      return !(userId.includes(val) && playerArrValue.includes(val));
     });
     console.log(this.createteamForm.value);
     console.log(diff, "diff");

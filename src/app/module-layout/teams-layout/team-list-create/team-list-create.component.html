@@ -105,8 +105,7 @@
                                 
 
                               <select multiple="multiple" class="multi-select" id="player_select"
-                                name="player_select" data-plugin="multiselect"
-                                (change)="OnPlayerChange($event,createteamForm)" [ngClass]="{ 'is-invalid': submitted && f.player_select.errors }">
+                                name="player_select" data-plugin="multiselect" [ngClass]="{ 'is-invalid': submitted && f.player_select.errors }">
                                  <option [value]="player.id" *ngFor="let player of teamplayerList;let i = index">{{player.name}}</option> 
                               </select>
 
@@ -114,7 +113,178 @@
                               <div *ngIf="submitted && f.player_select.errors" class="invalid-feedback">
                                     <div *ngIf="f.player_select.errors.required">Player is required.</div>
                                 </div>
-                        </div>                                
+                        </div>                            
+                        {{playerBox}}
+                        <div *ngIf=" playerBox ">
+                            <div *ngFor="let player of playerArr.controls; let i = index">
+                               XXX {{player}}
+                            </div>
+
+                            <div formArrayName="player" style="overflow-x: scroll;">
+                                <table id="basic-datatable" style="display: table;"
+                                class="table table-responsive datatables dt-responsive nowrap mb-0">
+                                  <thead class="border">
+                                    <tr>
+                                      <th class="border" style="width: 200px;">Name</th>
+                                      <th class="border" style="width: 200px;">Position(s)</th>
+                                       <th class="border" style="width: 200px;">Shoots</th>
+                                      <th class="border" style="width: 200px;">Height</th>
+                                      <th class="border" style="width: 200px;">Weight</th>
+                                      <th class="border" style="width: 200px;" *ngFor="let playerMetaDataItem of playerMetaList; index as i;">
+                                          {{playerMetaDataItem.Name}}
+                                       </th>
+                                    </tr>
+                                  </thead>
+                                      <tbody>
+                                      
+                                      <tr class="border"
+                                      *ngFor="let player of playerArr.controls; let i = index" [formGroupName]="i">
+                                          <td>
+                                              <ng-select appendTo="body" 
+                                              [items]="playerList" 
+                                              bindLabel="name"                                          
+                                              [clearable]="false" 
+                                              formControlName="first_name"
+                                              [clearSearchOnAdd]="true"
+                                              (change)="selectedPlayer($event,createteamForm,i)"
+                                              bindValue="first_name" placeholder="Select name">
+                                          </ng-select>
+                                          </td>
+                                          <td>
+                                              <ng-select appendTo="body" 
+                                              [items]="positionList" 
+                                              bindLabel="name"
+                                              [clearable]="false" 
+                                              [multiple]="true"
+                                              [clearSearchOnAdd]="true" 
+                                              (change)="selectedPosition($event,createteamForm,i)"
+                                              bindValue="position_id" placeholder="Select position">
+                                              </ng-select>
+                                          </td>
+                                          <td>
+                                              <ng-select appendTo="body" 
+                                              [items]="shootList" 
+                                              bindLabel="name"
+                                              formControlName="shoot" 
+                                              [clearable]="false" 
+                                              bindValue="name"
+                                              placeholder="Select shoots">
+                                          </ng-select>
+                                          </td>
+                                          <td>
+                                              <div class="d-flex p-0" formGroupName="height">
+                                                  <div >
+                                                      <input type="text" class="form-control"
+                                                      formControlName="height_main_uom" />                                            
+                                                  </div>
+                                                  <div>
+                                                      <ng-select appendTo="body" 
+                                                          [items]="height" 
+                                                          bindLabel="value" 
+                                                          class="px-1" 
+                                                          (change)=heightValidation($event,createteamForm,i)
+                                                          formControlName="height_main_unit" 
+                                                          [clearable]="false"
+                                                          bindValue="value">
+                                                      </ng-select>
+                                                  
+                                                  </div>
+  
+                                                  <div >
+                                                      <input type="text" class="form-control"
+                                                      formControlName="height_sub_uom" />
+                                                  </div>
+  
+                                                  <ng-select appendTo="body" 
+                                                  [items]="height" 
+                                                  bindLabel="name"
+                                                  class="px-1" 
+                                                  (change)=heightValidation($event,createteamForm,i)
+                                                  formControlName="height_sub_unit" [clearable]="false"
+                                                  bindValue="name">
+                                                  </ng-select>
+                                                      
+                                              </div>       
+  
+                                          </td>
+                                          <td formGroupName="weight">
+  
+                                              <div class="d-flex p-0">
+                                                  <div id="form">
+                                                       <input type="text" class="form-control"
+                                                       formControlName="weight_main_uom" />
+                                                      
+  
+                                                  </div>
+                                                  <div>
+                                                       <ng-select appendTo="body" 
+                                                       [items]="height" 
+                                                       bindLabel="weight" 
+                                                       class="px-1"
+                                                       formControlName="weight_main_unit" [clearable]="false"
+                                                       bindValue="weight">
+                                                   </ng-select>
+                                                   
+                                                  </div>
+                                                </div>
+                                          </td>
+  
+                                          
+                                          <ng-container *ngIf="playerMetaList.length>0">
+                                              <td class="border p-1" *ngFor="let playerMetaDataItem of playerMetaList; index as i;">
+                                                  
+                                                  <div *ngIf="playerMetaDataItem.Type === 'Drop Down'">
+  
+                                                              <ng-select appendTo="body" 
+                                                              [items]="playerMetaDataItem.Value"
+                                                              id="playerMetaDataItem.Key"
+                                                              name="playerMetaDataItem.Key"
+                                                              placeholder="Select Item">
+                                                              </ng-select>
+  
+                                                  </div>
+                                                  <div *ngIf="playerMetaDataItem.Type === 'Radio button'">
+  
+                                                      <label style="width: 150px;"  *ngFor="let itemvalue of playerMetaDataItem.Value; let i = index" for="i">
+                                                          <input type="radio" 
+                                                          
+                                                          id="playerMetaDataItem.Key"
+                                                          name="playerMetaDataItem.Key"
+                                                          value="itemvalue" >
+                                                          {{itemvalue}}
+                                                      </label> 
+  
+                                                  </div>
+                                                  <div *ngIf="playerMetaDataItem.Type === 'Check box'">
+  
+                                                          <label style="width: 150px;"  *ngFor="let itemvalue of playerMetaDataItem.Value; let i = index">
+                                                              <input type="checkbox" 
+                                                              
+                                                              id="playerMetaDataItem.Key"
+                                                              name="playerMetaDataItem.Key"
+                                                              value="itemvalue" >
+                                                              {{itemvalue}}
+                                                          </label>
+  
+                                                  </div>
+                                                  <div *ngIf="playerMetaDataItem.Type === 'Text Field'">
+  
+                                                              <input type="text"
+                                                              
+                                                              id="playerMetaDataItem.Key"
+                                                              name="playerMetaDataItem.Key"
+                                                              placeholder="Enter Value" />
+  
+                                                  </div>
+  
+                                               </td>
+                                          </ng-container>
+                                          
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                        </div>
                   </div>
 
 
@@ -131,6 +301,7 @@
                             (change)="OnPlayerChange($event,createteamForm)"
                             >
                             </ng-select>
+                            
                         </div>
                     </div>
 
