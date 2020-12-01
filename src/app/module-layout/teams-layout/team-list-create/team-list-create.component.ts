@@ -208,22 +208,23 @@ export class TeamListCreateComponent implements OnInit {
     {
 
     let self = this; // store here  
-    $('#player_select').on('change', function () {
+    $('#player_select').on('change', function (event) {
       console.log("player_select");
+      console.log(event);
       this.choosenPlayers = $(this).val();
       console.log("multiselect choosen players::",this.choosenPlayers);
-      self.getPlayerList(this.choosenPlayers);
+      //self.getPlayerList(this.choosenPlayers);
       //self.OnPlayerChange( event, this.createteamForm);
     });
     $('#coach_select').on('change', function () {
       console.log("coach_select");
       this.choosenCoaches = $(this).val();
-      self.getCoachList(this.choosenCoaches);
+      //self.getCoachList(this.choosenCoaches);
     });
     $('#manager_select').on('change', function () {
       console.log("manager_select");
       this.choosenManagers = $(this).val();
-      self.getManagerList(this.choosenManagers);
+     //self.getManagerList(this.choosenManagers);
     });
 
     }
