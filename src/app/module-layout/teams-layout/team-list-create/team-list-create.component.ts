@@ -102,6 +102,14 @@ export class TeamListCreateComponent implements OnInit {
   coachMetaList: any[] = [];
   managerMetaList: any[] = [];
 
+  playerBox: any = false;
+  coachBox: any = false;
+  managerBox: any = false;
+
+  eventPlayerArray: any[] =[];
+  eventCoachArray: any[] =[];
+  eventManagerArray: any[] =[];
+
   constructor(private router: Router, 
     public formBuilder: FormBuilder,
     public cookieService: CookieService, 
@@ -118,7 +126,7 @@ export class TeamListCreateComponent implements OnInit {
       season_id: [null, Validators.required],
       level_id: [null, Validators.required],
       level_name: [''],
-      team_name: [null, Validators.required],
+      team_name: [null, Validators.required,Validators.pattern('^[a-zA-Z ]*$')],
 
       player_select: [null],
       coach_select: [null],
@@ -203,12 +211,6 @@ export class TeamListCreateComponent implements OnInit {
     return this.createteamForm.get('manager') as FormArray;
   }
  
-  playerBox: any = false;
-
-  
-  eventPlayerArray: any[] =[];
-  eventCoachArray: any[] =[];
-  eventManagerArray: any[] =[];
   
   ngAfterViewInit() {
     {
@@ -277,9 +279,6 @@ export class TeamListCreateComponent implements OnInit {
 
   OnPlayerChange( event, form)
   {
-      console.log("FOCUS");
-      console.log("FOCUS EVENT",event);
-      console.log("FOCUS FORM",form);
     
     if (event.type === "focus") {
       if (!form.value.sport_id) {
@@ -347,9 +346,7 @@ export class TeamListCreateComponent implements OnInit {
       })
     }
 
-    console.log("this.playerArr.length", this.playerArr.length)
     this.playerBox=true;
-    console.log("this.playerBox", this.playerBox);
     
   }
 
@@ -415,6 +412,9 @@ export class TeamListCreateComponent implements OnInit {
         coach_select: null
       })
     }
+
+    this.coachBox=true;
+
   }
 
   OnManagerChange(event, form)
@@ -476,6 +476,10 @@ export class TeamListCreateComponent implements OnInit {
         manager_select: null
       })
     }
+
+    
+    this.managerBox=true;
+
   }
 
   selectedPlayer( event, form, i)
