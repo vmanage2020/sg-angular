@@ -235,7 +235,8 @@ export class TeamListCreateComponent implements OnInit {
   OnPlayerChange( event, form)
   {
       console.log("FOCUS");
-      console.log(event);
+      console.log("FOCUS EVENT",event);
+      console.log("FOCUS FORM",form);
     
     if (event.type === "focus") {
       if (!form.value.sport_id) {
