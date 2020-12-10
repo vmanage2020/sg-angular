@@ -135,6 +135,26 @@ export class TeamListComponent implements OnInit {
       this.notification.isNotification(true, "Tags Data", "Unable to delete.Please try again later.", "times-circle");
     }
   }
+
+
+  deleteTeam( id, name)
+  {
+    var result = confirm("Want to delete?");
+    if(result) {
+      console.log(id+' '+name)
+
+      this.restApiService.remove( 'teams/'+id ).subscribe( res => {
+        console.log('---res---', res)
+        this.notification.isNotification(true, "Tags Data", "Tags Data has been deleted successfully.", "check-square");
+        this.refreshPage();
+      }, e => {
+
+      })
+    }else{
+      console.log('---no---')
+    }
+    
+  } 
  
  refreshPage() {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
